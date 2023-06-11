@@ -32,6 +32,12 @@
 $ npm install
 ```
 
+## Building
+
+```bash
+$ npm run build
+```
+
 ## Running the app
 
 ```bash
