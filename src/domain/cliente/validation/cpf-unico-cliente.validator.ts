@@ -1,0 +1,29 @@
+import { Inject, Injectable, Logger } from "@nestjs/common";
+import { SalvarClienteValidator } from "./salvar-cliente.validator";
+import { ValidationException } from "src/domain/exception/validation-domain-exception";
+import { Cliente } from "../model/cliente.model";
+import { IRepository } from "src/domain/repository/repository";
+
+@Injectable()
+export class CpfUnicoClienteValidator implements SalvarClienteValidator{
+    
+    private logger: Logger = new Logger(CpfUnicoClienteValidator.name)
+
+    constructor(@Inject('IRepository<Cliente>') private repository: IRepository<Cliente>){}
+    
+    async validate(cliente: Cliente): Promise<boolean> {
+
+        this.logger.log(`Inicializando validação ${CpfUnicoClienteValidator.name} para salvar o cliente: ${cliente.cpf}`)
+
+        return this.repository.findBy({cpf: cliente.cpf})
+            .then(clients => {
+                if (clients.length > 0){
+                    this.logger.error(`Cliente já existente na base de dados com o CPF: ${cliente.cpf}`)
+                    throw new ValidationException('O CPF do cliente não é único');
+                }
+                
+                this.logger.debug(`${CpfUnicoClienteValidator.name} finalizado com sucesso para cliente: ${cliente.cpf}`)
+                return true;
+            })
+        }
+}

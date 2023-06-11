@@ -1,0 +1,34 @@
+Lanchonete
+	Empresa que realiza a comercialização de fast food, referida aqui como a "nossa empresa"
+	
+Lanche
+	Conjunto de itens formando uma refeição, geralmente um sauduiche, acompanhamento, bebida e sobremesa.
+	
+Sanduiche
+	Parte principal de um lanche, consiste em duas fatias de pão, carne, queijo e outros condimentos.
+	
+Acompanhamento
+	Indica um item adicional que pode ser escolhido juntamente com o lanche.
+
+Bebida
+	Uma opção de bebida para acompanhar o pedido, como refrigerante ou suco.
+	
+Sobremesa
+	Refere-se a uma opção adicional após a refeição principal, como sorvete ou torta.	
+
+Item
+	Forma generica de identificar um sanduice, acompanhamento, bebida ou sobremesa no pedido.
+	Parte de um lanche.
+	Termos Sinônimos: Produto
+
+Pedido
+	Solicitação de um cliente para adquirir items da lanchonete.
+
+Cliente
+	Uma pessoa que faz um pedido na lanchonete.
+	
+Preço
+	Quantia em valor monetário de cada item.
+	
+Pagamento
+	Processo que o cliente realiza uma compensação financeira totalizando o preço de cada item de um pedido.
