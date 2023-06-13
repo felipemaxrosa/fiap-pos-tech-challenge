@@ -6,16 +6,16 @@ import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 
 @Controller('v1/cliente')
 @ApiTags("Cliente")
-export class ClientController {
+export class ClienteController {
 
-    private logger: Logger = new Logger(ClientController.name)
+    private logger: Logger = new Logger(ClienteController.name)
 
     constructor(@Inject('IService<Cliente>') private service: IService<Cliente>) { }
 
     @Post()
     @ApiCreatedResponse({description: "Cliente salvo com sucesso"})
-    async save(@Body() request: SalvarClienteRequest): Promise<Cliente> {
-        this.logger.debug(`Salvando cliente request: ${SalvarClienteRequest.toString(request)}`)
+    async salvar(@Body() request: SalvarClienteRequest): Promise<Cliente> {
+        this.logger.debug(`Salvando cliente request: ${JSON.stringify(request)}`)
         return await this.service.save({
             nome: request.nome,
             email: request.email,
@@ -25,5 +25,4 @@ export class ClientController {
             return cliente;
         })
     }
-
 }

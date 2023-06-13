@@ -44,6 +44,8 @@ $ npm run build
 
 ##env-names:
 - local                   # Variáveis usadas para rodar a aplicação em ambiente local, COM dependência de container mysql
+                          # Presume mysql rodando e a necessidade de atachar a aplicação ao container para desenvolver/
+                          # Exemplo: debugar local e apontando para o banco no container: NODE_ENV=local npm run start:debug
 - local-mock-repository   # Variáveis usadas para rodar a aplicação em ambiente local, SEM dependência de container mysql
 - prod                    # Variáveis usadas para rodar a aplicação em ambiente de produção
 

@@ -4,8 +4,9 @@ export abstract class ExceptionHandler<T extends Error> implements ExceptionFilt
     
     private logger = new Logger(ExceptionHandler.name);
 
-    constructor(private httpStatus: HttpStatus){
+    constructor(private httpStatus: HttpStatus, private message?: string){
         this.httpStatus= httpStatus
+        this.message= message
     }
 
     catch(exception: T, host: ArgumentsHost) {
@@ -18,7 +19,7 @@ export abstract class ExceptionHandler<T extends Error> implements ExceptionFilt
     
         response.status(this.httpStatus).json({
             status: this.httpStatus,
-            message: exception.message,
+            message: this.message ?? exception.message,
             timestamp: new Date().toISOString(),
             path: request.url,
         })

@@ -7,6 +7,8 @@ import { IRepository } from "src/domain/repository/repository";
 @Injectable()
 export class CpfUnicoClienteValidator implements SalvarClienteValidator{
     
+    public static CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE: string = "O cpf do cliente não é único"
+
     private logger: Logger = new Logger(CpfUnicoClienteValidator.name)
 
     constructor(@Inject('IRepository<Cliente>') private repository: IRepository<Cliente>){}
@@ -19,7 +21,7 @@ export class CpfUnicoClienteValidator implements SalvarClienteValidator{
             .then(clients => {
                 if (clients.length > 0){
                     this.logger.error(`Cliente já existente na base de dados com o CPF: ${cliente.cpf}`)
-                    throw new ValidationException('O CPF do cliente não é único');
+                    throw new ValidationException(CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
                 }
                 
                 this.logger.debug(`${CpfUnicoClienteValidator.name} finalizado com sucesso para cliente: ${cliente.cpf}`)
