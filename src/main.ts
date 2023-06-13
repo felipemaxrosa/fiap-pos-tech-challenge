@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MainModule } from './main.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { EnvUtils } from './shared/env.utils';
 import { ApplicationConstants } from './application/constants/application.constants';
 
@@ -12,6 +12,11 @@ async function bootstrap() {
   // Configuração do servidor
   const serverPort = process.env.SERVER_PORT || 3000;
   const app = await NestFactory.create(MainModule);
+
+  // Configuração de validações global inputs request
+  app.useGlobalPipes(new ValidationPipe({
+    stopAtFirstError: true
+  }))
 
   // Configuração do swagger
   const options = new DocumentBuilder()

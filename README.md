@@ -84,8 +84,13 @@ $ docker-compose --env-file ./envs/{env-name}.env up {service-name}
 # unit tests
 $ npm run test
 
+# unit tests com mocks de banco
+$ NODE_ENV=local-mock-repository npm run test
 # e2e tests
 $ npm run test:e2e
+
+# e2e tests com mocks de banco
+$ NODE_ENV=local-mock-repository npm run test:e2e
 
 # test coverage
 $ npm run test:cov

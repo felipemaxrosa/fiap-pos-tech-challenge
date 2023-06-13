@@ -1,11 +1,13 @@
 import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { IService } from 'src/domain/service/service';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiCreatedResponse, ApiProduces, ApiTags } from '@nestjs/swagger';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 
 @Controller('v1/cliente')
 @ApiTags("Cliente")
+@ApiConsumes('application/json')
+@ApiProduces('application/json')
 export class ClienteController {
 
     private logger: Logger = new Logger(ClienteController.name)

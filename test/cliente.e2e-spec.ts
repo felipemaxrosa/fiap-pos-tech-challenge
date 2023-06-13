@@ -1,0 +1,152 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import * as request from 'supertest';
+import { MainModule } from '../src/main.module';
+import { SalvarClienteRequest } from 'src/application/web/cliente/request/salvar-cliente.request';
+import { Cliente } from 'src/domain/cliente/model/cliente.model';
+import { EmailUnicoClienteValidator } from 'src/domain/cliente/validation/email-unico-cliente.validator';
+import { CpfUnicoClienteValidator } from 'src/domain/cliente/validation/cpf-unico-cliente.validator';
+
+describe('ClienteController (e2e)', () => {
+  let app: INestApplication;
+  let salvarClienteRequest: SalvarClienteRequest;
+  let cliente: Cliente;
+
+  beforeEach(() => {
+    // Define um objeto de requisição
+    salvarClienteRequest = {
+      nome: 'Teste',
+      email: 'teste@teste.com',
+      cpf: '123456789',
+    };
+
+    // Define um objeto de cliente esperado como resultado
+    cliente = {
+      id: 1,
+      nome: 'Teste',
+      email: 'teste@teste.com',
+      cpf: '123456789',
+    };
+  })
+  
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [MainModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+
+    // Configuração de validações global inputs request
+    app.useGlobalPipes(new ValidationPipe({
+      stopAtFirstError: true
+    }))
+    await app.init();
+  });
+
+  it('POST /v1/cliente - Deve cadastrar um cliente e retornar o ID', () => {
+    return request(app.getHttpServer())
+      .post('/v1/cliente')
+      .set('Content-type', 'application/json')
+      .send(salvarClienteRequest)
+      .then(response => {
+        expect(response.status).toEqual(201)
+        expect(response.body).toEqual(cliente)
+        expect(response.body).toHaveProperty('id');
+        expect(response.body.nome).toEqual(salvarClienteRequest.nome);
+        expect(response.body.email).toEqual(salvarClienteRequest.email);
+        expect(response.body.cpf).toEqual(salvarClienteRequest.cpf);
+      })
+  });
+
+  it('POST /v1/cliente - Não deve cadastrar um cliente sem o request', () => {
+
+    return request(app.getHttpServer())
+      .post('/v1/cliente')
+      .set('Content-type', 'application/json')
+      .send({})
+      .then(response => {
+        expect(response.status).toEqual(400)
+        expect(response.body.message).toEqual(["Nome deve ser válido", "Email deve ser válido", "Cpf deve ser válido"])
+        expect(response.body).toHaveProperty('path')
+        expect(response.body).toHaveProperty('timestamp')
+      })
+  });
+  
+  it('POST /v1/cliente - Não deve cadastrar um cliente com email existente', () => {
+    return request(app.getHttpServer())
+      .post('/v1/cliente')
+      .set('Content-type', 'application/json')
+      .send(salvarClienteRequest)
+      .then(response => {
+        expect(response.status).toEqual(400)
+        expect(response.body.message).toEqual(EmailUnicoClienteValidator.EMAIL_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
+        expect(response.body).toHaveProperty('path')
+        expect(response.body).toHaveProperty('timestamp')
+      })
+  });
+
+  it('POST /v1/cliente - Não deve cadastrar um cliente com cpf existente', () => {
+
+    // Altera o email para um novo, não cadastrado
+    salvarClienteRequest.email = 'novo@email.com'
+
+    return request(app.getHttpServer())
+      .post('/v1/cliente')
+      .set('Content-type', 'application/json')
+      .send(salvarClienteRequest)
+      .then(response => {
+        expect(response.status).toEqual(400)
+        expect(response.body.message).toEqual(CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
+        expect(response.body).toHaveProperty('path')
+        expect(response.body).toHaveProperty('timestamp')
+      })
+  });
+
+  it('POST /v1/cliente - Não deve cadastrar um cliente sem nome', () => {
+
+    salvarClienteRequest.nome = undefined
+
+    return request(app.getHttpServer())
+      .post('/v1/cliente')
+      .set('Content-type', 'application/json')
+      .send(salvarClienteRequest)
+      .then(response => {
+        expect(response.status).toEqual(400)
+        expect(response.body.message).toEqual(["Nome deve ser válido"])
+        expect(response.body).toHaveProperty('path')
+        expect(response.body).toHaveProperty('timestamp')
+      })
+  });
+
+  it('POST /v1/cliente - Não deve cadastrar um cliente sem email', () => {
+
+    salvarClienteRequest.email = undefined
+
+    return request(app.getHttpServer())
+      .post('/v1/cliente')
+      .set('Content-type', 'application/json')
+      .send(salvarClienteRequest)
+      .then(response => {
+        expect(response.status).toEqual(400)
+        expect(response.body.message).toEqual(["Email deve ser válido"])
+        expect(response.body).toHaveProperty('path')
+        expect(response.body).toHaveProperty('timestamp')
+      })
+  });
+
+  it('POST /v1/cliente - Não deve cadastrar um cliente sem cpf', () => {
+
+    salvarClienteRequest.cpf = undefined
+
+    return request(app.getHttpServer())
+      .post('/v1/cliente')
+      .set('Content-type', 'application/json')
+      .send(salvarClienteRequest)
+      .then(response => {
+        expect(response.status).toEqual(400)
+        expect(response.body.message).toEqual(["Cpf deve ser válido"])
+        expect(response.body).toHaveProperty('path')
+        expect(response.body).toHaveProperty('timestamp')
+      })
+  });
+});

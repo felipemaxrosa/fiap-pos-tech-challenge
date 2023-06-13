@@ -6,6 +6,7 @@ import { ValidationExceptionHandler } from './web/handler/validation-exception.h
 import { ClienteController } from './web/cliente/controller/cliente.controller';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { GeneralExceptionHandler } from './web/handler/general-exception.handler';
+import { GeneralHttpExceptionHandler } from './web/handler/general-http-exception.handler';
 
 @Module({
     imports:[
@@ -14,6 +15,7 @@ import { GeneralExceptionHandler } from './web/handler/general-exception.handler
     ],
     providers:[
         {provide: APP_FILTER, useClass: GeneralExceptionHandler},
+        {provide: APP_FILTER, useClass: GeneralHttpExceptionHandler},
         {provide: APP_FILTER, useClass: InfraestructureExceptionHandler},
         {provide: APP_FILTER, useClass: ValidationExceptionHandler},
 
