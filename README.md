@@ -107,7 +107,7 @@ Nest is [MIT licensed](LICENSE).
 
 
 # Project Structure
-
+```
 ./envs/                                   environment variables
 ./schema/                                 schema initialization
 ./src/                                    source code
@@ -137,3 +137,4 @@ Nest is [MIT licensed](LICENSE).
 └── shared                                shared components
 ./test/                                   test folder
 └── api                                   http isolated tests
+````
