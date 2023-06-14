@@ -3,7 +3,7 @@ POST http://localhost:3000/v1/cliente
 Content-Type: application/json
 
 {
-   "nome": "Cliente",
+   "nome": "cliente",
    "email": "cliente@email.com",
    "cpf": "12345678901" 
 }

@@ -18,12 +18,12 @@ export class ClienteTypeormRepository implements IRepository<Cliente>{
         return this.repository.findBy(attributes)
             .then(clienteEntities => {
                 this.logger.debug(`Consulta de cliente realizada com sucesso com os parâmetros: '${JSON.stringify(attributes)}'`)
-                return clienteEntities.map(clienteEntity => new Cliente(
-                    clienteEntity.nome,
-                    clienteEntity.email,
-                    clienteEntity.cpf,
-                    clienteEntity.id
-                ));
+                return clienteEntities.map(clienteEntity => ({
+                    id: clienteEntity.id,
+                    nome: clienteEntity.nome,
+                    email: clienteEntity.email,
+                    cpf: clienteEntity.cpf
+                }))
             })
             .catch(error => {
                 throw new RepositoryException(`Houve um erro ao buscar o cliete com os parâmetros: '${JSON.stringify(attributes)}': ${error.message}`)
@@ -32,15 +32,19 @@ export class ClienteTypeormRepository implements IRepository<Cliente>{
 
     async save(cliente: Cliente): Promise<Cliente>{
         this.logger.debug(`Salvando cliente: ${cliente}`)
-        return this.repository.save(cliente)
+        return this.repository.save({
+                nome: cliente.nome,
+                email: cliente.email,
+                cpf: cliente.cpf,   
+            })
             .then(clienteEntity => {
                 this.logger.debug(`Cliente salvo com sucesso no banco de dados: ${clienteEntity.id}`)
-                return new Cliente(
-                    clienteEntity.nome,
-                    clienteEntity.email,
-                    clienteEntity.cpf,
-                    clienteEntity.id
-                );
+                return ({
+                    id: clienteEntity.id,
+                    nome: clienteEntity.nome,
+                    email: clienteEntity.email,
+                    cpf: clienteEntity.cpf,    
+                });
             })
             .catch(error => {
                 throw new RepositoryException(`Houve um erro ao salvar o cliente no banco de dados: '${cliente}': ${error.message}`)

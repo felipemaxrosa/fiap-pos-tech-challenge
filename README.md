@@ -44,6 +44,8 @@ $ npm run build
 
 ##env-names:
 - local                   # Variáveis usadas para rodar a aplicação em ambiente local, COM dependência de container mysql
+                          # Presume mysql rodando e a necessidade de atachar a aplicação ao container para desenvolver/
+                          # Exemplo: debugar local e apontando para o banco no container: NODE_ENV=local npm run start:debug
 - local-mock-repository   # Variáveis usadas para rodar a aplicação em ambiente local, SEM dependência de container mysql
 - prod                    # Variáveis usadas para rodar a aplicação em ambiente de produção
 
@@ -82,30 +84,20 @@ $ docker-compose --env-file ./envs/{env-name}.env up {service-name}
 # unit tests
 $ npm run test
 
+# unit tests com mocks de banco
+$ NODE_ENV=local-mock-repository npm run test
 # e2e tests
 $ npm run test:e2e
+
+# e2e tests com mocks de banco
+$ NODE_ENV=local-mock-repository npm run test:e2e
 
 # test coverage
 $ npm run test:cov
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
-
-
 # Project Structure
-
+```
 ./envs/                                   environment variables
 ./schema/                                 schema initialization
 ./src/                                    source code
@@ -135,3 +127,4 @@ Nest is [MIT licensed](LICENSE).
 └── shared                                shared components
 ./test/                                   test folder
 └── api                                   http isolated tests
+````

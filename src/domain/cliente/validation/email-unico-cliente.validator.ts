@@ -7,6 +7,8 @@ import { IRepository } from "src/domain/repository/repository";
 @Injectable()
 export class EmailUnicoClienteValidator implements SalvarClienteValidator{
     
+    public static EMAIL_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE: string = "O email do cliente não é único"
+
     private logger: Logger = new Logger(EmailUnicoClienteValidator.name)
 
     constructor(@Inject('IRepository<Cliente>') private repository: IRepository<Cliente>){}
@@ -19,7 +21,7 @@ export class EmailUnicoClienteValidator implements SalvarClienteValidator{
             .then(clients => {
                 if (clients.length > 0){
                     this.logger.error(`Cliente já existente na base de dados com o email: ${cliente.email}`)
-                    throw new ValidationException('O email do cliente não é único');
+                    throw new ValidationException(EmailUnicoClienteValidator.EMAIL_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
                 }
                 
                 this.logger.debug(`${EmailUnicoClienteValidator.name} finalizado com sucesso para cliente: ${cliente.email}`)
