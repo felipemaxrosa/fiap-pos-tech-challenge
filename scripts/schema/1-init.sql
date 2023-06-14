@@ -32,15 +32,6 @@ CREATE TABLE IF NOT EXISTS CATEGORIA_PRODUTO (
 -- indexes para tabela CATEGORIA_PRODUTO
 CREATE UNIQUE INDEX categoria_produto_nome_idx ON CATEGORIA_PRODUTO(NOME);
 
--- inserts para CATEGORIA_PRODUTO (tabela com valores fixos)
-INSERT INTO
-    CATEGORIA_PRODUTO (ID, NOME)
-VALUES
-    (1, 'Lanche'),
-    (2, 'Acompanhamento'),
-    (3, 'Bebida'),
-    (4, 'Sobremesa');
-
 -- Tabela PRODUTO
 CREATE TABLE IF NOT EXISTS PRODUTO (
                                        ID INT AUTO_INCREMENT PRIMARY KEY,
