@@ -24,6 +24,7 @@ describe('ClienteController', () => {
   };
 
   beforeEach(async () => {
+    // Configuração do módulo de teste
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ClienteController],
       providers: [
@@ -31,6 +32,7 @@ describe('ClienteController', () => {
         {
           provide: 'IService<Cliente>',
           useValue: {
+            // Mocka chamada para o save, rejeitando a promise em caso de request undefined
             save: jest.fn((request) => request ? Promise.resolve(cliente) : Promise.reject(new Error('error'))),
           },
         },
@@ -43,8 +45,8 @@ describe('ClienteController', () => {
   });
 
   describe('salvar', () => {
-    it('deve existir classe de serviço definida', async () => {  
-        // Verifica se a classe de serviço está definida
+    it('deve existir instância de serviço definida', async () => {  
+        // Verifica se a instância de serviço está definida
         expect(service).toBeDefined()
       });
 
