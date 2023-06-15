@@ -1,9 +1,9 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
-import { DomainException } from "src/domain/exception/domain.exception";
 import { Cliente } from "src/domain/cliente/model/cliente.model";
 import { IService } from "src/domain/service/service";
 import { SalvarClienteValidator } from "src/domain/cliente/validation/salvar-cliente.validator";
 import { IRepository } from "src/domain/repository/repository";
+import { ServiceException } from "src/domain/exception/service.exception";
 
 
 @Injectable()
@@ -27,7 +27,7 @@ export class ClienteService implements IService<Cliente>{
                     cpf: cliente.cpf,
                 }).catch(error => {
                     this.logger.error(`Erro ao salvar no banco de dados: ${error} ` )
-                    throw new DomainException(`Houve um erro ao salvar o cliente: ${error}`)
+                    throw new ServiceException(`Houve um erro ao salvar o cliente: ${error}`)
                 })
     }
 }

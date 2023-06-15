@@ -39,17 +39,23 @@ describe('ClienteController', () => {
       ],
     }).compile();
 
+    // Desabilita a saída de log
+    module.useLogger(false)
+
     // Obtém a instância do controller e do serviço a partir do módulo de teste
     controller = module.get<ClienteController>(ClienteController);
     service = module.get<IService<Cliente>>('IService<Cliente>');
   });
 
-  describe('salvar', () => {
+  describe('injeção de dependências', () => {
     it('deve existir instância de serviço definida', async () => {  
         // Verifica se a instância de serviço está definida
         expect(service).toBeDefined()
       });
+  })
 
+  describe('salvar', () => {
+   
     it('deve salvar um novo cliente', async () => {
       // Chama o método salvar do controller
       const result = await controller.salvar(request);

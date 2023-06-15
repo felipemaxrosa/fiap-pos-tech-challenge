@@ -1,17 +1,45 @@
 #!/bin/sh
 
 # Configura para usar o repositorio mockado
-NODE_ENV_CURRENT=${NODE_ENV}
-export NODE_ENV='local-mock-repository'
+setNodeEnvToMock() {
+    NODE_ENV_CURRENT=${NODE_ENV}
+    export NODE_ENV='local-mock-repository'
+}
+# Restaura os valores originais
+restoreNodeEnv() {
+  export NODE_ENV=${NODE_ENV_CURRENT}
+  unset NODE_ENV_CURRENT
+}
 
-# Executa os testes unitarios e e2e
+# Termina o programa, retornando a mensagem e status
+exitWithMessage() {
+  message=$1
+  status=$2
+  echo "$message"
+  restoreNodeEnv
+  exit $status
+}
+
+setNodeEnvToMock
+
+# Executa os testes unitarios
 echo "Executando testes unitários.."
 npm run test
+testStatus=$?
 
-# Restaura os valores originais
-export NODE_ENV=${NODE_ENV_CURRENT}
-unset NODE_ENV_CURRENT
+# Verifica se os testes unitário falharam
+if [ $testStatus -ne 0 ]; then
+  exitWithMessage "Testes unitários falharam. Abortando o commit." 1
+fi
 
-status=$?
+# Verifica cobertura de testes
+echo "Verificando cobertura de testes unitários.."
+npm run test:cov
+coverageStatus=$?
 
-exit $status
+# Verifica se a cobertura de teste atende os threasholds
+if [ $coverageStatus -ne 0 ]; then
+  exitWithMessage "Cobertura de testes unitários insuficientes. Abortando o commit." 1
+fi
+
+exitWithMessage "Validação pre-commit finalizada com sucesso" 0

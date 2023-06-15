@@ -32,26 +32,32 @@ describe('EmailUnicoClienteValidator', () => {
       ],
     }).compile();
 
+    // Desabilita a saída de log
+    module.useLogger(false)
+    
     // Obtém a instância do serviço e repositório a partir do módulo de teste
     repository = module.get<IRepository<Cliente>>('IRepository<Cliente>')
     validator = module.get<EmailUnicoClienteValidator>(EmailUnicoClienteValidator)
   });
 
-  describe('validate', () => {
+  describe('injeção de dependências', () => {
     it('deve existir instância de repositório definida', async () => {  
-        expect(repository).toBeDefined()
+      expect(repository).toBeDefined()
     });
+  })
 
+  describe('validate', () => {
+  
     it('deve validar cliente com email único', async () => {
         
-        let repositySpy = jest.spyOn(repository, 'findBy');
+        let repositorySpy = jest.spyOn(repository, 'findBy');
 
         await validator.validate(cliente)
             .then((unique) => {
                 expect(unique).toBeTruthy()
             })
         
-        expect(repositySpy).toHaveBeenCalledWith({email: cliente.email})
+        expect(repositorySpy).toHaveBeenCalledWith({email: cliente.email})
     });
 
     it('deve validar cliente com email não-único', async () => {

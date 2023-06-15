@@ -32,26 +32,32 @@ describe('CpfUnicoClienteValidator', () => {
       ],
     }).compile();
 
+    // Desabilita a saída de log
+    module.useLogger(false)
+    
     // Obtém a instância do serviço e repositório a partir do módulo de teste
     repository = module.get<IRepository<Cliente>>('IRepository<Cliente>')
     validator = module.get<CpfUnicoClienteValidator>(CpfUnicoClienteValidator)
   });
 
-  describe('validate', () => {
+  describe('injeção de dependências', () => {
     it('deve existir instância de repositório definida', async () => {  
-        expect(repository).toBeDefined()
+      expect(repository).toBeDefined()
     });
+  })
+
+  describe('validate', () => {
 
     it('deve validar cliente com cpf único', async () => {
         
-        let repositySpy = jest.spyOn(repository, 'findBy');
+        let repositorySpy = jest.spyOn(repository, 'findBy');
 
         await validator.validate(cliente)
             .then((unique) => {
                 expect(unique).toBeTruthy()
             })
         
-        expect(repositySpy).toHaveBeenCalledWith({cpf: cliente.cpf})
+        expect(repositorySpy).toHaveBeenCalledWith({cpf: cliente.cpf})
     });
 
     it('deve validar cliente com cpf não-único', async () => {

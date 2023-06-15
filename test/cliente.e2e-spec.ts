@@ -31,11 +31,14 @@ describe('ClienteController (e2e)', () => {
   
   beforeAll(async () => {
     // Configuração do módulo de teste
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       imports: [MainModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    // Desabilita a saída de log
+    module.useLogger(false)
+
+    app = module.createNestApplication();
 
     // Configuração de validações global inputs request
     app.useGlobalPipes(new ValidationPipe({

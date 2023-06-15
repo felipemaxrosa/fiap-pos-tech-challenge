@@ -4,10 +4,10 @@ import { IRepository } from "../../../../domain/repository/repository";
 import { ClienteEntity } from "../entity/cliente.entity";
 import { Repository} from "typeorm"
 import { InjectRepository } from "@nestjs/typeorm";
-import { RepositoryException } from "../../../exception/repository-infraestructure.exception";
+import { RepositoryException } from "../../../exception/repository.exception";
 
 @Injectable()
-export class ClienteTypeormRepository implements IRepository<Cliente>{
+export class ClienteTypeormRepository implements IRepository<Cliente>{w
     
     private logger: Logger = new Logger(ClienteTypeormRepository.name)
 
@@ -26,7 +26,7 @@ export class ClienteTypeormRepository implements IRepository<Cliente>{
                 }))
             })
             .catch(error => {
-                throw new RepositoryException(`Houve um erro ao buscar o cliete com os parâmetros: '${JSON.stringify(attributes)}': ${error.message}`)
+                throw new RepositoryException(`Houve um erro ao buscar o cliente com os parâmetros: '${JSON.stringify(attributes)}': ${error.message}`)
             })
     }
 
