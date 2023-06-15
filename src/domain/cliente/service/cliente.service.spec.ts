@@ -6,6 +6,8 @@ import { IService } from 'src/domain/service/service';
 import { ClienteService } from './cliente.service';
 import { EmailUnicoClienteValidator } from '../validation/email-unico-cliente.validator';
 import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
+import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
+import { ServiceException } from 'src/domain/exception/service.exception';
 describe('CienteService', () => {
   let service: IService<Cliente>;
   let repository: IRepository<Cliente>;
@@ -19,6 +21,7 @@ describe('CienteService', () => {
   };
   
   beforeEach(async () => {
+    // Configuração do módulo de teste
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         //  IService<Cliente> provider
@@ -35,6 +38,7 @@ describe('CienteService', () => {
           useValue: {
             // mock para a chamama repository.save(cliente)
             save: jest.fn(() => Promise.resolve(cliente)),
+            // mock para a chamama repository.findBy(attributes)
             findBy: jest.fn((attributes) => {
                 // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
                 return Promise.resolve({})
@@ -55,18 +59,23 @@ describe('CienteService', () => {
       ],
     }).compile();
 
-    // Obtém a instância do serviço e repositório a partir do módulo de teste
+    // Desabilita a saída de log
+    module.useLogger(false)
+
+    // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
     repository = module.get<IRepository<Cliente>>('IRepository<Cliente>')
     validators = module.get<SalvarClienteValidator[]>('SalvarClienteValidator')
     service =  module.get<IService<Cliente>>('IService<Cliente>')
   });
 
-  describe('save', () => {
-    it('deve existir classe de repositório e validator definidas', async () => {  
-        expect(repository).toBeDefined()
-        expect(validators).toBeDefined()
+  describe('injeção de dependências', () => {
+    it('deve existir instâncias de repositório e validators definidas', async () => {  
+      expect(repository).toBeDefined()
+      expect(validators).toBeDefined()
     });
+  })
 
+  describe('save', () => {
     it('deve salvar cliente', async () => {
 
       let cliente: Cliente = {
@@ -77,6 +86,7 @@ describe('CienteService', () => {
 
       await service.save(cliente)
           .then((clienteSalvo) => {
+              // verifica se o cliente salvo contém os mesmos dados passados como input
               expect(clienteSalvo.id).toEqual(1)
               expect(clienteSalvo.nome).toEqual(cliente.nome)
               expect(clienteSalvo.email).toEqual(cliente.email)
@@ -95,8 +105,9 @@ describe('CienteService', () => {
       // mock de repositório retornando um cliente, caso exista o email
       repository.findBy = jest.fn().mockImplementation((attributes) => {
         return Promise.resolve(attributes['email'] === cliente.email ? [cliente]: {})
-    })
+      })
 
+      // verifica se foi lançada uma exception com a mensagem de validção de email único
       await expect(service.save(cliente)).rejects.toThrowError(EmailUnicoClienteValidator.EMAIL_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
     });
 
@@ -113,7 +124,17 @@ describe('CienteService', () => {
           return Promise.resolve(attributes['cpf'] === cliente.cpf ? [cliente]: {})
       })
 
+      // verifica se foi lançada uma exception com a mensagem de validção de cpf único
       await expect(service.save(cliente)).rejects.toThrowError(CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
+    });
+
+    it('não deve salvar cliente quando houver um erro de banco ', async () => {
+        
+      const error = new RepositoryException('Erro genérico de banco de dados');
+      jest.spyOn(repository, 'save').mockRejectedValue(error);
+
+      // verifiaca se foi lançada uma exception na camada de serviço
+      await expect(service.save(cliente)).rejects.toThrowError(ServiceException);
     });
 
   });

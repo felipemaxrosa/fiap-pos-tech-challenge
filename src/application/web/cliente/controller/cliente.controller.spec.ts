@@ -24,6 +24,7 @@ describe('ClienteController', () => {
   };
 
   beforeEach(async () => {
+    // Configuração do módulo de teste
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ClienteController],
       providers: [
@@ -31,23 +32,30 @@ describe('ClienteController', () => {
         {
           provide: 'IService<Cliente>',
           useValue: {
+            // Mocka chamada para o save, rejeitando a promise em caso de request undefined
             save: jest.fn((request) => request ? Promise.resolve(cliente) : Promise.reject(new Error('error'))),
           },
         },
       ],
     }).compile();
 
+    // Desabilita a saída de log
+    module.useLogger(false)
+
     // Obtém a instância do controller e do serviço a partir do módulo de teste
     controller = module.get<ClienteController>(ClienteController);
     service = module.get<IService<Cliente>>('IService<Cliente>');
   });
 
-  describe('salvar', () => {
-    it('deve existir classe de serviço definida', async () => {  
-        // Verifica se a classe de serviço está definida
+  describe('injeção de dependências', () => {
+    it('deve existir instância de serviço definida', async () => {  
+        // Verifica se a instância de serviço está definida
         expect(service).toBeDefined()
       });
+  })
 
+  describe('salvar', () => {
+   
     it('deve salvar um novo cliente', async () => {
       // Chama o método salvar do controller
       const result = await controller.salvar(request);

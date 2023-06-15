@@ -1,16 +1,35 @@
 #!/bin/sh
 
 # Configura para usar o repositorio mockado
-NODE_ENV_CURRENT=${NODE_ENV}
-export NODE_ENV='local-mock-repository'
+setNodeEnvToMock() {
+    NODE_ENV_CURRENT=${NODE_ENV}
+    export NODE_ENV='local-mock-repository'
+}
+# Restaura os valores originais
+restoreNodeEnv() {
+  export NODE_ENV=${NODE_ENV_CURRENT}
+  unset NODE_ENV_CURRENT
+}
 
-echo "Executando testes de de integração (modo local moked).."
+# Termina o programa, retornando a mensagem e status
+exitWithMessage() {
+  message=$1
+  status=$2
+  echo "$message"
+  restoreNodeEnv
+  exit $status
+}
+
+setNodeEnvToMock
+
+echo "Executando testes de de integração (modo local mocked).."
 npm run test:e2e
 
-# Restaura os valores originais
-export NODE_ENV=${NODE_ENV_CURRENT}
-unset NODE_ENV_CURRENT
+e2etestStatus=$?
 
-status=$?
+# Verifica se os testes unitário falharam
+if [ $e2etestStatus -ne 0 ]; then
+  exitWithMessage "Testes de integração falharam. Abortando o push." 1
+fi
 
-exit $status
+exitWithMessage "Validação pre-push finalizada com sucesso" 0

@@ -30,11 +30,15 @@ describe('ClienteController (e2e)', () => {
   })
   
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    // Configuração do módulo de teste
+    const module: TestingModule = await Test.createTestingModule({
       imports: [MainModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    // Desabilita a saída de log
+    module.useLogger(false)
+
+    app = module.createNestApplication();
 
     // Configuração de validações global inputs request
     app.useGlobalPipes(new ValidationPipe({
@@ -44,6 +48,7 @@ describe('ClienteController (e2e)', () => {
   });
 
   it('POST /v1/cliente - Deve cadastrar um cliente e retornar o ID', () => {
+    // realiza requisição e compara a resposta
     return request(app.getHttpServer())
       .post('/v1/cliente')
       .set('Content-type', 'application/json')
@@ -59,7 +64,7 @@ describe('ClienteController (e2e)', () => {
   });
 
   it('POST /v1/cliente - Não deve cadastrar um cliente sem o request', () => {
-
+    // realiza requisição e compara a resposta de erro
     return request(app.getHttpServer())
       .post('/v1/cliente')
       .set('Content-type', 'application/json')
@@ -73,6 +78,7 @@ describe('ClienteController (e2e)', () => {
   });
   
   it('POST /v1/cliente - Não deve cadastrar um cliente com email existente', () => {
+     // realiza requisição e compara a resposta de erro
     return request(app.getHttpServer())
       .post('/v1/cliente')
       .set('Content-type', 'application/json')
@@ -90,6 +96,7 @@ describe('ClienteController (e2e)', () => {
     // Altera o email para um novo, não cadastrado
     salvarClienteRequest.email = 'novo@email.com'
 
+     // realiza requisição e compara a resposta de erro
     return request(app.getHttpServer())
       .post('/v1/cliente')
       .set('Content-type', 'application/json')
@@ -122,6 +129,7 @@ describe('ClienteController (e2e)', () => {
 
     salvarClienteRequest.email = undefined
 
+     // realiza requisição e compara a resposta de erro
     return request(app.getHttpServer())
       .post('/v1/cliente')
       .set('Content-type', 'application/json')
@@ -138,6 +146,7 @@ describe('ClienteController (e2e)', () => {
 
     salvarClienteRequest.cpf = undefined
 
+    // realiza requisição e compara a resposta de erro
     return request(app.getHttpServer())
       .post('/v1/cliente')
       .set('Content-type', 'application/json')
