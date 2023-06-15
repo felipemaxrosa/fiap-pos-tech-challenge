@@ -67,7 +67,7 @@ describe('ClienteController', () => {
         // Chama o método salvar do controller
         await expect(controller.salvar(request)).rejects.toThrow('Erro genérico não tratado');
   
-        // Verifica se o resultado obtido é igual ao objeto cliente esperado
+        // Verifica se método save foi chamado com o parametro esperado
         expect(service.save).toHaveBeenCalledWith(request);
       });
 
