@@ -9,8 +9,6 @@ import { RepositoryException } from '../../../exception/repository.exception';
 
 @Injectable()
 export class ClienteTypeormRepository implements IRepository<Cliente> {
-  w;
-
   private logger: Logger = new Logger(ClienteTypeormRepository.name);
 
   constructor(
