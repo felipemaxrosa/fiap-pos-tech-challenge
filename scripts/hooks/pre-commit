@@ -27,6 +27,10 @@ echo "Executando testes unitários.."
 npm run test
 testStatus=$?
 
+# Executa lint
+echo "Executando Lint.."
+npm run lint
+
 # Verifica se os testes unitário falharam
 if [ $testStatus -ne 0 ]; then
   exitWithMessage "Testes unitários falharam. Abortando o commit." 1
