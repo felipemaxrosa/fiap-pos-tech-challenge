@@ -1,4 +1,5 @@
-import { Catch, HttpException, HttpStatus } from '@nestjs/common';
+import { Catch, HttpException } from '@nestjs/common';
+
 import { ValidationException } from 'src/domain/exception/validation.exception';
 import { ExceptionHandler } from './exception.handler';
 

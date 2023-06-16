@@ -1,4 +1,5 @@
 import { Catch, HttpStatus } from '@nestjs/common';
+
 import { InfraestructureException } from 'src/infrastructure/exception/infrastructure.exception';
 import { ExceptionHandler } from './exception.handler';
 

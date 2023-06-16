@@ -1,9 +1,10 @@
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
+
 import { Cliente } from '../../../../domain/cliente/model/cliente.model';
 import { IRepository } from '../../../../domain/repository/repository';
 import { ClienteEntity } from '../entity/cliente.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { RepositoryException } from '../../../exception/repository.exception';
 
 @Injectable()

@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+
 import { MysqlConfg } from './mysql/mysql.config';
-import { ClienteTypeormRepository } from './cliente/repository/cliente-typeorm.repository';
-import { ClienteEntity } from './cliente/entity/cliente.entity';
 import { DatabaseConstants } from './mysql/mysql.constants';
+import { ClienteEntity } from './cliente/entity/cliente.entity';
+import { ClienteTypeormRepository } from './cliente/repository/cliente-typeorm.repository';
 
 @Module({
   imports: [

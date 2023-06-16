@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { DomainModule } from 'src/domain/domain.module';
 import { APP_FILTER } from '@nestjs/core';
+
+import { DomainModule } from 'src/domain/domain.module';
 import { InfraestructureExceptionHandler } from './web/handler/infraestructure-exception.handler';
 import { ValidationExceptionHandler } from './web/handler/validation-exception.handler';
 import { ClienteController } from './web/cliente/controller/cliente.controller';

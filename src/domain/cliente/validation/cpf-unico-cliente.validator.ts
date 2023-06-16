@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+
 import { SalvarClienteValidator } from './salvar-cliente.validator';
 import { ValidationException } from 'src/domain/exception/validation.exception';
 import { Cliente } from '../model/cliente.model';
