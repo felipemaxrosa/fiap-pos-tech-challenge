@@ -7,19 +7,19 @@ import { EmailUnicoClienteValidator } from './cliente/validation/email-unico-cli
 import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.validator';
 
 @Module({
-    providers:[
-        {provide: 'IService<Cliente>', useClass: ClienteService},
-        {   
-            provide: 'SalvarClienteValidator',
-            inject: ['IRepository<Cliente>'],
-            useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => [
-                new EmailUnicoClienteValidator(repository),
-                new CpfUnicoClienteValidator(repository),
-            ]
-        },
-    ],
-    exports:[
-        {provide: 'IService<Cliente>', useClass: ClienteService},
-    ]
+  providers: [
+    { provide: 'IService<Cliente>', useClass: ClienteService },
+    {
+      provide: 'SalvarClienteValidator',
+      inject: ['IRepository<Cliente>'],
+      useFactory: (
+        repository: IRepository<Cliente>,
+      ): SalvarClienteValidator[] => [
+        new EmailUnicoClienteValidator(repository),
+        new CpfUnicoClienteValidator(repository),
+      ],
+    },
+  ],
+  exports: [{ provide: 'IService<Cliente>', useClass: ClienteService }],
 })
 export class DomainModule {}

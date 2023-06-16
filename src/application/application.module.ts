@@ -9,17 +9,13 @@ import { GeneralExceptionHandler } from './web/handler/general-exception.handler
 import { GeneralHttpExceptionHandler } from './web/handler/general-http-exception.handler';
 
 @Module({
-    imports:[
-        InfrastructureModule,
-        DomainModule,
-    ],
-    providers:[
-        {provide: APP_FILTER, useClass: GeneralExceptionHandler},
-        {provide: APP_FILTER, useClass: GeneralHttpExceptionHandler},
-        {provide: APP_FILTER, useClass: InfraestructureExceptionHandler},
-        {provide: APP_FILTER, useClass: ValidationExceptionHandler},
-
-    ],
-    controllers: [ClienteController]
+  imports: [InfrastructureModule, DomainModule],
+  providers: [
+    { provide: APP_FILTER, useClass: GeneralExceptionHandler },
+    { provide: APP_FILTER, useClass: GeneralHttpExceptionHandler },
+    { provide: APP_FILTER, useClass: InfraestructureExceptionHandler },
+    { provide: APP_FILTER, useClass: ValidationExceptionHandler },
+  ],
+  controllers: [ClienteController],
 })
 export class ApplicationModule {}

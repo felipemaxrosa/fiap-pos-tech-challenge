@@ -33,14 +33,18 @@ describe('ClienteController', () => {
           provide: 'IService<Cliente>',
           useValue: {
             // Mocka chamada para o save, rejeitando a promise em caso de request undefined
-            save: jest.fn((request) => request ? Promise.resolve(cliente) : Promise.reject(new Error('error'))),
+            save: jest.fn((request) =>
+              request
+                ? Promise.resolve(cliente)
+                : Promise.reject(new Error('error')),
+            ),
           },
         },
       ],
     }).compile();
 
     // Desabilita a saída de log
-    module.useLogger(false)
+    module.useLogger(false);
 
     // Obtém a instância do controller e do serviço a partir do módulo de teste
     controller = module.get<ClienteController>(ClienteController);
@@ -48,14 +52,13 @@ describe('ClienteController', () => {
   });
 
   describe('injeção de dependências', () => {
-    it('deve existir instância de serviço definida', async () => {  
-        // Verifica se a instância de serviço está definida
-        expect(service).toBeDefined()
-      });
-  })
+    it('deve existir instância de serviço definida', async () => {
+      // Verifica se a instância de serviço está definida
+      expect(service).toBeDefined();
+    });
+  });
 
   describe('salvar', () => {
-   
     it('deve salvar um novo cliente', async () => {
       // Chama o método salvar do controller
       const result = await controller.salvar(request);
@@ -68,16 +71,16 @@ describe('ClienteController', () => {
     });
 
     it('não deve tratar erro a nível de controlador', async () => {
-        
-        const error = new Error('Erro genérico não tratado');
-        jest.spyOn(service, 'save').mockRejectedValue(error);
-  
-        // Chama o método salvar do controller
-        await expect(controller.salvar(request)).rejects.toThrow('Erro genérico não tratado');
-  
-        // Verifica se método save foi chamado com o parametro esperado
-        expect(service.save).toHaveBeenCalledWith(request);
-      });
+      const error = new Error('Erro genérico não tratado');
+      jest.spyOn(service, 'save').mockRejectedValue(error);
 
+      // Chama o método salvar do controller
+      await expect(controller.salvar(request)).rejects.toThrow(
+        'Erro genérico não tratado',
+      );
+
+      // Verifica se método save foi chamado com o parametro esperado
+      expect(service.save).toHaveBeenCalledWith(request);
+    });
   });
 });
