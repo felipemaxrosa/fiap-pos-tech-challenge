@@ -1,3 +1,1 @@
-export class DomainException extends Error{
-    
-}
+export class DomainException extends Error {}

@@ -1,3 +1,1 @@
-export class InfraestructureException extends Error{
-    
-}
+export class InfraestructureException extends Error {}

@@ -4,70 +4,68 @@ import { IRepository } from 'src/domain/repository/repository';
 import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
 
 describe('CpfUnicoClienteValidator', () => {
-  let validator: CpfUnicoClienteValidator
-  let repository: IRepository<Cliente>
+   let validator: CpfUnicoClienteValidator;
+   let repository: IRepository<Cliente>;
 
-  const cliente: Cliente = {
-    id:1,
-    nome: 'Teste',
-    email: 'teste@teste.com',
-    cpf: '123456789',
-  };
-  
-  beforeEach(async () => {
-    // Configuração do módulo de teste
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        CpfUnicoClienteValidator,
-        // Mock do serviço IRepository<Cliente>
-        {
-          provide: 'IRepository<Cliente>',
-          useValue: {
-            findBy: jest.fn((attributes) => {
-                // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
-                return Promise.resolve({})
-            }),
-          },
-        },
-      ],
-    }).compile();
+   const cliente: Cliente = {
+      id: 1,
+      nome: 'Teste',
+      email: 'teste@teste.com',
+      cpf: '123456789',
+   };
 
-    // Desabilita a saída de log
-    module.useLogger(false)
-    
-    // Obtém a instância do serviço e repositório a partir do módulo de teste
-    repository = module.get<IRepository<Cliente>>('IRepository<Cliente>')
-    validator = module.get<CpfUnicoClienteValidator>(CpfUnicoClienteValidator)
-  });
+   beforeEach(async () => {
+      // Configuração do módulo de teste
+      const module: TestingModule = await Test.createTestingModule({
+         providers: [
+            CpfUnicoClienteValidator,
+            // Mock do serviço IRepository<Cliente>
+            {
+               provide: 'IRepository<Cliente>',
+               useValue: {
+                  findBy: jest.fn(() => {
+                     // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
+                     return Promise.resolve({});
+                  }),
+               },
+            },
+         ],
+      }).compile();
 
-  describe('injeção de dependências', () => {
-    it('deve existir instância de repositório definida', async () => {  
-      expect(repository).toBeDefined()
-    });
-  })
+      // Desabilita a saída de log
+      module.useLogger(false);
 
-  describe('validate', () => {
+      // Obtém a instância do serviço e repositório a partir do módulo de teste
+      repository = module.get<IRepository<Cliente>>('IRepository<Cliente>');
+      validator = module.get<CpfUnicoClienteValidator>(CpfUnicoClienteValidator);
+   });
 
-    it('deve validar cliente com cpf único', async () => {
-        
-        let repositorySpy = jest.spyOn(repository, 'findBy');
+   describe('injeção de dependências', () => {
+      it('deve existir instância de repositório definida', async () => {
+         expect(repository).toBeDefined();
+      });
+   });
 
-        await validator.validate(cliente)
-            .then((unique) => {
-                expect(unique).toBeTruthy()
-            })
-        
-        expect(repositorySpy).toHaveBeenCalledWith({cpf: cliente.cpf})
-    });
+   describe('validate', () => {
+      it('deve validar cliente com cpf único', async () => {
+         const repositorySpy = jest.spyOn(repository, 'findBy');
 
-    it('deve validar cliente com cpf não-único', async () => {
-        // mock de repositório retornando um cliente
-        repository.findBy = jest.fn().mockImplementation((attributes) => {
-            return Promise.resolve([cliente])
-        })
+         await validator.validate(cliente).then((unique) => {
+            expect(unique).toBeTruthy();
+         });
 
-        await expect(validator.validate(cliente)).rejects.toThrowError(CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
-    });
+         expect(repositorySpy).toHaveBeenCalledWith({ cpf: cliente.cpf });
+      });
 
-  });
+      it('deve validar cliente com cpf não-único', async () => {
+         // mock de repositório retornando um cliente
+         repository.findBy = jest.fn().mockImplementation(() => {
+            return Promise.resolve([cliente]);
+         });
+
+         await expect(validator.validate(cliente)).rejects.toThrowError(
+            CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
+         );
+      });
+   });
 });

@@ -1,11 +1,9 @@
 export class EnvUtils {
-    
-    static envs(): string {
+   static envs(): string {
+      const envs = Object.entries(process.env)
+         .map((key, value) => `${key}=${value}`)
+         .join('\n');
 
-        const envs = Object.entries(process.env)
-            .map((key, value) => `${key}=${value}`)
-            .join('\n');
-
-        return envs
-    }
+      return envs;
+   }
 }
