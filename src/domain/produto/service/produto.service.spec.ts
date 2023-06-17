@@ -152,9 +152,9 @@ describe('ProdutoService', () => {
         ativo: true,
       };
 
-      // verifica se foi lançada uma exception com a mensagem de validção de email único
+      // verifica se foi lançada uma exception com a mensagem de idCategoriaProduto inválido
       await expect(service.save(produto)).rejects.toThrowError(
-        CamposObrigatoriosProdutoValidator.CAMPOS_INVALIDOS_ERROR_MESSAGE,
+        CamposObrigatoriosProdutoValidator.ID_CATEGORIA_PRODUTO_INVALIDO_ERROR_MESSAGE,
       );
     }); // end it não salva produto com preço inválido
 
@@ -162,7 +162,7 @@ describe('ProdutoService', () => {
       const error = new RepositoryException('Erro genérico de banco de dados');
       jest.spyOn(repository, 'save').mockRejectedValue(error);
 
-      // verifiaca se foi lançada uma exception na camada de serviço
+      // verifica se foi lançada uma exception na camada de serviço
       await expect(service.save(produto)).rejects.toThrowError(
         ServiceException,
       );

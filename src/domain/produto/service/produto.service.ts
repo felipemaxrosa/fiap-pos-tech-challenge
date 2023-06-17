@@ -1,9 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { DomainException } from 'src/domain/exception/domain.exception';
 import { Produto } from 'src/domain/Produto/model/Produto.model';
 import { IService } from 'src/domain/service/service';
 import { SalvarProdutoValidator } from 'src/domain/Produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/domain/repository/repository';
+import { ServiceException } from '../../exception/service.exception';
 
 @Injectable()
 export class ProdutoService implements IService<Produto> {
@@ -31,7 +31,7 @@ export class ProdutoService implements IService<Produto> {
       })
       .catch((error) => {
         this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
-        throw new DomainException(
+        throw new ServiceException(
           `Houve um erro ao salvar o produto: ${error}`,
         );
       });
