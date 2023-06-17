@@ -5,5 +5,5 @@ Content-Type: application/json
 {
    "nome": "cliente",
    "email": "cliente@email.com",
-   "cpf": "12345678901" 
+   "cpf": "02345678902" 
 }
