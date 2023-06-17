@@ -1,0 +1,9 @@
+### Cria um cliente
+POST http://localhost:3000/v1/produto
+Content-Type: application/json
+
+{
+   "nome": "Produto Teste",
+   "descricao": "Descrição Produto Teste",
+   "preço": "100,00"
+}
