@@ -1,5 +1,3 @@
-import { DomainException } from "./domain.exception";
+import { DomainException } from './domain.exception';
 
-export class ServiceException extends DomainException{
-    
-}
+export class ServiceException extends DomainException {}

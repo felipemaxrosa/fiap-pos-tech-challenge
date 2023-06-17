@@ -1,4 +1,4 @@
-export interface IRepository<T>{
-    save(type: T): Promise<T>;
-    findBy(attributes: {}): Promise<T[]>;
+export interface IRepository<T> {
+   save(type: T): Promise<T>;
+   findBy(attributes: any): Promise<T[]>;
 }

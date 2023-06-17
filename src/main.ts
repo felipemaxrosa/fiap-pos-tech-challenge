@@ -1,38 +1,40 @@
 import { NestFactory } from '@nestjs/core';
-import { MainModule } from './main.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+import { MainModule } from './main.module';
 import { EnvUtils } from './shared/env.utils';
 import { ApplicationConstants } from './application/constants/application.constants';
 
-async function bootstrap() {
-  
-  const logger: Logger = new Logger(MainModule.name)
-  
-  // Configuração do servidor
-  const serverPort = process.env.SERVER_PORT || 3000;
-  const app = await NestFactory.create(MainModule);
+async function bootstrap(): Promise<void> {
+   const logger: Logger = new Logger(MainModule.name);
 
-  // Configuração de validações global inputs request
-  app.useGlobalPipes(new ValidationPipe({
-    stopAtFirstError: true
-  }))
+   // Configuração do servidor
+   const serverPort = process.env.SERVER_PORT || 3000;
+   const app = await NestFactory.create(MainModule);
 
-  // Configuração do swagger
-  const options = new DocumentBuilder()
-    .setTitle(ApplicationConstants.SWAGGER_TITLE)
-    .setVersion(ApplicationConstants.SWAGGER_VERSION)
-    .setDescription(ApplicationConstants.SWAGGER_DESCRIPTION)
-    .build();
+   // Configuração de validações global inputs request
+   app.useGlobalPipes(
+      new ValidationPipe({
+         stopAtFirstError: true,
+      }),
+   );
 
-  logger.log('Configurando swagger');
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(ApplicationConstants.SWAGGER_PATH, app, document)
+   // Configuração do swagger
+   const options = new DocumentBuilder()
+      .setTitle(ApplicationConstants.SWAGGER_TITLE)
+      .setVersion(ApplicationConstants.SWAGGER_VERSION)
+      .setDescription(ApplicationConstants.SWAGGER_DESCRIPTION)
+      .build();
 
-  // Server startup
-  logger.log(`Configurando aplicação com as variáveis:`, EnvUtils.envs())
-  await app.listen(serverPort);
-  logger.log(`Servidor escutando na porta: ${serverPort}`);
+   logger.log('Configurando swagger');
+   const document = SwaggerModule.createDocument(app, options);
+   SwaggerModule.setup(ApplicationConstants.SWAGGER_PATH, app, document);
+
+   // Server startup
+   logger.log(`Configurando aplicação com as variáveis:`, EnvUtils.envs());
+   await app.listen(serverPort);
+   logger.log(`Servidor escutando na porta: ${serverPort}`);
 }
 
 bootstrap();
