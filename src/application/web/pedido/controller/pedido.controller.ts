@@ -5,6 +5,7 @@ import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { IService } from 'src/domain/service/service';
 import { CriarNovoPedidoRequest } from '../request/criar-novo-pedido.request';
 import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';
+import { PedidoConstants } from 'src/shared/constants';
 
 @Controller('v1/pedido')
 @ApiTags('Pedido')
@@ -13,7 +14,7 @@ import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';
 export class PedidoController {
    private logger: Logger = new Logger(PedidoController.name);
 
-   constructor(@Inject('IService<Pedido>') private service: IService<Pedido>) {}
+   constructor(@Inject(PedidoConstants.ISERVICE) private service: IService<Pedido>) {}
 
    @Post()
    @ApiCreatedResponse({ description: 'Pedido gerado com sucesso' })
