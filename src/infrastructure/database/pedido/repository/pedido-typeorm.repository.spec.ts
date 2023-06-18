@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { IRepository } from 'src/domain/repository/repository';
-import { PedidoEntity } from '../entity/pedido.entity';
+import { PedidoEntity } from '../../pedido/entity/pedido.entity';
 import { PedidoTypeormRepository } from './pedido-typeorm.repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';

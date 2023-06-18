@@ -4,7 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { IRepository } from 'src/domain/repository/repository';
-import { PedidoEntity } from '../entity/pedido.entity';
+import { PedidoEntity } from '../../pedido/entity/pedido.entity';
 import { RepositoryException } from '../../../exception/repository.exception';
 
 @Injectable()

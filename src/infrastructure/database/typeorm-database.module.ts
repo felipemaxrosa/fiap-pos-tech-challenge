@@ -5,8 +5,8 @@ import { MysqlConfg } from './mysql/mysql.config';
 import { DatabaseConstants } from './mysql/mysql.constants';
 import { ClienteEntity } from './cliente/entity/cliente.entity';
 import { ClienteTypeormRepository } from './cliente/repository/cliente-typeorm.repository';
-import { PedidoEntity } from './cliente/entity/pedido.entity';
-import { PedidoTypeormRepository } from './cliente/repository/pedido-typeorm.repository';
+import { PedidoEntity } from './pedido/entity/pedido.entity';
+import { PedidoTypeormRepository } from './pedido/repository/pedido-typeorm.repository';
 import { PedidoConstants } from 'src/shared/constants';
 @Module({
    imports: [
