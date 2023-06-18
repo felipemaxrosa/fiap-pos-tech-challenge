@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { IRepository } from 'src/domain/repository/repository';
 import { IService } from 'src/domain/service/service';
@@ -8,16 +9,19 @@ import { ServiceException } from 'src/domain/exception/service.exception';
 import { ESTADO_PEDIDO } from '../enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 import { CriarNovoPedidoRequest } from 'src/application/web/pedido/request/criar-novo-pedido.request';
+import { CriarNovoPedidoValidator } from '../validation/criar-novo-pedido.validator';
+import { EstadoCorretoNovoPedidoValidator } from '../validation/estado-correto-novo-pedido.validator';
 
 describe('PedidoService', () => {
    let service: IService<Pedido>;
    let repository: IRepository<Pedido>;
+   let validators: CriarNovoPedidoValidator[];
 
    const pedido: Pedido = {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      estadoPedido: ESTADO_PEDIDO.RECEBIDO,
    };
 
    beforeEach(async () => {
@@ -27,9 +31,12 @@ describe('PedidoService', () => {
             //  IService<Pedido> provider
             {
                provide: PedidoConstants.ISERVICE,
-               inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (repository: IRepository<Pedido>): IService<Pedido> => {
-                  return new PedidoService(repository);
+               inject: [PedidoConstants.IREPOSITORY, 'CriarNovoPedidoValidator'],
+               useFactory: (
+                  repository: IRepository<Pedido>,
+                  criarNovoPedidoValidator: CriarNovoPedidoValidator[],
+               ): IService<Pedido> => {
+                  return new PedidoService(repository, criarNovoPedidoValidator);
                },
             },
             // Mock do serviço IRepository<Pedido>
@@ -45,6 +52,14 @@ describe('PedidoService', () => {
                   }),
                },
             },
+            // Mock do CriarNovoPedidoValidator
+            {
+               provide: 'CriarNovoPedidoValidator',
+               inject: [PedidoConstants.IREPOSITORY],
+               useFactory: (): CriarNovoPedidoValidator[] => {
+                  return [new EstadoCorretoNovoPedidoValidator()];
+               },
+            },
          ],
       }).compile();
 
@@ -53,12 +68,14 @@ describe('PedidoService', () => {
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
       repository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
+      validators = module.get<CriarNovoPedidoValidator[]>('CriarNovoPedidoValidator');
       service = module.get<IService<Pedido>>(PedidoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {
       it('deve existir instância de repositório definida', async () => {
          expect(repository).toBeDefined();
+         expect(validators).toBeDefined();
       });
    });
 
@@ -67,7 +84,7 @@ describe('PedidoService', () => {
          const novoPedido: CriarNovoPedidoRequest = {
             clienteId: 1,
             dataInicio: '2023-06-18',
-            estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+            estadoPedido: ESTADO_PEDIDO.RECEBIDO,
          };
 
          await service.save(novoPedido).then((pedidoSalvo) => {

@@ -3,7 +3,7 @@ import { ApiConsumes, ApiCreatedResponse, ApiProduces, ApiTags } from '@nestjs/s
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { IService } from 'src/domain/service/service';
-import { CriarNovoPedidoRequest } from '../request/criar-novo-pedido.request';
+import { CriarNovoPedidoRequest } from '../request';
 import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 
