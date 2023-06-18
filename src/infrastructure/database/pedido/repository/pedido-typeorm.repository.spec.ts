@@ -43,7 +43,7 @@ describe('PedidoTypeormRepository', () => {
             {
                provide: PedidoConstants.REPOSITORY_PEDIDO_ENTITY,
                useValue: {
-                  // mock para a chamama repositoryTypeOrm.save(cliente)
+                  // mock para a chamama repositoryTypeOrm.save(pedido)
                   save: jest.fn(() => Promise.resolve(pedidoEntity)),
                   // mock para a chamama repositoryTypeOrm.findBy(attributes)
                   findBy: jest.fn(() => {
@@ -73,7 +73,7 @@ describe('PedidoTypeormRepository', () => {
          const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'save');
 
          await repository.save(mockedPedido).then((pedidoSalvo) => {
-            // verifica se o cliente salvo contém os mesmos dados passados como input
+            // verifica se o pedido criado contém os mesmos dados passados como input
             expect(pedidoSalvo.id).toEqual(1);
             expect(pedidoSalvo.clienteId).toEqual(mockedPedido.clienteId);
             expect(pedidoSalvo.dataInicio).toEqual(mockedPedido.dataInicio);
@@ -115,7 +115,7 @@ describe('PedidoTypeormRepository', () => {
          });
 
          await repository.findBy({ dataInicio: mockedPedido.dataInicio }).then((pedidosEncontrados) => {
-            // verifica se o cliente salvo contém os mesmos dados passados como input
+            // verifica se o pedido criado contém os mesmos dados passados como input
             pedidosEncontrados.forEach((pedido) => {
                expect(pedido.dataInicio).toEqual(mockedPedido.dataInicio);
                expect(pedido.id).not.toBeUndefined();
@@ -131,7 +131,7 @@ describe('PedidoTypeormRepository', () => {
          });
 
          await repository.findBy({ clienteId: mockedPedido.clienteId }).then((pedidosEncontrados) => {
-            // verifica se o cliente salvo contém os mesmos dados passados como input
+            // verifica se o pedido criado contém os mesmos dados passados como input
             pedidosEncontrados.forEach((pedido) => {
                expect(pedido.clienteId).toEqual(mockedPedido.clienteId);
                expect(pedido.id).not.toBeUndefined();
@@ -147,7 +147,7 @@ describe('PedidoTypeormRepository', () => {
          });
 
          await repository.findBy({ estadoPedido: mockedPedido.estadoPedido }).then((pedidosEncontrados) => {
-            // verifica se o cliente salvo contém os mesmos dados passados como input
+            // verifica se o pedido criado    contém os mesmos dados passados como input
             pedidosEncontrados.forEach((pedido) => {
                expect(pedido.estadoPedido).toEqual(mockedPedido.estadoPedido);
                expect(pedido.id).not.toBeUndefined();

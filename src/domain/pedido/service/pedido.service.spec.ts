@@ -36,7 +36,7 @@ describe('PedidoService', () => {
             {
                provide: PedidoConstants.IREPOSITORY,
                useValue: {
-                  // mock para a chamama repository.save(cliente)
+                  // mock para a chamama repository.save(pedido)
                   save: jest.fn(() => Promise.resolve(pedido)),
                   // mock para a chamama repository.findBy(attributes)
                   findBy: jest.fn(() => {
@@ -71,7 +71,7 @@ describe('PedidoService', () => {
          };
 
          await service.save(novoPedido).then((pedidoSalvo) => {
-            // verifica se o cliente salvo contém os mesmos dados passados como input
+            // verifica se o pedido criado contém os mesmos dados passados como input
             expect(pedidoSalvo.id).toEqual(1);
             expect(pedidoSalvo.clienteId).toEqual(novoPedido.clienteId);
             expect(pedidoSalvo.dataInicio).toEqual(novoPedido.dataInicio);

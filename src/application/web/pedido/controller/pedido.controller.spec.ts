@@ -12,14 +12,14 @@ describe('PedidoController', () => {
 
    const request: CriarNovoPedidoRequest = {
       clienteId: 1,
-      dataInicio: new Date().toString(),
+      dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
    };
 
    const pedido: Pedido = {
       id: 1,
       clienteId: 1,
-      dataInicio: new Date().toString(),
+      dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
    };
 
