@@ -11,30 +11,29 @@ import { SalvarProdutoValidator } from './produto/validation/salvar-produto.vali
 import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-obrigatorios-produto.validator';
 
 @Module({
-  providers: [
-    { provide: 'IService<Cliente>', useClass: ClienteService },
-    {
-      provide: 'SalvarClienteValidator',
-      inject: ['IRepository<Cliente>'],
-      useFactory: (
-        repository: IRepository<Cliente>,
-      ): SalvarClienteValidator[] => [
-        new EmailUnicoClienteValidator(repository),
-        new CpfUnicoClienteValidator(repository),
-      ],
-    },
+   providers: [
+      { provide: 'IService<Cliente>', useClass: ClienteService },
+      {
+         provide: 'SalvarClienteValidator',
+         inject: ['IRepository<Cliente>'],
+         useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => [
+            new EmailUnicoClienteValidator(repository),
+            new CpfUnicoClienteValidator(repository),
+         ],
+      },
 
-    { provide: 'IService<Produto>', useClass: ProdutoService },
-    {
-      provide: 'SalvarProdutoValidator',
-      inject: ['IRepository<Produto>'],
-      useFactory: (
-        repository: IRepository<Produto>,
-      ): SalvarProdutoValidator[] => [
-        new CamposObrigatoriosProdutoValidator(repository),
-      ],
-    },
-  ],
-  exports: [{ provide: 'IService<Cliente>', useClass: ClienteService }],
+      { provide: 'IService<Produto>', useClass: ProdutoService },
+      {
+         provide: 'SalvarProdutoValidator',
+         inject: ['IRepository<Produto>'],
+         useFactory: (repository: IRepository<Produto>): SalvarProdutoValidator[] => [
+            new CamposObrigatoriosProdutoValidator(repository),
+         ],
+      },
+   ],
+   exports: [
+      { provide: 'IService<Cliente>', useClass: ClienteService },
+      { provide: 'IService<Produto>', useClass: ProdutoService },
+   ],
 })
 export class DomainModule {}
