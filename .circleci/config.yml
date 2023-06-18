@@ -1,7 +1,7 @@
 version: 2.1
 jobs:
   build:
-    working_directory: $CIRCLE_WORKING_DIRECTORY
+    working_directory: ~/fast-n-foodious
     docker:
       - image: cimg/node:18.16.0
         auth:
@@ -42,7 +42,7 @@ jobs:
           name: Wait for MySQL to Accept Connections and Run Initialization Scripts
           command: |
             docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "until mysqladmin ping -h 127.0.0.1 -u$DATABASE_USERNAME -p$DATABASE_PASSWORD; do sleep 1; done"
-            docker cp $CIRCLE_WORKING_DIRECTORY/scripts/schema/. $(docker-compose ps -q mysql):/docker-entrypoint-initdb.d
+            docker cp ./scripts/schema/. $(docker-compose ps -q mysql):/docker-entrypoint-initdb.d
             docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "mysql -uroot -p$DATABASE_PASSWORD -e 'source /docker-entrypoint-initdb.d/1-init.sql; source /docker-entrypoint-initdb.d/2-populate.sql;'"
       - run:
           name: Run E2E Tests (With TypeORM Repositories - MySQL)
