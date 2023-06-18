@@ -46,9 +46,13 @@ describe('ClienteController (e2e)', () => {
       await app.init();
    });
 
-   it('POST /v1/cliente - Deve cadastrar um cliente e retornar o ID', () => {
+   afterAll(async () => {
+      await app.close();
+   });
+
+   it('POST /v1/cliente - Deve cadastrar um cliente e retornar o ID', async () => {
       // realiza requisição e compara a resposta
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
@@ -62,9 +66,9 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente sem o request', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente sem o request', async () => {
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send({})
@@ -80,13 +84,13 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente com email existente', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente com email existente', async () => {
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
-         .catch((response) => {
+         .then((response) => {
             expect(response.status).toEqual(400);
             expect(response.body.message).toEqual(
                EmailUnicoClienteValidator.EMAIL_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
@@ -96,16 +100,16 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente com cpf existente', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente com cpf existente', async () => {
       // Altera o email para um novo, não cadastrado
       salvarClienteRequest.email = 'novo@email.com';
 
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
-         .catch((response) => {
+         .then((response) => {
             expect(response.status).toEqual(400);
             expect(response.body.message).toEqual(CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
             expect(response.body).toHaveProperty('path');
@@ -113,10 +117,10 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente sem nome', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente sem nome', async () => {
       salvarClienteRequest.nome = undefined;
 
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
@@ -128,11 +132,11 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente sem email', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente sem email', async () => {
       salvarClienteRequest.email = undefined;
 
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
@@ -144,11 +148,11 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente sem cpf', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente sem cpf', async () => {
       salvarClienteRequest.cpf = undefined;
 
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
@@ -160,11 +164,11 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente com nome maior do que 255 caracteres', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente com nome maior do que 255 caracteres', async () => {
       salvarClienteRequest.nome = Array.from({ length: 256 }, () => 'x').join('');
 
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
@@ -176,11 +180,11 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente com email maior do que 255 caracteres', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente com email maior do que 255 caracteres', async () => {
       salvarClienteRequest.email = Array.from({ length: 256 }, () => 'x').join('');
 
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)
@@ -192,11 +196,11 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
-   it('POST /v1/cliente - Não deve cadastrar um cliente com cpf maior do que 11 caracteres', () => {
+   it('POST /v1/cliente - Não deve cadastrar um cliente com cpf maior do que 11 caracteres', async () => {
       salvarClienteRequest.cpf = '123456789012';
 
       // realiza requisição e compara a resposta de erro
-      return request(app.getHttpServer())
+      return await request(app.getHttpServer())
          .post('/v1/cliente')
          .set('Content-type', 'application/json')
          .send(salvarClienteRequest)

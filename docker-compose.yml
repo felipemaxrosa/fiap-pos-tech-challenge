@@ -13,7 +13,7 @@ services:
     depends_on:
       - mysql
     networks:
-      - fast-n-foodious-networks
+      - fast-n-foodious-network
   mysql:
     image: mysql:8.0
     container_name: fast-n-foodious-mysql    
@@ -21,6 +21,7 @@ services:
     environment:
       MYSQL_PASSWORD: $DATABASE_PASSWORD
       MYSQL_ROOT_PASSWORD: $DATABASE_PASSWORD
+      MYSQL_ROOT_HOST: '%'
       MYSQL_USER: $DATABASE_USERNAME
       MYSQL_DATABASE: FAST_N_FOODIOUS
     ports:
@@ -29,10 +30,10 @@ services:
       - ./scripts/schema:/docker-entrypoint-initdb.d
       - mysql-data:/data/db
     networks:
-      - fast-n-foodious-networks
+      - fast-n-foodious-network
 
 volumes:
   mysql-data:
 networks:
-  fast-n-foodious-networks:
+  fast-n-foodious-network:
     driver: bridge
