@@ -50,7 +50,7 @@ CREATE UNIQUE INDEX produto_nome_idx ON PRODUTO(NOME);
 CREATE TABLE IF NOT EXISTS PEDIDO (
                                        ID INT AUTO_INCREMENT PRIMARY KEY,
                                        CLIENTE_ID INT NOT NULL, CONSTRAINT FK_CLIENTE_ID FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(ID),
-                                       DATA_HORA_INICIO VARCHAR(255) NOT NULL,
+                                       DATA_INICIO VARCHAR(255) NOT NULL,
                                        ESTADO_PEDIDO VARCHAR(255) NOT NULL, 
 )
 -- indexes para tabela PEDIDO
