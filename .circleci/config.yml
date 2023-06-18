@@ -60,7 +60,7 @@ jobs:
             docker tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 $DOCKER_USER/fast-n-foodious-app:latest
             docker push $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM
             docker push $DOCKER_USER/fast-n-foodious-app:latest
-            echo "Docker image pushed successfully!
+            echo "Docker image pushed successfully!"
       - run:
           when: on_fail
           name: Build failed
