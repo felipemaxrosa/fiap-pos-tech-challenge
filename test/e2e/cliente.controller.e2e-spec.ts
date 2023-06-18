@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 
-import { MainModule } from '../src/main.module';
+import { MainModule } from '../../src/main.module';
 import { SalvarClienteRequest } from 'src/application/web/cliente/request/salvar-cliente.request';
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { EmailUnicoClienteValidator } from 'src/domain/cliente/validation/email-unico-cliente.validator';
