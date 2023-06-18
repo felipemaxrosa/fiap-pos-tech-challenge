@@ -33,6 +33,9 @@ jobs:
           name: Run E2E Tests (With In-Memory Repositories)
           command: NODE_ENV=local-mock-repository npm run test:e2e
       - run:
+          name: Verify Components Without Unit/E2E Tests
+          command: npm run test:check
+      - run:
           name: Build Docker Images
           command: docker-compose --env-file ./envs/prod.env build
       - run:
@@ -53,14 +56,18 @@ jobs:
       - deploy:
           when: on_success
           name: Build Production Image & Push It To Registry
-          command: | 
-            docker build -t $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 .
-            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-            docker tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM
-            docker tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 $DOCKER_USER/fast-n-foodious-app:latest
-            docker push $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM
-            docker push $DOCKER_USER/fast-n-foodious-app:latest
-            echo "Docker image pushed successfully!"
+          command: |
+            if [ "$CIRCLE_BRANCH" = "main" ]; then 
+              docker build -t $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 .
+              echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+              docker tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM
+              docker tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 $DOCKER_USER/fast-n-foodious-app:latest
+              docker push $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM
+              docker push $DOCKER_USER/fast-n-foodious-app:latest
+              echo "Docker image pushed successfully!"
+            else
+              echo "Skipping image push as it's not the main branch."
+            fi 
       - run:
           when: on_fail
           name: Build failed
