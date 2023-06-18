@@ -7,9 +7,9 @@ export class CriarNovoPedidoRequest {
    @IsInt({ message: 'ID do cliente deve ser válido' })
    public clienteId: number;
 
-   @ApiProperty({ required: true, nullable: false, description: 'Data e Hora do Inicio do Pedido' })
-   @IsNotEmpty({ message: 'Data e Hora não pode ser vazio' })
-   @IsString({ message: 'Data e Hora deve ser válido' })
+   @ApiProperty({ required: true, nullable: false, description: 'Data do Inicio do Pedido' })
+   @IsNotEmpty({ message: 'Data não pode ser vazio' })
+   @IsString({ message: 'Data deve ser válido' })
    public dataInicio: string;
 
    @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido' })
