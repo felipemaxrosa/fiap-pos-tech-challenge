@@ -22,6 +22,9 @@ exitWithMessage() {
 
 setNodeEnvToMock
 
+echo "Verificando implementações dos testes.."
+npm run test:check
+
 echo "Executando testes de de integração (modo local mocked).."
 npm run test:e2e
 
