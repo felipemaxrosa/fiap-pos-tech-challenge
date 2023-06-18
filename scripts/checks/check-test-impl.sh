@@ -31,6 +31,11 @@ for component in "${components[@]}"; do
         continue
       fi
 
+      # Ignore files that contain "export type IValidator<xxx>;" if component is "valdidator"
+      if [ "$component" == "validator" ] && grep -q "export type .* = IValidator<.*>;" "$file"; then
+        continue
+      fi
+
       #echo "$test_file: You need to create and provide the test implementation for this component."
       missing_components+=("$test_file")
     # else
