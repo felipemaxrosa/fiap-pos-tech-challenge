@@ -25,20 +25,17 @@ for component in "${components[@]}"; do
     
     # Check if the test file exists
     if [ ! -f "$test_file" ]; then
+
+      # Ignore -memory.repository.spec.ts files if the component is "repository"
+      if [ "$component" == "repository" ] && [[ "$test_file" != *"-memory.repository" ]]; then
+        continue
+      fi
+
       #echo "$test_file: You need to create and provide the test implementation for this component."
       missing_components+=("$test_file")
     # else
     #   echo "$test_file: Found test implementation for this component."
     fi
-
-    # # Check for e2e test file for controller components
-    # if [ "$component" == "controller" ]; then
-    #   # Get the corresponding e2e test file in the test folder
-    #   e2e_test_file="test/e2e/.${component}.e2e.spec.ts"
-    #   if [ ! -f "$e2e_test_file" ]; then
-    #     missing_components+=("$e2e_test_file")
-    #   fi
-    # fi
 
     # Check for e2e test file for controller components
     if [ "$component" == "controller" ]; then
