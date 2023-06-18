@@ -7,6 +7,8 @@ import { CpfUnicoClienteValidator } from './cliente/validation/cpf-unico-cliente
 import { EmailUnicoClienteValidator } from './cliente/validation/email-unico-cliente.validator';
 import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.validator';
 import { PedidoService } from './pedido/service/pedido.service';
+import { CriarNovoPedidoValidator } from './pedido/validation/criar-novo-pedido.validator';
+import { EstadoCorretoNovoPedidoValidator } from './pedido/validation/estado-correto-novo-pedido.validator';
 import { PedidoConstants } from 'src/shared/constants';
 
 @Module({
@@ -21,6 +23,11 @@ import { PedidoConstants } from 'src/shared/constants';
          ],
       },
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
+      {
+         provide: 'CriarNovoPedidoValidator',
+         inject: [PedidoConstants.IREPOSITORY],
+         useFactory: (): CriarNovoPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
+      },
    ],
    exports: [
       { provide: 'IService<Cliente>', useClass: ClienteService },
