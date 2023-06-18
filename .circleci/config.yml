@@ -1,7 +1,7 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/fast-n-foodious
+    working_directory: $CIRCLE_WORKING_DIRECTORY
     docker:
       - image: cimg/node:18.16.0
         auth:
