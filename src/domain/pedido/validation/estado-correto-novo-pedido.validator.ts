@@ -1,10 +1,8 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { ValidationException } from 'src/domain/exception/validation.exception';
-import { IRepository } from 'src/domain/repository/repository';
 import { Pedido } from '../model/pedido.model';
 import { CriarNovoPedidoValidator } from './criar-novo-pedido.validator';
-import { PedidoConstants } from 'src/shared/constants';
 import { ESTADO_PEDIDO } from '../enums/pedido';
 
 @Injectable()
