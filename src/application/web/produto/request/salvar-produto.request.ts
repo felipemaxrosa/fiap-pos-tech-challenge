@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBase64, IsBoolean, IsCurrency, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class SalvarProdutoRequest {
    @ApiProperty({
@@ -17,7 +17,7 @@ export class SalvarProdutoRequest {
       description: 'Id da categoria do produto',
    })
    @IsNotEmpty({ message: 'Id da categoria do produto não pode ser vazio' })
-   @IsNumber({}, { message: 'Nome deve ser válido' })
+   @IsNumber({}, { message: 'Id da categoria deve ser válido' })
    public idCategoriaProduto: number;
 
    @ApiProperty({
@@ -34,7 +34,7 @@ export class SalvarProdutoRequest {
       description: 'Preço do produto',
    })
    @IsNotEmpty({ message: 'Preço não pode ser vazio' })
-   @IsCurrency({}, { message: 'Preço deve ser válido' })
+   //@IsCurrency({}, { message: 'Preço deve ser válido' })
    public preco: number;
 
    @ApiProperty({
@@ -42,7 +42,7 @@ export class SalvarProdutoRequest {
       nullable: true,
       description: 'Imagem do produto',
    })
-   @IsBase64({ message: 'Imagem deve ser padrão base64' })
+   //@IsBase64({ message: 'Imagem deve ser padrão base64' })
    public imagemBase64: string;
 
    @ApiProperty({
@@ -51,6 +51,6 @@ export class SalvarProdutoRequest {
       description: 'Ativo',
       default: true,
    })
-   @IsBoolean({ message: 'Ativo deve ser booleano' })
+   //@IsBoolean({ message: 'Ativo deve ser booleano' })
    public ativo: boolean;
 }

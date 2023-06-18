@@ -1,9 +1,10 @@
-### Cria um cliente
+### Cria um produto
 POST http://localhost:3000/v1/produto
 Content-Type: application/json
 
 {
-   "nome": "Produto Teste",
-   "descricao": "Descrição Produto Teste",
-   "preço": "100,00"
+  "nome": "Produto Teste",
+  "idCategoriaProduto": 1,
+  "descricao": "Descrição Produto Teste",
+  "preco": 100
 }

@@ -26,9 +26,9 @@ export class ProdutoController {
             imagemBase64: '',
             ativo: true,
          })
-         .then((cliente) => {
-            this.logger.log(`Cliente salvo com sucesso: ${cliente.id}}`);
-            return cliente;
+         .then((produto) => {
+            this.logger.log(`Produto salvo com sucesso: ${produto.id}}`);
+            return produto;
          });
    }
 }
