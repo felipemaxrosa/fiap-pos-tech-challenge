@@ -57,7 +57,7 @@ describe('CamposObrigatoriosProdutoValidator', () => {
             {
                provide: 'IRepository<Produto>',
                useValue: {
-                  findBy: jest.fn((attributes) => {
+                  findBy: jest.fn(() => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),

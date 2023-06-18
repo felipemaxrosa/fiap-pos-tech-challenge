@@ -46,7 +46,7 @@ describe('ProdutoService', () => {
                   // mock para a chamama repository.save(produto)
                   save: jest.fn(() => Promise.resolve(produto)),
                   // mock para a chamama repository.findBy(attributes)
-                  findBy: jest.fn((attributes) => {
+                  findBy: jest.fn(() => {
                      // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
