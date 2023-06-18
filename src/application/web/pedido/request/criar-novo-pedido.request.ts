@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumberString, IsString } from 'class-validator';
+import { IsNotEmpty, IsInt, IsString } from 'class-validator';
 
 export class CriarNovoPedidoRequest {
    @ApiProperty({ required: true, nullable: false, description: 'ID do cliente' })
    @IsNotEmpty({ message: 'ID do cliente não pode ser vazio' })
-   @IsNumberString({}, { message: 'ID do cliente deve ser válido' })
+   @IsInt({ message: 'ID do cliente deve ser válido' })
    public clienteId: number;
 
    @ApiProperty({ required: true, nullable: false, description: 'Data e Hora do Inicio do Pedido' })
