@@ -33,6 +33,9 @@ jobs:
           name: Run E2E Tests (With In-Memory Repositories)
           command: NODE_ENV=local-mock-repository npm run test:e2e
       - run:
+          name: Verify Components Without Unit/E2E Tests
+          command: npm run test:check
+      - run:
           name: Build Docker Images
           command: docker-compose --env-file ./envs/prod.env build
       - run:
