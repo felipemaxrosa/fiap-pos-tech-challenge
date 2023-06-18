@@ -118,6 +118,13 @@ describe('ProdutoTypeormRepository', () => {
          });
       });
    }); // end it deve buscar produto pelo nome
+   it('erros de banco na busca devem lançar uma exceção na camada de infra', async () => {
+      const error = new TypeORMError('Erro genérico do TypeORM');
+      jest.spyOn(repositoryTypeOrm, 'findBy').mockRejectedValue(error);
+
+      // verifica se foi lançada uma exception na camada infra
+      await expect(repository.findBy({})).rejects.toThrowError(RepositoryException);
+   });
 }); // end describe ProdutoTypeormRepository
 
 // método para reaproveitar código de checar Expectations
