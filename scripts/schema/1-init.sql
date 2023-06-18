@@ -45,3 +45,23 @@ CREATE TABLE IF NOT EXISTS PRODUTO (
 
 -- indexes para tabela PRODUTO
 CREATE UNIQUE INDEX produto_nome_idx ON PRODUTO(NOME);
+
+-- Tabela PEDIDO
+CREATE TABLE IF NOT EXISTS PEDIDO (
+                                       ID INT AUTO_INCREMENT PRIMARY KEY,
+                                       CLIENTE_ID INT NOT NULL, CONSTRAINT FK_CLIENTE_ID FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(ID),
+                                       DATA_HORA_INICIO VARCHAR(255) NOT NULL,
+                                       ESTADO_PEDIDO VARCHAR(255) NOT NULL, 
+)
+-- indexes para tabela PEDIDO
+CREATE UNIQUE INDEX pedido_estado_idx ON PEDIDO(ESTADO_PEDIDO);
+
+-- Tabela ITEMS DE PEDIDO
+CREATE TABLE IF NOT EXISTS ITEMS_PEDIDO (
+                                       ID INT AUTO_INCREMENT PRIMARY KEY,
+                                       PEDIDO_ID INT NOT NULL, CONSTRAINT FK_PEDIDO_ID FOREIGN KEY (PEDIDO_ID) REFERENCES PEDIDO(ID),
+                                       PRODUTO_ID INT NOT NULL, CONSTRAINT FK_PRODUTO_ID FOREIGN KEY (PRODUTO_ID) REFERENCES PRODUTO(ID),
+                                       QUANTIDADE INT NOT NULL, 
+)
+-- indexes para tabela ITEMS DE PEDIDO
+CREATE UNIQUE INDEX items_pedido_pedido_id_idx ON ITEMS_PEDIDO(PEDIDO_ID);
