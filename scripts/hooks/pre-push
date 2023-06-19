@@ -22,13 +22,13 @@ exitWithMessage() {
 
 setNodeEnvToMock
 
-echo "Verificando implementações dos testes.."
-npm run test:check
-
 echo "Executando testes de de integração (modo local mocked).."
 npm run test:e2e
 
 e2etestStatus=$?
+
+echo "Verificando implementações dos testes.."
+npm run test:check -- --silent
 
 # Verifica se os testes unitário falharam
 if [ $e2etestStatus -ne 0 ]; then
