@@ -31,4 +31,8 @@ export class ClienteService implements IService<Cliente> {
             throw new ServiceException(`Houve um erro ao salvar o cliente: ${error}`);
          });
    }
+
+   edit(): Promise<Cliente> {
+      throw new ServiceException(`Método não implementado`);
+   }
 }

@@ -31,4 +31,8 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
          resolve(cliente);
       });
    }
+
+   edit(cliente: Cliente): Promise<Cliente> {
+      return Promise.resolve(this.repository[cliente.id - 1]);
+   }
 }

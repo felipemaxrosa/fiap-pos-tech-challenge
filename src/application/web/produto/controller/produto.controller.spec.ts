@@ -3,13 +3,14 @@ import { ProdutoController } from './produto.controller';
 import { Produto } from 'src/domain/produto/model/produto.model';
 import { IService } from 'src/domain/service/service';
 import { SalvarProdutoRequest } from '../request/salvar-produto.request';
+import { EditarProdutoRequest } from '../request/editar-produto.request';
 
 describe('ProdutoController', () => {
    let controller: ProdutoController;
    let service: IService<Produto>;
 
-   // Define um objeto de requisição
-   const request: SalvarProdutoRequest = {
+   // Define um objeto de requisição para salvar
+   const salvarProdutoRequest: SalvarProdutoRequest = {
       nome: 'Teste',
       idCategoriaProduto: 1,
       descricao: 'Teste',
@@ -18,15 +19,37 @@ describe('ProdutoController', () => {
       ativo: true,
    };
 
-   // Define um objeto de produto esperado como resultado
-   const produto: Produto = {
+   // Define um objeto de produto esperado como resultado de salvar
+   const produtoSalvar: Produto = {
       id: 1,
-      nome: request.nome,
+      nome: salvarProdutoRequest.nome,
       idCategoriaProduto: 1,
-      descricao: request.descricao,
-      preco: request.preco,
+      descricao: salvarProdutoRequest.descricao,
+      preco: salvarProdutoRequest.preco,
       imagemBase64: '',
       ativo: true,
+   };
+
+   // Define um objeto de requisição para salvar
+   const editarProdutoRequest: EditarProdutoRequest = {
+      id: 1,
+      nome: 'Teste 2',
+      idCategoriaProduto: 2,
+      descricao: 'Teste 2',
+      preco: 100,
+      imagemBase64: '',
+      ativo: true,
+   };
+
+   // Define um objeto de produto esperado como resultado de salvar
+   const produtoEditar: Produto = {
+      id: editarProdutoRequest.id,
+      nome: editarProdutoRequest.nome,
+      idCategoriaProduto: editarProdutoRequest.idCategoriaProduto,
+      descricao: editarProdutoRequest.descricao,
+      preco: editarProdutoRequest.preco,
+      imagemBase64: editarProdutoRequest.imagemBase64,
+      ativo: editarProdutoRequest.ativo,
    };
 
    beforeEach(async () => {
@@ -39,7 +62,12 @@ describe('ProdutoController', () => {
                provide: 'IService<Produto>',
                useValue: {
                   // Mocka chamada para o save, rejeitando a promise em caso de request undefined
-                  save: jest.fn((request) => (request ? Promise.resolve(produto) : Promise.reject(new Error('error')))),
+                  save: jest.fn((salvarProdutoRequest) =>
+                     salvarProdutoRequest ? Promise.resolve(produtoSalvar) : Promise.reject(new Error('error')),
+                  ),
+                  edit: jest.fn((editarProdutoRequest) =>
+                     editarProdutoRequest ? Promise.resolve(produtoEditar) : Promise.reject(new Error('error')),
+                  ),
                },
             },
          ],
@@ -63,13 +91,13 @@ describe('ProdutoController', () => {
    describe('salvar', () => {
       it('deve salvar um novo produto', async () => {
          // Chama o método salvar do controller
-         const result = await controller.salvar(request);
+         const result = await controller.save(salvarProdutoRequest);
 
          // Verifica se o método save do serviço foi chamado corretamente com a requisição
-         expect(service.save).toHaveBeenCalledWith(request);
+         expect(service.save).toHaveBeenCalledWith(salvarProdutoRequest);
 
          // Verifica se o resultado obtido é igual ao objeto produto esperado
-         expect(result).toEqual(produto);
+         expect(result).toEqual(produtoSalvar);
       });
 
       it('não deve tratar erro a nível de controlador', async () => {
@@ -77,10 +105,36 @@ describe('ProdutoController', () => {
          jest.spyOn(service, 'save').mockRejectedValue(error);
 
          // Chama o método salvar do controller
-         await expect(controller.salvar(request)).rejects.toThrow('Erro genérico não tratado');
+         await expect(controller.save(salvarProdutoRequest)).rejects.toThrow('Erro genérico não tratado');
 
          // Verifica se método save foi chamado com o parametro esperado
-         expect(service.save).toHaveBeenCalledWith(request);
+         expect(service.save).toHaveBeenCalledWith(salvarProdutoRequest);
       });
    });
+
+   describe('editar', () => {
+      it('deve editar um produto existente', async () => {
+         // Chama o método editar do controller
+         const result = await controller.edit(editarProdutoRequest.id, editarProdutoRequest);
+
+         // Verifica se o método save do serviço foi chamado corretamente com a requisição
+         expect(service.edit).toHaveBeenCalledWith(editarProdutoRequest);
+
+         // Verifica se o resultado obtido é igual ao objeto produto esperado
+         expect(result).toEqual(produtoEditar);
+      }); // end it deve editar um produto existente
+
+      it('não deve tratar erro a nível de controlador', async () => {
+         const error = new Error('Erro genérico não tratado');
+         jest.spyOn(service, 'edit').mockRejectedValue(error);
+
+         // Chama o método editar do controller
+         await expect(controller.edit(editarProdutoRequest.id, editarProdutoRequest)).rejects.toThrow(
+            'Erro genérico não tratado',
+         );
+
+         // Verifica se método edit foi chamado com os parâmetros esperados
+         expect(service.edit).toHaveBeenCalledWith(editarProdutoRequest);
+      }); // end it não deve tratar erro a nível de controlador
+   }); // end describe editar
 });

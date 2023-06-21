@@ -9,12 +9,22 @@ import { ServiceException } from 'src/domain/exception/service.exception';
 import { CamposObrigatoriosProdutoValidator } from '../validation/campos-obrigatorios-produto.validator';
 
 // Stubs
-const produto: Produto = {
+const produtoSalvar: Produto = {
    id: 1,
    nome: 'nome correto',
    idCategoriaProduto: 1,
    descricao: 'Teste',
    preco: 10,
+   imagemBase64: '',
+   ativo: true,
+};
+
+const produtoEditar: Produto = {
+   id: 1,
+   nome: 'nome editado',
+   idCategoriaProduto: 2,
+   descricao: 'Teste editado',
+   preco: 101,
    imagemBase64: '',
    ativo: true,
 };
@@ -43,13 +53,15 @@ describe('ProdutoService', () => {
             {
                provide: 'IRepository<Produto>',
                useValue: {
-                  // mock para a chamama repository.save(produto)
-                  save: jest.fn(() => Promise.resolve(produto)),
-                  // mock para a chamama repository.findBy(attributes)
+                  // mock para a chamada repository.save(produto)
+                  save: jest.fn(() => Promise.resolve(produtoSalvar)),
+                  // mock para a chamada repository.findBy(attributes)
                   findBy: jest.fn(() => {
                      // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
+                  // mock para a chamada repository.edit(produto)
+                  edit: jest.fn(() => Promise.resolve(produtoEditar)),
                },
             },
             // Mock do SalvarProdutoValidator
@@ -114,7 +126,7 @@ describe('ProdutoService', () => {
             ativo: true,
          };
 
-         // verifica se foi lançada uma exception com a mensagem de validção de email único
+         // verifica se foi lançada uma exception com a mensagem de validação de campos inválidos
          await expect(service.save(produto)).rejects.toThrowError(
             CamposObrigatoriosProdutoValidator.CAMPOS_INVALIDOS_ERROR_MESSAGE,
          );
@@ -131,7 +143,7 @@ describe('ProdutoService', () => {
             ativo: true,
          };
 
-         // verifica se foi lançada uma exception com a mensagem de validção de email único
+         // verifica se foi lançada uma exception com a mensagem de validação de campos inválidos
          await expect(service.save(produto)).rejects.toThrowError(
             CamposObrigatoriosProdutoValidator.CAMPOS_INVALIDOS_ERROR_MESSAGE,
          );
@@ -159,7 +171,91 @@ describe('ProdutoService', () => {
          jest.spyOn(repository, 'save').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
-         await expect(service.save(produto)).rejects.toThrowError(ServiceException);
+         await expect(service.save(produtoSalvar)).rejects.toThrowError(ServiceException);
       }); // end it não deve salvar produto quando houver um erro de banco
    }); // end describe save
+
+   describe('editar', () => {
+      it('edita produtos com campos válidos', async () => {
+         const produto: Produto = {
+            id: 1,
+            nome: 'nome editado',
+            idCategoriaProduto: 2,
+            descricao: 'Teste editado',
+            preco: 101,
+            imagemBase64: '',
+            ativo: true,
+         };
+
+         await service.edit(produto).then((produtoEditado) => {
+            // verifica se o produto salvo contém os mesmos dados passados como input
+            expect(produtoEditado.id).toEqual(1);
+            expect(produtoEditado.nome).toEqual(produto.nome);
+            expect(produtoEditado.idCategoriaProduto).toEqual(produto.idCategoriaProduto);
+            expect(produtoEditado.descricao).toEqual(produto.descricao);
+            expect(produtoEditado.preco).toEqual(produto.preco);
+            expect(produtoEditado.imagemBase64).toEqual(produto.imagemBase64);
+            expect(produtoEditado.ativo).toEqual(produto.ativo);
+         });
+      }); // end it edita produtos com campos válidos
+
+      it('não edita produto com nome inválido', async () => {
+         const produto: Produto = {
+            id: 1,
+            nome: ' ',
+            idCategoriaProduto: 1,
+            descricao: 'Teste',
+            preco: 10,
+            imagemBase64: '',
+            ativo: true,
+         };
+
+         // verifica se foi lançada uma exception com a mensagem de validação de campos inválidos
+         await expect(service.edit(produto)).rejects.toThrowError(
+            CamposObrigatoriosProdutoValidator.CAMPOS_INVALIDOS_ERROR_MESSAGE,
+         );
+      }); // end it não edita produto com nome inválido
+
+      it('não edita produto com preço inválido', async () => {
+         const produto: Produto = {
+            id: 1,
+            nome: ' ',
+            idCategoriaProduto: 1,
+            descricao: 'Teste',
+            preco: -10,
+            imagemBase64: '',
+            ativo: true,
+         };
+
+         // verifica se foi lançada uma exception com a mensagem de validação de campos inválidos
+         await expect(service.edit(produto)).rejects.toThrowError(
+            CamposObrigatoriosProdutoValidator.CAMPOS_INVALIDOS_ERROR_MESSAGE,
+         );
+      }); // end it não edita produto com preço inválido
+
+      it('não edita produto com idCategoriaProduto inválido', async () => {
+         const produto: Produto = {
+            id: 1,
+            nome: 'nome correto',
+            idCategoriaProduto: 100,
+            descricao: 'Teste',
+            preco: 10,
+            imagemBase64: '',
+            ativo: true,
+         };
+
+         // verifica se foi lançada uma exception com a mensagem de idCategoriaProduto inválido
+         await expect(service.edit(produto)).rejects.toThrowError(
+            CamposObrigatoriosProdutoValidator.ID_CATEGORIA_PRODUTO_INVALIDO_ERROR_MESSAGE,
+         );
+      }); // end it não edita produto com idCategoriaProduto inválido
+
+      it('não deve editar produto quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'edit').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.edit(produtoSalvar)).rejects.toThrowError(ServiceException);
+      }); // end it não deve editar produto quando houver um erro de banco
+   }); // end describe edit
 }); // end describe ProdutoService

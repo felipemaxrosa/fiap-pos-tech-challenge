@@ -16,9 +16,7 @@ export class ProdutoService implements IService<Produto> {
    ) {}
 
    async save(produto: Produto): Promise<Produto> {
-      for (const validator of this.validators) {
-         await validator.validate(produto);
-      }
+      await this.validate(produto);
 
       return await this.repository
          .save({
@@ -33,5 +31,29 @@ export class ProdutoService implements IService<Produto> {
             this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
             throw new ServiceException(`Houve um erro ao salvar o produto: ${error}`);
          });
+   }
+
+   async edit(produto: Produto): Promise<Produto> {
+      await this.validate(produto);
+      return await this.repository
+         .edit({
+            id: produto.id,
+            nome: produto.nome,
+            idCategoriaProduto: produto.idCategoriaProduto,
+            descricao: produto.descricao,
+            preco: produto.preco,
+            imagemBase64: produto.imagemBase64,
+            ativo: produto.ativo,
+         })
+         .catch((error) => {
+            this.logger.error(`Erro ao editar no banco de dados: ${error} `);
+            throw new ServiceException(`Houve um erro ao editar o produto: ${error}`);
+         });
+   }
+
+   private async validate(produto: Produto): Promise<void> {
+      for (const validator of this.validators) {
+         await validator.validate(produto);
+      }
    }
 }

@@ -162,4 +162,14 @@ describe('ClienteTypeormRepository', () => {
          await expect(repository.findBy({})).rejects.toThrowError(RepositoryException);
       });
    });
+
+   describe('edit', () => {
+      it('editar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(repository.edit(cliente));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
 });

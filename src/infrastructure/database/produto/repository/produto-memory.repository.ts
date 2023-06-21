@@ -31,4 +31,12 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
          resolve(produto);
       });
    }
+
+   async edit(produto: Produto): Promise<Produto> {
+      //return Promise.resolve(this.repository[produto.id - 1]);
+      return new Promise<Produto>((resolve) => {
+         this.repository[produto.id - 1] = produto;
+         resolve(produto);
+      });
+   }
 }

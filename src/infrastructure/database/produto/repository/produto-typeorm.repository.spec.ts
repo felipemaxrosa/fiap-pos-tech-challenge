@@ -10,7 +10,7 @@ describe('ProdutoTypeormRepository', () => {
    let repository: IRepository<Produto>;
    let repositoryTypeOrm: Repository<ProdutoEntity>;
 
-   const produto: Produto = {
+   const produtoSalvar: Produto = {
       id: 1,
       nome: 'Nome teste',
       idCategoriaProduto: 1,
@@ -20,12 +20,32 @@ describe('ProdutoTypeormRepository', () => {
       ativo: true,
    };
 
-   const produtoEntity: ProdutoEntity = {
+   const produtoSalvarEntity: ProdutoEntity = {
       id: 1,
       nome: 'Nome teste',
       idCategoriaProduto: 1,
       descricao: 'Descrição teste',
       preco: 10,
+      imagemBase64: '',
+      ativo: true,
+   };
+
+   const produtoEditar: Produto = {
+      id: 1,
+      nome: 'Nome editado',
+      idCategoriaProduto: 2,
+      descricao: 'Descrição editada',
+      preco: 100,
+      imagemBase64: '',
+      ativo: true,
+   };
+
+   const produtoEditarEntity: ProdutoEntity = {
+      id: 1,
+      nome: 'Nome editado',
+      idCategoriaProduto: 2,
+      descricao: 'Descrição editada',
+      preco: 100,
       imagemBase64: '',
       ativo: true,
    };
@@ -46,12 +66,12 @@ describe('ProdutoTypeormRepository', () => {
             {
                provide: 'Repository<ProdutoEntity>',
                useValue: {
-                  // mock para a chamama repositoryTypeOrm.save(produto)
-                  save: jest.fn(() => Promise.resolve(produtoEntity)),
-                  // mock para a chamama repositoryTypeOrm.findBy(attributes)
-                  findBy: jest.fn(() => {
-                     return Promise.resolve([produtoEntity]);
-                  }),
+                  // mock para a chamada repositoryTypeOrm.save(produto)
+                  save: jest.fn(),
+                  // mock para a chamada repositoryTypeOrm.findBy(attributes)
+                  findBy: jest.fn(),
+                  // mock para a chamada repositoryTypeOrm.save(produto)
+                  edit: jest.fn(),
                },
             },
          ],
@@ -73,11 +93,11 @@ describe('ProdutoTypeormRepository', () => {
 
    describe('save', () => {
       it('deve salvar produto corretamente', async () => {
-         const repositorySpy = jest.spyOn(repositoryTypeOrm, 'save');
+         const repositorySpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(produtoSalvarEntity);
 
-         await repository.save(produto).then((produtoSalvo) => {
+         await repository.save(produtoSalvar).then((produtoSalvo) => {
             // verifica se o produto salvo contém os mesmos dados passados como input
-            validateExpectations(produtoSalvo, produto);
+            validateExpectations(produtoSalvo, produtoSalvar);
          });
          expect(repositorySpy).toBeCalled();
       }); // end it deve salvar produto corretamente
@@ -87,34 +107,34 @@ describe('ProdutoTypeormRepository', () => {
          jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada infra
-         await expect(repository.save(produto)).rejects.toThrowError(RepositoryException);
+         await expect(repository.save(produtoSalvar)).rejects.toThrowError(RepositoryException);
       }); // end it não deve salvar produto quando houver um erro de banco
    }); // end describe save
 
    describe('findBy', () => {
       it('deve buscar produto pelo id', async () => {
          repositoryTypeOrm.findBy = jest.fn().mockImplementation((attributes) => {
-            return Promise.resolve(attributes['id'] === produto.id ? [produtoEntity] : {});
+            return Promise.resolve(attributes['id'] === produtoSalvar.id ? [produtoSalvarEntity] : {});
          });
 
-         await repository.findBy({ id: produto.id }).then((produtosEncontrados) => {
+         await repository.findBy({ id: produtoSalvar.id }).then((produtosEncontrados) => {
             // verifica se o produto salvo contém os mesmos dados passados como input
             expect(produtosEncontrados.length).toEqual(1);
             produtosEncontrados.forEach((produtoEncontrado) => {
-               validateExpectations(produtoEncontrado, produto);
+               validateExpectations(produtoEncontrado, produtoSalvar);
             });
          });
       }); // end it deve buscar produto pelo id
    }); // end describe findBy
    it('deve buscar produto pelo nome', async () => {
       repositoryTypeOrm.findBy = jest.fn().mockImplementation((attributes) => {
-         return Promise.resolve(attributes['nome'] === produto.nome ? [produtoEntity] : {});
+         return Promise.resolve(attributes['nome'] === produtoSalvar.nome ? [produtoSalvarEntity] : {});
       });
 
-      await repository.findBy({ nome: produto.nome }).then((produtosEncontrados) => {
+      await repository.findBy({ nome: produtoSalvar.nome }).then((produtosEncontrados) => {
          // verifica se o produto salvo contém os mesmos dados passados como input
          produtosEncontrados.forEach((produtoEncontrado) => {
-            validateExpectations(produtoEncontrado, produto);
+            validateExpectations(produtoEncontrado, produtoSalvar);
          });
       });
    }); // end it deve buscar produto pelo nome
@@ -124,7 +144,26 @@ describe('ProdutoTypeormRepository', () => {
 
       // verifica se foi lançada uma exception na camada infra
       await expect(repository.findBy({})).rejects.toThrowError(RepositoryException);
-   });
+   }); // end it erros de banco na busca devem lançar uma exceção na camada de infra
+   describe('edit', () => {
+      it('deve editar produto corretamente', async () => {
+         const repositorySpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(produtoEditarEntity);
+
+         await repository.edit(produtoEditar).then((produtoEditado) => {
+            // verifica se o produto editado contém os mesmos dados passados como input
+            validateExpectations(produtoEditado, produtoEditar);
+         });
+         expect(repositorySpy).toBeCalled();
+      }); // end it deve editar produto corretamente
+
+      it('não deve editar produto quando houver um erro de banco ', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada infra
+         await expect(repository.edit(produtoEditar)).rejects.toThrowError(RepositoryException);
+      }); // end it não deve editar produto quando houver um erro de banco
+   }); // end describe edit
 }); // end describe ProdutoTypeormRepository
 
 // método para reaproveitar código de checar Expectations

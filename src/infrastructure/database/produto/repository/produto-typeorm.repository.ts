@@ -70,4 +70,51 @@ export class ProdutoTypeormRepository implements IRepository<Produto> {
             );
          });
    }
+
+   async edit(produto: Produto): Promise<Produto> {
+      this.logger.debug(`Editando produto: ${produto}`);
+      return this.repository
+         .save({
+            id: produto.id,
+            nome: produto.nome,
+            idCategoriaProduto: produto.idCategoriaProduto,
+            descricao: produto.descricao,
+            preco: produto.preco,
+            imagemBase64: produto.imagemBase64,
+            ativo: produto.ativo,
+         })
+         .then((produtoEntity) => {
+            this.logger.debug(`Produto editado com sucesso no banco de dados: ${produtoEntity.id}`);
+            return {
+               id: produtoEntity.id,
+               nome: produtoEntity.nome,
+               idCategoriaProduto: produtoEntity.idCategoriaProduto,
+               descricao: produtoEntity.descricao,
+               preco: produtoEntity.preco,
+               imagemBase64: produtoEntity.imagemBase64,
+               ativo: produtoEntity.ativo,
+            };
+         })
+         .catch((error) => {
+            throw new RepositoryException(
+               `Houve um erro ao editar o produto no banco de dados: '${produto}': ${error.message}`,
+            );
+         });
+   }
+
+   // async edit(produto: Produto): Promise<Produto> {
+   //    this.logger.debug(`Editando produto: ${produto}`);
+   //    return this.repository
+   //       .update(produto.id, produto)
+   //       .then((updateResult) => {
+   //          this.logger.debug(`Produto editado com sucesso no banco de dados: ${updateResult.raw}`);
+   //          // TODO Rodrigo - implementar o retorno usando findbyid
+   //          return produto;
+   //       })
+   //       .catch((error) => {
+   //          throw new RepositoryException(
+   //             `Houve um erro ao editar o produto no banco de dados: '${produto}': ${error.message}`,
+   //          );
+   //       });
+   // }
 }
