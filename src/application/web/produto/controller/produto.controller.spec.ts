@@ -68,6 +68,7 @@ describe('ProdutoController', () => {
                   edit: jest.fn((editarProdutoRequest) =>
                      editarProdutoRequest ? Promise.resolve(produtoEditar) : Promise.reject(new Error('error')),
                   ),
+                  delete: jest.fn((id) => (id ? Promise.resolve(true) : Promise.reject(new Error('error')))),
                },
             },
          ],
@@ -117,7 +118,7 @@ describe('ProdutoController', () => {
          // Chama o método editar do controller
          const result = await controller.edit(editarProdutoRequest.id, editarProdutoRequest);
 
-         // Verifica se o método save do serviço foi chamado corretamente com a requisição
+         // Verifica se o método edit do serviço foi chamado corretamente com a requisição
          expect(service.edit).toHaveBeenCalledWith(editarProdutoRequest);
 
          // Verifica se o resultado obtido é igual ao objeto produto esperado
@@ -137,4 +138,28 @@ describe('ProdutoController', () => {
          expect(service.edit).toHaveBeenCalledWith(editarProdutoRequest);
       }); // end it não deve tratar erro a nível de controlador
    }); // end describe editar
+
+   describe('deletar', () => {
+      it('deve deletar um produto existente', async () => {
+         // Chama o método delete do controller
+         const result = await controller.delete(1);
+
+         // Verifica se o método delete do serviço foi chamado corretamente com a requisição
+         expect(service.delete).toHaveBeenCalledWith(1);
+
+         // Verifica se o resultado obtido é igual ao objeto produto esperado
+         expect(result).toEqual(true);
+      }); // end it deve deletar um produto existente
+
+      it('não deve tratar erro a nível de controlador', async () => {
+         const error = new Error('Erro genérico não tratado');
+         jest.spyOn(service, 'delete').mockRejectedValue(error);
+
+         // Chama o método delete do controller
+         await expect(controller.delete(1)).rejects.toThrow('Erro genérico não tratado');
+
+         // Verifica se método delete foi chamado com os parâmetros esperados
+         expect(service.delete).toHaveBeenCalledWith(1);
+      }); // end it não deve tratar erro a nível de controlador
+   }); // end describe deletar
 });

@@ -65,4 +65,8 @@ export class ClienteTypeormRepository implements IRepository<Cliente> {
    edit(): Promise<Cliente> {
       throw new RepositoryException('Método não implementado.');
    }
+
+   delete(): Promise<boolean> {
+      throw new RepositoryException('Método não implementado.');
+   }
 }

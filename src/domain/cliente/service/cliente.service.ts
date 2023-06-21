@@ -35,4 +35,8 @@ export class ClienteService implements IService<Cliente> {
    edit(): Promise<Cliente> {
       throw new ServiceException(`Método não implementado`);
    }
+
+   delete(): Promise<boolean> {
+      throw new ServiceException('Método não implementado.');
+   }
 }

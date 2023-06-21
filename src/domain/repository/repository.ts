@@ -4,4 +4,6 @@ export interface IRepository<T> {
    findBy(attributes: any): Promise<T[]>;
 
    edit(type: T): Promise<T>;
+
+   delete(id: number): Promise<boolean>;
 }

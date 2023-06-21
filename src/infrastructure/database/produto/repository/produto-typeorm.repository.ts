@@ -101,4 +101,28 @@ export class ProdutoTypeormRepository implements IRepository<Produto> {
             );
          });
    }
+
+   async delete(id: number): Promise<boolean> {
+      this.logger.debug(`Deletando logicamente produto id: ${id}`);
+      const produto = (await this.findBy({ id: id }))[0];
+      return this.repository
+         .save({
+            id: produto.id,
+            nome: produto.nome,
+            idCategoriaProduto: produto.idCategoriaProduto,
+            descricao: produto.descricao,
+            preco: produto.preco,
+            imagemBase64: produto.imagemBase64,
+            ativo: false,
+         })
+         .then((produtoEntity) => {
+            this.logger.debug(`Produto deletado logicamente com sucesso no banco de dados: ${produtoEntity.id}`);
+            return true;
+         })
+         .catch((error) => {
+            throw new RepositoryException(
+               `Houve um erro ao deletar logicamente o produto no banco de dados: '${produto}': ${error.message}`,
+            );
+         });
+   }
 }

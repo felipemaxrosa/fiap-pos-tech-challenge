@@ -62,6 +62,8 @@ describe('ProdutoService', () => {
                   }),
                   // mock para a chamada repository.edit(produto)
                   edit: jest.fn(() => Promise.resolve(produtoEditar)),
+                  // mock para a chamada repository.delete(id)
+                  delete: jest.fn(() => Promise.resolve(true)),
                },
             },
             // Mock do SalvarProdutoValidator
@@ -257,5 +259,23 @@ describe('ProdutoService', () => {
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.edit(produtoSalvar)).rejects.toThrowError(ServiceException);
       }); // end it não deve editar produto quando houver um erro de banco
-   }); // end describe edit
+   }); // end describe editar
+
+   describe('deletar', () => {
+      it('deleta produto', async () => {
+         const id = 1;
+
+         await service.delete(1).then((result) => {
+            expect(result).toBeTruthy();
+         });
+      }); // end it edita produtos com campos válidos
+
+      it('não deve deletar produto quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'delete').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.delete(1)).rejects.toThrowError(ServiceException);
+      }); // end it não deve deletar produto quando houver um erro de banco
+   }); // end describe deletar
 }); // end describe ProdutoService

@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { Cliente } from '../../../../domain/cliente/model/cliente.model';
 import { IRepository } from '../../../../domain/repository/repository';
+import { RepositoryException } from '../../../exception/repository.exception';
 
 @Injectable()
 export class ClienteMemoryRepository implements IRepository<Cliente> {
@@ -33,6 +34,10 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
    }
 
    edit(cliente: Cliente): Promise<Cliente> {
-      return Promise.resolve(this.repository[cliente.id - 1]);
+      throw new RepositoryException('Método não implementado.');
+   }
+
+   delete(id: number): Promise<boolean> {
+      throw new RepositoryException('Método não implementado.');
    }
 }

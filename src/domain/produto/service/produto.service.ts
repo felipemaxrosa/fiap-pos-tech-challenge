@@ -51,6 +51,13 @@ export class ProdutoService implements IService<Produto> {
          });
    }
 
+   async delete(id: number): Promise<boolean> {
+      return await this.repository.delete(id).catch((error) => {
+         this.logger.error(`Erro ao deletar no banco de dados: ${error} `);
+         throw new ServiceException(`Houve um erro ao deletar o produto: ${error}`);
+      });
+   }
+
    private async validate(produto: Produto): Promise<void> {
       for (const validator of this.validators) {
          await validator.validate(produto);

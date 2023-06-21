@@ -1,6 +1,6 @@
-import { Body, Controller, Inject, Logger, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Inject, Logger, Param, Post, Put } from '@nestjs/common';
 import { IService } from 'src/domain/service/service';
-import { ApiConsumes, ApiCreatedResponse, ApiProduces, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiCreatedResponse, ApiNoContentResponse, ApiProduces, ApiTags } from '@nestjs/swagger';
 import { Produto } from '../../../../domain/produto/model/produto.model';
 import { SalvarProdutoRequest } from '../request/salvar-produto.request';
 import { EditarProdutoRequest } from '../request/editar-produto.request';
@@ -52,13 +52,14 @@ export class ProdutoController {
             return produto;
          });
    }
-   /*
+
    @Delete(':id')
    @ApiNoContentResponse({ description: 'Produto deletado com sucesso' })
-   async delete(@Param('id') id: number): Promise<void> {
+   async delete(@Param('id') id: number): Promise<boolean> {
       this.logger.debug(`Deletando produto id: ${id}`);
-      await this.service.delete(id).then(() => {
-         this.logger.log(`Produto editado com sucesso: ${id}}`);
+      return await this.service.delete(id).then((result) => {
+         this.logger.log(`Produto deletado com sucesso: ${id}}`);
+         return result;
       });
-   }*/
+   }
 }

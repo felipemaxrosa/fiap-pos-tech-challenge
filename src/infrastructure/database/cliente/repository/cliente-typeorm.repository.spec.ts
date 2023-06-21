@@ -172,4 +172,14 @@ describe('ClienteTypeormRepository', () => {
          }
       });
    });
+
+   describe('delete', () => {
+      it('deletar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(repository.delete(1));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
 });

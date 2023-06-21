@@ -50,6 +50,16 @@ describe('ProdutoTypeormRepository', () => {
       ativo: true,
    };
 
+   const produtoDeletarEntity: ProdutoEntity = {
+      id: 1,
+      nome: 'Nome',
+      idCategoriaProduto: 1,
+      descricao: 'Descrição',
+      preco: 100,
+      imagemBase64: '',
+      ativo: false,
+   };
+
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
@@ -145,6 +155,7 @@ describe('ProdutoTypeormRepository', () => {
       // verifica se foi lançada uma exception na camada infra
       await expect(repository.findBy({})).rejects.toThrowError(RepositoryException);
    }); // end it erros de banco na busca devem lançar uma exceção na camada de infra
+
    describe('edit', () => {
       it('deve editar produto corretamente', async () => {
          const repositorySpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(produtoEditarEntity);
@@ -163,6 +174,26 @@ describe('ProdutoTypeormRepository', () => {
          // verifica se foi lançada uma exception na camada infra
          await expect(repository.edit(produtoEditar)).rejects.toThrowError(RepositoryException);
       }); // end it não deve editar produto quando houver um erro de banco
+   }); // end describe edit
+
+   describe('delete', () => {
+      it('deve deletar produto corretamente', async () => {
+         jest.spyOn(repositoryTypeOrm, 'findBy').mockResolvedValue([produtoDeletarEntity]);
+         const repositorySpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(produtoDeletarEntity);
+
+         await repository.delete(1).then((result) => {
+            expect(result).toBeTruthy();
+         });
+         expect(repositorySpy).toBeCalled();
+      }); // end it deve deletar produto corretamente
+
+      it('não deve deletar produto quando houver um erro de banco ', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada infra
+         await expect(repository.edit(produtoEditar)).rejects.toThrowError(RepositoryException);
+      }); // end it não deve deletar produto quando houver um erro de banco
    }); // end describe edit
 }); // end describe ProdutoTypeormRepository
 

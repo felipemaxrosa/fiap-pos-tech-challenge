@@ -33,10 +33,17 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
    }
 
    async edit(produto: Produto): Promise<Produto> {
-      //return Promise.resolve(this.repository[produto.id - 1]);
       return new Promise<Produto>((resolve) => {
          this.repository[produto.id - 1] = produto;
          resolve(produto);
+      });
+   }
+
+   async delete(id: number): Promise<boolean> {
+      return new Promise<boolean>((resolve) => {
+         const produto = this.repository[id - 1];
+         produto.ativo = false;
+         resolve(true);
       });
    }
 }
