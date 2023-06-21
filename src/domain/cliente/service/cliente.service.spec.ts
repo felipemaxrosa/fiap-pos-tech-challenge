@@ -8,6 +8,7 @@ import { EmailUnicoClienteValidator } from '../validation/email-unico-cliente.va
 import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ServiceException } from 'src/domain/exception/service.exception';
+
 describe('CienteService', () => {
    let service: IService<Cliente>;
    let repository: IRepository<Cliente>;
@@ -134,6 +135,26 @@ describe('CienteService', () => {
 
          // verifiaca se foi lançada uma exception na camada de serviço
          await expect(service.save(cliente)).rejects.toThrowError(ServiceException);
+      });
+   });
+
+   describe('edit', () => {
+      it('editar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(service.edit(cliente));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
+
+   describe('delete', () => {
+      it('deletar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(service.delete(1));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
       });
    });
 });

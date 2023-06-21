@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Produto } from 'src/domain/Produto/model/Produto.model';
+import { Produto } from 'src/domain/Produto/model/produto.model';
 import { IService } from 'src/domain/service/service';
-import { SalvarProdutoValidator } from 'src/domain/Produto/validation/salvar-produto.validator';
+import { SalvarProdutoValidator } from 'src/domain/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/domain/repository/repository';
 import { ServiceException } from '../../exception/service.exception';
 

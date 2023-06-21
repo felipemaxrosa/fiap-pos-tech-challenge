@@ -189,10 +189,11 @@ describe('ProdutoTypeormRepository', () => {
 
       it('não deve deletar produto quando houver um erro de banco ', async () => {
          const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'findBy').mockResolvedValue([produtoDeletarEntity]);
          jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada infra
-         await expect(repository.edit(produtoEditar)).rejects.toThrowError(RepositoryException);
+         await expect(repository.delete(1)).rejects.toThrowError(RepositoryException);
       }); // end it não deve deletar produto quando houver um erro de banco
    }); // end describe edit
 }); // end describe ProdutoTypeormRepository

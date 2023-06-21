@@ -263,8 +263,6 @@ describe('ProdutoService', () => {
 
    describe('deletar', () => {
       it('deleta produto', async () => {
-         const id = 1;
-
          await service.delete(1).then((result) => {
             expect(result).toBeTruthy();
          });

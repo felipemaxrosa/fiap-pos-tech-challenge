@@ -33,11 +33,11 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
       });
    }
 
-   edit(cliente: Cliente): Promise<Cliente> {
+   edit(): Promise<Cliente> {
       throw new RepositoryException('Método não implementado.');
    }
 
-   delete(id: number): Promise<boolean> {
+   delete(): Promise<boolean> {
       throw new RepositoryException('Método não implementado.');
    }
 }
