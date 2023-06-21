@@ -101,20 +101,4 @@ export class ProdutoTypeormRepository implements IRepository<Produto> {
             );
          });
    }
-
-   // async edit(produto: Produto): Promise<Produto> {
-   //    this.logger.debug(`Editando produto: ${produto}`);
-   //    return this.repository
-   //       .update(produto.id, produto)
-   //       .then((updateResult) => {
-   //          this.logger.debug(`Produto editado com sucesso no banco de dados: ${updateResult.raw}`);
-   //          // TODO Rodrigo - implementar o retorno usando findbyid
-   //          return produto;
-   //       })
-   //       .catch((error) => {
-   //          throw new RepositoryException(
-   //             `Houve um erro ao editar o produto no banco de dados: '${produto}': ${error.message}`,
-   //          );
-   //       });
-   // }
 }
