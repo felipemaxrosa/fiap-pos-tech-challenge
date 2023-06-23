@@ -13,17 +13,17 @@ export class ClienteService implements IClienteService {
 
    constructor(
       @Inject('IRepository<Cliente>') private repository: IRepository<Cliente>,
-      @Inject('SalvarClienteValidator') private salvarValidators: SalvarClienteValidator[], 
-      @Inject('BuscarClienteValidator') private buscarValidators: BuscarClienteValidator[], 
-      ) {}
-  
+      @Inject('SalvarClienteValidator') private salvarValidators: SalvarClienteValidator[],
+      @Inject('BuscarClienteValidator') private buscarValidators: BuscarClienteValidator[],
+   ) {}
+
    async findByCpf(cpf: string): Promise<Cliente> {
+      await this.validate(this.buscarValidators, new Cliente(undefined, undefined, cpf));
 
-      await this.validate(this.buscarValidators, new Cliente(undefined, undefined, cpf))
-
-      return await this.repository.findBy({cpf: cpf})
+      return await this.repository
+         .findBy({ cpf: cpf })
          .then((clientes) => {
-            return clientes[0]
+            return clientes[0];
          })
          .catch((error) => {
             this.logger.error(`Erro ao consultar cliente no banco de dados: ${error} `);
@@ -32,8 +32,7 @@ export class ClienteService implements IClienteService {
    }
 
    async save(cliente: Cliente): Promise<Cliente> {
-     
-      await this.validate(this.salvarValidators, cliente)
+      await this.validate(this.salvarValidators, cliente);
 
       return await this.repository
          .save({
@@ -47,7 +46,7 @@ export class ClienteService implements IClienteService {
          });
    }
 
-   private async validate(validators: IValidator<Cliente>[], cliente: Cliente): Promise<void>{
+   private async validate(validators: IValidator<Cliente>[], cliente: Cliente): Promise<void> {
       for (const validator of validators) {
          await validator.validate(cliente);
       }

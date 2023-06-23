@@ -23,9 +23,7 @@ import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-clien
       },
       {
          provide: 'BuscarClienteValidator',
-         useFactory: (): BuscarClienteValidator[] => [
-            new CpfValidoClienteValidator(),
-         ],
+         useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
       },
    ],
    exports: [{ provide: 'IService<Cliente>', useClass: ClienteService }],

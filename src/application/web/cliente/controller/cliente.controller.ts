@@ -1,5 +1,12 @@
 import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, Post, Query } from '@nestjs/common';
-import { ApiConsumes, ApiCreatedResponse, ApiFoundResponse, ApiNotFoundResponse, ApiProduces, ApiTags } from '@nestjs/swagger';
+import {
+   ApiConsumes,
+   ApiCreatedResponse,
+   ApiFoundResponse,
+   ApiNotFoundResponse,
+   ApiProduces,
+   ApiTags,
+} from '@nestjs/swagger';
 
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
@@ -32,17 +39,15 @@ export class ClienteController {
 
    @Get()
    @ApiFoundResponse({ description: 'Cliente consultado com sucesso' })
-   @ApiNotFoundResponse({description: 'Cliente não encontrado'})
+   @ApiNotFoundResponse({ description: 'Cliente não encontrado' })
    async buscaPorCpf(@Query('cpf') cpf: string): Promise<Cliente> {
       this.logger.debug(`Consultando cliente por cpf: ${cpf}`);
-      return await this.service
-         .findByCpf(cpf)
-         .then((cliente) => {
-            if (cliente === undefined){
-               throw new NotFoundException('Cliente não encontrado')
-            }
+      return await this.service.findByCpf(cpf).then((cliente) => {
+         if (cliente === undefined) {
+            throw new NotFoundException('Cliente não encontrado');
+         }
 
-            return cliente;
-         })
+         return cliente;
+      });
    }
 }

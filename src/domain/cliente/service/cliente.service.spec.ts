@@ -57,9 +57,11 @@ describe('CienteService', () => {
                provide: 'SalvarClienteValidator',
                inject: ['IRepository<Cliente>'],
                useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => {
-                  return [ new CpfValidoClienteValidator(), 
-                           new EmailUnicoClienteValidator(repository),
-                           new CpfUnicoClienteValidator(repository)];
+                  return [
+                     new CpfValidoClienteValidator(),
+                     new EmailUnicoClienteValidator(repository),
+                     new CpfUnicoClienteValidator(repository),
+                  ];
                },
             },
 
@@ -184,29 +186,25 @@ describe('CienteService', () => {
       });
 
       it('não deve buscar cliente com cpf inexistente', async () => {
-      
          // mock de repositório retornando um cliente, caso exista o email
          repository.findBy = jest.fn().mockImplementation(() => {
             return Promise.resolve([]);
          });
 
-         await service.findByCpf('00000000191')
-            .then((cliente) => {
-               expect(cliente).toBeUndefined()
-            })
+         await service.findByCpf('00000000191').then((cliente) => {
+            expect(cliente).toBeUndefined();
+         });
       });
 
       it('não deve buscar cliente com cpf inválido', async () => {
-      
          // mock de repositório retornando um cliente, caso exista o email
          repository.findBy = jest.fn().mockImplementation(() => {
             return Promise.resolve([]);
          });
 
-         await service.findByCpf('12345678901')
-            .catch((error) => {
-               expect(error.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
-            })
+         await service.findByCpf('12345678901').catch((error) => {
+            expect(error.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
+         });
       });
 
       it('não deve consultar cliente por cpf quando houver um erro de banco ', async () => {
@@ -216,7 +214,5 @@ describe('CienteService', () => {
          // verifiaca se foi lançada uma exception na camada de serviço
          await expect(service.findByCpf(cliente.cpf)).rejects.toThrowError(ServiceException);
       });
-
    });
-
 });

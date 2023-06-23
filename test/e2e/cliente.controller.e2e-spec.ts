@@ -235,7 +235,7 @@ describe('ClienteController (e2e)', () => {
          .get(`/v1/cliente?cpf=${cliente.cpf}`)
          .then((response) => {
             expect(response.status).toEqual(200);
-            expect(response.body).toEqual(cliente)
+            expect(response.body).toEqual(cliente);
          });
    });
 
@@ -245,7 +245,7 @@ describe('ClienteController (e2e)', () => {
          .get(`/v1/cliente?cpf=00000000191`)
          .then((response) => {
             expect(response.status).toEqual(404);
-            expect(response.body.message).toEqual('Cliente não encontrado')
+            expect(response.body.message).toEqual('Cliente não encontrado');
          });
    });
 
@@ -255,7 +255,7 @@ describe('ClienteController (e2e)', () => {
          .get(`/v1/cliente?cpf=12345678901`)
          .then((response) => {
             expect(response.status).toEqual(400);
-            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
+            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
          });
    });
 
@@ -265,7 +265,7 @@ describe('ClienteController (e2e)', () => {
          .get(`/v1/cliente?cpf=`)
          .then((response) => {
             expect(response.status).toEqual(400);
-            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
+            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
          });
    });
 });

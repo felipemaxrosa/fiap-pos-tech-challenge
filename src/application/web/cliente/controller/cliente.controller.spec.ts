@@ -34,7 +34,9 @@ describe('ClienteController', () => {
                useValue: {
                   // Mocka chamada para o save, rejeitando a promise em caso de request undefined
                   save: jest.fn((request) => (request ? Promise.resolve(cliente) : Promise.reject(new Error('error')))),
-                  findByCpf: jest.fn((cpf) =>  cpf === cliente.cpf ? Promise.resolve(cliente): Promise.resolve(undefined))
+                  findByCpf: jest.fn((cpf) =>
+                     cpf === cliente.cpf ? Promise.resolve(cliente) : Promise.resolve(undefined),
+                  ),
                },
             },
          ],
@@ -93,11 +95,10 @@ describe('ClienteController', () => {
 
       it('não deve buscar cliente por cpf inexistente', async () => {
          // Chama o método salvar do controller
-         await controller.buscaPorCpf('123456')
-            .catch((error) => {
-               expect(error.message).toEqual('Cliente não encontrado')
-               expect(error.status).toEqual(404)
-            });
+         await controller.buscaPorCpf('123456').catch((error) => {
+            expect(error.message).toEqual('Cliente não encontrado');
+            expect(error.status).toEqual(404);
+         });
 
          // Verifica se o método save do serviço foi chamado corretamente com a requisição
          expect(service.findByCpf).toHaveBeenCalledWith('123456');
