@@ -14,14 +14,14 @@ describe('ClienteTypeormRepository', () => {
       id: 1,
       nome: 'Teste',
       email: 'teste@teste.com',
-      cpf: '123456789',
+      cpf: '25634428777',
    };
 
    const clienteEntity: ClienteEntity = {
       id: 1,
       nome: 'Teste',
       email: 'teste@teste.com',
-      cpf: '123456789',
+      cpf: '25634428777',
    };
 
    beforeEach(async () => {
