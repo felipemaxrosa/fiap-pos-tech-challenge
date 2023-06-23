@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Inject, Logger, Param, Post, Put } from '@nestjs/common';
 import { IService } from 'src/domain/service/service';
-import { ApiConsumes, ApiCreatedResponse, ApiNoContentResponse, ApiProduces, ApiTags } from '@nestjs/swagger';
+import { ApiConsumes, ApiCreatedResponse, ApiProduces, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Produto } from '../../../../domain/produto/model/produto.model';
 import { SalvarProdutoRequest } from '../request/salvar-produto.request';
 import { EditarProdutoRequest } from '../request/editar-produto.request';
@@ -54,7 +54,7 @@ export class ProdutoController {
    }
 
    @Delete(':id')
-   @ApiNoContentResponse({ description: 'Produto deletado com sucesso' })
+   @ApiResponse({ status: 200, description: 'Produto deletado com sucesso' })
    async delete(@Param('id') id: number): Promise<boolean> {
       this.logger.debug(`Deletando produto id: ${id}`);
       return await this.service.delete(id).then((result) => {
