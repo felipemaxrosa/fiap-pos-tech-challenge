@@ -192,7 +192,9 @@ describe('ClienteController (e2e)', () => {
          .send(salvarClienteRequest)
          .catch((response) => {
             expect(response.status).toEqual(400);
-            expect(response.body.message).toEqual(EmailValidoClienteValidator.EMAIL_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
+            expect(response.body.message).toEqual(
+               EmailValidoClienteValidator.EMAIL_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
+            );
             expect(response.body).toHaveProperty('path');
             expect(response.body).toHaveProperty('timestamp');
          });

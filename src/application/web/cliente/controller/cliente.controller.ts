@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Logger, NotFoundException, Post, Query } from '@nestjs/common';
 import {
    ApiConsumes,
    ApiCreatedResponse,
