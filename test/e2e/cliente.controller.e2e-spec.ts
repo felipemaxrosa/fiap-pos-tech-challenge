@@ -8,6 +8,7 @@ import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { EmailUnicoClienteValidator } from 'src/domain/cliente/validation/email-unico-cliente.validator';
 import { CpfUnicoClienteValidator } from 'src/domain/cliente/validation/cpf-unico-cliente.validator';
 import { CpfValidoClienteValidator } from 'src/domain/cliente/validation/cpf-valido-cliente.validator';
+import { EmailValidoClienteValidator } from 'src/domain/cliente/validation/email-valido-cliente.validator.';
 
 describe('ClienteController (e2e)', () => {
    let app: INestApplication;
@@ -176,6 +177,38 @@ describe('ClienteController (e2e)', () => {
          .catch((response) => {
             expect(response.status).toEqual(400);
             expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
+            expect(response.body).toHaveProperty('path');
+            expect(response.body).toHaveProperty('timestamp');
+         });
+   });
+
+   it('POST /v1/cliente - Não deve cadastrar um cliente com email inválido', async () => {
+      salvarClienteRequest.email = 'emailinvalido';
+
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .post('/v1/cliente')
+         .set('Content-type', 'application/json')
+         .send(salvarClienteRequest)
+         .catch((response) => {
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual(EmailValidoClienteValidator.EMAIL_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
+            expect(response.body).toHaveProperty('path');
+            expect(response.body).toHaveProperty('timestamp');
+         });
+   });
+
+   it('POST /v1/cliente - Não deve cadastrar um cliente com email inválido', async () => {
+      salvarClienteRequest.email = 'emailinvalido';
+
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .post('/v1/cliente')
+         .set('Content-type', 'application/json')
+         .send(salvarClienteRequest)
+         .catch((response) => {
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual('Email deve ser válido');
             expect(response.body).toHaveProperty('path');
             expect(response.body).toHaveProperty('timestamp');
          });

@@ -8,6 +8,7 @@ import { EmailUnicoClienteValidator } from './cliente/validation/email-unico-cli
 import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.validator';
 import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.validator';
 import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
+import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator.';
 
 @Module({
    providers: [
@@ -17,6 +18,7 @@ import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-clien
          inject: ['IRepository<Cliente>'],
          useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => [
             new CpfValidoClienteValidator(),
+            new EmailValidoClienteValidator(),
             new EmailUnicoClienteValidator(repository),
             new CpfUnicoClienteValidator(repository),
          ],

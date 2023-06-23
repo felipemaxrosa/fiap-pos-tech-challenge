@@ -11,6 +11,7 @@ import { ServiceException } from 'src/domain/exception/service.exception';
 import { IClienteService } from './cliente.service.interface';
 import { BuscarClienteValidator } from '../validation/buscar-cliente.validator';
 import { CpfValidoClienteValidator } from '../validation/cpf-valido-cliente.validator';
+import { EmailValidoClienteValidator } from '../validation/email-valido-cliente.validator.';
 describe('CienteService', () => {
    let service: IClienteService;
    let repository: IRepository<Cliente>;
@@ -58,6 +59,7 @@ describe('CienteService', () => {
                inject: ['IRepository<Cliente>'],
                useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => {
                   return [
+                     new EmailValidoClienteValidator(),
                      new CpfValidoClienteValidator(),
                      new EmailUnicoClienteValidator(repository),
                      new CpfUnicoClienteValidator(repository),
@@ -155,6 +157,22 @@ describe('CienteService', () => {
 
          await expect(service.save(cliente)).rejects.toThrowError(
             CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
+         );
+      });
+
+      it('não deve salvar cliente com email inválido', async () => {
+         const cliente: Cliente = {
+            nome: 'Teste',
+            email: 'emailinvalido',
+            cpf: '25634428777',
+         };
+
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(attributes['email'] === cliente.email ? [cliente] : {});
+         });
+
+         await expect(service.save(cliente)).rejects.toThrowError(
+            EmailValidoClienteValidator.EMAIL_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
          );
       });
 

@@ -1,11 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
-import { IRepository } from 'src/domain/repository/repository';
 import { CpfValidoClienteValidator } from './cpf-valido-cliente.validator';
 
 describe('CpfValidoClienteValidator', () => {
    let validator: CpfValidoClienteValidator;
-   let repository: IRepository<Cliente>;
 
    const cliente: Cliente = {
       id: 1,
