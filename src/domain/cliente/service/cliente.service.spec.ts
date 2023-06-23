@@ -8,9 +8,12 @@ import { EmailUnicoClienteValidator } from '../validation/email-unico-cliente.va
 import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ServiceException } from 'src/domain/exception/service.exception';
-
+import { IClienteService } from './cliente.service.interface';
+import { BuscarClienteValidator } from '../validation/buscar-cliente.validator';
+import { CpfValidoClienteValidator } from '../validation/cpf-valido-cliente.validator';
+import { EmailValidoClienteValidator } from '../validation/email-valido-cliente.validator.';
 describe('CienteService', () => {
-   let service: IService<Cliente>;
+   let service: IClienteService;
    let repository: IRepository<Cliente>;
    let validators: SalvarClienteValidator[];
 
@@ -18,7 +21,7 @@ describe('CienteService', () => {
       id: 1,
       nome: 'Teste',
       email: 'teste@teste.com',
-      cpf: '123456789',
+      cpf: '25634428777',
    };
 
    beforeEach(async () => {
@@ -28,12 +31,13 @@ describe('CienteService', () => {
             //  IService<Cliente> provider
             {
                provide: 'IService<Cliente>',
-               inject: ['IRepository<Cliente>', 'SalvarClienteValidator'],
+               inject: ['IRepository<Cliente>', 'SalvarClienteValidator', 'BuscarClienteValidator'],
                useFactory: (
                   repository: IRepository<Cliente>,
                   salvarClienteValidator: SalvarClienteValidator[],
+                  buscarClienteValidator: BuscarClienteValidator[],
                ): IService<Cliente> => {
-                  return new ClienteService(repository, salvarClienteValidator);
+                  return new ClienteService(repository, salvarClienteValidator, buscarClienteValidator);
                },
             },
             // Mock do serviço IRepository<Cliente>
@@ -54,8 +58,19 @@ describe('CienteService', () => {
                provide: 'SalvarClienteValidator',
                inject: ['IRepository<Cliente>'],
                useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => {
-                  return [new EmailUnicoClienteValidator(repository), new CpfUnicoClienteValidator(repository)];
+                  return [
+                     new EmailValidoClienteValidator(),
+                     new CpfValidoClienteValidator(),
+                     new EmailUnicoClienteValidator(repository),
+                     new CpfUnicoClienteValidator(repository),
+                  ];
                },
+            },
+
+            {
+               provide: 'BuscarClienteValidator',
+               inject: ['IRepository<Cliente>'],
+               useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
             },
          ],
       }).compile();
@@ -66,7 +81,7 @@ describe('CienteService', () => {
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
       repository = module.get<IRepository<Cliente>>('IRepository<Cliente>');
       validators = module.get<SalvarClienteValidator[]>('SalvarClienteValidator');
-      service = module.get<IService<Cliente>>('IService<Cliente>');
+      service = module.get<IClienteService>('IService<Cliente>');
    });
 
    describe('injeção de dependências', () => {
@@ -81,7 +96,7 @@ describe('CienteService', () => {
          const cliente: Cliente = {
             nome: 'Teste',
             email: 'teste@teste.com',
-            cpf: '123456789',
+            cpf: '25634428777',
          };
 
          await service.save(cliente).then((clienteSalvo) => {
@@ -97,7 +112,7 @@ describe('CienteService', () => {
          const cliente: Cliente = {
             nome: 'Teste',
             email: 'teste@teste.com',
-            cpf: '123456789',
+            cpf: '25634428777',
          };
 
          // mock de repositório retornando um cliente, caso exista o email
@@ -115,7 +130,7 @@ describe('CienteService', () => {
          const cliente: Cliente = {
             nome: 'Teste',
             email: 'teste@teste.com',
-            cpf: '123456789',
+            cpf: '25634428777',
          };
 
          // mock de repositório retornando um cliente, caso exista o cpf
@@ -126,6 +141,38 @@ describe('CienteService', () => {
          // verifica se foi lançada uma exception com a mensagem de validção de cpf único
          await expect(service.save(cliente)).rejects.toThrowError(
             CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
+         );
+      });
+
+      it('não deve salvar cliente com cpf inválido', async () => {
+         const cliente: Cliente = {
+            nome: 'Teste',
+            email: 'teste@teste.com',
+            cpf: '12345678901',
+         };
+
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(attributes['cpf'] === cliente.cpf ? [cliente] : {});
+         });
+
+         await expect(service.save(cliente)).rejects.toThrowError(
+            CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
+         );
+      });
+
+      it('não deve salvar cliente com email inválido', async () => {
+         const cliente: Cliente = {
+            nome: 'Teste',
+            email: 'emailinvalido',
+            cpf: '25634428777',
+         };
+
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(attributes['email'] === cliente.email ? [cliente] : {});
+         });
+
+         await expect(service.save(cliente)).rejects.toThrowError(
+            EmailValidoClienteValidator.EMAIL_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
          );
       });
 
@@ -155,6 +202,55 @@ describe('CienteService', () => {
          } catch (error) {
             expect(error.message).toEqual('Método não implementado.');
          }
+      });
+   });
+
+   describe('buscaPorCpf', () => {
+      it('deve buscar cliente por cpf', async () => {
+         const cliente: Cliente = {
+            id: 1,
+            nome: 'Teste',
+            email: 'teste@teste.com',
+            cpf: '25634428777',
+         };
+
+         repository.findBy = jest.fn().mockImplementation(() => {
+            return Promise.resolve([cliente]);
+         });
+
+         await service.findByCpf(cliente.cpf).then((clienteSalvo) => {
+            expect(clienteSalvo).toEqual(cliente);
+         });
+      });
+
+      it('não deve buscar cliente com cpf inexistente', async () => {
+         // mock de repositório retornando um cliente, caso exista o email
+         repository.findBy = jest.fn().mockImplementation(() => {
+            return Promise.resolve([]);
+         });
+
+         await service.findByCpf('00000000191').then((cliente) => {
+            expect(cliente).toBeUndefined();
+         });
+      });
+
+      it('não deve buscar cliente com cpf inválido', async () => {
+         // mock de repositório retornando um cliente, caso exista o email
+         repository.findBy = jest.fn().mockImplementation(() => {
+            return Promise.resolve([]);
+         });
+
+         await service.findByCpf('12345678901').catch((error) => {
+            expect(error.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
+         });
+      });
+
+      it('não deve consultar cliente por cpf quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+
+         // verifiaca se foi lançada uma exception na camada de serviço
+         await expect(service.findByCpf(cliente.cpf)).rejects.toThrowError(ServiceException);
       });
    });
 });

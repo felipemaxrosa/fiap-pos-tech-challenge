@@ -9,6 +9,9 @@ import { ProdutoService } from './produto/service/produto.service';
 import { Produto } from './produto/model/produto.model';
 import { SalvarProdutoValidator } from './produto/validation/salvar-produto.validator';
 import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-obrigatorios-produto.validator';
+import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.validator';
+import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
+import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator.';
 
 @Module({
    providers: [
@@ -17,6 +20,8 @@ import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-
          provide: 'SalvarClienteValidator',
          inject: ['IRepository<Cliente>'],
          useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => [
+            new CpfValidoClienteValidator(),
+            new EmailValidoClienteValidator(),
             new EmailUnicoClienteValidator(repository),
             new CpfUnicoClienteValidator(repository),
          ],
@@ -29,6 +34,10 @@ import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-
          useFactory: (repository: IRepository<Produto>): SalvarProdutoValidator[] => [
             new CamposObrigatoriosProdutoValidator(repository),
          ],
+      },
+      {
+         provide: 'BuscarClienteValidator',
+         useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
       },
    ],
    exports: [
