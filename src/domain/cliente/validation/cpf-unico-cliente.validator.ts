@@ -14,7 +14,7 @@ export class CpfUnicoClienteValidator implements SalvarClienteValidator {
    constructor(@Inject('IRepository<Cliente>') private repository: IRepository<Cliente>) {}
 
    async validate(cliente: Cliente): Promise<boolean> {
-      this.logger.log(`Inicializando validação ${CpfUnicoClienteValidator.name} para salvar o cliente: ${cliente.cpf}`);
+      this.logger.log(`Inicializando validação ${CpfUnicoClienteValidator.name} de cpf único: ${cliente.cpf}`);
 
       return this.repository.findBy({ cpf: cliente.cpf }).then((clients) => {
          if (clients.length > 0) {

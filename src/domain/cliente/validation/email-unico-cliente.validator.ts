@@ -15,7 +15,7 @@ export class EmailUnicoClienteValidator implements SalvarClienteValidator {
 
    async validate(cliente: Cliente): Promise<boolean> {
       this.logger.log(
-         `Inicializando validação ${EmailUnicoClienteValidator.name} para salvar o cliente: ${cliente.email}`,
+         `Inicializando validação ${EmailUnicoClienteValidator.name} de email único: ${cliente.email}`,
       );
 
       return this.repository.findBy({ email: cliente.email }).then((clients) => {
