@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Produto } from 'src/domain/produto/model/produto.model';
-import { IService } from 'src/domain/service/service';
 import { SalvarProdutoValidator } from 'src/domain/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/domain/repository/repository';
 import { ServiceException } from '../../exception/service.exception';
+import { IProdutoService } from './produto.service.interface';
 
 @Injectable()
-export class ProdutoService implements IService<Produto> {
+export class ProdutoService implements IProdutoService {
    private logger: Logger = new Logger(ProdutoService.name);
 
    constructor(
@@ -56,6 +56,31 @@ export class ProdutoService implements IService<Produto> {
          this.logger.error(`Erro ao deletar no banco de dados: ${error} `);
          throw new ServiceException(`Houve um erro ao deletar o produto: ${error}`);
       });
+   }
+
+   async findById(id: number): Promise<Produto> {
+      const produtos = await this.repository.findBy({ id: id }).catch((error) => {
+         this.logger.debug(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
+         this.logger.error(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
+         throw new ServiceException(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
+      });
+      if (produtos.length > 0) {
+         return produtos[0];
+      }
+   }
+
+   async findByIdCategoriaProduto(idCategoriaProduto: number): Promise<Produto[]> {
+      const produtos = await this.repository.findBy({ idCategoriaProduto: idCategoriaProduto }).catch((error) => {
+         this.logger.error(
+            `Erro ao buscar produto idCategoriaProduto=${idCategoriaProduto} no banco de dados: ${error}`,
+         );
+         throw new ServiceException(
+            `Erro ao buscar produto idCategoriaProduto=${idCategoriaProduto} no banco de dados: ${error}`,
+         );
+      });
+      if (produtos.length > 0) {
+         return produtos;
+      }
    }
 
    private async validate(produto: Produto): Promise<void> {

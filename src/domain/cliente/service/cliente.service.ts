@@ -59,4 +59,8 @@ export class ClienteService implements IClienteService {
          await validator.validate(cliente);
       }
    }
+
+   findById(): Promise<Cliente> {
+      throw new ServiceException('Método não implementado.');
+   }
 }
