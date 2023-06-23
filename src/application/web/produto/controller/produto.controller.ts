@@ -24,7 +24,7 @@ export class ProdutoController {
             idCategoriaProduto: request.idCategoriaProduto,
             descricao: request.descricao,
             preco: request.preco,
-            imagemBase64: '',
+            imagemBase64: request.imagemBase64,
             ativo: true,
          })
          .then((produto) => {
@@ -44,7 +44,7 @@ export class ProdutoController {
             idCategoriaProduto: request.idCategoriaProduto,
             descricao: request.descricao,
             preco: request.preco,
-            imagemBase64: '',
+            imagemBase64: request.imagemBase64,
             ativo: true,
          })
          .then((produto) => {

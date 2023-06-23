@@ -8,6 +8,9 @@ import { RepositoryException } from 'src/infrastructure/exception/repository.exc
 import { ServiceException } from 'src/domain/exception/service.exception';
 import { CamposObrigatoriosProdutoValidator } from '../validation/campos-obrigatorios-produto.validator';
 
+const IMAGEM_BASE64_SAMPLE =
+   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=';
+
 // Stubs
 const produtoSalvar: Produto = {
    id: 1,
@@ -15,7 +18,7 @@ const produtoSalvar: Produto = {
    idCategoriaProduto: 1,
    descricao: 'Teste',
    preco: 10,
-   imagemBase64: '',
+   imagemBase64: IMAGEM_BASE64_SAMPLE,
    ativo: true,
 };
 
@@ -25,7 +28,7 @@ const produtoEditar: Produto = {
    idCategoriaProduto: 2,
    descricao: 'Teste editado',
    preco: 101,
-   imagemBase64: '',
+   imagemBase64: IMAGEM_BASE64_SAMPLE,
    ativo: true,
 };
 
@@ -101,7 +104,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 1,
             descricao: 'Teste',
             preco: 10,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
@@ -124,7 +127,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 1,
             descricao: 'Teste',
             preco: 10,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
@@ -141,7 +144,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 1,
             descricao: 'Teste',
             preco: -10,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
@@ -158,7 +161,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 100,
             descricao: 'Teste',
             preco: 10,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
@@ -185,7 +188,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 2,
             descricao: 'Teste editado',
             preco: 101,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
@@ -208,7 +211,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 1,
             descricao: 'Teste',
             preco: 10,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
@@ -225,7 +228,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 1,
             descricao: 'Teste',
             preco: -10,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
@@ -242,7 +245,7 @@ describe('ProdutoService', () => {
             idCategoriaProduto: 100,
             descricao: 'Teste',
             preco: 10,
-            imagemBase64: '',
+            imagemBase64: IMAGEM_BASE64_SAMPLE,
             ativo: true,
          };
 
