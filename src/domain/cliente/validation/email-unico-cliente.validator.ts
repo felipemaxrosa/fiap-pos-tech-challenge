@@ -14,9 +14,7 @@ export class EmailUnicoClienteValidator implements SalvarClienteValidator {
    constructor(@Inject('IRepository<Cliente>') private repository: IRepository<Cliente>) {}
 
    async validate(cliente: Cliente): Promise<boolean> {
-      this.logger.log(
-         `Inicializando validação ${EmailUnicoClienteValidator.name} de email único: ${cliente.email}`,
-      );
+      this.logger.log(`Inicializando validação ${EmailUnicoClienteValidator.name} de email único: ${cliente.email}`);
 
       return this.repository.findBy({ email: cliente.email }).then((clients) => {
          if (clients.length > 0) {
