@@ -7,6 +7,7 @@ import { SalvarClienteRequest } from 'src/application/web/cliente/request/salvar
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { EmailUnicoClienteValidator } from 'src/domain/cliente/validation/email-unico-cliente.validator';
 import { CpfUnicoClienteValidator } from 'src/domain/cliente/validation/cpf-unico-cliente.validator';
+import { CpfValidoClienteValidator } from 'src/domain/cliente/validation/cpf-valido-cliente.validator';
 
 describe('ClienteController (e2e)', () => {
    let app: INestApplication;
@@ -18,7 +19,7 @@ describe('ClienteController (e2e)', () => {
       salvarClienteRequest = {
          nome: 'Teste',
          email: 'teste@teste.com',
-         cpf: '123456789',
+         cpf: '25634428777',
       };
 
       // Define um objeto de cliente esperado como resultado
@@ -26,7 +27,7 @@ describe('ClienteController (e2e)', () => {
          id: 1,
          nome: 'Teste',
          email: 'teste@teste.com',
-         cpf: '123456789',
+         cpf: '25634428777',
       };
    });
 
@@ -164,6 +165,22 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
+   it('POST /v1/cliente - Não deve cadastrar um cliente com cpf inválido', async () => {
+      salvarClienteRequest.cpf = '12345678901';
+
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .post('/v1/cliente')
+         .set('Content-type', 'application/json')
+         .send(salvarClienteRequest)
+         .catch((response) => {
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
+            expect(response.body).toHaveProperty('path');
+            expect(response.body).toHaveProperty('timestamp');
+         });
+   });
+
    it('POST /v1/cliente - Não deve cadastrar um cliente com nome maior do que 255 caracteres', async () => {
       salvarClienteRequest.nome = Array.from({ length: 256 }, () => 'x').join('');
 
@@ -209,6 +226,46 @@ describe('ClienteController (e2e)', () => {
             expect(response.body.message).toEqual(['O cpf deve ter no máximo 11 caracteres']);
             expect(response.body).toHaveProperty('path');
             expect(response.body).toHaveProperty('timestamp');
+         });
+   });
+
+   it('GET /v1/cliente?cpf - Deve consultar cliente por cpf', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .get(`/v1/cliente?cpf=${cliente.cpf}`)
+         .then((response) => {
+            expect(response.status).toEqual(200);
+            expect(response.body).toEqual(cliente)
+         });
+   });
+
+   it('GET /v1/cliente?cpf - Não deve consultar cliente por cpf inexistente', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .get(`/v1/cliente?cpf=00000000191`)
+         .then((response) => {
+            expect(response.status).toEqual(404);
+            expect(response.body.message).toEqual('Cliente não encontrado')
+         });
+   });
+
+   it('GET /v1/cliente?cpf - Não deve consultar cliente por cpf inválido', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .get(`/v1/cliente?cpf=12345678901`)
+         .then((response) => {
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
+         });
+   });
+
+   it('GET /v1/cliente?cpf - Não deve consultar cliente por cpf vazio', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .get(`/v1/cliente?cpf=`)
+         .then((response) => {
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE)
          });
    });
 });
