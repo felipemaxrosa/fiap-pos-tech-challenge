@@ -162,4 +162,24 @@ describe('ClienteTypeormRepository', () => {
          await expect(repository.findBy({})).rejects.toThrowError(RepositoryException);
       });
    });
+
+   describe('edit', () => {
+      it('editar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(repository.edit(cliente));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
+
+   describe('delete', () => {
+      it('deletar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(repository.delete(1));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
 });

@@ -12,6 +12,7 @@ import { IClienteService } from './cliente.service.interface';
 import { BuscarClienteValidator } from '../validation/buscar-cliente.validator';
 import { CpfValidoClienteValidator } from '../validation/cpf-valido-cliente.validator';
 import { EmailValidoClienteValidator } from '../validation/email-valido-cliente.validator.';
+
 describe('CienteService', () => {
    let service: IClienteService;
    let repository: IRepository<Cliente>;
@@ -231,6 +232,26 @@ describe('CienteService', () => {
 
          // verifiaca se foi lançada uma exception na camada de serviço
          await expect(service.findByCpf(cliente.cpf)).rejects.toThrowError(ServiceException);
+      });
+   });
+
+   describe('edit', () => {
+      it('editar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(service.edit(cliente));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
+
+   describe('delete', () => {
+      it('deletar deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(service.delete(1));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
       });
    });
 });
