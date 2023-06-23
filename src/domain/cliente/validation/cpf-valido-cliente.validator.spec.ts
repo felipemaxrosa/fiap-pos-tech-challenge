@@ -17,9 +17,7 @@ describe('CpfValidoClienteValidator', () => {
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
-         providers: [
-            CpfValidoClienteValidator,
-         ],
+         providers: [CpfValidoClienteValidator],
       }).compile();
 
       // Desabilita a saída de log
@@ -30,16 +28,15 @@ describe('CpfValidoClienteValidator', () => {
 
    describe('validate', () => {
       it('deve validar cliente com cpf valido', async () => {
-
          await validator.validate(cliente).then((result) => {
             expect(result).toBeTruthy();
          });
       });
 
       it('deve validar cliente com cpf inválido', async () => {
-         cliente.cpf = '12345678901'
+         cliente.cpf = '12345678901';
          await expect(validator.validate(cliente)).rejects.toThrowError(
-            CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE
+            CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
          );
       });
    });
