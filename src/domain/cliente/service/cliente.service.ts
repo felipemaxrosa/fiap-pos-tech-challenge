@@ -47,11 +47,11 @@ export class ClienteService implements IClienteService {
    }
 
    edit(): Promise<Cliente> {
-      throw new ServiceException(`MÈtodo n„o implementado.`);
+      throw new ServiceException(`M√©todo n√£o implementado.`);
    }
 
    delete(): Promise<boolean> {
-      throw new ServiceException('MÈtodo n„o implementado.');
+      throw new ServiceException('M√©todo n√£o implementado.');
    }
 
    private async validate(validators: IValidator<Cliente>[], cliente: Cliente): Promise<void> {
