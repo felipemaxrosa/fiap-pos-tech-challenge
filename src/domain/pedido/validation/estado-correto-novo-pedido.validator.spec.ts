@@ -15,6 +15,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+      ativo: true,
    };
 
    const criarNovoPedido = (props?: Partial<Pedido>): Pedido => {

@@ -14,6 +14,7 @@ describe('PedidoController', () => {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      ativo: true,
    };
 
    const pedido: Pedido = {
@@ -21,6 +22,7 @@ describe('PedidoController', () => {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      ativo: true,
    };
 
    beforeEach(async () => {

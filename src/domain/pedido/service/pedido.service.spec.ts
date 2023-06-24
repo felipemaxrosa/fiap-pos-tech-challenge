@@ -22,6 +22,7 @@ describe('PedidoService', () => {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+      ativo: true,
    };
 
    beforeEach(async () => {
@@ -50,6 +51,10 @@ describe('PedidoService', () => {
                      // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
+                  // mock para a chamada repository.edit(produto)
+                  edit: jest.fn(() => Promise.resolve(pedido)),
+                  // mock para a chamada repository.delete(id)
+                  delete: jest.fn(() => Promise.resolve(true)),
                },
             },
             // Mock do CriarNovoPedidoValidator
@@ -85,6 +90,7 @@ describe('PedidoService', () => {
             clienteId: 1,
             dataInicio: '2023-06-18',
             estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+            ativo: true,
          };
 
          await service.save(novoPedido).then((pedidoSalvo) => {
@@ -103,5 +109,38 @@ describe('PedidoService', () => {
          // verifiaca se foi lançada uma exception na camada de serviço
          await expect(service.save(pedido)).rejects.toThrowError(ServiceException);
       });
+   });
+
+   describe('edit', () => {
+      it('editar deve falhar porque não foi implementado', async () => {
+         await service.edit(pedido).then((pedidoEditado) => {
+            expect(pedidoEditado.clienteId).toEqual(pedido.clienteId);
+            expect(pedidoEditado.dataInicio).toEqual(pedido.dataInicio);
+            expect(pedidoEditado.estadoPedido).toEqual(pedido.estadoPedido);
+            expect(pedidoEditado.id).toEqual(pedido.id);
+         });
+      });
+
+      it('não deve editar produto quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'edit').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.edit(pedido)).rejects.toThrowError(ServiceException);
+      }); // end it não deve editar produto quando houver um erro de banco
+   });
+
+   describe('delete', () => {
+      it('deletar pedido', async () => {
+         await service.delete(1).then((result) => expect(result).toBeTruthy());
+      });
+
+      it('não deve deletar produto quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'delete').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.delete(1)).rejects.toThrowError(ServiceException);
+      }); // end it não deve deletar produto quando houver um erro de banco
    });
 });

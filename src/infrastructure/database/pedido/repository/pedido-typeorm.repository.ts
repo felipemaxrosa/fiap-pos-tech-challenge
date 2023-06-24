@@ -24,12 +24,7 @@ export class PedidoTypeormRepository implements IRepository<Pedido> {
             this.logger.debug(
                `Consulta de pedidos realizada com sucesso com os parâmetros: '${JSON.stringify(attributes)}'`,
             );
-            return pedidoEntities.map((pedido) => ({
-               id: pedido.id,
-               clienteId: pedido.clienteId,
-               dataInicio: pedido.dataInicio,
-               estadoPedido: pedido.estadoPedido,
-            }));
+            return pedidoEntities.map((pedido) => pedido);
          })
          .catch((error) => {
             throw new RepositoryException(
@@ -43,23 +38,54 @@ export class PedidoTypeormRepository implements IRepository<Pedido> {
    async save(pedido: Pedido): Promise<Pedido> {
       this.logger.debug(`Criando novo pedido: ${pedido}`);
       return this.repository
-         .save({
-            clienteId: pedido.clienteId,
-            dataInicio: pedido.dataInicio,
-            estadoPedido: pedido.estadoPedido,
-         })
-         .then((pedido) => {
-            this.logger.debug(`Novo pedido salvo com sucesso no banco de dados: ${pedido.id}`);
-            return {
-               id: pedido.id,
-               clienteId: pedido.clienteId,
-               dataInicio: pedido.dataInicio,
-               estadoPedido: pedido.estadoPedido,
-            };
+         .save(pedido)
+         .then((pedidoSalvo) => {
+            this.logger.debug(`Novo pedido salvo com sucesso no banco de dados: ${pedidoSalvo.id}`);
+            return pedidoSalvo;
          })
          .catch((error) => {
             throw new RepositoryException(
                `Houve um erro ao salvar o novo pedido no banco de dados: '${pedido}': ${error.message}`,
+            );
+         });
+   }
+
+   async edit(pedido: Pedido): Promise<Pedido> {
+      this.logger.debug(`Editando pedido: ${pedido}`);
+
+      return this.repository
+         .save(pedido)
+         .then((pedidoEditado) => {
+            this.logger.debug(`Pedido editado com sucesso no banco de dados: ${pedidoEditado.id}`);
+
+            return pedidoEditado;
+         })
+         .catch((error) => {
+            throw new RepositoryException(
+               `Houve um erro ao editar o pedido no banco de dados: '${pedido}': ${error.message}`,
+            );
+         });
+   }
+
+   async delete(id: number): Promise<boolean> {
+      this.logger.debug(`Deletando logicamente pedido id: ${id}`);
+      const pedido = (await this.findBy({ id: id }))[0];
+
+      return this.repository
+         .save({
+            id: pedido.id,
+            clienteId: pedido.clienteId,
+            dataInicio: pedido.dataInicio,
+            estadoPedido: pedido.estadoPedido,
+            ativo: false,
+         })
+         .then((pedidoEntity) => {
+            this.logger.debug(`Pedido deletado logicamente com sucesso no banco de dados: ${pedidoEntity.id}`);
+            return true;
+         })
+         .catch((error) => {
+            throw new RepositoryException(
+               `Houve um erro ao deletar logicamente o pedido no banco de dados: '${pedido}': ${error.message}`,
             );
          });
    }

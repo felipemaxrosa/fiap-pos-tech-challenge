@@ -1,3 +1,4 @@
+import { RepositoryException } from './../../../exception/repository.exception';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from '../../../../domain/pedido/model/pedido.model';
@@ -30,5 +31,13 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
          pedido.id = ++PedidoMemoryRepository.ID_COUNT;
          resolve(pedido);
       });
+   }
+
+   async edit(): Promise<Pedido> {
+      throw new RepositoryException('Método não implementado.');
+   }
+
+   async delete(): Promise<boolean> {
+      throw new RepositoryException('Método não implementado.');
    }
 }

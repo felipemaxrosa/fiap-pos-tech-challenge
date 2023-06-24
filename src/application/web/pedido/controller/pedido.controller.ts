@@ -25,6 +25,7 @@ export class PedidoController {
             clienteId: request.clienteId,
             dataInicio: request.dataInicio,
             estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+            ativo: request.ativo,
          })
          .then((pedido) => {
             this.logger.log(`Pedido gerado com sucesso: ${pedido.id}}`);

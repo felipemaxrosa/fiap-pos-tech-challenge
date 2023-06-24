@@ -18,6 +18,7 @@ describe('PedidoTypeormRepository', () => {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      ativo: true,
    };
 
    const pedidoEntity: PedidoEntity = {
@@ -25,6 +26,7 @@ describe('PedidoTypeormRepository', () => {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      ativo: true,
    };
 
    beforeEach(async () => {
@@ -43,12 +45,10 @@ describe('PedidoTypeormRepository', () => {
             {
                provide: PedidoConstants.REPOSITORY_PEDIDO_ENTITY,
                useValue: {
-                  // mock para a chamama repositoryTypeOrm.save(pedido)
-                  save: jest.fn(() => Promise.resolve(pedidoEntity)),
-                  // mock para a chamama repositoryTypeOrm.findBy(attributes)
-                  findBy: jest.fn(() => {
-                     return Promise.resolve([pedidoEntity]);
-                  }),
+                  save: jest.fn(),
+                  findBy: jest.fn(),
+                  edit: jest.fn(),
+                  delete: jest.fn(),
                },
             },
          ],
@@ -70,7 +70,7 @@ describe('PedidoTypeormRepository', () => {
 
    describe('save', () => {
       it('deve CRIAR novo pedido', async () => {
-         const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'save');
+         const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(pedidoEntity);
 
          await repository.save(mockedPedido).then((pedidoSalvo) => {
             // verifica se o pedido criado contém os mesmos dados passados como input
@@ -78,6 +78,7 @@ describe('PedidoTypeormRepository', () => {
             expect(pedidoSalvo.clienteId).toEqual(mockedPedido.clienteId);
             expect(pedidoSalvo.dataInicio).toEqual(mockedPedido.dataInicio);
             expect(pedidoSalvo.estadoPedido).toEqual(mockedPedido.estadoPedido);
+            expect(pedidoSalvo.ativo).toEqual(mockedPedido.ativo);
          });
 
          expect(repositorySaveSpy).toBeCalled();
@@ -121,6 +122,7 @@ describe('PedidoTypeormRepository', () => {
                expect(pedido.id).not.toBeUndefined();
                expect(pedido.clienteId).not.toBeUndefined();
                expect(pedido.estadoPedido).not.toBeUndefined();
+               expect(pedido.ativo).not.toBeUndefined();
             });
          });
       });
@@ -137,6 +139,7 @@ describe('PedidoTypeormRepository', () => {
                expect(pedido.id).not.toBeUndefined();
                expect(pedido.dataInicio).not.toBeUndefined();
                expect(pedido.estadoPedido).not.toBeUndefined();
+               expect(pedido.ativo).not.toBeUndefined();
             });
          });
       });
@@ -153,6 +156,7 @@ describe('PedidoTypeormRepository', () => {
                expect(pedido.id).not.toBeUndefined();
                expect(pedido.dataInicio).not.toBeUndefined();
                expect(pedido.clienteId).not.toBeUndefined();
+               expect(pedido.ativo).not.toBeUndefined();
             });
          });
       });
@@ -163,6 +167,56 @@ describe('PedidoTypeormRepository', () => {
 
          // verifiaca se foi lançada uma exception na camada infra
          await expect(repository.findBy({})).rejects.toThrowError(RepositoryException);
+      });
+   });
+
+   describe('edit', () => {
+      it('deve editar estado do pedido corretamente', async () => {
+         const pedidoEditarEntity: PedidoEntity = {
+            ...pedidoEntity,
+            estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+         };
+         const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(pedidoEditarEntity);
+
+         await repository.edit(pedidoEditarEntity).then((pedidoEditado) => {
+            expect(pedidoEditado.estadoPedido).toEqual(ESTADO_PEDIDO.EM_PREPARO);
+         });
+
+         expect(repositorySaveSpy).toBeCalled();
+      });
+
+      it('não deve editar produto quando houver um erro de banco ', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada infra
+         await expect(repository.edit(mockedPedido)).rejects.toThrowError(RepositoryException);
+      }); // end it não deve editar produto quando houver um erro de banco
+   });
+
+   describe('delete', () => {
+      const pedidoDeletarEntity: PedidoEntity = {
+         ...pedidoEntity,
+         ativo: true,
+      };
+
+      it('deve deletar pedido corretamente', async () => {
+         jest.spyOn(repositoryTypeOrm, 'findBy').mockResolvedValue([pedidoDeletarEntity]);
+         const repositorySpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(pedidoDeletarEntity);
+
+         await repository.delete(1).then((result) => {
+            expect(result).toBeTruthy();
+         });
+         expect(repositorySpy).toBeCalled();
+      });
+
+      it('não deve deletar pedido quando houver um erro de banco ', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'findBy').mockResolvedValue([pedidoDeletarEntity]);
+         jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada infra
+         await expect(repository.delete(1)).rejects.toThrowError(RepositoryException);
       });
    });
 });

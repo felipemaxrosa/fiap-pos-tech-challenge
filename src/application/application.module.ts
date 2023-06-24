@@ -9,6 +9,7 @@ import { PedidoController } from './web/pedido/controller/pedido.controller';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { GeneralExceptionHandler } from './web/handler/general-exception.handler';
 import { GeneralHttpExceptionHandler } from './web/handler/general-http-exception.handler';
+import { ProdutoController } from './web/produto/controller/produto.controller';
 
 @Module({
    imports: [InfrastructureModule, DomainModule],
@@ -18,6 +19,6 @@ import { GeneralHttpExceptionHandler } from './web/handler/general-http-exceptio
       { provide: APP_FILTER, useClass: InfraestructureExceptionHandler },
       { provide: APP_FILTER, useClass: ValidationExceptionHandler },
    ],
-   controllers: [ClienteController, PedidoController],
+   controllers: [ClienteController, ProdutoController, PedidoController],
 })
 export class ApplicationModule {}

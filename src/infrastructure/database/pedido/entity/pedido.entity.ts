@@ -13,4 +13,7 @@ export class PedidoEntity {
 
    @Column({ name: 'DATA_INICIO' })
    dataInicio: string;
+
+   @Column({ name: 'ATIVO' })
+   ativo: boolean;
 }

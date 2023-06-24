@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS PEDIDO (
                                        ID INT AUTO_INCREMENT PRIMARY KEY,
                                        PEDIDO_CLIENTE_ID INT NOT NULL, CONSTRAINT FK_PEDIDO_CLIENTE_ID FOREIGN KEY (PEDIDO_CLIENTE_ID) REFERENCES CLIENTE(ID),
                                        DATA_INICIO VARCHAR(255) NOT NULL,
-                                       ESTADO_PEDIDO VARCHAR(255) NOT NULL
+                                       ESTADO_PEDIDO VARCHAR(255) NOT NULL,
+                                       ATIVO BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 -- Tabela ITEMS DE PEDIDO
