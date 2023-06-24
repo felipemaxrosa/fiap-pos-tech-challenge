@@ -19,9 +19,16 @@ export class PedidoController {
    @ApiCreatedResponse({ description: 'Pedido gerado com sucesso' })
    async salvar(@Body() novoPedido: CriarNovoPedidoRequest): Promise<Pedido> {
       this.logger.debug(`Criando Novo Pedido Request: ${JSON.stringify(novoPedido)}`);
-      return await this.service.save(novoPedido).then((pedido) => {
-         this.logger.log(`Pedido gerado com sucesso: ${pedido.id}}`);
-         return pedido;
-      });
+      return await this.service
+         .save({
+            ativo: novoPedido.ativo,
+            clienteId: novoPedido.clienteId,
+            dataInicio: novoPedido.dataInicio,
+            estadoPedido: novoPedido.estadoPedido,
+         })
+         .then((pedido) => {
+            this.logger.log(`Pedido gerado com sucesso: ${pedido.id}}`);
+            return pedido;
+         });
    }
 }
