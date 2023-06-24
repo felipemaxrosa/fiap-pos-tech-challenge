@@ -20,7 +20,7 @@ describe('PedidoController (e2e)', () => {
          estadoPedido: ESTADO_PEDIDO.RECEBIDO,
          ativo: true,
       };
-      // Define um objeto de produto esperado como resultado
+      // Define um objeto de pedido esperado como resultado
       pedido = {
          id: 1,
          clienteId: 1,
