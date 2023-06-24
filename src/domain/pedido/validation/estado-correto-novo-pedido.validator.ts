@@ -14,19 +14,22 @@ export class EstadoCorretoNovoPedidoValidator implements CriarNovoPedidoValidato
 
    // constructor(@Inject(PedidoConstants.IREPOSITORY) private repository: IRepository<Pedido>) {}
 
-   async validate(pedido: Pedido): Promise<boolean> {
+   async validate({ estadoPedido }: Pedido): Promise<boolean> {
       this.logger.log(
          `Inicializando validação ${EstadoCorretoNovoPedidoValidator.name} para criar o pedido com o estado correto.`,
       );
+      console.log({ estadoPedido, esperado: ESTADO_PEDIDO.RECEBIDO });
 
-      if (pedido.estadoPedido === ESTADO_PEDIDO.RECEBIDO) {
+      if (estadoPedido === ESTADO_PEDIDO.RECEBIDO) {
          this.logger.debug(
-            `${EstadoCorretoNovoPedidoValidator.name} finalizado com sucesso para novo pedido com estado: ${pedido.estadoPedido}`,
+            `${EstadoCorretoNovoPedidoValidator.name} finalizado com sucesso para novo pedido com estado: ${estadoPedido}`,
          );
          return true;
       }
 
-      this.logger.error(`Estado de um novo pedido invalido: ${pedido.estadoPedido}`);
+      this.logger.warn(`estadoPedido: ${estadoPedido}, esperado: ${ESTADO_PEDIDO.RECEBIDO}`);
+
+      this.logger.error(`Estado de um novo pedido invalido: ${estadoPedido}`);
       throw new ValidationException(
          EstadoCorretoNovoPedidoValidator.ESTADO_CORRETO_NOVO_PEDIDO_VALIDATOR_ERROR_MESSAGE,
       );

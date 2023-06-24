@@ -4,7 +4,6 @@ import { ApiConsumes, ApiCreatedResponse, ApiProduces, ApiTags } from '@nestjs/s
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { IService } from 'src/domain/service/service';
 import { CriarNovoPedidoRequest } from '../request';
-import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 
 @Controller('v1/pedido')
@@ -18,18 +17,11 @@ export class PedidoController {
 
    @Post()
    @ApiCreatedResponse({ description: 'Pedido gerado com sucesso' })
-   async salvar(@Body() request: CriarNovoPedidoRequest): Promise<Pedido> {
-      this.logger.debug(`Criando Novo Pedido Request: ${JSON.stringify(request)}`);
-      return await this.service
-         .save({
-            clienteId: request.clienteId,
-            dataInicio: request.dataInicio,
-            estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
-            ativo: request.ativo,
-         })
-         .then((pedido) => {
-            this.logger.log(`Pedido gerado com sucesso: ${pedido.id}}`);
-            return pedido;
-         });
+   async salvar(@Body() novoPedido: CriarNovoPedidoRequest): Promise<Pedido> {
+      this.logger.debug(`Criando Novo Pedido Request: ${JSON.stringify(novoPedido)}`);
+      return await this.service.save(novoPedido).then((pedido) => {
+         this.logger.log(`Pedido gerado com sucesso: ${pedido.id}}`);
+         return pedido;
+      });
    }
 }
