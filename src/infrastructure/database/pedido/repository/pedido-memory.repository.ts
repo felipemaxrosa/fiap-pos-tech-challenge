@@ -5,6 +5,7 @@ import { IRepository } from '../../../../domain/repository/repository';
 
 @Injectable()
 export class PedidoMemoryRepository implements IRepository<Pedido> {
+  
    private logger: Logger = new Logger(PedidoMemoryRepository.name);
 
    private repository: Array<Pedido> = [];
@@ -30,5 +31,12 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
          pedido.id = ++PedidoMemoryRepository.ID_COUNT;
          resolve(pedido);
       });
+   }
+
+   async edit(type: Pedido): Promise<Pedido> {
+      throw new Error('Method not implemented.');
+   }
+   async delete(id: number): Promise<boolean> {
+      throw new Error('Method not implemented.');
    }
 }

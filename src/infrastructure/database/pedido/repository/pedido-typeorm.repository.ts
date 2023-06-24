@@ -63,4 +63,12 @@ export class PedidoTypeormRepository implements IRepository<Pedido> {
             );
          });
    }
+
+   async edit(type: Pedido): Promise<Pedido> {
+      throw new Error('Method not implemented.');
+   }
+   
+   async delete(id: number): Promise<boolean> {
+      throw new Error('Method not implemented.');
+   }
 }

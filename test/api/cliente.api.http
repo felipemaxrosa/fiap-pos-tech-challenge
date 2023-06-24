@@ -5,5 +5,8 @@ Content-Type: application/json
 {
    "nome": "cliente",
    "email": "cliente@email.com",
-   "cpf": "02345678902" 
+   "cpf": "17169878062" 
 }
+
+### Consulta cliente por cpf
+GET http://localhost:3000/v1/cliente?cpf=17169878062

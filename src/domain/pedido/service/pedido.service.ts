@@ -16,6 +16,13 @@ export class PedidoService implements IService<Pedido> {
       @Inject('CriarNovoPedidoValidator')
       private validators: CriarNovoPedidoValidator[],
    ) {}
+  
+   edit(type: Pedido): Promise<Pedido> {
+      throw new Error('Method not implemented.');
+   }
+   delete(id: number): Promise<boolean> {
+      throw new Error('Method not implemented.');
+   }
 
    async save(pedido: Pedido): Promise<Pedido> {
       for (const validator of this.validators) {

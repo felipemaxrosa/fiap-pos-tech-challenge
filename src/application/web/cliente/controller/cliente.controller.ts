@@ -1,9 +1,16 @@
-import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
-import { ApiConsumes, ApiCreatedResponse, ApiProduces, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Inject, Logger, NotFoundException, Post, Query } from '@nestjs/common';
+import {
+   ApiConsumes,
+   ApiCreatedResponse,
+   ApiFoundResponse,
+   ApiNotFoundResponse,
+   ApiProduces,
+   ApiTags,
+} from '@nestjs/swagger';
 
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
-import { IService } from 'src/domain/service/service';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
+import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
 
 @Controller('v1/cliente')
 @ApiTags('Cliente')
@@ -12,7 +19,7 @@ import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 export class ClienteController {
    private logger: Logger = new Logger(ClienteController.name);
 
-   constructor(@Inject('IService<Cliente>') private service: IService<Cliente>) {}
+   constructor(@Inject('IService<Cliente>') private service: IClienteService) {}
 
    @Post()
    @ApiCreatedResponse({ description: 'Cliente salvo com sucesso' })
@@ -28,5 +35,19 @@ export class ClienteController {
             this.logger.log(`Cliente salvo com sucesso: ${cliente.id}}`);
             return cliente;
          });
+   }
+
+   @Get()
+   @ApiFoundResponse({ description: 'Cliente consultado com sucesso' })
+   @ApiNotFoundResponse({ description: 'Cliente não encontrado' })
+   async buscaPorCpf(@Query('cpf') cpf: string): Promise<Cliente> {
+      this.logger.debug(`Consultando cliente por cpf: ${cpf}`);
+      return await this.service.findByCpf(cpf).then((cliente) => {
+         if (cliente === undefined) {
+            throw new NotFoundException('Cliente não encontrado');
+         }
+
+         return cliente;
+      });
    }
 }
