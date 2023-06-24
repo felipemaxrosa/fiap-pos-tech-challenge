@@ -19,6 +19,6 @@ import { ProdutoController } from './web/produto/controller/produto.controller';
       { provide: APP_FILTER, useClass: InfraestructureExceptionHandler },
       { provide: APP_FILTER, useClass: ValidationExceptionHandler },
    ],
-   controllers: [ClienteController, ProdutoController, PedidoController],
+   controllers: [ClienteController, PedidoController, ProdutoController],
 })
 export class ApplicationModule {}

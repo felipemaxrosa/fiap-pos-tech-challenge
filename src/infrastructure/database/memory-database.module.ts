@@ -9,6 +9,7 @@ import { ProdutoMemoryRepository } from './produto/repository/produto-memory.rep
    providers: [
       { provide: 'IRepository<Cliente>', useClass: ClienteMemoryRepository },
       { provide: PedidoConstants.IREPOSITORY, useClass: PedidoMemoryRepository },
+      { provide: 'IRepository<Produto>', useClass: ProdutoMemoryRepository },
    ],
    exports: [
       { provide: 'IRepository<Cliente>', useClass: ClienteMemoryRepository },

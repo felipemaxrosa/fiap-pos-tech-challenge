@@ -5,11 +5,11 @@ import { MysqlConfg } from './mysql/mysql.config';
 import { DatabaseConstants } from './mysql/mysql.constants';
 import { ClienteEntity } from './cliente/entity/cliente.entity';
 import { ClienteTypeormRepository } from './cliente/repository/cliente-typeorm.repository';
-import { PedidoEntity } from './pedido/entity/pedido.entity';
-import { PedidoTypeormRepository } from './pedido/repository/pedido-typeorm.repository';
-import { PedidoConstants } from 'src/shared/constants';
 import { ProdutoEntity } from './produto/entity/produto.entity';
 import { ProdutoTypeormRepository } from './produto/repository/produto-typeorm.repository';
+import { PedidoConstants } from 'src/shared/constants';
+import { PedidoEntity } from './pedido/entity/pedido.entity';
+import { PedidoTypeormRepository } from './pedido/repository/pedido-typeorm.repository';
 @Module({
    imports: [
       DatabaseConstants,
