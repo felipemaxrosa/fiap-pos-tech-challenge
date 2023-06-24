@@ -6,7 +6,7 @@ import { IRepository } from 'src/domain/repository/repository';
 import { PedidoEntity } from '../../pedido/entity/pedido.entity';
 import { PedidoTypeormRepository } from './pedido-typeorm.repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';
+import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 
 describe('PedidoTypeormRepository', () => {
@@ -17,7 +17,7 @@ describe('PedidoTypeormRepository', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARO,
       ativo: true,
    };
 
@@ -25,7 +25,7 @@ describe('PedidoTypeormRepository', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARO,
       ativo: true,
    };
 
@@ -174,12 +174,12 @@ describe('PedidoTypeormRepository', () => {
       it('deve editar estado do pedido corretamente', async () => {
          const pedidoEditarEntity: PedidoEntity = {
             ...pedidoEntity,
-            estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+            estadoPedido: EstadoPedido.EM_PREPARO,
          };
          const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(pedidoEditarEntity);
 
          await repository.edit(pedidoEditarEntity).then((pedidoEditado) => {
-            expect(pedidoEditado.estadoPedido).toEqual(ESTADO_PEDIDO.EM_PREPARO);
+            expect(pedidoEditado.estadoPedido).toEqual(EstadoPedido.EM_PREPARO);
          });
 
          expect(repositorySaveSpy).toBeCalled();

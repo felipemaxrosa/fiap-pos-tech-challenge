@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { IRepository } from 'src/domain/repository/repository';
 import { Pedido } from '../model/pedido.model';
 import { EstadoCorretoNovoPedidoValidator } from './estado-correto-novo-pedido.validator';
-import { ESTADO_PEDIDO } from '../enums/pedido';
+import { EstadoPedido } from '../enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 
 describe('EstadoCorretoNovoPedidoValidator', () => {
@@ -14,7 +14,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+      estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
    };
 
@@ -65,7 +65,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
       });
 
       it('deve disparar um ERRO devido ao estado invalido do novo pedido - FINALIZADO', async () => {
-         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: ESTADO_PEDIDO.FINALIZADO });
+         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: EstadoPedido.FINALIZADO });
          // mock de repositório retornando um cliente
          repository.findBy = jest.fn().mockImplementation(() => {
             return Promise.resolve([pedidoComEstadoErrado]);
@@ -77,7 +77,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
       });
 
       it('deve disparar um ERRO devido ao estado invalido do novo pedido - EM PREPARO', async () => {
-         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: ESTADO_PEDIDO.EM_PREPARO });
+         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: EstadoPedido.EM_PREPARO });
          // mock de repositório retornando um cliente
          repository.findBy = jest.fn().mockImplementation(() => {
             return Promise.resolve([pedidoComEstadoErrado]);
@@ -89,7 +89,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
       });
 
       it('deve disparar um ERRO devido ao estado invalido do novo pedido - PRONTO', async () => {
-         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: ESTADO_PEDIDO.PRONTO });
+         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: EstadoPedido.PRONTO });
          // mock de repositório retornando um cliente
          repository.findBy = jest.fn().mockImplementation(() => {
             return Promise.resolve([pedidoComEstadoErrado]);

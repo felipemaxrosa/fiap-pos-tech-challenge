@@ -5,7 +5,7 @@ import * as request from 'supertest';
 import { MainModule } from '../../src/main.module';
 import { CriarNovoPedidoRequest } from 'src/application/web/pedido/request';
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';
+import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 
 describe('PedidoController (e2e)', () => {
    let app: INestApplication;
@@ -17,7 +17,7 @@ describe('PedidoController (e2e)', () => {
       criarNovoPedidoRequest = {
          clienteId: 1,
          dataInicio: '2023-06-24',
-         estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+         estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
       };
       // Define um objeto de pedido esperado como resultado
@@ -25,7 +25,7 @@ describe('PedidoController (e2e)', () => {
          id: 1,
          clienteId: 1,
          dataInicio: '2023-06-24',
-         estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+         estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
       };
    });

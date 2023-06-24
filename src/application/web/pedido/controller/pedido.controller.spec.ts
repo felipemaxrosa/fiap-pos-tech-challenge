@@ -4,7 +4,7 @@ import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { PedidoController } from './pedido.controller';
 import { IService } from 'src/domain/service/service';
 import { CriarNovoPedidoRequest } from '../request/criar-novo-pedido.request';
-import { ESTADO_PEDIDO } from 'src/domain/pedido/enums/pedido';
+import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 
 describe('PedidoController', () => {
    let controller: PedidoController;
@@ -13,7 +13,7 @@ describe('PedidoController', () => {
    const request: CriarNovoPedidoRequest = {
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARO,
       ativo: true,
    };
 
@@ -21,7 +21,7 @@ describe('PedidoController', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: ESTADO_PEDIDO.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARO,
       ativo: true,
    };
 
@@ -58,7 +58,7 @@ describe('PedidoController', () => {
 
    describe('salvar', () => {
       it('deve contar um estado do pedido EM PREPARO', () => {
-         expect(request.estadoPedido).toEqual(ESTADO_PEDIDO.EM_PREPARO);
+         expect(request.estadoPedido).toEqual(EstadoPedido.EM_PREPARO);
       });
 
       it('deve CRIAR um novo pedido', async () => {

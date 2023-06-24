@@ -6,7 +6,7 @@ import { IService } from 'src/domain/service/service';
 import { PedidoService } from './pedido.service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ServiceException } from 'src/domain/exception/service.exception';
-import { ESTADO_PEDIDO } from '../enums/pedido';
+import { EstadoPedido } from '../enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 import { CriarNovoPedidoRequest } from 'src/application/web/pedido/request/criar-novo-pedido.request';
 import { CriarNovoPedidoValidator } from '../validation/criar-novo-pedido.validator';
@@ -21,7 +21,7 @@ describe('PedidoService', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+      estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
    };
 
@@ -89,7 +89,7 @@ describe('PedidoService', () => {
          const novoPedido: CriarNovoPedidoRequest = {
             clienteId: 1,
             dataInicio: '2023-06-18',
-            estadoPedido: ESTADO_PEDIDO.RECEBIDO,
+            estadoPedido: EstadoPedido.RECEBIDO,
             ativo: true,
          };
 

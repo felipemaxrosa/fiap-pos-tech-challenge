@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ValidationException } from 'src/domain/exception/validation.exception';
 import { Pedido } from '../model/pedido.model';
 import { CriarNovoPedidoValidator } from './criar-novo-pedido.validator';
-import { ESTADO_PEDIDO } from '../enums/pedido';
+import { EstadoPedido } from '../enums/pedido';
 
 @Injectable()
 export class EstadoCorretoNovoPedidoValidator implements CriarNovoPedidoValidator {
@@ -16,7 +16,7 @@ export class EstadoCorretoNovoPedidoValidator implements CriarNovoPedidoValidato
          `Inicializando validação ${EstadoCorretoNovoPedidoValidator.name} para criar o pedido com o estado correto.`,
       );
 
-      if (estadoPedido === ESTADO_PEDIDO.RECEBIDO) {
+      if (estadoPedido === EstadoPedido.RECEBIDO) {
          this.logger.debug(
             `${EstadoCorretoNovoPedidoValidator.name} finalizado com sucesso para novo pedido com estado: ${estadoPedido}`,
          );

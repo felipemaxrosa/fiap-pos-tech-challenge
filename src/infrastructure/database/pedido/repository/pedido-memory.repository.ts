@@ -1,4 +1,3 @@
-import { RepositoryException } from './../../../exception/repository.exception';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from '../../../../domain/pedido/model/pedido.model';
@@ -8,36 +7,43 @@ import { IRepository } from '../../../../domain/repository/repository';
 export class PedidoMemoryRepository implements IRepository<Pedido> {
    private logger: Logger = new Logger(PedidoMemoryRepository.name);
 
-   private repository: Array<Pedido> = [];
+   private pedidosRepository: Array<Pedido> = [];
    private static ID_COUNT = 0;
 
-   async findBy(attributes: any): Promise<Pedido[]> {
+   async findBy(attributes: Partial<Pedido>): Promise<Pedido[]> {
       this.logger.debug(`Realizando consulta de pedidos: com os parâmetros ${JSON.stringify(attributes)}`);
+
       return new Promise((resolve) => {
          resolve(
-            this.repository.filter((pedido) => {
-               return Object.entries(attributes).every(([key, value]) => {
-                  return pedido[key] === value;
-               });
-            }),
+            this.pedidosRepository.filter((pedido) =>
+               Object.entries(attributes).every(([key, value]) => pedido[key] === value),
+            ),
          );
       });
    }
 
    async save(pedido: Pedido): Promise<Pedido> {
       this.logger.debug(`Criando novo pedido: ${pedido}`);
+
       return new Promise<Pedido>((resolve) => {
-         this.repository.push(pedido);
+         this.pedidosRepository.push(pedido);
          pedido.id = ++PedidoMemoryRepository.ID_COUNT;
          resolve(pedido);
       });
    }
 
-   async edit(): Promise<Pedido> {
-      throw new RepositoryException('Método não implementado.');
+   async edit(pedido: Pedido): Promise<Pedido> {
+      return new Promise<Pedido>((resolve) => {
+         this.pedidosRepository[pedido.id - 1] = pedido;
+         resolve(pedido);
+      });
    }
 
-   async delete(): Promise<boolean> {
-      throw new RepositoryException('Método não implementado.');
+   async delete(pedidoId: number): Promise<boolean> {
+      return new Promise<boolean>((resolve) => {
+         const pedido = this.pedidosRepository[pedidoId - 1];
+         pedido.ativo = false;
+         resolve(true);
+      });
    }
 }
