@@ -72,7 +72,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
          });
 
          await expect(validator.validate(pedidoComEstadoErrado)).rejects.toThrowError(
-            EstadoCorretoNovoPedidoValidator.ESTADO_CORRETO_NOVO_PEDIDO_VALIDATOR_ERROR_MESSAGE,
+            EstadoCorretoNovoPedidoValidator.ERROR_MESSAGE,
          );
       });
 
@@ -84,7 +84,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
          });
 
          await expect(validator.validate(pedidoComEstadoErrado)).rejects.toThrowError(
-            EstadoCorretoNovoPedidoValidator.ESTADO_CORRETO_NOVO_PEDIDO_VALIDATOR_ERROR_MESSAGE,
+            EstadoCorretoNovoPedidoValidator.ERROR_MESSAGE,
          );
       });
 
@@ -96,7 +96,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
          });
 
          await expect(validator.validate(pedidoComEstadoErrado)).rejects.toThrowError(
-            EstadoCorretoNovoPedidoValidator.ESTADO_CORRETO_NOVO_PEDIDO_VALIDATOR_ERROR_MESSAGE,
+            EstadoCorretoNovoPedidoValidator.ERROR_MESSAGE,
          );
       });
    });
