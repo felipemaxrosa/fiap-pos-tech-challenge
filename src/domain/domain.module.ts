@@ -19,6 +19,7 @@ import { EmailValidoClienteValidator } from './cliente/validation/email-valido-c
 
 @Module({
    providers: [
+      // Cliente
       { provide: 'IService<Cliente>', useClass: ClienteService },
       {
          provide: 'SalvarClienteValidator',
@@ -30,6 +31,8 @@ import { EmailValidoClienteValidator } from './cliente/validation/email-valido-c
             new CpfUnicoClienteValidator(repository),
          ],
       },
+
+      // Pedido
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       {
          provide: 'CriarNovoPedidoValidator',
@@ -37,6 +40,7 @@ import { EmailValidoClienteValidator } from './cliente/validation/email-valido-c
          useFactory: (): CriarNovoPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
       },
 
+      // Produto
       { provide: 'IService<Produto>', useClass: ProdutoService },
       {
          provide: 'SalvarProdutoValidator',

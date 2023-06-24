@@ -70,15 +70,10 @@ export class PedidoTypeormRepository implements IRepository<Pedido> {
    async delete(id: number): Promise<boolean> {
       this.logger.debug(`Deletando logicamente pedido id: ${id}`);
       const pedido = (await this.findBy({ id: id }))[0];
+      pedido.ativo = false;
 
       return this.repository
-         .save({
-            id: pedido.id,
-            clienteId: pedido.clienteId,
-            dataInicio: pedido.dataInicio,
-            estadoPedido: pedido.estadoPedido,
-            ativo: false,
-         })
+         .save(pedido)
          .then((pedidoEntity) => {
             this.logger.debug(`Pedido deletado logicamente com sucesso no banco de dados: ${pedidoEntity.id}`);
             return true;
