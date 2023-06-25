@@ -17,7 +17,7 @@ describe('PedidoTypeormRepository', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: EstadoPedido.EM_PREPARO,
+      estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
    };
 
@@ -25,7 +25,7 @@ describe('PedidoTypeormRepository', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: EstadoPedido.EM_PREPARO,
+      estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
    };
 
@@ -174,12 +174,12 @@ describe('PedidoTypeormRepository', () => {
       it('deve editar estado do pedido corretamente', async () => {
          const pedidoEditarEntity: PedidoEntity = {
             ...pedidoEntity,
-            estadoPedido: EstadoPedido.EM_PREPARO,
+            estadoPedido: EstadoPedido.RECEBIDO,
          };
          const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(pedidoEditarEntity);
 
          await repository.edit(pedidoEditarEntity).then((pedidoEditado) => {
-            expect(pedidoEditado.estadoPedido).toEqual(EstadoPedido.EM_PREPARO);
+            expect(pedidoEditado.estadoPedido).toEqual(EstadoPedido.RECEBIDO);
          });
 
          expect(repositorySaveSpy).toBeCalled();
