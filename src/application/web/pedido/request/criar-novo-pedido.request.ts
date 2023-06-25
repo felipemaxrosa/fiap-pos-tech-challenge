@@ -14,8 +14,8 @@ export class CriarNovoPedidoRequest {
 
    @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido' })
    @IsNotEmpty({ message: 'Estado do pedido não pode ser vazio' })
-   @IsString({ message: 'Estado do pedido deve ser válido' })
-   public estadoPedido: string;
+   @IsInt({ message: 'Estado do pedido deve ser válido' })
+   public estadoPedido: number;
 
    @ApiProperty({
       required: false,

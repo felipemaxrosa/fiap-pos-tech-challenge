@@ -196,6 +196,16 @@ describe('ProdutoTypeormRepository', () => {
          await expect(repository.delete(1)).rejects.toThrowError(RepositoryException);
       }); // end it não deve deletar produto quando houver um erro de banco
    }); // end describe edit
+
+   describe('findAll', () => {
+      it('findAll deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(repository.findAll());
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
 }); // end describe ProdutoTypeormRepository
 
 // método para reaproveitar código de checar Expectations

@@ -6,4 +6,6 @@ export interface IRepository<T> {
    edit(type: T): Promise<T>;
 
    delete(id: number): Promise<boolean>;
+
+   findAll(): Promise<T[]>;
 }
