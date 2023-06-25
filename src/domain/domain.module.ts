@@ -16,6 +16,7 @@ import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-
 import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.validator';
 import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
 import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator.';
+import { CategoriaProdutoService } from './categoria/service/categoria-produto.service';
 
 @Module({
    providers: [
@@ -53,11 +54,15 @@ import { EmailValidoClienteValidator } from './cliente/validation/email-valido-c
          provide: 'BuscarClienteValidator',
          useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
       },
+
+      // Categoria de Produto
+      { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
    ],
    exports: [
       { provide: 'IService<Cliente>', useClass: ClienteService },
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       { provide: 'IService<Produto>', useClass: ProdutoService },
+      { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
    ],
 })
 export class DomainModule {}

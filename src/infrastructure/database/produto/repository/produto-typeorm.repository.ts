@@ -125,4 +125,8 @@ export class ProdutoTypeormRepository implements IRepository<Produto> {
             );
          });
    }
+
+   findAll(): Promise<Produto[]> {
+      throw new RepositoryException('Método não implementado.');
+   }
 }
