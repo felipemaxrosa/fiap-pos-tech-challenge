@@ -60,7 +60,6 @@ export class ProdutoService implements IProdutoService {
 
    async findById(id: number): Promise<Produto> {
       const produtos = await this.repository.findBy({ id: id }).catch((error) => {
-         this.logger.debug(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
          this.logger.error(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
          throw new ServiceException(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
       });

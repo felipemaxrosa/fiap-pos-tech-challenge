@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { Produto } from '../../../../domain/produto/model/produto.model';
 import { IRepository } from '../../../../domain/repository/repository';
+import { RepositoryException } from '../../../exception/repository.exception';
 
 // The ids' values are coming as string from the request, whereas they should be numbers.
 function convertIdtoNumberTypeIfPresent(attributes: any, fieldWithIdContent: string): any {
@@ -53,5 +54,9 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
          produto.ativo = false;
          resolve(true);
       });
+   }
+
+   findAll(): Promise<Produto[]> {
+      throw new RepositoryException('Método não implementado.');
    }
 }
