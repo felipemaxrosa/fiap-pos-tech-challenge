@@ -300,7 +300,7 @@ describe('ClienteController (e2e)', () => {
          .get(`/v1/cliente?cpf=`)
          .then((response) => {
             expect(response.status).toEqual(400);
-            expect(response.body.message).toEqual(["Cpf deve ser válido"]);
+            expect(response.body.message).toEqual(['Cpf deve ser válido']);
          });
    });
 });
