@@ -2,14 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { PedidoController } from './pedido.controller';
-import { IService } from 'src/domain/service/service';
 import { CriarNovoPedidoRequest } from '../request/criar-novo-pedido.request';
 import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
+import { IPedidoService } from 'src/domain/pedido/service/pedido.service.interface';
 
 describe('PedidoController', () => {
    let controller: PedidoController;
-   let service: IService<Pedido>;
+   let service: IPedidoService;
 
    const novoPedido: CriarNovoPedidoRequest = {
       clienteId: 1,
@@ -35,8 +35,13 @@ describe('PedidoController', () => {
             {
                provide: PedidoConstants.ISERVICE,
                useValue: {
-                  // Mocka chamada para o save, rejeitando a promise em caso de request undefined
                   save: jest.fn((request) => (request ? Promise.resolve(pedido) : Promise.reject(new Error('error')))),
+                  findById: jest.fn((id) => (id === pedido.id ? Promise.resolve(pedido) : Promise.resolve(undefined))),
+                  // findByIdEstadoDoPedido: jest.fn((id) =>
+                  //    id === pedido.id
+                  //       ? Promise.resolve({ estadoPedido: pedido.estadoPedido })
+                  //       : Promise.resolve(undefined),
+                  // ),
                },
             },
          ],
@@ -47,7 +52,7 @@ describe('PedidoController', () => {
 
       // Obtém a instância do controller e do serviço a partir do módulo de teste
       controller = module.get<PedidoController>(PedidoController);
-      service = module.get<IService<Pedido>>(PedidoConstants.ISERVICE);
+      service = module.get<IPedidoService>(PedidoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {
@@ -82,6 +87,37 @@ describe('PedidoController', () => {
 
          // Verifica se método save foi chamado com o parametro esperado
          expect(service.save).toHaveBeenCalledWith(novoPedido);
+      });
+   });
+
+   describe('buscaPorId', () => {
+      it('deve buscar o pedido por ID', async () => {
+         const result = await controller.findById(1);
+
+         expect(service.findById).toHaveBeenCalledWith(pedido.id);
+         expect(result).toEqual(pedido);
+      });
+
+      it('não deve encontrar o pedido', async () => {
+         await controller.findById(2).catch((error) => {
+            expect(error.message).toEqual('Pedido não encontrado');
+            expect(error.status).toEqual(404);
+         });
+      });
+   });
+
+   describe('buscaEstadoDoPedido', () => {
+      it('deve buscar estado do pedido', async () => {
+         const result = await controller.findByIdEstadoDoPedido(pedido.id);
+
+         expect(result).toEqual({ estadoPedido: pedido.estadoPedido });
+      });
+
+      it('não deve encontrar o pedido', async () => {
+         await controller.findByIdEstadoDoPedido(2).catch((error) => {
+            expect(error.message).toEqual(`Pedido não encontrado: ${2}`);
+            expect(error.status).toEqual(404);
+         });
       });
    });
 });
