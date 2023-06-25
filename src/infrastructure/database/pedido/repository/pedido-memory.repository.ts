@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from '../../../../domain/pedido/model/pedido.model';
 import { IRepository } from '../../../../domain/repository/repository';
+import { RepositoryException } from '../../../exception/repository.exception';
 
 @Injectable()
 export class PedidoMemoryRepository implements IRepository<Pedido> {
@@ -45,5 +46,9 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
          pedido.ativo = false;
          resolve(true);
       });
+   }
+
+   findAll(): Promise<Pedido[]> {
+      throw new RepositoryException('Método não implementado.');
    }
 }

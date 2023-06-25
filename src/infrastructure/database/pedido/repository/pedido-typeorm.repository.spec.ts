@@ -219,4 +219,14 @@ describe('PedidoTypeormRepository', () => {
          await expect(repository.delete(1)).rejects.toThrowError(RepositoryException);
       });
    });
+
+   describe('findAll', () => {
+      it('findAll deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(repository.findAll());
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
 });

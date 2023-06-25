@@ -1,0 +1,4 @@
+### Lista categorias
+GET http://localhost:3000/v1/categoria
+Content-Type: application/json
+
