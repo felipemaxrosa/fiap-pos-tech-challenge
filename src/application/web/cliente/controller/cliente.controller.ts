@@ -1,9 +1,21 @@
-import { Body, Controller, Get, Inject, Logger, NotFoundException, Post, Query, ValidationPipe } from '@nestjs/common';
+import {
+   Body,
+   Controller,
+   Get,
+   HttpCode,
+   Inject,
+   Logger,
+   NotFoundException,
+   Post,
+   Query,
+   ValidationPipe,
+} from '@nestjs/common';
 import {
    ApiConsumes,
    ApiCreatedResponse,
    ApiFoundResponse,
    ApiNotFoundResponse,
+   ApiOkResponse,
    ApiProduces,
    ApiTags,
 } from '@nestjs/swagger';
@@ -12,6 +24,8 @@ import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
 import { BuscarPorCpfClienteRequest } from '../request/buscar-por-cpf-cliente.request';
+import { ClienteIdentificado } from 'src/domain/cliente/model/cliente-identificado.model';
+import { IdentificaPorCpfClienteRequest } from '../request/identifica-por-cpf-cliente.request';
 
 @Controller('v1/cliente')
 @ApiTags('Cliente')
@@ -49,6 +63,17 @@ export class ClienteController {
          }
 
          return cliente;
+      });
+   }
+
+   @Post('identifica')
+   @HttpCode(200)
+   @ApiOkResponse({ description: 'Cliente identificado com sucesso' })
+   async identificaCliente(@Query(ValidationPipe) query: IdentificaPorCpfClienteRequest): Promise<ClienteIdentificado> {
+      this.logger.debug(`Identificando cliente request: ${query.cpf}`);
+      return await this.service.identifyByCpf(query.cpf).then((clienteIdentificado) => {
+         this.logger.log(`Cliente identificado com sucesso: ${JSON.stringify(clienteIdentificado)}`);
+         return clienteIdentificado;
       });
    }
 }

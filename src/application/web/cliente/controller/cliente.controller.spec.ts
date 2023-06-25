@@ -3,6 +3,7 @@ import { ClienteController } from './cliente.controller';
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
+import { ClienteIdentificado } from 'src/domain/cliente/model/cliente-identificado.model';
 
 describe('ClienteController', () => {
    let controller: ClienteController;
@@ -36,6 +37,11 @@ describe('ClienteController', () => {
                   save: jest.fn((request) => (request ? Promise.resolve(cliente) : Promise.reject(new Error('error')))),
                   findByCpf: jest.fn((cpf) =>
                      cpf === cliente.cpf ? Promise.resolve(cliente) : Promise.resolve(undefined),
+                  ),
+                  identifyByCpf: jest.fn((cpf) =>
+                     cpf === cliente.cpf
+                        ? Promise.resolve(cliente)
+                        : Promise.resolve(new ClienteIdentificado(undefined)),
                   ),
                },
             },
@@ -83,10 +89,10 @@ describe('ClienteController', () => {
 
    describe('buscaPorCpf', () => {
       it('deve buscar cliente por cpf', async () => {
-         // Chama o método salvar do controller
+         // Chama o método buscaPorCpf do controller
          const result = await controller.buscaPorCpf({ cpf: cliente.cpf });
 
-         // Verifica se o método save do serviço foi chamado corretamente com a requisição
+         // Verifica se o método findByCpf do serviço foi chamado corretamente com a requisição
          expect(service.findByCpf).toHaveBeenCalledWith(cliente.cpf);
 
          // Verifica se o resultado obtido é igual ao objeto cliente esperado
@@ -94,14 +100,38 @@ describe('ClienteController', () => {
       });
 
       it('não deve buscar cliente por cpf inexistente', async () => {
-         // Chama o método salvar do controller
+         // Chama o método buscaPorCpf do controller
          await controller.buscaPorCpf({ cpf: '123456' }).catch((error) => {
             expect(error.message).toEqual('Cliente não encontrado');
             expect(error.status).toEqual(404);
          });
 
-         // Verifica se o método save do serviço foi chamado corretamente com a requisição
+         // Verifica se o método findByCpf do serviço foi chamado corretamente com a requisição
          expect(service.findByCpf).toHaveBeenCalledWith('123456');
+      });
+   });
+
+   describe('identificaCliente', () => {
+      it('deve identificar cliente por cpf', async () => {
+         // Chama o método identificaCliente do controller
+         const result = await controller.identificaCliente({ cpf: cliente.cpf });
+
+         // Verifica se o método findByCpf do serviço foi chamado corretamente com a requisição
+         expect(service.identifyByCpf).toHaveBeenCalledWith(cliente.cpf);
+
+         // Verifica se o resultado obtido é igual ao objeto cliente esperado
+         expect(result).toEqual(cliente);
+      });
+
+      it('deve identificar cliente anonimo', async () => {
+         // Chama o método identificaCliente do controller
+         const result: ClienteIdentificado = await controller.identificaCliente({ cpf: '00000000191' });
+
+         // Verifica se o método findByCpf do serviço foi chamado corretamente com a requisição
+         expect(service.identifyByCpf).toHaveBeenCalledWith('00000000191');
+
+         // Verifica se o resultado obtido é igual ao objeto cliente esperado
+         expect(result.anonimo).toEqual(true);
       });
    });
 });
