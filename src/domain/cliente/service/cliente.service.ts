@@ -7,6 +7,7 @@ import { ServiceException } from 'src/domain/exception/service.exception';
 import { IClienteService } from './cliente.service.interface';
 import { BuscarClienteValidator } from '../validation/buscar-cliente.validator';
 import { IValidator } from 'src/domain/validation/validator';
+import { ClienteIdentificado } from '../model/cliente-identificado.model';
 
 @Injectable()
 export class ClienteService implements IClienteService {
@@ -47,6 +48,16 @@ export class ClienteService implements IClienteService {
          });
    }
 
+   async identifyByCpf(cpf: string): Promise<ClienteIdentificado> {
+      if (cpf === undefined) {
+         return Promise.resolve(new ClienteIdentificado(undefined));
+      }
+
+      return await this.findByCpf(cpf).then((cliente) => {
+         return new ClienteIdentificado(cliente);
+      });
+   }
+
    edit(): Promise<Cliente> {
       throw new ServiceException(`Método não implementado.`);
    }
@@ -55,13 +66,13 @@ export class ClienteService implements IClienteService {
       throw new ServiceException('Método não implementado.');
    }
 
+   findById(): Promise<Cliente> {
+      throw new ServiceException('Método não implementado.');
+   }
+
    private async validate(validators: IValidator<Cliente>[], cliente: Cliente): Promise<void> {
       for (const validator of validators) {
          await validator.validate(cliente);
       }
-   }
-
-   findById(): Promise<Cliente> {
-      throw new ServiceException('Método não implementado.');
    }
 }

@@ -248,6 +248,38 @@ describe('ClienteController (e2e)', () => {
          });
    });
 
+   it('POST /v1/cliente/identifica?cpf - Deve identificar cliente por cpf', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .post(`/v1/cliente/identifica?cpf=${salvarClienteRequest.cpf}`)
+         .then((response) => {
+            expect(response.status).toEqual(200);
+            expect(response.body).toEqual(cliente);
+         });
+   });
+
+   it('POST /v1/cliente/identifica?cpf - Deve identificar cliente anônimo com cpf inexistente', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .post(`/v1/cliente/identifica?cpf=00000000191`)
+         .then((response) => {
+            expect(response.status).toEqual(200);
+            expect(response.body.anonimo).toEqual(true);
+         });
+   });
+
+   it('POST /v1/cliente/identifica?cpf - Não deve identificar cliente por cpf inválido', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .post(`/v1/cliente?cpf=00000000000`)
+         .catch((response) => {
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual(CpfValidoClienteValidator.CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE);
+            expect(response.body).toHaveProperty('path');
+            expect(response.body).toHaveProperty('timestamp');
+         });
+   });
+
    it('POST /v1/cliente - Não deve cadastrar um cliente com cpf maior do que 11 caracteres', async () => {
       salvarClienteRequest.cpf = '123456789012';
 

@@ -10,3 +10,6 @@ Content-Type: application/json
 
 ### Consulta cliente por cpf
 GET http://localhost:3000/v1/cliente?cpf=17169878062
+
+### Identifica cliente por cpf (cliente ou anonimo)
+POST http://localhost:3000/v1/cliente/identifica?cpf=00000000191
