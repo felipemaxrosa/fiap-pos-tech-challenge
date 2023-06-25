@@ -145,7 +145,7 @@ describe('ProdutoController (e2e)', () => {
          });
    });
 
-   it('GET /v1/produto1 - deve retornar um produto existente', async () => {
+   it('GET /v1/produto/1 - deve retornar um produto existente', async () => {
       // realiza requisição e compara a resposta
       return await request(app.getHttpServer())
          .get('/v1/produto/1')
@@ -162,7 +162,7 @@ describe('ProdutoController (e2e)', () => {
          });
    });
 
-   it('GET /v1/produto1 - deve retornar 404 quando buscar um produto inexistente', async () => {
+   it('GET /v1/produto/1000 - deve retornar 404 quando buscar um produto inexistente', async () => {
       // realiza requisição e compara a resposta
       return await request(app.getHttpServer())
          .get('/v1/produto/1000')
