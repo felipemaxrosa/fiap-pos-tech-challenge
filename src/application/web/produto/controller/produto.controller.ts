@@ -65,7 +65,7 @@ export class ProdutoController {
 
    @Get(':id')
    @ApiResponse({ status: 200, description: 'Produto encontrado com sucesso' })
-   @ApiResponse({ status: 404, description: 'Produto n„o encontrado' })
+   @ApiResponse({ status: 404, description: 'Produto n√£o encontrado' })
    async findById(@Param('id') id: number): Promise<Produto> {
       this.logger.debug(`Procurando Produto id: ${id}`);
       return await this.service.findById(id).then((produto) => {
@@ -73,14 +73,14 @@ export class ProdutoController {
             this.logger.log(`Produto encontrado com sucesso: ${produto.id}}`);
             return produto;
          }
-         this.logger.debug(`Produto n„o encontrado: ${id}`);
-         throw new NotFoundException(`Produto n„o encontrado: ${id}}`);
+         this.logger.debug(`Produto n√£o encontrado: ${id}`);
+         throw new NotFoundException(`Produto n√£o encontrado: ${id}}`);
       });
    }
 
    @Get('categoria/:id')
    @ApiResponse({ status: 200, description: 'Produtos encontrados com sucesso' })
-   @ApiResponse({ status: 404, description: 'Produtos n„o encontrados' })
+   @ApiResponse({ status: 404, description: 'Produtos n√£o encontrados' })
    async findByIdCategoriaProduto(@Param('id') id: number): Promise<Produto[]> {
       this.logger.debug(`Procurando Produtos para idCategoriaProduto: ${id}`);
       return await this.service.findByIdCategoriaProduto(id).then((produtos) => {
@@ -88,8 +88,8 @@ export class ProdutoController {
             this.logger.debug(`Produtos encontrado com sucesso: ${JSON.stringify(produtos)}`);
             return produtos;
          }
-         this.logger.debug(`Produtos n„o encontrados para idCategoriaProduto: ${id}`);
-         throw new NotFoundException(`Produtos n„o encontrados para idCategoriaProduto: ${id}}`);
+         this.logger.debug(`Produtos n√£o encontrados para idCategoriaProduto: ${id}`);
+         throw new NotFoundException(`Produtos n√£o encontrados para idCategoriaProduto: ${id}}`);
       });
    }
 }
