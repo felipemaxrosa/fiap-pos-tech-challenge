@@ -9,7 +9,7 @@ export class PedidoEntity {
    clienteId: number;
 
    @Column({ name: 'ESTADO_PEDIDO' })
-   estadoPedido: string;
+   estadoPedido: number;
 
    @Column({ name: 'DATA_INICIO' })
    dataInicio: string;
