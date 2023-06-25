@@ -84,7 +84,7 @@ describe('ClienteController', () => {
    describe('buscaPorCpf', () => {
       it('deve buscar cliente por cpf', async () => {
          // Chama o método salvar do controller
-         const result = await controller.buscaPorCpf(cliente.cpf);
+         const result = await controller.buscaPorCpf({ cpf: cliente.cpf });
 
          // Verifica se o método save do serviço foi chamado corretamente com a requisição
          expect(service.findByCpf).toHaveBeenCalledWith(cliente.cpf);
@@ -95,7 +95,7 @@ describe('ClienteController', () => {
 
       it('não deve buscar cliente por cpf inexistente', async () => {
          // Chama o método salvar do controller
-         await controller.buscaPorCpf('123456').catch((error) => {
+         await controller.buscaPorCpf({ cpf: '123456' }).catch((error) => {
             expect(error.message).toEqual('Cliente não encontrado');
             expect(error.status).toEqual(404);
          });
