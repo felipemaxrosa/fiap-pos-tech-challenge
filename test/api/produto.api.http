@@ -20,3 +20,11 @@ Content-Type: application/json
   "descricao": "Descrição Produto Teste 2",
   "preco": 111
 }
+
+### Recupera um produto
+GET http://localhost:3000/v1/produto/2
+Content-Type: application/json
+
+### Recupera produtos por categoria
+GET http://localhost:3000/v1/produto/categoria/2
+Content-Type: application/json

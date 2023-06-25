@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Produto } from 'src/domain/produto/model/produto.model';
 import { SalvarProdutoValidator } from '../validation/salvar-produto.validator';
 import { IRepository } from 'src/domain/repository/repository';
-import { IService } from 'src/domain/service/service';
 import { ProdutoService } from './produto.service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ServiceException } from 'src/domain/exception/service.exception';
 import { CamposObrigatoriosProdutoValidator } from '../validation/campos-obrigatorios-produto.validator';
+import { IProdutoService } from './produto.service.interface';
 
 const IMAGEM_BASE64_SAMPLE =
    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=';
@@ -22,6 +22,36 @@ const produtoSalvar: Produto = {
    ativo: true,
 };
 
+const produto1ComIdCategoriaProdutoLanche: Produto = {
+   id: 1,
+   nome: 'algum lanche',
+   idCategoriaProduto: 1,
+   descricao: 'descrição algum lanche',
+   preco: 10,
+   imagemBase64: IMAGEM_BASE64_SAMPLE,
+   ativo: true,
+};
+
+const produto2ComIdCategoriaProdutoLanche: Produto = {
+   id: 2,
+   nome: 'algum outro lanche',
+   idCategoriaProduto: 1,
+   descricao: 'descrição algum outro lanche',
+   preco: 12,
+   imagemBase64: IMAGEM_BASE64_SAMPLE,
+   ativo: true,
+};
+
+const produto1ComIdCategoriaProdutoBebida: Produto = {
+   id: 3,
+   nome: 'alguma bebida',
+   idCategoriaProduto: 2,
+   descricao: 'descrição alguma bebida',
+   preco: 6,
+   imagemBase64: IMAGEM_BASE64_SAMPLE,
+   ativo: true,
+};
+
 const produtoEditar: Produto = {
    id: 1,
    nome: 'nome editado',
@@ -33,7 +63,7 @@ const produtoEditar: Produto = {
 };
 
 describe('ProdutoService', () => {
-   let service: IService<Produto>;
+   let service: IProdutoService;
    let repository: IRepository<Produto>;
    let validators: SalvarProdutoValidator[];
 
@@ -41,14 +71,14 @@ describe('ProdutoService', () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
          providers: [
-            //  IService<Produto> provider
+            //  IProdutoService provider
             {
-               provide: 'IService<Produto>',
+               provide: 'IProdutoService',
                inject: ['IRepository<Produto>', 'SalvarProdutoValidator'],
                useFactory: (
                   repository: IRepository<Produto>,
                   salvarProdutoValidator: SalvarProdutoValidator[],
-               ): IService<Produto> => {
+               ): IProdutoService => {
                   return new ProdutoService(repository, salvarProdutoValidator);
                },
             },
@@ -60,8 +90,17 @@ describe('ProdutoService', () => {
                   save: jest.fn(() => Promise.resolve(produtoSalvar)),
                   // mock para a chamada repository.findBy(attributes)
                   findBy: jest.fn(() => {
-                     // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
+                     // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
+                  }),
+                  // mock para a chamada repository.findById(id)
+                  findById: jest.fn(() => {
+                     // retorna vazio, simulando que não encontrou registros pelo id passado por parâmetro
+                     return Promise.resolve({});
+                  }),
+                  // mock para a chamada repository.findByIdCategoriaProduto(idCategoriaProduto)
+                  findByIdCategoriaProduto: jest.fn(() => {
+                     return Promise.resolve(undefined);
                   }),
                   // mock para a chamada repository.edit(produto)
                   edit: jest.fn(() => Promise.resolve(produtoEditar)),
@@ -86,7 +125,7 @@ describe('ProdutoService', () => {
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
       repository = module.get<IRepository<Produto>>('IRepository<Produto>');
       validators = module.get<SalvarProdutoValidator[]>('SalvarProdutoValidator');
-      service = module.get<IService<Produto>>('IService<Produto>');
+      service = module.get<IProdutoService>('IProdutoService');
    });
 
    describe('injeção de dependências', () => {
@@ -269,7 +308,7 @@ describe('ProdutoService', () => {
          await service.delete(1).then((result) => {
             expect(result).toBeTruthy();
          });
-      }); // end it edita produtos com campos válidos
+      }); // end it deleta produto
 
       it('não deve deletar produto quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
@@ -279,4 +318,70 @@ describe('ProdutoService', () => {
          await expect(service.delete(1)).rejects.toThrowError(ServiceException);
       }); // end it não deve deletar produto quando houver um erro de banco
    }); // end describe deletar
+
+   describe('findById', () => {
+      it('encontra produto por id', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(attributes['id'] === produtoSalvar.id ? [produtoSalvar] : {});
+         });
+         await service.findById(1).then((produtoEncontrado) => {
+            expect(produtoEncontrado).toEqual(produtoSalvar);
+         });
+      }); // end it encontra produto por id
+
+      it('não encontra produto por id', async () => {
+         await service.findById(2).then((produtoEncontrado) => {
+            expect(produtoEncontrado).toEqual(undefined);
+         });
+      }); // end it não encontra produto por id
+
+      it('não deve encontrar produto por id quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.findById(1)).rejects.toThrowError(ServiceException);
+      }); // end it não deve encontrar produto por id quando houver um erro de banco
+   }); // end describe findById
+
+   describe('findByIdCategoriaProduto', () => {
+      it('encontra 2 produtos por IdCategoriaProduto = 1', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(
+               attributes['idCategoriaProduto'] === 1
+                  ? [produto1ComIdCategoriaProdutoLanche, produto2ComIdCategoriaProdutoLanche]
+                  : {},
+            );
+         });
+         await service.findByIdCategoriaProduto(1).then((produtosEncontrados) => {
+            expect(produtosEncontrados).toEqual([
+               produto1ComIdCategoriaProdutoLanche,
+               produto2ComIdCategoriaProdutoLanche,
+            ]);
+         });
+      }); // end it encontra 2 produtos por IdCategoriaProduto = 1
+
+      it('encontra 1 produtos por IdCategoriaProduto = 2', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(attributes['idCategoriaProduto'] === 2 ? [produto1ComIdCategoriaProdutoBebida] : {});
+         });
+         await service.findByIdCategoriaProduto(2).then((produtosEncontrados) => {
+            expect(produtosEncontrados).toEqual([produto1ComIdCategoriaProdutoBebida]);
+         });
+      }); // end it encontra 1 produtos por IdCategoriaProduto = 2
+
+      it('não encontra produto por idCategoriaProduto', async () => {
+         await service.findByIdCategoriaProduto(3).then((produtoEncontrado) => {
+            expect(produtoEncontrado).toEqual(undefined);
+         });
+      }); // end it não encontra produto por idCategoriaProduto
+
+      it('não deve encontrar produto por idCategoriaProduto quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.findByIdCategoriaProduto(1)).rejects.toThrowError(ServiceException);
+      }); // end it não deve encontrar produto por idCategoriaProduto quando houver um erro de banco
+   }); // end describe findByIdCategoriaProduto
 }); // end describe ProdutoService

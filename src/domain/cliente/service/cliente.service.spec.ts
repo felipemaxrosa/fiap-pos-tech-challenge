@@ -49,7 +49,7 @@ describe('CienteService', () => {
                   save: jest.fn(() => Promise.resolve(cliente)),
                   // mock para a chamama repository.findBy(attributes)
                   findBy: jest.fn(() => {
-                     // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
+                     // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
                },
@@ -249,6 +249,16 @@ describe('CienteService', () => {
       it('deletar deve falhar porque não foi implementado', async () => {
          try {
             await expect(service.delete(1));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
+   });
+
+   describe('findById', () => {
+      it('findById deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(service.findById(1));
          } catch (error) {
             expect(error.message).toEqual('Método não implementado.');
          }
