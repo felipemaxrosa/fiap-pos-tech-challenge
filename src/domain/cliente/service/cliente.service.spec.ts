@@ -235,6 +235,35 @@ describe('CienteService', () => {
       });
    });
 
+   describe('identifyByCpf', () => {
+      it('deve identificar cliente por cpf', async () => {
+         // mock de repositório retornando um cliente, caso exista o email
+         repository.findBy = jest.fn().mockImplementation(() => {
+            return Promise.resolve([cliente]);
+         });
+
+         await service.identifyByCpf(cliente.cpf).then((clienteIdentificado) => {
+            expect(clienteIdentificado).toEqual(cliente);
+         });
+      });
+
+      it('deve identificar cliente anomimo por cpf inexistente', async () => {
+         repository.findBy = jest.fn().mockImplementation(() => {
+            return Promise.resolve([]);
+         });
+
+         await service.identifyByCpf('00000000191').then((clienteIdentificado) => {
+            expect(clienteIdentificado.anonimo).toEqual(true);
+         });
+      });
+
+      it('deve identificar cliente anomimo por cpf vazio', async () => {
+         await service.identifyByCpf(undefined).then((clienteIdentificado) => {
+            expect(clienteIdentificado.anonimo).toEqual(true);
+         });
+      });
+   });
+
    describe('edit', () => {
       it('editar deve falhar porque não foi implementado', async () => {
          try {
