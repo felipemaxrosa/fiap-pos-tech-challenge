@@ -42,7 +42,11 @@ describe('CategoriaProdutoController (e2e)', () => {
          .set('Content-type', 'application/json')
          .then((response) => {
             expect(response.status).toEqual(200);
-            expect(response.body).toEqual(categoriaProdutos);
+            expect(response.body).toHaveLength(categoriaProdutos.length);
+            const categoriasProdutosEncontrados = <CategoriaProduto[]>JSON.parse(JSON.stringify(response.body));
+            categoriasProdutosEncontrados.forEach((categoriaProduto) => {
+               expect(categoriaProdutos).toContainEqual(categoriaProduto);
+            });
          });
    });
 });
