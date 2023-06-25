@@ -44,11 +44,11 @@ describe('PedidoService', () => {
             {
                provide: PedidoConstants.IREPOSITORY,
                useValue: {
-                  // mock para a chamama repository.save(pedido)
+                  // mock para a chamada repository.save(pedido)
                   save: jest.fn(() => Promise.resolve(pedido)),
-                  // mock para a chamama repository.findBy(attributes)
+                  // mock para a chamada repository.findBy(attributes)
                   findBy: jest.fn(() => {
-                     // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
+                     // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
                   // mock para a chamada repository.edit(produto)
@@ -142,5 +142,15 @@ describe('PedidoService', () => {
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.delete(1)).rejects.toThrowError(ServiceException);
       }); // end it não deve deletar produto quando houver um erro de banco
+   });
+
+   describe('findById', () => {
+      it('findById deve falhar porque não foi implementado', async () => {
+         try {
+            await expect(service.findById(1));
+         } catch (error) {
+            expect(error.message).toEqual('Método não implementado.');
+         }
+      });
    });
 });

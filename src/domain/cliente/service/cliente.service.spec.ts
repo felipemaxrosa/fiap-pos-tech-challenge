@@ -49,7 +49,7 @@ describe('CienteService', () => {
                   save: jest.fn(() => Promise.resolve(cliente)),
                   // mock para a chamama repository.findBy(attributes)
                   findBy: jest.fn(() => {
-                     // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
+                     // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
                },
