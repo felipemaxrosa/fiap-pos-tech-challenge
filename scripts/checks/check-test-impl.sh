@@ -45,9 +45,9 @@ for component in "${components[@]}"; do
     # Check for e2e test file for controller components
     if [ "$component" == "controller" ]; then
       # Get the corresponding e2e test file in the test folder
-      e2e_test_file="test/e2e/${component_name}.${component}.e2e-spec.ts"
-      if [ ! -f "$e2e_test_file" ]; then
-        missing_components+=("$e2e_test_file")
+      e2e_test_files=$(find "test/e2e" -type f -regex ".*/[0-9][0-9]-${component_name}\.${component}\.e2e-spec\.ts$" 2>/dev/null)
+      if [ -z "$e2e_test_files" ]; then
+        missing_components+=("test/e2e/${component_name}.${component}.e2e-spec.ts")
       fi
     fi
   

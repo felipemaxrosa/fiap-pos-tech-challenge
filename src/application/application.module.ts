@@ -5,6 +5,7 @@ import { DomainModule } from 'src/domain/domain.module';
 import { InfraestructureExceptionHandler } from './web/handler/infraestructure-exception.handler';
 import { ValidationExceptionHandler } from './web/handler/validation-exception.handler';
 import { ClienteController } from './web/cliente/controller/cliente.controller';
+import { PedidoController } from './web/pedido/controller/pedido.controller';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { GeneralExceptionHandler } from './web/handler/general-exception.handler';
 import { GeneralHttpExceptionHandler } from './web/handler/general-http-exception.handler';
@@ -18,6 +19,6 @@ import { ProdutoController } from './web/produto/controller/produto.controller';
       { provide: APP_FILTER, useClass: InfraestructureExceptionHandler },
       { provide: APP_FILTER, useClass: ValidationExceptionHandler },
    ],
-   controllers: [ClienteController, ProdutoController],
+   controllers: [ClienteController, PedidoController, ProdutoController],
 })
 export class ApplicationModule {}
