@@ -7,11 +7,13 @@ import { ClienteEntity } from './cliente/entity/cliente.entity';
 import { ClienteTypeormRepository } from './cliente/repository/cliente-typeorm.repository';
 import { ProdutoEntity } from './produto/entity/produto.entity';
 import { ProdutoTypeormRepository } from './produto/repository/produto-typeorm.repository';
-
+import { PedidoConstants } from 'src/shared/constants';
+import { PedidoEntity } from './pedido/entity/pedido.entity';
+import { PedidoTypeormRepository } from './pedido/repository/pedido-typeorm.repository';
 @Module({
    imports: [
       DatabaseConstants,
-      TypeOrmModule.forFeature([ClienteEntity, ProdutoEntity]),
+      TypeOrmModule.forFeature([ClienteEntity, PedidoEntity, ProdutoEntity]),
       TypeOrmModule.forRootAsync({
          imports: [MysqlConfg],
          useFactory: async (config: TypeOrmModuleOptions) => config,
@@ -20,10 +22,12 @@ import { ProdutoTypeormRepository } from './produto/repository/produto-typeorm.r
    ],
    providers: [
       { provide: 'IRepository<Cliente>', useClass: ClienteTypeormRepository },
+      { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
       { provide: 'IRepository<Produto>', useClass: ProdutoTypeormRepository },
    ],
    exports: [
       { provide: 'IRepository<Cliente>', useClass: ClienteTypeormRepository },
+      { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
       { provide: 'IRepository<Produto>', useClass: ProdutoTypeormRepository },
    ],
 })

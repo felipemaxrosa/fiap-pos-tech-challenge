@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, NotFoundException, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Logger, NotFoundException, Post, Query, ValidationPipe } from '@nestjs/common';
 import {
    ApiConsumes,
    ApiCreatedResponse,
@@ -11,6 +11,7 @@ import {
 import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
+import { BuscarPorCpfClienteRequest } from '../request/buscar-por-cpf-cliente.request';
 
 @Controller('v1/cliente')
 @ApiTags('Cliente')
@@ -40,9 +41,9 @@ export class ClienteController {
    @Get()
    @ApiFoundResponse({ description: 'Cliente consultado com sucesso' })
    @ApiNotFoundResponse({ description: 'Cliente não encontrado' })
-   async buscaPorCpf(@Query('cpf') cpf: string): Promise<Cliente> {
-      this.logger.debug(`Consultando cliente por cpf: ${cpf}`);
-      return await this.service.findByCpf(cpf).then((cliente) => {
+   async buscaPorCpf(@Query(ValidationPipe) query: BuscarPorCpfClienteRequest): Promise<Cliente> {
+      this.logger.debug(`Consultando cliente por cpf: ${query}`);
+      return await this.service.findByCpf(query.cpf).then((cliente) => {
          if (cliente === undefined) {
             throw new NotFoundException('Cliente não encontrado');
          }

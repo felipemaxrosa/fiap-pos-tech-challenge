@@ -16,7 +16,7 @@ export class ProdutoTypeormRepository implements IRepository<Produto> {
       private repository: Repository<ProdutoEntity>,
    ) {}
 
-   async findBy(attributes: any): Promise<Produto[]> {
+   async findBy(attributes: Partial<Produto>): Promise<Produto[]> {
       this.logger.debug(`Realizando consulta de produto: com os parâmetros ${JSON.stringify(attributes)}`);
       return this.repository
          .findBy(attributes)

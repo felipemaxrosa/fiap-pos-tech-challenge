@@ -5,6 +5,10 @@ import { IRepository } from './repository/repository';
 import { CpfUnicoClienteValidator } from './cliente/validation/cpf-unico-cliente.validator';
 import { EmailUnicoClienteValidator } from './cliente/validation/email-unico-cliente.validator';
 import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.validator';
+import { PedidoService } from './pedido/service/pedido.service';
+import { CriarNovoPedidoValidator } from './pedido/validation/criar-novo-pedido.validator';
+import { EstadoCorretoNovoPedidoValidator } from './pedido/validation/estado-correto-novo-pedido.validator';
+import { PedidoConstants } from 'src/shared/constants';
 import { ProdutoService } from './produto/service/produto.service';
 import { Produto } from './produto/model/produto.model';
 import { SalvarProdutoValidator } from './produto/validation/salvar-produto.validator';
@@ -15,6 +19,7 @@ import { EmailValidoClienteValidator } from './cliente/validation/email-valido-c
 
 @Module({
    providers: [
+      // Cliente
       { provide: 'IService<Cliente>', useClass: ClienteService },
       {
          provide: 'SalvarClienteValidator',
@@ -27,6 +32,15 @@ import { EmailValidoClienteValidator } from './cliente/validation/email-valido-c
          ],
       },
 
+      // Pedido
+      { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
+      {
+         provide: 'CriarNovoPedidoValidator',
+         inject: [PedidoConstants.IREPOSITORY],
+         useFactory: (): CriarNovoPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
+      },
+
+      // Produto
       { provide: 'IService<Produto>', useClass: ProdutoService },
       {
          provide: 'SalvarProdutoValidator',
@@ -42,6 +56,7 @@ import { EmailValidoClienteValidator } from './cliente/validation/email-valido-c
    ],
    exports: [
       { provide: 'IService<Cliente>', useClass: ClienteService },
+      { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       { provide: 'IService<Produto>', useClass: ProdutoService },
    ],
 })
