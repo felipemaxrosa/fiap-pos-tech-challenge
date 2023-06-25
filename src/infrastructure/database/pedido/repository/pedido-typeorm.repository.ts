@@ -84,4 +84,8 @@ export class PedidoTypeormRepository implements IRepository<Pedido> {
             );
          });
    }
+
+   findAll(): Promise<Pedido[]> {
+      throw new RepositoryException('Método não implementado.');
+   }
 }
