@@ -145,6 +145,63 @@ describe('ProdutoController (e2e)', () => {
          });
    });
 
+   it('GET /v1/produto1 - deve retornar um produto existente', async () => {
+      // realiza requisição e compara a resposta
+      return await request(app.getHttpServer())
+         .get('/v1/produto/1')
+         .set('Content-type', 'application/json')
+         .then((response) => {
+            expect(response.status).toEqual(200);
+            expect(response.body).toHaveProperty('id');
+            expect(response.body.nome).toEqual(editarProdutoRequest.nome);
+            expect(response.body.idCategoriaProduto).toEqual(editarProdutoRequest.idCategoriaProduto);
+            expect(response.body.descricao).toEqual(editarProdutoRequest.descricao);
+            expect(response.body.preco).toEqual(editarProdutoRequest.preco);
+            expect(response.body.imagemBase64).toEqual(editarProdutoRequest.imagemBase64);
+            expect(response.body.ativo).toEqual(editarProdutoRequest.ativo);
+         });
+   });
+
+   it('GET /v1/produto1 - deve retornar 404 quando buscar um produto inexistente', async () => {
+      // realiza requisição e compara a resposta
+      return await request(app.getHttpServer())
+         .get('/v1/produto/1000')
+         .set('Content-type', 'application/json')
+         .then((response) => {
+            expect(response.status).toEqual(404);
+         });
+   });
+
+   it('GET /v1/produto/categoria/2 - deve retornar produtos para categoria 2', async () => {
+      // realiza requisição e compara a resposta
+      return await request(app.getHttpServer())
+         .get('/v1/produto/categoria/2')
+         .set('Content-type', 'application/json')
+         .then((response) => {
+            expect(response.status).toEqual(200);
+            expect(Array.isArray(response.body)).toBeTruthy();
+            const produtosEncontrados = <Produto[]>JSON.parse(JSON.stringify(response.body));
+            expect(produtosEncontrados.length).toEqual(1);
+            expect(produtosEncontrados[0].id).toEqual(editarProdutoRequest.id);
+            expect(produtosEncontrados[0].nome).toEqual(editarProdutoRequest.nome);
+            expect(produtosEncontrados[0].idCategoriaProduto).toEqual(editarProdutoRequest.idCategoriaProduto);
+            expect(produtosEncontrados[0].descricao).toEqual(editarProdutoRequest.descricao);
+            expect(produtosEncontrados[0].preco).toEqual(editarProdutoRequest.preco);
+            expect(produtosEncontrados[0].imagemBase64).toEqual(editarProdutoRequest.imagemBase64);
+            expect(produtosEncontrados[0].ativo).toEqual(editarProdutoRequest.ativo);
+         });
+   });
+
+   it('GET /v1/produto/categoria/1 - deve retornar 404 quando não houver produtos para a categoria', async () => {
+      // realiza requisição e compara a resposta
+      return await request(app.getHttpServer())
+         .get('/v1/produto/categoria/1')
+         .set('Content-type', 'application/json')
+         .then((response) => {
+            expect(response.status).toEqual(404);
+         });
+   });
+
    it('DELETE /v1/produto/1 - deve deletar um produto', async () => {
       // realiza requisição e compara a resposta de erro
       return await request(app.getHttpServer())

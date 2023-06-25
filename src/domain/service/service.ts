@@ -4,4 +4,6 @@ export interface IService<T> {
    edit(type: T): Promise<T>;
 
    delete(id: number): Promise<boolean>;
+
+   findById(id: number): Promise<T>;
 }

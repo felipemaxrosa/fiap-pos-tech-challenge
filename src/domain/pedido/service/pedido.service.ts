@@ -54,4 +54,8 @@ export class PedidoService implements IService<Pedido> {
             throw new ServiceException(`Houve um erro ao deletar o produto: ${error}`);
          });
    }
+
+   findById(): Promise<Pedido> {
+      throw new ServiceException('Método não implementado.');
+   }
 }
