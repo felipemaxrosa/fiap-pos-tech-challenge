@@ -1,0 +1,27 @@
+### Cria um cliente
+POST http://localhost:3000/v1/cliente
+Content-Type: application/json
+
+{
+   "nome": "cliente",
+   "email": "cliente@email.com",
+   "cpf": "17169878062" 
+}
+
+### Cria um pedido
+POST http://localhost:3000/v1/pedido
+Content-Type: application/json
+
+{
+    "clienteId": 1,
+    "dataInicio": "2023-06-10",
+    "estadoPedido": 1,
+    "ativo": true,
+    "id": 1
+}
+
+### Consulta pedido por ID
+GET http://localhost:3000/v1/pedido/1
+
+### Consulta estado de um pedido por ID
+GET http://localhost:3000/v1/pedido/1/estado
