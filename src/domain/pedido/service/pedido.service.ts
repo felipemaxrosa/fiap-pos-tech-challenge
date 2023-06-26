@@ -82,4 +82,13 @@ export class PedidoService implements IPedidoService {
       }
       return;
    }
+
+   async findAllByEstadoDoPedido(estado: EstadoPedido): Promise<Pedido[]> {
+      const pedidos = await this.repository.findBy({ estadoPedido: estado }).catch((error) => {
+         this.logger.error(`Erro ao buscar produtos com estadoPedido=${estado} no banco de dados: ${error}`);
+         throw new ServiceException(`Erro ao buscar produtos com estadoPedido=${estado} no banco de dados: ${error}`);
+      });
+
+      return pedidos;
+   }
 }
