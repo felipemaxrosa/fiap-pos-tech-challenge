@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { IRepository } from 'src/domain/repository/repository';
-import { IService } from 'src/domain/service/service';
 import { PedidoService } from './pedido.service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ServiceException } from 'src/domain/exception/service.exception';
@@ -11,9 +10,10 @@ import { PedidoConstants } from 'src/shared/constants';
 import { CriarNovoPedidoRequest } from 'src/application/web/pedido/request/criar-novo-pedido.request';
 import { CriarNovoPedidoValidator } from '../validation/criar-novo-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from '../validation/estado-correto-novo-pedido.validator';
+import { IPedidoService } from './pedido.service.interface';
 
 describe('PedidoService', () => {
-   let service: IService<Pedido>;
+   let service: IPedidoService;
    let repository: IRepository<Pedido>;
    let validators: CriarNovoPedidoValidator[];
 
@@ -36,7 +36,7 @@ describe('PedidoService', () => {
                useFactory: (
                   repository: IRepository<Pedido>,
                   criarNovoPedidoValidator: CriarNovoPedidoValidator[],
-               ): IService<Pedido> => {
+               ): IPedidoService => {
                   return new PedidoService(repository, criarNovoPedidoValidator);
                },
             },
@@ -51,6 +51,7 @@ describe('PedidoService', () => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
+                  findByIdEstadoDoPedido: jest.fn(() => Promise.resolve({ estadoPedido: pedido.estadoPedido })),
                   // mock para a chamada repository.edit(produto)
                   edit: jest.fn(() => Promise.resolve(pedido)),
                   // mock para a chamada repository.delete(id)
@@ -74,7 +75,7 @@ describe('PedidoService', () => {
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
       repository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
       validators = module.get<CriarNovoPedidoValidator[]>('CriarNovoPedidoValidator');
-      service = module.get<IService<Pedido>>(PedidoConstants.ISERVICE);
+      service = module.get<IPedidoService>(PedidoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {
@@ -100,6 +101,12 @@ describe('PedidoService', () => {
             expect(pedidoSalvo.dataInicio).toEqual(novoPedido.dataInicio);
             expect(pedidoSalvo.estadoPedido).toEqual(novoPedido.estadoPedido);
          });
+      });
+
+      it('não deve criar novo pedido com estado que não seja RECEBIDO (1)', async () => {
+         await expect(service.save({ ...pedido, estadoPedido: EstadoPedido.FINALIZADO })).rejects.toThrowError(
+            EstadoCorretoNovoPedidoValidator.ERROR_MESSAGE,
+         );
       });
 
       it('não deve criar um novo pedido quando houver um erro de banco ', async () => {
@@ -144,13 +151,53 @@ describe('PedidoService', () => {
       }); // end it não deve deletar produto quando houver um erro de banco
    });
 
-   describe('findById', () => {
-      it('findById deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(service.findById(1));
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
+   describe('buscar por ID', () => {
+      it('encontra pedido por id', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(attributes['id'] === pedido.id ? [pedido] : undefined);
+         });
+         await service.findById(1).then((produtoEncontrado) => {
+            expect(produtoEncontrado).toEqual(pedido);
+         });
+      });
+
+      it('não encontra pedido por id', async () => {
+         await service.findById(2).then((produtoEncontrado) => {
+            expect(produtoEncontrado).toEqual(undefined);
+         });
+      });
+
+      it('não deve encontrar pedido por id quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+
+         await expect(service.findById(1)).rejects.toThrowError(ServiceException);
+      });
+   });
+
+   describe('findByIdEstadoProduto', () => {
+      it('retorna estado do produto de ID 1 como Recebido (1)', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes) => {
+            return Promise.resolve(attributes['id'] === pedido.id ? [pedido] : undefined);
+         });
+
+         await service.findByIdEstadoDoPedido(1).then((pedido) => {
+            expect(pedido).toEqual({ estadoPedido: EstadoPedido.RECEBIDO });
+         });
+      });
+
+      it('não encontra produto de ID 2', async () => {
+         await service.findByIdEstadoDoPedido(2).then((pedidoEncontrado) => {
+            expect(pedidoEncontrado).toEqual(undefined);
+         });
+      });
+
+      it('não deve encontrar pedido por ID quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.findByIdEstadoDoPedido(1)).rejects.toThrowError(ServiceException);
       });
    });
 });
