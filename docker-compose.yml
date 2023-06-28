@@ -19,13 +19,13 @@ services:
     container_name: fast-n-foodious-mysql    
     restart: unless-stopped
     environment:
-      MYSQL_PASSWORD: $DATABASE_PASSWORD
-      MYSQL_ROOT_PASSWORD: $DATABASE_PASSWORD
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_PASSWORD
       MYSQL_ROOT_HOST: '%'
-      MYSQL_USER: $DATABASE_USERNAME
-      MYSQL_DATABASE: FAST_N_FOODIOUS
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_DATABASE: $MYSQL_DATABASE
     ports:
-      - ${DATABASE_PORT:-3306}:${DATABASE_PORT:-3306}
+      - ${MYSQL_PORT:-3306}:${MYSQL_PORT:-3306}
     volumes:
       - ./scripts/schema:/docker-entrypoint-initdb.d
       - mysql-data:/data/db

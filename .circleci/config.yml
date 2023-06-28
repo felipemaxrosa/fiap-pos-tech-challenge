@@ -1,16 +1,69 @@
 version: 2.1
 jobs:
-  build:
+  run-unit-tests:
     working_directory: ~/fast-n-foodious
     docker:
       - image: cimg/node:18.16.0
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASSWORD
-        environment:
-          MYSQL_USER: $DATABASE_USERNAME
-          MYSQL_ROOT_PASSWORD: $DATABASE_PASSWORD
-          MYSQL_HOST: '%'
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-      
+      - run:
+          name: Run Unit Tests
+          command: npm install && npm run test
+
+  run-coverage-tests:
+    working_directory: ~/fast-n-foodious
+    docker:
+      - image: cimg/node:18.16.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-      
+      - run:
+          name: Run Coverage Tests
+          command: npm install && npm run test:cov
+
+  run-check-test-impl:
+    working_directory: ~/fast-n-foodious
+    docker:
+      - image: cimg/node:18.16.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-      
+      - run:
+          name: Verify Components Without Unit/E2E Tests
+          command: npm install && npm run test:check
+
+  run-e2e-in-memory:
+    working_directory: ~/fast-n-foodious
+    docker:
+      - image: cimg/node:18.16.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-      
+      - run:
+          name: Run E2E Tests (With In-Memory Repositories)
+          command: npm install && NODE_ENV=local-mock-repository npm run test:e2e
+
+  run-e2e-mysql:
+    working_directory: ~/fast-n-foodious
+    docker:
+      - image: cimg/node:18.16.0
+    environment:
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_HOST: '%'
     steps:
       - checkout
       - setup_remote_docker:
@@ -21,49 +74,38 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run:
-          name: Install Node Dependencies
-          command: npm install
-      - run:
-          name: Run Unit Tests
-          command: npm run test
-      - run:
-          name: Run Coverage Tests
-          command: npm run test:cov
-      - run:
-          name: Run E2E Tests (With In-Memory Repositories)
-          command: NODE_ENV=local-mock-repository npm run test:e2e
-      - run:
-          name: Verify Components Without Unit/E2E Tests
-          command: npm run test:check
-      - run:
-          name: Build Docker Images
-          command: docker-compose --env-file ./envs/prod.env build
-      - run:
           name: Start Docker Containers
           command: docker-compose --env-file ./envs/prod.env up -d
       - run:
           name: Wait for MySQL to Accept Connections and Run Initialization Scripts
           command: |
-            docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "until mysqladmin ping -h 127.0.0.1 -u$DATABASE_USERNAME -p$DATABASE_PASSWORD; do sleep 1; done"
+            docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "until mysqladmin ping -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD; do sleep 1; done"
             docker cp ./scripts/schema/. $(docker-compose ps -q mysql):/docker-entrypoint-initdb.d
-            docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "mysql -uroot -p$DATABASE_PASSWORD -e 'source /docker-entrypoint-initdb.d/1-init.sql; source /docker-entrypoint-initdb.d/2-populate.sql;'"
+            docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "mysql -uroot -p$MYSQL_ROOT_PASSWORD -e 'source /docker-entrypoint-initdb.d/1-init.sql; source /docker-entrypoint-initdb.d/2-populate.sql;'"
       - run:
           name: Run E2E Tests (With TypeORM Repositories - MySQL)
           command: docker-compose --env-file ./envs/prod.env exec -T app sh -c "npm run test:e2e"
       - run:
           name: Stop and Remove Docker Containers
           command: docker-compose --env-file ./envs/prod.env down
+  build-image:
+    working_directory: ~/fast-n-foodious
+    docker:
+     - image: cimg/node:18.16.0
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.18
       - deploy:
           when: on_success
-          name: Build Production Image & Push It To Registry
+          name: Build Image & Push It To Registry
           command: |
-            if [ "$CIRCLE_BRANCH" = "main" ]; then 
-              docker build -t $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 .
+            if [ "$CIRCLE_BRANCH" = "main" ]; then
               echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-              docker tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM
-              docker tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_SHA1 $DOCKER_USER/fast-n-foodious-app:latest
-              docker push $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM
-              docker push $DOCKER_USER/fast-n-foodious-app:latest
+              docker context create tls-env
+              docker buildx create tls-env --use
+              docker buildx build --push --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM .
+              docker buildx build --push --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $DOCKER_USER/fast-n-foodious-app:latest .
               echo "Docker image pushed successfully!"
             else
               echo "Skipping image push as it's not the main branch."
@@ -73,3 +115,18 @@ jobs:
           name: Build failed
           command: |
             echo "ERROR building the project from branch $CIRCLE_BRANCH"
+workflows:
+  fast-n-foodious:
+    jobs:
+      - run-check-test-impl
+      - run-unit-tests
+      - run-coverage-tests
+      - run-e2e-in-memory
+      - run-e2e-mysql
+      - build-image:
+         requires:
+            - run-unit-tests
+            - run-coverage-tests
+            - run-check-test-impl
+            - run-e2e-in-memory
+            - run-e2e-mysql
