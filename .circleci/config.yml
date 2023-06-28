@@ -9,7 +9,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-      
+            - v1-dependencies-
       - run:
           name: Run Unit Tests
           command: npm install && npm run test
@@ -23,7 +23,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-      
+            - v1-dependencies-
       - run:
           name: Run Coverage Tests
           command: npm install && npm run test:cov
@@ -37,7 +37,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-      
+            - v1-dependencies-
       - run:
           name: Verify Components Without Unit/E2E Tests
           command: npm install && npm run test:check
@@ -51,7 +51,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-      
+            - v1-dependencies-
       - run:
           name: Run E2E Tests (With In-Memory Repositories)
           command: npm install && NODE_ENV=local-mock-repository npm run test:e2e
@@ -96,7 +96,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 20.10.18
-      - deploy:
+      - run:
           when: on_success
           name: Build Image & Push It To Registry
           command: |
