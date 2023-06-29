@@ -60,11 +60,11 @@ jobs:
     working_directory: ~/fast-n-foodious
     docker:
       - image: cimg/node:18.16.0
-    environment:
-      MYSQL_USER: $MYSQL_USER
-      MYSQL_PASSWORD: $MYSQL_PASSWORD
-      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-      MYSQL_HOST: '%'
+        environment:
+          MYSQL_USER: $MYSQL_USER
+          MYSQL_PASSWORD: $MYSQL_PASSWORD
+          MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+          MYSQL_HOST: '%'
     steps:
       - checkout
       - setup_remote_docker:
@@ -85,8 +85,7 @@ jobs:
           name: Create schema MySQL Schema & Populate Database
           command: |
             docker cp ./scripts/schema/. $(docker-compose ps -q mysql):/docker-entrypoint-initdb.d
-            echo "    mysql -uroot -p$MYSQL_ROOT_PASSWORD   "
-            docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "mysql -uroot -p$MYSQL_ROOT_PASSWORD -e 'source /docker-entrypoint-initdb.d/1-init.sql; source /docker-entrypoint-initdb.d/2-populate.sql;'"          
+            docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "mysql -uroot -p$MYSQL_ROOT_PASSWORD -e 'source /docker-entrypoint-initdb.d/1-init.sql; source /docker-entrypoint-initdb.d/2-populate.sql;'"
       - run:
           name: Run E2E Tests (With TypeORM Repositories - MySQL)
           command: docker-compose --env-file ./envs/prod.env exec -T app sh -c "npm run test:e2e"
