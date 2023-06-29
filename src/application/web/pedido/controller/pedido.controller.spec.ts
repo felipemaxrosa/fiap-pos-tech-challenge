@@ -37,11 +37,9 @@ describe('PedidoController', () => {
                useValue: {
                   save: jest.fn((request) => (request ? Promise.resolve(pedido) : Promise.reject(new Error('error')))),
                   findById: jest.fn((id) => (id === pedido.id ? Promise.resolve(pedido) : Promise.resolve(undefined))),
-                  // findByIdEstadoDoPedido: jest.fn((id) =>
-                  //    id === pedido.id
-                  //       ? Promise.resolve({ estadoPedido: pedido.estadoPedido })
-                  //       : Promise.resolve(undefined),
-                  // ),
+                  findAllByEstadoDoPedido: jest.fn((estado) =>
+                     Promise.resolve([pedido].filter((pedido) => pedido.estadoPedido === estado)),
+                  ),
                },
             },
          ],
@@ -116,6 +114,36 @@ describe('PedidoController', () => {
       it('não deve encontrar o pedido', async () => {
          await controller.findByIdEstadoDoPedido(2).catch((error) => {
             expect(error.message).toEqual(`Pedido não encontrado: ${2}`);
+            expect(error.status).toEqual(404);
+         });
+      });
+   });
+
+   describe('buscaPedidosPorEstado', () => {
+      const mockedPedidos = [pedido];
+      it('deve buscar pedidos com estado: RECEBIDO (1)', async () => {
+         const result = await controller.findAllByEstadoDoPedido(EstadoPedido.RECEBIDO);
+
+         expect(result).toEqual(mockedPedidos);
+      });
+
+      it('nao deve buscar pedidos com estado: EM PREPARO (2)', async () => {
+         await controller.findAllByEstadoDoPedido(EstadoPedido.EM_PREPARO).catch((error) => {
+            expect(error.message).toEqual(`Pedidos com estado: ${EstadoPedido.EM_PREPARO} não encontrados`);
+            expect(error.status).toEqual(404);
+         });
+      });
+
+      it('nao deve buscar pedidos com estado: PRONTO (3)', async () => {
+         await controller.findAllByEstadoDoPedido(EstadoPedido.PRONTO).catch((error) => {
+            expect(error.message).toEqual(`Pedidos com estado: ${EstadoPedido.PRONTO} não encontrados`);
+            expect(error.status).toEqual(404);
+         });
+      });
+
+      it('nao deve buscar pedidos com estado: FINALIZADO (4)', async () => {
+         await controller.findAllByEstadoDoPedido(EstadoPedido.FINALIZADO).catch((error) => {
+            expect(error.message).toEqual(`Pedidos com estado: ${EstadoPedido.FINALIZADO} não encontrados`);
             expect(error.status).toEqual(404);
          });
       });

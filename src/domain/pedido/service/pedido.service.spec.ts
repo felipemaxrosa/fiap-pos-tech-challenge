@@ -200,4 +200,55 @@ describe('PedidoService', () => {
          await expect(service.findByIdEstadoDoPedido(1)).rejects.toThrowError(ServiceException);
       });
    });
+
+   describe('findAllByEstadoPedido', () => {
+      const mockedPedidos = [pedido];
+      it('retorna pedidos com estado - Recebido (1)', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+            return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
+         });
+
+         await service.findAllByEstadoDoPedido(EstadoPedido.RECEBIDO).then((pedidos) => {
+            expect(pedidos).toEqual([pedido]);
+         });
+      });
+
+      it('nao retorna produtos com estado - EM PREPARO (2)', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+            return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
+         });
+
+         await service.findAllByEstadoDoPedido(EstadoPedido.EM_PREPARO).then((pedidos) => {
+            expect(pedidos).toHaveLength(0);
+         });
+      });
+
+      it('nao retorna produtos com estado - PRONTO (3)', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+            return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
+         });
+
+         await service.findAllByEstadoDoPedido(EstadoPedido.PRONTO).then((pedidos) => {
+            expect(pedidos).toHaveLength(0);
+         });
+      });
+
+      it('nao retorna produtos com estado - FINALIZADO (4)', async () => {
+         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+            return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
+         });
+
+         await service.findAllByEstadoDoPedido(EstadoPedido.FINALIZADO).then((pedidos) => {
+            expect(pedidos).toHaveLength(0);
+         });
+      });
+
+      it('não deve encontrar pedidos por ESTADO quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada de serviço
+         await expect(service.findAllByEstadoDoPedido(EstadoPedido.FINALIZADO)).rejects.toThrowError(ServiceException);
+      });
+   });
 });

@@ -59,4 +59,21 @@ export class PedidoController {
          throw new NotFoundException(`Pedido não encontrado: ${id}`);
       });
    }
+
+   @Get('estado/:id')
+   @ApiResponse({ status: 200, description: 'Pedidos encontrados com sucesso' })
+   @ApiResponse({ status: 404, description: 'Pedidos não encontrados para o estado escolhido' })
+   async findAllByEstadoDoPedido(@Param('id') estado: EstadoPedido): Promise<Pedido[]> {
+      this.logger.debug(`Procurando Pedidos com estado: ${estado}`);
+
+      return await this.service.findAllByEstadoDoPedido(estado).then((pedidos) => {
+         if (pedidos.length > 0) {
+            this.logger.log(`Pedidos com estado: ${estado} encontrados com sucesso`);
+            return pedidos;
+         }
+
+         this.logger.debug(`Pedidos com estado: ${estado} não encontrados`);
+         throw new NotFoundException(`Pedidos com estado: ${estado} não encontrados`);
+      });
+   }
 }
