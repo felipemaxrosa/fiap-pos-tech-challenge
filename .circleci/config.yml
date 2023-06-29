@@ -92,7 +92,7 @@ jobs:
       - run:
           name: Stop and Remove Docker Containers
           command: docker-compose --env-file ./envs/prod.env down
-  build-image:
+  build:
     working_directory: ~/fast-n-foodious
     docker:
      - image: cimg/node:18.16.0
@@ -127,7 +127,7 @@ workflows:
       - run-coverage-tests
       - run-e2e-in-memory
       - run-e2e-mysql
-      - build-image:
+      - build:
          requires:
             - run-unit-tests
             - run-coverage-tests
