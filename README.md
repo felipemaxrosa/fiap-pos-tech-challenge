@@ -1,5 +1,7 @@
 # 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main)
 
+[![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/workflow/badge.svg?window=7d&circle-token=b58fa7f3f1c216768f2d59e57b0b9b257c68c36f)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/workflow/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
+
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da pós gradução em Software Architecture.
 [TLDR; Execução em modo produção (Avalidação FIAP)](#🚨⚡️-execução-em-modo-produção-avalidação-fiap)
 
@@ -120,12 +122,12 @@ $ docker run -d --rm --name mysql -p 3306:3306 \
 
 $ docker run -d --rm --name fast-n-foodious-app -p 3000:3000 \
     --env-file ./envs/prod.env --network fast-n-foodious-network \
-    renators/fast-n-foodious-app
+    rodrigo-ottero/fast-n-foodious-app
 
 $ docker ps
-CONTAINER ID   IMAGE                          COMMAND                  CREATED         STATUS         PORTS                               NAMES
-88bf7eae7e46   renators/fast-n-foodious-app   "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious-app
-8b0268d435a6   mysql:8.0                      "docker-entrypoint.s…"   6 seconds ago   Up 5 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
+CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS         PORTS                               NAMES
+88bf7eae7e46   rodrigo-ottero/fast-n-foodious-app   "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious-app
+8b0268d435a6   mysql:8.0                            "docker-entrypoint.s…"   6 seconds ago   Up 5 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
 #### 🧾 Documentação da API
 Swagger: http://localhost:3000/api
@@ -141,11 +143,18 @@ $ docker-compose --env-file ./envs/{env-name}.env up
 
 # Execução de um serviço registrados no docker-compose utilizando env específica
 $ docker-compose --env-file ./envs/{env-name}.env up {service}
+
+# Interrupção dos serviços registrados no docker-compose utilizando env específica
+$ docker-compose --env-file ./envs/{env-name}.env down
+
+# Interrupção de um serviço registrados no docker-compose utilizando env específica
+$ docker-compose --env-file ./envs/{env-name}.env down {service}
 ```
 **Nota:** Os serviços registrados no docker-compose são:
+```
 - mysql
 - app
-
+```
 ## 🧪 Testes
 O projeto cobre testes unitários, testes e2e e testes isolados de api (para desenvolvedor), além de verifiar a cobertura dos testes:
 ```bash
@@ -201,7 +210,7 @@ src/                                                        # Source da soluçã
 │   │   ├── produto
 │   │   ├── mysql                                           # Configurações de banco de dados MySQL
 │   ├── exception                                           # Exceções da camada de infraestrutura (InfrastructureException, RepositoryException)
-└── shared  # Shared                                        # Itens compartilhados
+└── shared                                                  # Itens compartilhados
 test/                                                       # Implementações de testes
 ├── api                                                     # Implementações de testes isolados de API
 ├── e2e                                                     # Implementações de testes isolados e2e
