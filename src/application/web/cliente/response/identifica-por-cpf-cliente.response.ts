@@ -14,7 +14,7 @@ export class IdentificaPorCpfClienteResponse {
    @ApiProperty({ required: false, nullable: true, description: 'ID do cliente' })
    public id: number;
 
-   @ApiProperty({required: false, nullable: true, description: 'Cliente anônimo' })
+   @ApiProperty({ required: false, nullable: true, description: 'Cliente anônimo' })
    public anonimo: boolean;
 
    constructor(cliente: ClienteIdentificado) {

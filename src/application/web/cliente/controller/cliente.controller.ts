@@ -10,12 +10,7 @@ import {
    Query,
    ValidationPipe,
 } from '@nestjs/common';
-import {
-   ApiCreatedResponse,
-   ApiOkResponse,
-   ApiOperation,
-   ApiTags,
-} from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
@@ -28,13 +23,18 @@ import { IdentificaPorCpfClienteResponse } from '../response/identifica-por-cpf-
 
 @Controller('v1/cliente')
 @ApiTags('Cliente')
-export class ClienteController extends BaseController{
+export class ClienteController extends BaseController {
    private logger: Logger = new Logger(ClienteController.name);
 
-   constructor(@Inject('IService<Cliente>') private service: IClienteService) {super()}
+   constructor(@Inject('IService<Cliente>') private service: IClienteService) {
+      super();
+   }
 
    @Post()
-   @ApiOperation({ summary: 'Adiciona um novo cliente', description: 'Adiciona um novo cliente identificado por nome, email e cpf' })
+   @ApiOperation({
+      summary: 'Adiciona um novo cliente',
+      description: 'Adiciona um novo cliente identificado por nome, email e cpf',
+   })
    @ApiCreatedResponse({ description: 'Cliente salvo com sucesso', type: SalvarClienteResponse })
    async salvar(@Body() request: SalvarClienteRequest): Promise<SalvarClienteResponse> {
       this.logger.debug(`Salvando cliente request: ${JSON.stringify(request)}`);
@@ -67,8 +67,10 @@ export class ClienteController extends BaseController{
    @Post('identifica')
    @ApiOperation({ summary: 'Identifica cliente por CPF', description: 'Realiza identificação de cliente por CPF' })
    @HttpCode(200)
-   @ApiOkResponse({ description: 'Cliente identificado com sucesso', type: IdentificaPorCpfClienteResponse})
-   async identificaCliente(@Query(ValidationPipe) query: IdentificaPorCpfClienteRequest): Promise<IdentificaPorCpfClienteResponse> {
+   @ApiOkResponse({ description: 'Cliente identificado com sucesso', type: IdentificaPorCpfClienteResponse })
+   async identificaCliente(
+      @Query(ValidationPipe) query: IdentificaPorCpfClienteRequest,
+   ): Promise<IdentificaPorCpfClienteResponse> {
       this.logger.debug(`Identificando cliente request: ${query.cpf}`);
       return await this.service.identifyByCpf(query.cpf).then((clienteIdentificado) => {
          this.logger.log(`Cliente identificado com sucesso: ${JSON.stringify(clienteIdentificado)}`);
