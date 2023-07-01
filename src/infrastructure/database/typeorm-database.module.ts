@@ -1,3 +1,4 @@
+import { ItemPedidoEntity } from './item-pedido/entity/item-pedido.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
@@ -17,7 +18,7 @@ import { ItemPedidoTypeormRepository } from './item-pedido/repository/item-pedid
 @Module({
    imports: [
       DatabaseConstants,
-      TypeOrmModule.forFeature([ClienteEntity, PedidoEntity, ProdutoEntity, CategoriaProdutoEntity]),
+      TypeOrmModule.forFeature([ClienteEntity, PedidoEntity, ProdutoEntity, ItemPedidoEntity, CategoriaProdutoEntity]),
       TypeOrmModule.forRootAsync({
          imports: [MysqlConfg],
          useFactory: async (config: TypeOrmModuleOptions) => config,

@@ -7,7 +7,7 @@ import { IProdutoService } from './produto.service.interface';
 
 @Injectable()
 export class ProdutoService implements IProdutoService {
-   private logger: Logger = new Logger(ProdutoService.name);
+   private logger = new Logger(ProdutoService.name);
 
    constructor(
       @Inject('IRepository<Produto>') private repository: IRepository<Produto>,

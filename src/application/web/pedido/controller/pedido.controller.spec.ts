@@ -61,7 +61,7 @@ describe('PedidoController', () => {
    });
 
    describe('salvar', () => {
-      it('deve contar um estado do pedido RECEBIDO', () => {
+      it('deve conter um estado do pedido RECEBIDO', () => {
          expect(novoPedido.estadoPedido).toEqual(EstadoPedido.RECEBIDO);
       });
 
