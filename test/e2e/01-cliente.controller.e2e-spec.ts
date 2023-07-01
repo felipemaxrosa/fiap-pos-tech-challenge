@@ -13,7 +13,7 @@ import { EmailValidoClienteValidator } from 'src/domain/cliente/validation/email
 describe('ClienteController (e2e)', () => {
    let app: INestApplication;
    let salvarClienteRequest: SalvarClienteRequest;
-   let cliente: Cliente;
+   let salvarClienteResponse: Cliente;
 
    beforeEach(() => {
       // Define um objeto de requisição
@@ -24,7 +24,7 @@ describe('ClienteController (e2e)', () => {
       };
 
       // Define um objeto de cliente esperado como resultado
-      cliente = {
+      salvarClienteResponse = {
          id: 1,
          nome: 'Teste',
          email: 'teste@teste.com',
@@ -60,7 +60,7 @@ describe('ClienteController (e2e)', () => {
          .send(salvarClienteRequest)
          .then((response) => {
             expect(response.status).toEqual(201);
-            expect(response.body).toEqual(cliente);
+            expect(response.body).toEqual(salvarClienteResponse);
             expect(response.body).toHaveProperty('id');
             expect(response.body.nome).toEqual(salvarClienteRequest.nome);
             expect(response.body.email).toEqual(salvarClienteRequest.email);
@@ -79,7 +79,7 @@ describe('ClienteController (e2e)', () => {
             expect(response.body.message).toEqual([
                'Nome deve ser válido',
                'Email deve ser válido',
-               'Cpf deve ser válido',
+               'CPF deve ser válido',
             ]);
             expect(response.body).toHaveProperty('path');
             expect(response.body).toHaveProperty('timestamp');
@@ -160,7 +160,7 @@ describe('ClienteController (e2e)', () => {
          .send(salvarClienteRequest)
          .catch((response) => {
             expect(response.status).toEqual(400);
-            expect(response.body.message).toEqual(['Cpf deve ser válido']);
+            expect(response.body.message).toEqual(['CPF deve ser válido']);
             expect(response.body).toHaveProperty('path');
             expect(response.body).toHaveProperty('timestamp');
          });
@@ -254,7 +254,7 @@ describe('ClienteController (e2e)', () => {
          .post(`/v1/cliente/identifica?cpf=${salvarClienteRequest.cpf}`)
          .then((response) => {
             expect(response.status).toEqual(200);
-            expect(response.body).toEqual(cliente);
+            expect(response.body).toEqual(salvarClienteResponse);
          });
    });
 
@@ -299,10 +299,10 @@ describe('ClienteController (e2e)', () => {
    it('GET /v1/cliente?cpf - Deve consultar cliente por cpf', async () => {
       // realiza requisição e compara a resposta de erro
       return await request(app.getHttpServer())
-         .get(`/v1/cliente?cpf=${cliente.cpf}`)
+         .get(`/v1/cliente?cpf=${salvarClienteResponse.cpf}`)
          .then((response) => {
             expect(response.status).toEqual(200);
-            expect(response.body).toEqual(cliente);
+            expect(response.body).toEqual(salvarClienteResponse);
          });
    });
 
@@ -332,7 +332,7 @@ describe('ClienteController (e2e)', () => {
          .get(`/v1/cliente?cpf=`)
          .then((response) => {
             expect(response.status).toEqual(400);
-            expect(response.body.message).toEqual(['Cpf deve ser válido']);
+            expect(response.body.message).toEqual(['CPF deve ser válido']);
          });
    });
 });

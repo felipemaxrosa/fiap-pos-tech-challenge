@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ClienteController } from './cliente.controller';
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
 import { ClienteIdentificado } from 'src/domain/cliente/model/cliente-identificado.model';
+import { SalvarClienteResponse } from '../response/salvar-cliente.response';
 
 describe('ClienteController', () => {
    let controller: ClienteController;
@@ -17,7 +17,7 @@ describe('ClienteController', () => {
    };
 
    // Define um objeto de cliente esperado como resultado
-   const cliente: Cliente = {
+   const response: SalvarClienteResponse = {
       id: 1,
       nome: 'Teste',
       email: 'teste@teste.com',
@@ -34,13 +34,15 @@ describe('ClienteController', () => {
                provide: 'IService<Cliente>',
                useValue: {
                   // Mocka chamada para o save, rejeitando a promise em caso de request undefined
-                  save: jest.fn((request) => (request ? Promise.resolve(cliente) : Promise.reject(new Error('error')))),
+                  save: jest.fn((request) =>
+                     request ? Promise.resolve(response) : Promise.reject(new Error('error')),
+                  ),
                   findByCpf: jest.fn((cpf) =>
-                     cpf === cliente.cpf ? Promise.resolve(cliente) : Promise.resolve(undefined),
+                     cpf === response.cpf ? Promise.resolve(response) : Promise.resolve(undefined),
                   ),
                   identifyByCpf: jest.fn((cpf) =>
-                     cpf === cliente.cpf
-                        ? Promise.resolve(cliente)
+                     cpf === response.cpf
+                        ? Promise.resolve(response)
                         : Promise.resolve(new ClienteIdentificado(undefined)),
                   ),
                },
@@ -72,7 +74,7 @@ describe('ClienteController', () => {
          expect(service.save).toHaveBeenCalledWith(request);
 
          // Verifica se o resultado obtido é igual ao objeto cliente esperado
-         expect(result).toEqual(cliente);
+         expect(result).toEqual(response);
       });
 
       it('não deve tratar erro a nível de controlador', async () => {
@@ -90,13 +92,13 @@ describe('ClienteController', () => {
    describe('buscaPorCpf', () => {
       it('deve buscar cliente por cpf', async () => {
          // Chama o método buscaPorCpf do controller
-         const result = await controller.buscaPorCpf({ cpf: cliente.cpf });
+         const result = await controller.buscaPorCpf({ cpf: request.cpf });
 
          // Verifica se o método findByCpf do serviço foi chamado corretamente com a requisição
-         expect(service.findByCpf).toHaveBeenCalledWith(cliente.cpf);
+         expect(service.findByCpf).toHaveBeenCalledWith(request.cpf);
 
          // Verifica se o resultado obtido é igual ao objeto cliente esperado
-         expect(result).toEqual(cliente);
+         expect(result).toEqual(response);
       });
 
       it('não deve buscar cliente por cpf inexistente', async () => {
@@ -114,13 +116,13 @@ describe('ClienteController', () => {
    describe('identificaCliente', () => {
       it('deve identificar cliente por cpf', async () => {
          // Chama o método identificaCliente do controller
-         const result = await controller.identificaCliente({ cpf: cliente.cpf });
+         const result = await controller.identificaCliente({ cpf: request.cpf });
 
          // Verifica se o método findByCpf do serviço foi chamado corretamente com a requisição
-         expect(service.identifyByCpf).toHaveBeenCalledWith(cliente.cpf);
+         expect(service.identifyByCpf).toHaveBeenCalledWith(request.cpf);
 
          // Verifica se o resultado obtido é igual ao objeto cliente esperado
-         expect(result).toEqual(cliente);
+         expect(result).toEqual(response);
       });
 
       it('deve identificar cliente anonimo', async () => {
