@@ -26,6 +26,11 @@ for component in "${components[@]}"; do
     # Check if the test file exists
     if [ ! -f "$test_file" ]; then
 
+      # Ignore files that contain "export abstract class .*Controller" if component is "controller"
+      if [ "$component" == "controller" ] && grep -q "export abstract class .*Controller" "$file"; then
+        continue
+      fi
+
       # Ignore -memory.repository.spec.ts files if the component is "repository"
       if [ "$component" == "repository" ] && [[ "$test_file" != *"-memory.repository" ]]; then
         continue
@@ -44,6 +49,7 @@ for component in "${components[@]}"; do
 
     # Check for e2e test file for controller components
     if [ "$component" == "controller" ]; then
+
       # Get the corresponding e2e test file in the test folder
       e2e_test_files=$(find "test/e2e" -type f -regex ".*/[0-9][0-9]-${component_name}\.${component}\.e2e-spec\.ts$" 2>/dev/null)
       if [ -z "$e2e_test_files" ]; then
