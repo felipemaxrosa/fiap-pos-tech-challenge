@@ -1,24 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { PedidoController } from './pedido.controller';
-import { SalvarPedidoRequest } from '../request/salvar-pedido.request';
 import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 import { IPedidoService } from 'src/domain/pedido/service/pedido.service.interface';
-import { SalvarPedidoResponse } from '../response/salvar-pedido.response';
 
 describe('PedidoController', () => {
    let controller: PedidoController;
    let service: IPedidoService;
 
-   const salvarPedidoRequest: SalvarPedidoRequest = {
+   const salvarPedidoRequest = {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
    };
 
-   const salvarPedidoResponse: SalvarPedidoResponse = {
+   const salvarPedidoResponse = {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',

@@ -15,11 +15,11 @@ import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestj
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
 import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
 import { BuscarPorCpfClienteRequest } from '../request/buscar-por-cpf-cliente.request';
-import { IdentificaPorCpfClienteRequest } from '../request/identifica-por-cpf-cliente.request';
+import { IdentificarPorCpfClienteRequest } from '../request/identificar-por-cpf-cliente.request';
 import { SalvarClienteResponse } from '../response/salvar-cliente.response';
 import { BuscarPorCpfClienteResponse } from '../response/buscar-por-cpf-cliente.response';
 import { BaseController } from '../../base.controller';
-import { IdentificaPorCpfClienteResponse } from '../response/identifica-por-cpf-cliente.response';
+import { IdentificarPorCpfClienteResponse } from '../response/identificar-por-cpf-cliente.response';
 
 @Controller('v1/cliente')
 @ApiTags('Cliente')
@@ -67,14 +67,14 @@ export class ClienteController extends BaseController {
    @Post('identifica')
    @ApiOperation({ summary: 'Identifica cliente por CPF', description: 'Realiza identificação de cliente por CPF' })
    @HttpCode(200)
-   @ApiOkResponse({ description: 'Cliente identificado com sucesso', type: IdentificaPorCpfClienteResponse })
+   @ApiOkResponse({ description: 'Cliente identificado com sucesso', type: IdentificarPorCpfClienteResponse })
    async identificaCliente(
-      @Query(ValidationPipe) query: IdentificaPorCpfClienteRequest,
-   ): Promise<IdentificaPorCpfClienteResponse> {
+      @Query(ValidationPipe) query: IdentificarPorCpfClienteRequest,
+   ): Promise<IdentificarPorCpfClienteResponse> {
       this.logger.debug(`Identificando cliente request: ${query.cpf}`);
       return await this.service.identifyByCpf(query.cpf).then((clienteIdentificado) => {
          this.logger.log(`Cliente identificado com sucesso: ${JSON.stringify(clienteIdentificado)}`);
-         return new IdentificaPorCpfClienteResponse(clienteIdentificado);
+         return new IdentificarPorCpfClienteResponse(clienteIdentificado);
       });
    }
 }

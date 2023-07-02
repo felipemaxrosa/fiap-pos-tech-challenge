@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ClienteIdentificado } from 'src/domain/cliente/model/cliente-identificado.model';
 
-export class IdentificaPorCpfClienteResponse {
+export class IdentificarPorCpfClienteResponse {
    @ApiProperty({ required: false, nullable: true, description: 'Nome do cliente' })
    public nome: string;
 
