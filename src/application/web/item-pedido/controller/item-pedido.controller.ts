@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Logger, Post, Put, Param } from '@nestjs/common';
+import { Body, Controller, Inject, Logger, Post, Put, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
@@ -38,7 +38,7 @@ export class ItemPedidoController extends BaseController {
       description: 'Edita um item do pedido, identificado pelo id do item vinculado ao id do pedido e id do produto',
    })
    @ApiCreatedResponse({ description: 'Item do pedido editado com sucesso' })
-   async editar(@Param('id') id: number, @Body() request: ItemPedido): Promise<ItemPedido> {
+   async editar(@Param('id', ParseIntPipe) id: number, @Body() request: ItemPedido): Promise<ItemPedido> {
       this.logger.debug(`Editando item do pedido request: ${JSON.stringify(request)}`);
 
       return await this.service
