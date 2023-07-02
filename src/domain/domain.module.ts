@@ -8,7 +8,7 @@ import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.vali
 import { PedidoService } from './pedido/service/pedido.service';
 import { CriarNovoPedidoValidator } from './pedido/validation/criar-novo-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from './pedido/validation/estado-correto-novo-pedido.validator';
-import { PedidoConstants } from 'src/shared/constants';
+import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
 import { ProdutoService } from './produto/service/produto.service';
 import { Produto } from './produto/model/produto.model';
 import { SalvarProdutoValidator } from './produto/validation/salvar-produto.validator';
@@ -17,6 +17,9 @@ import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.vali
 import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
 import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator.';
 import { CategoriaProdutoService } from './categoria/service/categoria-produto.service';
+import { ItemPedidoService } from './item-pedido/service/item-pedido.service';
+import { AddItemPedidoValidator } from './item-pedido/validation/add-item-pedido.validator';
+import { QuantidadeMinimaItemValidator } from './item-pedido/validation/quantidade-minima-item.validator';
 
 @Module({
    providers: [
@@ -55,12 +58,20 @@ import { CategoriaProdutoService } from './categoria/service/categoria-produto.s
          useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
       },
 
+      // Item do Pedido
+      { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
+      {
+         provide: 'AddItemPedidoValidator',
+         inject: [ItemPedidoConstants.IREPOSITORY],
+         useFactory: (): AddItemPedidoValidator[] => [new QuantidadeMinimaItemValidator()],
+      },
       // Categoria de Produto
       { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
    ],
    exports: [
       { provide: 'IService<Cliente>', useClass: ClienteService },
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
+      { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
       { provide: 'IService<Produto>', useClass: ProdutoService },
       { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
    ],

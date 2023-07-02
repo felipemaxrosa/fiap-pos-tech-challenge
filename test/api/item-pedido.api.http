@@ -1,0 +1,9 @@
+### Adiciona um novo item ao pedido
+POST http://localhost:3000/v1/item
+Content-Type: application/json
+
+{
+   "pedidoId": 1,
+   "produtoId": 1,
+   "quantidade": 1 
+}

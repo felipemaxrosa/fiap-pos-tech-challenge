@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 
 ### Recupera um produto
-GET http://localhost:3000/v1/produto/2
+GET http://localhost:3000/v1/produto/1
 Content-Type: application/json
 
 ### Recupera produtos por categoria

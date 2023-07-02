@@ -161,7 +161,7 @@ describe('PedidoTypeormRepository', () => {
          });
       });
 
-      it('não deve criar novo pedido quando houver um erro de banco ', async () => {
+      it('não deve buscar novo pedido quando houver um erro de banco ', async () => {
          const error = new TypeORMError('Erro genérico do TypeORM');
          jest.spyOn(repositoryTypeOrm, 'findBy').mockRejectedValue(error);
 
@@ -185,7 +185,7 @@ describe('PedidoTypeormRepository', () => {
          expect(repositorySaveSpy).toBeCalled();
       });
 
-      it('não deve editar produto quando houver um erro de banco ', async () => {
+      it('não deve editar pedido quando houver um erro de banco ', async () => {
          const error = new TypeORMError('Erro genérico do TypeORM');
          jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
 
