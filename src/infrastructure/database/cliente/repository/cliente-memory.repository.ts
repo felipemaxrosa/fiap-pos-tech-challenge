@@ -11,7 +11,7 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
    private repository: Array<Cliente> = [];
    private static ID_COUNT = 0;
 
-   async findBy(attributes: any): Promise<Cliente[]> {
+   async findBy(attributes: Partial<Cliente>): Promise<Cliente[]> {
       this.logger.debug(`Realizando consulta de cliente: com os parâmetros ${JSON.stringify(attributes)}`);
       return new Promise((resolve) => {
          resolve(

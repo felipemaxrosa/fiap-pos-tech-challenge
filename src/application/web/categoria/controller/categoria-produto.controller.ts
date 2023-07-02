@@ -1,7 +1,6 @@
 import { Controller, Get, Inject, Logger } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ICategoriaProdutoService } from '../../../../domain/categoria/service/categoria-produto.service.interface';
-import { CategoriaProduto } from '../../../../domain/categoria/model/categoria-produto.model';
 import { BaseController } from '../../base.controller';
 import { ListarCategoriaResponse } from './response/listar-categoria.response';
 

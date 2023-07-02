@@ -11,7 +11,7 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
    private pedidosRepository: Array<Pedido> = [];
    private static ID_COUNT = 0;
 
-   async findBy(attributes: any): Promise<Pedido[]> {
+   async findBy(attributes: Partial<Pedido>): Promise<Pedido[]> {
       this.logger.debug(`Realizando consulta de pedidos: com os parâmetros ${JSON.stringify(attributes)}`);
 
       return new Promise((resolve) => {
