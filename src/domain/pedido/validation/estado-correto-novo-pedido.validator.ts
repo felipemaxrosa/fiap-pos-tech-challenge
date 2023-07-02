@@ -7,7 +7,9 @@ import { EstadoPedido } from '../enums/pedido';
 
 @Injectable()
 export class EstadoCorretoNovoPedidoValidator implements SalvarPedidoValidator {
-   public static ERROR_MESSAGE = `O estado inicial de um novo pedido deve ser ${EstadoPedido.RECEBIDO} (${EstadoPedido[EstadoPedido.RECEBIDO]})`;
+   public static ERROR_MESSAGE = `O estado inicial de um novo pedido deve ser ${EstadoPedido.RECEBIDO} (${
+      EstadoPedido[EstadoPedido.RECEBIDO]
+   })`;
 
    private logger: Logger = new Logger(EstadoCorretoNovoPedidoValidator.name);
 

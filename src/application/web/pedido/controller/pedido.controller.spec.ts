@@ -35,8 +35,14 @@ describe('PedidoController', () => {
             {
                provide: PedidoConstants.ISERVICE,
                useValue: {
-                  save: jest.fn((request) => (request ? Promise.resolve(salvarPedidoResponse) : Promise.reject(new Error('error')))),
-                  findById: jest.fn((id) => (id === salvarPedidoResponse.id ? Promise.resolve(salvarPedidoResponse) : Promise.resolve(undefined))),
+                  save: jest.fn((request) =>
+                     request ? Promise.resolve(salvarPedidoResponse) : Promise.reject(new Error('error')),
+                  ),
+                  findById: jest.fn((id) =>
+                     id === salvarPedidoResponse.id
+                        ? Promise.resolve(salvarPedidoResponse)
+                        : Promise.resolve(undefined),
+                  ),
                   findAllByEstadoDoPedido: jest.fn((estado) =>
                      Promise.resolve([salvarPedidoResponse].filter((pedido) => pedido.estadoPedido === estado)),
                   ),

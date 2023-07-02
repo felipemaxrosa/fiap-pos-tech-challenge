@@ -11,28 +11,33 @@ import { SalvarPedidoResponse } from '../response/salvar-pedido.response';
 
 @Controller('v1/pedido')
 @ApiTags('Pedido')
-export class PedidoController extends BaseController{
+export class PedidoController extends BaseController {
    private logger: Logger = new Logger(PedidoController.name);
 
-   constructor(@Inject(PedidoConstants.ISERVICE) private service: IPedidoService) {super()}
+   constructor(@Inject(PedidoConstants.ISERVICE) private service: IPedidoService) {
+      super();
+   }
 
    @Post()
    @ApiOperation({
       summary: 'Adiciona um novo pedido',
-      description: 'Adiciona um novo pedido para o cliente, contendo o identificador do cliente, a data de início do pedido, o estado e indicador se é um pedido ativo',
+      description:
+         'Adiciona um novo pedido para o cliente, contendo o identificador do cliente, a data de início do pedido, o estado e indicador se é um pedido ativo',
    })
-   @ApiCreatedResponse({ description: 'Pedido gerado com sucesso', type: SalvarPedidoResponse})
+   @ApiCreatedResponse({ description: 'Pedido gerado com sucesso', type: SalvarPedidoResponse })
    async salvar(@Body() novoPedido: SalvarPedidoRequest): Promise<Pedido> {
       this.logger.debug(`Criando Novo Pedido Request: ${JSON.stringify(novoPedido)}`);
-      return await this.service.save({
-         clienteId: novoPedido.clienteId,
-         dataInicio: novoPedido.dataInicio,
-         estadoPedido: novoPedido.estadoPedido,
-         ativo: novoPedido.ativo
-      }).then((pedidoCriado) => {
-         this.logger.log(`Pedido gerado com sucesso: ${pedidoCriado.id}}`);
-         return new SalvarPedidoResponse(pedidoCriado);
-      });
+      return await this.service
+         .save({
+            clienteId: novoPedido.clienteId,
+            dataInicio: novoPedido.dataInicio,
+            estadoPedido: novoPedido.estadoPedido,
+            ativo: novoPedido.ativo,
+         })
+         .then((pedidoCriado) => {
+            this.logger.log(`Pedido gerado com sucesso: ${pedidoCriado.id}}`);
+            return new SalvarPedidoResponse(pedidoCriado);
+         });
    }
 
    @Get(':id')

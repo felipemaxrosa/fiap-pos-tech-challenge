@@ -41,7 +41,7 @@ import { ClienteExistentePedidoValidator } from './pedido/validation/cliente-exi
          inject: ['IRepository<Cliente>'],
          useFactory: (clienteRepository): SalvarPedidoValidator[] => [
             new EstadoCorretoNovoPedidoValidator(),
-           // new ClienteExistentePedidoValidator(clienteRepository)
+            // new ClienteExistentePedidoValidator(clienteRepository)
          ],
       },
 

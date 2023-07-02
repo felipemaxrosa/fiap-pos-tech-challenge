@@ -8,19 +8,19 @@ export class SalvarPedidoRequest {
    @IsInt({ message: 'ID do cliente deve ser válido' })
    public clienteId: number;
 
-   @ApiProperty({ required: true, nullable: false, description: 'Data do Inicio do Pedido' , pattern: 'yyyy-MM-dd' })
+   @ApiProperty({ required: true, nullable: false, description: 'Data do Inicio do Pedido', pattern: 'yyyy-MM-dd' })
    @IsNotEmpty({ message: 'Data não pode ser vazio' })
-   @IsDateString({},{message: 'Data deve ser válido'})
+   @IsDateString({}, { message: 'Data deve ser válido' })
    public dataInicio: string;
 
-   @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido', enum: EstadoPedido})
+   @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido', enum: EstadoPedido })
    @IsNotEmpty({ message: 'Estado do pedido não pode ser vazio' })
    @IsEnum(EstadoPedido, {
       message: () =>
-      `Estado do pedido deve ser válido: ${Object.values(EstadoPedido)
-         .filter(value => typeof value === 'number')
-         .map((value) => `${value}:${EstadoPedido[value]}`)
-         .join(', ')}`,
+         `Estado do pedido deve ser válido: ${Object.values(EstadoPedido)
+            .filter((value) => typeof value === 'number')
+            .map((value) => `${value}:${EstadoPedido[value]}`)
+            .join(', ')}`,
    })
    public estadoPedido: EstadoPedido;
 

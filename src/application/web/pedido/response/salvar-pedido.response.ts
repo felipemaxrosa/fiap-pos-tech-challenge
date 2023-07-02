@@ -2,15 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 
-
 export class SalvarPedidoResponse {
    @ApiProperty({ required: true, nullable: false, description: 'ID do cliente' })
    public clienteId: number;
 
-   @ApiProperty({ required: true, nullable: false, description: 'Data do Inicio do Pedido' , pattern: 'yyyy-MM-dd' })
+   @ApiProperty({ required: true, nullable: false, description: 'Data do Inicio do Pedido', pattern: 'yyyy-MM-dd' })
    public dataInicio: string;
 
-   @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido', enum: EstadoPedido})
+   @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido', enum: EstadoPedido })
    public estadoPedido: EstadoPedido;
 
    @ApiProperty({
