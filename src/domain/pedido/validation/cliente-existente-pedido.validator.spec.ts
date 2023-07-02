@@ -25,7 +25,6 @@ describe('ClienteExistentePedidoValidator', () => {
       cpf: '25634428777',
    };
 
-
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
@@ -59,22 +58,17 @@ describe('ClienteExistentePedidoValidator', () => {
 
    describe('validate', () => {
       it('deve validar pedido quando existir um cliente', async () => {
-         await validator.validate(pedido)
-            .then((result) => {
-               expect(result).toBeTruthy();
-            });
+         await validator.validate(pedido).then((result) => {
+            expect(result).toBeTruthy();
+         });
       });
 
-
       it('não deve validar pedido quando não existir um cliente', async () => {
-
          repository.findBy = jest.fn().mockImplementation(() => {
             return Promise.resolve([]);
          });
 
-         await expect(validator.validate(pedido)).rejects.toThrowError(
-            ClienteExistentePedidoValidator.ERROR_MESSAGE,
-         );
+         await expect(validator.validate(pedido)).rejects.toThrowError(ClienteExistentePedidoValidator.ERROR_MESSAGE);
       });
    });
 });
