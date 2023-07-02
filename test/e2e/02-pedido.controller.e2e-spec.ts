@@ -3,25 +3,25 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 
 import { MainModule } from '../../src/main.module';
-import { CriarNovoPedidoRequest } from 'src/application/web/pedido/request';
-import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
+import { SalvarPedidoRequest } from 'src/application/web/pedido/request';
+import { SalvarPedidoResponse } from 'src/application/web/pedido/response/salvar-pedido.response';
 
 describe('PedidoController (e2e)', () => {
    let app: INestApplication;
-   let criarNovoPedidoRequest: CriarNovoPedidoRequest;
-   let pedido: Pedido;
+   let salvarPedidoRequest: SalvarPedidoRequest;
+   let salvarPedidoResponse: SalvarPedidoResponse;
 
    beforeEach(() => {
       // Define um objeto de requisição
-      criarNovoPedidoRequest = {
+      salvarPedidoRequest = {
          clienteId: 1,
          dataInicio: '2023-06-24',
          estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
       };
       // Define um objeto de pedido esperado como resultado
-      pedido = {
+      salvarPedidoResponse = {
          id: 1,
          clienteId: 1,
          dataInicio: '2023-06-24',
@@ -55,12 +55,12 @@ describe('PedidoController (e2e)', () => {
       return await request(app.getHttpServer())
          .post('/v1/pedido')
          .set('Content-type', 'application/json')
-         .send(criarNovoPedidoRequest)
+         .send(salvarPedidoRequest)
          .then((response) => {
             expect(response.status).toEqual(201);
-            expect(response.body).toEqual(pedido);
+            expect(response.body).toEqual(salvarPedidoResponse);
             expect(response.body).toHaveProperty('id');
-            expect(response.body.clienteId).toEqual(criarNovoPedidoRequest.clienteId);
+            expect(response.body.clienteId).toEqual(salvarPedidoRequest.clienteId);
          });
    });
 });
