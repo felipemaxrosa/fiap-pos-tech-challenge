@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { PedidoConstants } from 'src/shared/constants';
@@ -48,8 +48,8 @@ export class PedidoController extends BaseController {
       summary: 'Consulta pedido por ID',
       description: 'Realiza a consulta um pedido por ID',
    })
-   @ApiResponse({ status: 200, description: 'Pedido encontrado com sucesso', type: BuscarPorIdPedidoResponse })
-   async findById(@Param('id') id: number): Promise<BuscarPorIdPedidoResponse> {
+   @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: BuscarPorIdPedidoResponse })
+   async findById(@Param('id', ParseIntPipe) id: number): Promise<BuscarPorIdPedidoResponse> {
       this.logger.debug(`Procurando Pedido id: ${id}`);
       return await this.service.findById(id).then((pedido) => {
          if (pedido) {
@@ -66,8 +66,8 @@ export class PedidoController extends BaseController {
       summary: 'Consulta o estado do pedido por ID',
       description: 'Realiza a consulta do estado do pedido por ID',
    })
-   @ApiResponse({ status: 200, description: 'Pedido encontrado com sucesso', type: BuscarPorIdEstadoPedidoResponse })
-   async findByIdEstadoDoPedido(@Param('id') id: number): Promise<BuscarPorIdEstadoPedidoResponse> {
+   @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: BuscarPorIdEstadoPedidoResponse })
+   async findByIdEstadoDoPedido(@Param('id', ParseIntPipe) id: number): Promise<BuscarPorIdEstadoPedidoResponse> {
       this.logger.debug(`Procurando Pedido id: ${id}`);
 
       return await this.service.findById(id).then((pedido) => {
@@ -86,10 +86,10 @@ export class PedidoController extends BaseController {
       summary: 'Consulta de pedidos por estado',
       description: 'Realiza a consulta de todos os pedidos por estado',
    })
-   @ApiResponse({
-      status: 200,
+   @ApiOkResponse({
       description: 'Pedidos encontrados com sucesso',
       type: BuscarTodosPorEstadoPedidoResponse,
+      isArray: true,
    })
    async findAllByEstadoDoPedido(@Param('id') estado: EstadoPedido): Promise<BuscarTodosPorEstadoPedidoResponse[]> {
       this.logger.debug(`Procurando Pedidos com estado: ${estado}`);

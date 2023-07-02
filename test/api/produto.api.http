@@ -14,7 +14,6 @@ PUT http://localhost:3000/v1/produto/1
 Content-Type: application/json
 
 {
-  "id": 12,
   "nome": "Produto Teste 23",
   "idCategoriaProduto": 2,
   "descricao": "Descrição Produto Teste 2",
