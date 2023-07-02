@@ -6,7 +6,7 @@ import { CpfUnicoClienteValidator } from './cliente/validation/cpf-unico-cliente
 import { EmailUnicoClienteValidator } from './cliente/validation/email-unico-cliente.validator';
 import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.validator';
 import { PedidoService } from './pedido/service/pedido.service';
-import { CriarNovoPedidoValidator } from './pedido/validation/criar-novo-pedido.validator';
+import { SalvarPedidoValidator } from './pedido/validation/salvar-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from './pedido/validation/estado-correto-novo-pedido.validator';
 import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
 import { ProdutoService } from './produto/service/produto.service';
@@ -17,6 +17,7 @@ import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.vali
 import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
 import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator.';
 import { CategoriaProdutoService } from './categoria/service/categoria-produto.service';
+import { ClienteExistentePedidoValidator } from './pedido/validation/cliente-existente-pedido.validator';
 import { ItemPedidoService } from './item-pedido/service/item-pedido.service';
 import { AddItemPedidoValidator } from './item-pedido/validation/add-item-pedido.validator';
 import { QuantidadeMinimaItemValidator } from './item-pedido/validation/quantidade-minima-item.validator';
@@ -39,9 +40,12 @@ import { QuantidadeMinimaItemValidator } from './item-pedido/validation/quantida
       // Pedido
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       {
-         provide: 'CriarNovoPedidoValidator',
-         inject: [PedidoConstants.IREPOSITORY],
-         useFactory: (): CriarNovoPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
+         provide: 'SalvarPedidoValidator',
+         inject: ['IRepository<Cliente>'],
+         useFactory: (clienteRepository): SalvarPedidoValidator[] => [
+            new EstadoCorretoNovoPedidoValidator(),
+            // new ClienteExistentePedidoValidator(clienteRepository)
+         ],
       },
 
       // Produto

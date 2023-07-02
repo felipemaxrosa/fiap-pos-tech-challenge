@@ -11,13 +11,13 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
    private repository: Array<Cliente> = [];
    private static ID_COUNT = 0;
 
-   async findBy(attributes: any): Promise<Cliente[]> {
+   async findBy(attributes: Partial<Cliente>): Promise<Cliente[]> {
       this.logger.debug(`Realizando consulta de cliente: com os parâmetros ${JSON.stringify(attributes)}`);
       return new Promise((resolve) => {
          resolve(
             this.repository.filter((cliente) => {
                return Object.entries(attributes).every(([key, value]) => {
-                  return cliente[key] === value;
+                  return cliente[key] == value;
                });
             }),
          );
@@ -27,8 +27,8 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
    async save(cliente: Cliente): Promise<Cliente> {
       this.logger.debug(`Salvando cliente: ${cliente}`);
       return new Promise<Cliente>((resolve) => {
-         this.repository.push(cliente);
          cliente.id = ++ClienteMemoryRepository.ID_COUNT;
+         this.repository.push(cliente);
          resolve(cliente);
       });
    }

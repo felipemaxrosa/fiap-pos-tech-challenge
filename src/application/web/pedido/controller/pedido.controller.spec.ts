@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Pedido } from 'src/domain/pedido/model/pedido.model';
 import { PedidoController } from './pedido.controller';
-import { CriarNovoPedidoRequest } from '../request/criar-novo-pedido.request';
 import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
 import { IPedidoService } from 'src/domain/pedido/service/pedido.service.interface';
@@ -11,14 +9,14 @@ describe('PedidoController', () => {
    let controller: PedidoController;
    let service: IPedidoService;
 
-   const novoPedido: CriarNovoPedidoRequest = {
+   const salvarPedidoRequest = {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
    };
 
-   const pedido: Pedido = {
+   const salvarPedidoResponse = {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
@@ -35,10 +33,16 @@ describe('PedidoController', () => {
             {
                provide: PedidoConstants.ISERVICE,
                useValue: {
-                  save: jest.fn((request) => (request ? Promise.resolve(pedido) : Promise.reject(new Error('error')))),
-                  findById: jest.fn((id) => (id === pedido.id ? Promise.resolve(pedido) : Promise.resolve(undefined))),
+                  save: jest.fn((request) =>
+                     request ? Promise.resolve(salvarPedidoResponse) : Promise.reject(new Error('error')),
+                  ),
+                  findById: jest.fn((id) =>
+                     id === salvarPedidoResponse.id
+                        ? Promise.resolve(salvarPedidoResponse)
+                        : Promise.resolve(undefined),
+                  ),
                   findAllByEstadoDoPedido: jest.fn((estado) =>
-                     Promise.resolve([pedido].filter((pedido) => pedido.estadoPedido === estado)),
+                     Promise.resolve([salvarPedidoResponse].filter((pedido) => pedido.estadoPedido === estado)),
                   ),
                },
             },
@@ -61,19 +65,19 @@ describe('PedidoController', () => {
    });
 
    describe('salvar', () => {
-      it('deve conter um estado do pedido RECEBIDO', () => {
-         expect(novoPedido.estadoPedido).toEqual(EstadoPedido.RECEBIDO);
+      it('deve contar um estado do pedido RECEBIDO', () => {
+         expect(salvarPedidoRequest.estadoPedido).toEqual(EstadoPedido.RECEBIDO);
       });
 
       it('deve CRIAR um novo pedido', async () => {
          // Chama o método salvar do controller
-         const result = await controller.salvar(novoPedido);
+         const result = await controller.salvar(salvarPedidoRequest);
 
          // Verifica se o método save do serviço foi chamado corretamente com a requisição
-         expect(service.save).toHaveBeenCalledWith(novoPedido);
+         expect(service.save).toHaveBeenCalledWith(salvarPedidoRequest);
 
          // Verifica se o resultado obtido é igual ao objeto cliente esperado
-         expect(result).toEqual(pedido);
+         expect(result).toEqual(salvarPedidoResponse);
       });
 
       it('não deve tratar erro a nível de controlador', async () => {
@@ -81,10 +85,10 @@ describe('PedidoController', () => {
          jest.spyOn(service, 'save').mockRejectedValue(error);
 
          // Chama o método salvar do controller
-         await expect(controller.salvar(novoPedido)).rejects.toThrow('Erro genérico não tratado');
+         await expect(controller.salvar(salvarPedidoRequest)).rejects.toThrow('Erro genérico não tratado');
 
          // Verifica se método save foi chamado com o parametro esperado
-         expect(service.save).toHaveBeenCalledWith(novoPedido);
+         expect(service.save).toHaveBeenCalledWith(salvarPedidoRequest);
       });
    });
 
@@ -92,8 +96,8 @@ describe('PedidoController', () => {
       it('deve buscar o pedido por ID', async () => {
          const result = await controller.findById(1);
 
-         expect(service.findById).toHaveBeenCalledWith(pedido.id);
-         expect(result).toEqual(pedido);
+         expect(service.findById).toHaveBeenCalledWith(salvarPedidoResponse.id);
+         expect(result).toEqual(salvarPedidoResponse);
       });
 
       it('não deve encontrar o pedido', async () => {
@@ -106,9 +110,9 @@ describe('PedidoController', () => {
 
    describe('buscaEstadoDoPedido', () => {
       it('deve buscar estado do pedido', async () => {
-         const result = await controller.findByIdEstadoDoPedido(pedido.id);
+         const result = await controller.findByIdEstadoDoPedido(salvarPedidoResponse.id);
 
-         expect(result).toEqual({ estadoPedido: pedido.estadoPedido });
+         expect(result).toEqual({ estadoPedido: salvarPedidoResponse.estadoPedido });
       });
 
       it('não deve encontrar o pedido', async () => {
@@ -120,7 +124,7 @@ describe('PedidoController', () => {
    });
 
    describe('buscaPedidosPorEstado', () => {
-      const mockedPedidos = [pedido];
+      const mockedPedidos = [salvarPedidoResponse];
       it('deve buscar pedidos com estado: RECEBIDO (1)', async () => {
          const result = await controller.findAllByEstadoDoPedido(EstadoPedido.RECEBIDO);
 

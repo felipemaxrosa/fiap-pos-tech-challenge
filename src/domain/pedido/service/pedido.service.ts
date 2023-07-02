@@ -4,7 +4,7 @@ import { Pedido } from '../model/pedido.model';
 import { IRepository } from 'src/domain/repository/repository';
 import { ServiceException } from 'src/domain/exception/service.exception';
 import { PedidoConstants } from 'src/shared/constants';
-import { CriarNovoPedidoValidator } from '../validation/criar-novo-pedido.validator';
+import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';
 import { IPedidoService } from './pedido.service.interface';
 import { EstadoPedido } from '../enums/pedido';
 
@@ -14,8 +14,8 @@ export class PedidoService implements IPedidoService {
 
    constructor(
       @Inject(PedidoConstants.IREPOSITORY) private repository: IRepository<Pedido>,
-      @Inject('CriarNovoPedidoValidator')
-      private validators: CriarNovoPedidoValidator[],
+      @Inject('SalvarPedidoValidator')
+      private validators: SalvarPedidoValidator[],
    ) {}
 
    async save(pedido: Pedido): Promise<Pedido> {

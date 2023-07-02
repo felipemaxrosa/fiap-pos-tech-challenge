@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { IRepository } from '../../../../domain/repository/repository';
 import { RepositoryException } from '../../../exception/repository.exception';
@@ -6,8 +6,6 @@ import { CategoriaProduto } from '../../../../domain/categoria/model/categoria-p
 
 @Injectable()
 export class CategoriaProdutoMemoryRepository implements IRepository<CategoriaProduto> {
-   private logger: Logger = new Logger(CategoriaProdutoMemoryRepository.name);
-
    private repository: Array<CategoriaProduto> = [
       { id: 1, nome: 'Lanche' },
       { id: 2, nome: 'Acompanhamento' },

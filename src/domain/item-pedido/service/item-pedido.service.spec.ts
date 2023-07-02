@@ -8,7 +8,7 @@ import { ItemPedido } from '../model';
 import { IRepository } from 'src/domain/repository/repository';
 import { ItemPedidoService } from './item-pedido.service';
 import { ItemPedidoConstants } from 'src/shared/constants';
-import { AddItemPedidoRequest } from 'src/application/web/item-pedido/request';
+import { SalvarItemPedidoRequest } from 'src/application/web/item-pedido/request';
 import { AddItemPedidoValidator, QuantidadeMinimaItemValidator } from '../validation';
 
 describe('ItemPedidoService', () => {
@@ -76,7 +76,7 @@ describe('ItemPedidoService', () => {
 
    describe('save', () => {
       it('deve ADICIONAR item ao pedido', async () => {
-         const novoItem: AddItemPedidoRequest = {
+         const novoItem: SalvarItemPedidoRequest = {
             pedidoId: 1,
             produtoId: 1,
             quantidade: 1,

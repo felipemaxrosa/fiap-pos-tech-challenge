@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumberString, IsOptional, MaxLength } from 'class-validator';
 
-export class IdentificaPorCpfClienteRequest {
+export class IdentificarPorCpfClienteRequest {
    @ApiProperty({ required: false, nullable: true, description: 'CPF do cliente' })
    @IsOptional()
    @IsNotEmpty({ message: 'CPF não pode ser vazio' })

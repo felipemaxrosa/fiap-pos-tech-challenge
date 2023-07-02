@@ -17,7 +17,7 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
    private repository: Array<Produto> = [];
    private static ID_COUNT = 0;
 
-   async findBy(attributes: any): Promise<Produto[]> {
+   async findBy(attributes: Partial<Produto>): Promise<Produto[]> {
       this.logger.debug(`Realizando consulta de produto: com os parâmetros ${JSON.stringify(attributes)}`);
       let attributesWithConvertedIds = convertIdtoNumberTypeIfPresent(attributes, 'id');
       attributesWithConvertedIds = convertIdtoNumberTypeIfPresent(attributesWithConvertedIds, 'idCategoriaProduto');
@@ -25,7 +25,7 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
          resolve(
             this.repository.filter((produto) => {
                return Object.entries(attributesWithConvertedIds).every(([key, value]) => {
-                  return produto[key] === value;
+                  return produto[key] == value;
                });
             }),
          );
@@ -35,8 +35,8 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
    async save(produto: Produto): Promise<Produto> {
       this.logger.debug(`Salvando produto: ${produto}`);
       return new Promise<Produto>((resolve) => {
-         this.repository.push(produto);
          produto.id = ++ProdutoMemoryRepository.ID_COUNT;
+         this.repository.push(produto);
          resolve(produto);
       });
    }

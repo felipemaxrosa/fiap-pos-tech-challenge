@@ -16,9 +16,11 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
 
       return new Promise((resolve) => {
          resolve(
-            this.pedidosRepository.filter((pedido) =>
-               Object.entries(attributes).every(([key, value]) => pedido[key] === value),
-            ),
+            this.pedidosRepository.filter((pedido) => {
+               return Object.entries(attributes).every(([key, value]) => {
+                  return pedido[key] == value;
+               });
+            }),
          );
       });
    }
@@ -27,8 +29,8 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
       this.logger.debug(`Criando novo pedido: ${pedido}`);
 
       return new Promise<Pedido>((resolve) => {
-         this.pedidosRepository.push(pedido);
          pedido.id = ++PedidoMemoryRepository.ID_COUNT;
+         this.pedidosRepository.push(pedido);
          resolve(pedido);
       });
    }

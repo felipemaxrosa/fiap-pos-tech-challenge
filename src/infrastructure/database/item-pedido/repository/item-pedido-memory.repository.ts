@@ -17,7 +17,7 @@ export class ItemPedidoMemoryRepository implements IRepository<ItemPedido> {
       return new Promise((resolve) => {
          resolve(
             this.itemsPedidosRepository.filter((pedido) =>
-               Object.entries(attributes).every(([key, value]) => pedido[key] === value),
+               Object.entries(attributes).every(([key, value]) => pedido[key] == value),
             ),
          );
       });
@@ -27,8 +27,8 @@ export class ItemPedidoMemoryRepository implements IRepository<ItemPedido> {
       this.logger.debug(`Adicionando item no pedido: ${itemPedido}`);
 
       return new Promise<ItemPedido>((resolve) => {
-         this.itemsPedidosRepository.push(itemPedido);
          itemPedido.id = ++ItemPedidoMemoryRepository.ID_COUNT;
+         this.itemsPedidosRepository.push(itemPedido);
          resolve(itemPedido);
       });
    }

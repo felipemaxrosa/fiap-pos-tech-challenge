@@ -1,9 +1,7 @@
 # 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main)
-
-[![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/workflow/badge.svg?window=7d&circle-token=b58fa7f3f1c216768f2d59e57b0b9b257c68c36f)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/workflow/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
-
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da pós gradução em Software Architecture.
-[TLDR; Execução em modo produção (Avalidação FIAP)](#🚨⚡️-execução-em-modo-produção-avalidação-fiap)
+
+###**[TLDR; Execução em modo produção (Avalidação FIAP)](#%EF%B8%8F-execução-em-modo-produção-avalidação-fiap)**
 
 ## Arquitetura
 - Arquitetura Hexagonal
@@ -34,6 +32,8 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da p�
             - run-coverage-tests    - Execução de validação de cobertura de testes (all green)
             - run-check-test-impl   - Execução de validação de implementação de testes (implementação mandatória de testes de controllers, services, validators, repositories)
             - build-image           - Build de imagens docker e publicação no registry (publicação de imagens docker no DockerHub nas arquiteturas ADM & ARM)
+            
+            [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/workflow/badge.svg?window=7d&circle-token=b58fa7f3f1c216768f2d59e57b0b9b257c68c36f)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/workflow/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
 
 ## 🚀 Instalação de Dependências Node
 ```bash
