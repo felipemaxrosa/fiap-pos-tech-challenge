@@ -2,21 +2,22 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { ItemPedido } from '../../../../domain/item-pedido/model';
 import { ItemPedidoConstants } from '../../../../shared/constants';
-import { AddItemPedidoRequest } from '../request';
+import { SalvarItemPedidoRequest } from '../request';
 import { ItemPedidoController } from './item-pedido.controller';
 import { IService } from 'src/domain/service/service';
+import { SalvarItemPedidoResponse } from '../request/salvar-item-pedido.response';
 
 describe('ItemPedidoController', () => {
    let controller: ItemPedidoController;
    let service: IService<ItemPedido>;
 
-   const novoItem: AddItemPedidoRequest = {
+   const novoItem: SalvarItemPedidoRequest = {
       pedidoId: 1,
       produtoId: 1,
       quantidade: 1,
    };
 
-   const itemPedido: ItemPedido = {
+   const itemPedido: SalvarItemPedidoResponse = {
       id: 1,
       pedidoId: 1,
       produtoId: 1,
