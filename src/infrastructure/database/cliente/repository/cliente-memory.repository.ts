@@ -17,7 +17,7 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
          resolve(
             this.repository.filter((cliente) => {
                return Object.entries(attributes).every(([key, value]) => {
-                  return cliente[key] === value;
+                  return cliente[key] == value;
                });
             }),
          );
@@ -27,8 +27,8 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
    async save(cliente: Cliente): Promise<Cliente> {
       this.logger.debug(`Salvando cliente: ${cliente}`);
       return new Promise<Cliente>((resolve) => {
-         this.repository.push(cliente);
          cliente.id = ++ClienteMemoryRepository.ID_COUNT;
+         this.repository.push(cliente);
          resolve(cliente);
       });
    }

@@ -46,8 +46,7 @@ export class PedidoController extends BaseController {
    @Get(':id')
    @ApiOperation({
       summary: 'Consulta pedido por ID',
-      description:
-         'Realiza a consulta um pedido por ID',
+      description: 'Realiza a consulta um pedido por ID',
    })
    @ApiResponse({ status: 200, description: 'Pedido encontrado com sucesso', type: BuscarPorIdPedidoResponse })
    async findById(@Param('id') id: number): Promise<BuscarPorIdPedidoResponse> {
@@ -65,8 +64,7 @@ export class PedidoController extends BaseController {
    @Get(':id/estado')
    @ApiOperation({
       summary: 'Consulta o estado do pedido por ID',
-      description:
-         'Realiza a consulta do estado do pedido por ID',
+      description: 'Realiza a consulta do estado do pedido por ID',
    })
    @ApiResponse({ status: 200, description: 'Pedido encontrado com sucesso', type: BuscarPorIdEstadoPedidoResponse })
    async findByIdEstadoDoPedido(@Param('id') id: number): Promise<BuscarPorIdEstadoPedidoResponse> {
@@ -86,10 +84,13 @@ export class PedidoController extends BaseController {
    @Get('estado/:id')
    @ApiOperation({
       summary: 'Consulta de pedidos por estado',
-      description:
-         'Realiza a consulta de todos os pedidos por estado',
+      description: 'Realiza a consulta de todos os pedidos por estado',
    })
-   @ApiResponse({ status: 200, description: 'Pedidos encontrados com sucesso', type: BuscarTodosPorEstadoPedidoResponse })
+   @ApiResponse({
+      status: 200,
+      description: 'Pedidos encontrados com sucesso',
+      type: BuscarTodosPorEstadoPedidoResponse,
+   })
    async findAllByEstadoDoPedido(@Param('id') estado: EstadoPedido): Promise<BuscarTodosPorEstadoPedidoResponse[]> {
       this.logger.debug(`Procurando Pedidos com estado: ${estado}`);
 
