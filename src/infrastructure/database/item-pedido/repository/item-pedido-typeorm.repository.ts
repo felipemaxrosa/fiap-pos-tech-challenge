@@ -54,13 +54,16 @@ export class ItemPedidoTypeormRepository implements IRepository<ItemPedido> {
 
    async edit(itemPedido: ItemPedido): Promise<ItemPedido> {
       this.logger.debug(`Editando item do pedido: ${itemPedido}`);
+      const { id, ...itemParaEdicao } = itemPedido;
 
       return this.repository
-         .save(itemPedido)
+         .update({ id }, itemParaEdicao)
          .then((itemEditado) => {
-            this.logger.debug(`Item do pedido editado com sucesso no banco de dados: ${itemEditado.id}`);
+            this.logger.debug(`Item do pedido editado com sucesso no banco de dados`);
 
-            return itemEditado;
+            if (itemEditado.affected > 0) {
+               return itemPedido;
+            }
          })
          .catch((error) => {
             throw new RepositoryException(

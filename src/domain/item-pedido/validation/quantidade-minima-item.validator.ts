@@ -6,18 +6,18 @@ import { ItemPedido } from '../model/item-pedido.model';
 
 @Injectable()
 export class QuantidadeMinimaItemValidator implements AddItemPedidoValidator {
-   public static ERROR_MESSAGE = 'A quantidade minima para adicionar um produto deve ser maio que zero';
+   public static ERROR_MESSAGE = 'A quantidade minima para um produto deve ser maio que zero';
 
    private logger = new Logger(QuantidadeMinimaItemValidator.name);
 
    async validate({ quantidade, pedidoId, produtoId }: ItemPedido): Promise<boolean> {
       this.logger.log(
-         `Inicializando validação ${QuantidadeMinimaItemValidator.name} para adicionar um item ao pedido.`,
+         `Inicializando validação ${QuantidadeMinimaItemValidator.name} para quantidade minima de um item do pedido.`,
       );
 
       if (quantidade > 0) {
          this.logger.debug(
-            `${QuantidadeMinimaItemValidator.name} finalizado com sucesso para adicionar novo item: ${produtoId} ao pedido: ${pedidoId}`,
+            `${QuantidadeMinimaItemValidator.name} finalizado com sucesso do produto: ${produtoId} ao pedido: ${pedidoId}`,
          );
 
          return true;

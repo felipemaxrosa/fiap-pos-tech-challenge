@@ -17,10 +17,14 @@ import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.vali
 import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
 import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator.';
 import { CategoriaProdutoService } from './categoria/service/categoria-produto.service';
-import { ClienteExistentePedidoValidator } from './pedido/validation/cliente-existente-pedido.validator';
 import { ItemPedidoService } from './item-pedido/service/item-pedido.service';
-import { AddItemPedidoValidator } from './item-pedido/validation/add-item-pedido.validator';
-import { QuantidadeMinimaItemValidator } from './item-pedido/validation/quantidade-minima-item.validator';
+import {
+   AddItemPedidoValidator,
+   EditarItemPedidoValidator,
+   QuantidadeMinimaItemValidator,
+   ItemPedidoExistenteValidator,
+} from './item-pedido/validation';
+import { ItemPedido } from './item-pedido/model';
 
 @Module({
    providers: [
@@ -42,10 +46,7 @@ import { QuantidadeMinimaItemValidator } from './item-pedido/validation/quantida
       {
          provide: 'SalvarPedidoValidator',
          inject: ['IRepository<Cliente>'],
-         useFactory: (clienteRepository): SalvarPedidoValidator[] => [
-            new EstadoCorretoNovoPedidoValidator(),
-            // new ClienteExistentePedidoValidator(clienteRepository)
-         ],
+         useFactory: (): SalvarPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
       },
 
       // Produto
@@ -65,9 +66,16 @@ import { QuantidadeMinimaItemValidator } from './item-pedido/validation/quantida
       // Item do Pedido
       { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
       {
-         provide: 'AddItemPedidoValidator',
+         provide: ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR,
          inject: [ItemPedidoConstants.IREPOSITORY],
          useFactory: (): AddItemPedidoValidator[] => [new QuantidadeMinimaItemValidator()],
+      },
+      {
+         provide: ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR,
+         inject: [ItemPedidoConstants.IREPOSITORY],
+         useFactory: (repository: IRepository<ItemPedido>): EditarItemPedidoValidator[] => [
+            new ItemPedidoExistenteValidator(repository),
+         ],
       },
       // Categoria de Produto
       { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },

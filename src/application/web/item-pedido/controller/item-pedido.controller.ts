@@ -1,10 +1,10 @@
-import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Logger, Post, Put, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
 import { ItemPedidoConstants } from '../../../../shared/constants';
 import { IService } from 'src/domain/service/service';
-import { SalvarItemPedidoRequest as SalvarItemPedidoRequest } from '../request/salvar-item-pedido.request';
+import { SalvarItemPedidoRequest } from '../request';
 import { BaseController } from '../../base.controller';
 import { SalvarItemPedidoResponse } from '../request/salvar-item-pedido.response';
 
@@ -30,5 +30,25 @@ export class ItemPedidoController extends BaseController {
          this.logger.log(`Pedido gerado com sucesso: ${itemAdicionado.id}}`);
          return new SalvarItemPedidoResponse(itemAdicionado);
       });
+   }
+
+   @Put(':id')
+   @ApiOperation({
+      summary: 'Edita um item do pedido',
+      description: 'Edita um item do pedido, identificado pelo id do item vinculado ao id do pedido e id do produto',
+   })
+   @ApiCreatedResponse({ description: 'Item do pedido editado com sucesso' })
+   async editar(@Param('id', ParseIntPipe) id: number, @Body() request: ItemPedido): Promise<ItemPedido> {
+      this.logger.debug(`Editando item do pedido request: ${JSON.stringify(request)}`);
+
+      return await this.service
+         .edit({
+            ...request,
+            id,
+         })
+         .then((itemPedido) => {
+            this.logger.log(`Item do pedido editado com sucesso: ${itemPedido.id}`);
+            return itemPedido;
+         });
    }
 }
