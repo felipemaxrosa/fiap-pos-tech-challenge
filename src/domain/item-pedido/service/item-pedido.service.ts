@@ -4,7 +4,8 @@ import { IService } from 'src/domain/service/service';
 import { ServiceException } from '../../exception/service.exception';
 import { ItemPedido } from '../model/item-pedido.model';
 import { ItemPedidoConstants } from 'src/shared/constants';
-import { AddItemPedidoValidator } from '../validation/add-item-pedido.validator';
+import { AddItemPedidoValidator, EditarItemPedidoValidator } from '../validation';
+import { IValidator } from 'src/domain/validation/validator';
 
 @Injectable()
 export class ItemPedidoService implements IService<ItemPedido> {
@@ -12,14 +13,14 @@ export class ItemPedidoService implements IService<ItemPedido> {
 
    constructor(
       @Inject(ItemPedidoConstants.IREPOSITORY) private repository: IRepository<ItemPedido>,
-      @Inject('AddItemPedidoValidator')
-      private validators: AddItemPedidoValidator[],
+      @Inject(ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR)
+      private adicionarValidators: AddItemPedidoValidator[],
+      @Inject(ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR)
+      private editarValidators: EditarItemPedidoValidator[],
    ) {}
 
    async save(item: ItemPedido): Promise<ItemPedido> {
-      for (const validator of this.validators) {
-         await validator.validate(item);
-      }
+      await this.validate(this.adicionarValidators, item);
 
       return await this.repository.save(item).catch((error) => {
          this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
@@ -29,8 +30,18 @@ export class ItemPedidoService implements IService<ItemPedido> {
       });
    }
 
-   edit(): Promise<ItemPedido> {
-      throw new ServiceException(`Método não implementado.`);
+   async edit(item: ItemPedido): Promise<ItemPedido> {
+      await this.validate(this.editarValidators, item);
+
+      return await this.repository
+         .edit(item)
+         .then((itemEditado) => itemEditado)
+         .catch((error) => {
+            this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
+            throw new ServiceException(
+               `Houve um erro ao editar o item: ${item.produtoId} ao pedido: ${item.pedidoId} - ${error}`,
+            );
+         });
    }
 
    delete(): Promise<boolean> {
@@ -39,5 +50,11 @@ export class ItemPedidoService implements IService<ItemPedido> {
 
    findById(): Promise<ItemPedido> {
       throw new ServiceException('Método não implementado.');
+   }
+
+   private async validate(validators: IValidator<ItemPedido>[], cliente: ItemPedido): Promise<void> {
+      for (const validator of validators) {
+         await validator.validate(cliente);
+      }
    }
 }

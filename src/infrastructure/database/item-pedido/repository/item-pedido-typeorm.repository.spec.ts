@@ -13,6 +13,8 @@ describe('ItemPedidoTypeormRepository', () => {
    let repository: IRepository<ItemPedido>;
    let repositoryTypeOrm: Repository<ItemPedidoEntity>;
 
+   const { IREPOSITORY, REPOSITORY_ENTITY } = ItemPedidoConstants;
+
    const mockedItemPedido: ItemPedido = {
       pedidoId: 1,
       produtoId: 1,
@@ -32,20 +34,21 @@ describe('ItemPedidoTypeormRepository', () => {
          providers: [
             //  IRepository<Pedido> provider
             {
-               provide: ItemPedidoConstants.IREPOSITORY,
-               inject: [ItemPedidoConstants.REPOSITORY_ENTITY],
+               provide: IREPOSITORY,
+               inject: [REPOSITORY_ENTITY],
                useFactory: (repositoryTypeOrm: Repository<ItemPedidoEntity>): IRepository<ItemPedido> => {
                   return new ItemPedidoTypeormRepository(repositoryTypeOrm);
                },
             },
             // Mock do serviço Repository<PedidoEntity>
             {
-               provide: ItemPedidoConstants.REPOSITORY_ENTITY,
+               provide: REPOSITORY_ENTITY,
                useValue: {
                   save: jest.fn(),
                   findBy: jest.fn(),
                   edit: jest.fn(),
                   delete: jest.fn(),
+                  update: jest.fn(),
                },
             },
          ],
@@ -55,8 +58,8 @@ describe('ItemPedidoTypeormRepository', () => {
       module.useLogger(false);
 
       // Obtém a instância dos repositórios
-      repository = module.get<IRepository<ItemPedido>>(ItemPedidoConstants.IREPOSITORY);
-      repositoryTypeOrm = module.get<Repository<ItemPedidoEntity>>(ItemPedidoConstants.REPOSITORY_ENTITY);
+      repository = module.get<IRepository<ItemPedido>>(IREPOSITORY);
+      repositoryTypeOrm = module.get<Repository<ItemPedidoEntity>>(REPOSITORY_ENTITY);
    });
 
    describe('Injeção de dependências', () => {
@@ -121,7 +124,10 @@ describe('ItemPedidoTypeormRepository', () => {
             ...itemPedidoEntity,
             quantidade: 3,
          };
-         const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(itemPedidoEditarEntity);
+
+         const typeOrmEdicaoReturn = { generatedMaps: [], raw: [], affected: 1 };
+
+         const repositorySaveSpy = jest.spyOn(repositoryTypeOrm, 'update').mockResolvedValue(typeOrmEdicaoReturn);
 
          await repository.edit(itemPedidoEditarEntity).then((pedidoEditado) => {
             expect(pedidoEditado.quantidade).toEqual(3);
@@ -132,7 +138,7 @@ describe('ItemPedidoTypeormRepository', () => {
 
       it('não deve editar item do pedido quando houver um erro de banco ', async () => {
          const error = new TypeORMError('Erro genérico do TypeORM');
-         jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
+         jest.spyOn(repositoryTypeOrm, 'update').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada infra
          await expect(repository.edit(mockedItemPedido)).rejects.toThrowError(RepositoryException);

@@ -11,6 +11,8 @@ describe('ItemPedidoController', () => {
    let controller: ItemPedidoController;
    let service: IService<ItemPedido>;
 
+   const { ISERVICE } = ItemPedidoConstants;
+
    const novoItem: SalvarItemPedidoRequest = {
       pedidoId: 1,
       produtoId: 1,
@@ -24,6 +26,11 @@ describe('ItemPedidoController', () => {
       quantidade: 1,
    };
 
+   const itemParaEdicao: ItemPedido = {
+      ...itemPedido,
+      quantidade: 10,
+   };
+
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
@@ -31,11 +38,12 @@ describe('ItemPedidoController', () => {
          providers: [
             // Mock do serviço IService<ItemPedido>
             {
-               provide: ItemPedidoConstants.ISERVICE,
+               provide: ISERVICE,
                useValue: {
                   save: jest.fn((request) =>
                      request ? Promise.resolve(itemPedido) : Promise.reject(new Error('error')),
                   ),
+                  edit: jest.fn((request) => (request ? Promise.resolve(itemParaEdicao) : Promise.resolve(undefined))),
                   findById: jest.fn((id) =>
                      id === itemPedido.id ? Promise.resolve(itemPedido) : Promise.resolve(undefined),
                   ),
@@ -49,7 +57,7 @@ describe('ItemPedidoController', () => {
 
       // Obtém a instância do controller e do serviço a partir do módulo de teste
       controller = module.get<ItemPedidoController>(ItemPedidoController);
-      service = module.get<IService<ItemPedido>>(ItemPedidoConstants.ISERVICE);
+      service = module.get<IService<ItemPedido>>(ISERVICE);
    });
 
    describe('injeção de dependências', () => {
@@ -65,6 +73,16 @@ describe('ItemPedidoController', () => {
 
          expect(service.save).toHaveBeenCalledWith(novoItem);
          expect(result).toEqual(itemPedido);
+      });
+   });
+
+   describe('editar', () => {
+      const { id, ...dadosDeItemParaEdicao } = itemParaEdicao;
+
+      it('deve editar um item ao pedido', async () => {
+         const result = await controller.editar(id, dadosDeItemParaEdicao);
+
+         expect(result).toEqual(itemParaEdicao);
       });
    });
 

@@ -9,14 +9,20 @@ import { IRepository } from 'src/domain/repository/repository';
 import { ItemPedidoService } from './item-pedido.service';
 import { ItemPedidoConstants } from 'src/shared/constants';
 import { SalvarItemPedidoRequest } from 'src/application/web/item-pedido/request';
-import { AddItemPedidoValidator, QuantidadeMinimaItemValidator } from '../validation';
+import {
+   AddItemPedidoValidator,
+   EditarItemPedidoValidator,
+   QuantidadeMinimaItemValidator,
+   ItemPedidoExistenteValidator,
+} from '../validation';
+import { ValidationException } from 'src/domain/exception/validation.exception';
 
 describe('ItemPedidoService', () => {
    let service: IService<ItemPedido>;
    let repository: IRepository<ItemPedido>;
    let validators: AddItemPedidoValidator[];
 
-   const { ISERVICE, IREPOSITORY, ADD_ITEM_PEDIDO_VALIDATOR } = ItemPedidoConstants;
+   const { ISERVICE, IREPOSITORY, ADD_ITEM_PEDIDO_VALIDATOR, EDITAR_ITEM_PEDIDO_VALIDATOR } = ItemPedidoConstants;
 
    const itemPedido: ItemPedido = {
       id: 1,
@@ -25,18 +31,26 @@ describe('ItemPedidoService', () => {
       quantidade: 1,
    };
 
+   const itemPedidoEditado: ItemPedido = {
+      id: 1,
+      pedidoId: 1,
+      produtoId: 1,
+      quantidade: 10,
+   };
+
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             {
                provide: ISERVICE,
-               inject: [IREPOSITORY, ADD_ITEM_PEDIDO_VALIDATOR],
+               inject: [IREPOSITORY, ADD_ITEM_PEDIDO_VALIDATOR, EDITAR_ITEM_PEDIDO_VALIDATOR],
                useFactory: (
                   repository: IRepository<ItemPedido>,
-                  addItemPedidoValidator: AddItemPedidoValidator[],
+                  adicionarValidators: AddItemPedidoValidator[],
+                  editarValidators: EditarItemPedidoValidator[],
                ): IService<ItemPedido> => {
-                  return new ItemPedidoService(repository, addItemPedidoValidator);
+                  return new ItemPedidoService(repository, adicionarValidators, editarValidators);
                },
             },
             {
@@ -46,7 +60,7 @@ describe('ItemPedidoService', () => {
                   findBy: jest.fn(() => {
                      return Promise.resolve({});
                   }),
-                  edit: jest.fn(() => Promise.resolve(itemPedido)),
+                  edit: jest.fn(() => Promise.resolve(itemPedidoEditado)),
                   delete: jest.fn(() => Promise.resolve(true)),
                },
             },
@@ -55,6 +69,13 @@ describe('ItemPedidoService', () => {
                inject: [IREPOSITORY],
                useFactory: (): AddItemPedidoValidator[] => {
                   return [new QuantidadeMinimaItemValidator()];
+               },
+            },
+            {
+               provide: EDITAR_ITEM_PEDIDO_VALIDATOR,
+               inject: [IREPOSITORY],
+               useFactory: (repository: IRepository<ItemPedido>): EditarItemPedidoValidator[] => {
+                  return [new ItemPedidoExistenteValidator(repository)];
                },
             },
          ],
@@ -104,12 +125,31 @@ describe('ItemPedidoService', () => {
    });
 
    describe('edit', () => {
-      it('editar deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(service.edit(itemPedido));
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
+      it('deve EDITAR o produto', async () => {
+         jest.spyOn(repository, 'findBy').mockResolvedValue([itemPedido]);
+
+         await service.edit({ ...itemPedido, quantidade: 10 }).then((itemAdicionado) => {
+            expect(itemAdicionado.quantidade).toEqual(10);
+         });
+      });
+
+      it('nao deve EDITAR item quando item nao existir', async () => {
+         jest.spyOn(repository, 'findBy').mockResolvedValue([]);
+
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'edit').mockRejectedValue(error);
+
+         await expect(service.edit(itemPedido)).rejects.toThrowError(ValidationException);
+      });
+
+      it('nao deve EDITAR item quanto houver erro de banco', async () => {
+         jest.spyOn(repository, 'findBy').mockResolvedValue([itemPedido]);
+
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'edit').mockRejectedValue(error);
+
+         // verifiaca se foi lançada uma exception na camada de serviço
+         await expect(service.edit(itemPedido)).rejects.toThrowError(ServiceException);
       });
    });
 
