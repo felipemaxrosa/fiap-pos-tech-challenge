@@ -7,15 +7,15 @@ import { RepositoryException } from 'src/infrastructure/exception/repository.exc
 import { ServiceException } from 'src/domain/exception/service.exception';
 import { EstadoPedido } from '../enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
-import { CriarNovoPedidoRequest } from 'src/application/web/pedido/request/criar-novo-pedido.request';
-import { CriarNovoPedidoValidator } from '../validation/criar-novo-pedido.validator';
+import { SalvarPedidoRequest } from 'src/application/web/pedido/request/salvar-pedido.request';
+import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from '../validation/estado-correto-novo-pedido.validator';
 import { IPedidoService } from './pedido.service.interface';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
    let repository: IRepository<Pedido>;
-   let validators: CriarNovoPedidoValidator[];
+   let validators: SalvarPedidoValidator[];
 
    const pedido: Pedido = {
       id: 1,
@@ -32,10 +32,10 @@ describe('PedidoService', () => {
             //  IService<Pedido> provider
             {
                provide: PedidoConstants.ISERVICE,
-               inject: [PedidoConstants.IREPOSITORY, 'CriarNovoPedidoValidator'],
+               inject: [PedidoConstants.IREPOSITORY, 'SalvarPedidoValidator'],
                useFactory: (
                   repository: IRepository<Pedido>,
-                  criarNovoPedidoValidator: CriarNovoPedidoValidator[],
+                  criarNovoPedidoValidator: SalvarPedidoValidator[],
                ): IPedidoService => {
                   return new PedidoService(repository, criarNovoPedidoValidator);
                },
@@ -58,11 +58,11 @@ describe('PedidoService', () => {
                   delete: jest.fn(() => Promise.resolve(true)),
                },
             },
-            // Mock do CriarNovoPedidoValidator
+            // Mock do SalvarPedidoValidator
             {
-               provide: 'CriarNovoPedidoValidator',
+               provide: 'SalvarPedidoValidator',
                inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (): CriarNovoPedidoValidator[] => {
+               useFactory: (): SalvarPedidoValidator[] => {
                   return [new EstadoCorretoNovoPedidoValidator()];
                },
             },
@@ -74,7 +74,7 @@ describe('PedidoService', () => {
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
       repository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
-      validators = module.get<CriarNovoPedidoValidator[]>('CriarNovoPedidoValidator');
+      validators = module.get<SalvarPedidoValidator[]>('SalvarPedidoValidator');
       service = module.get<IPedidoService>(PedidoConstants.ISERVICE);
    });
 
@@ -87,7 +87,7 @@ describe('PedidoService', () => {
 
    describe('save', () => {
       it('deve CRIAR novo pedido', async () => {
-         const novoPedido: CriarNovoPedidoRequest = {
+         const novoPedido: SalvarPedidoRequest = {
             clienteId: 1,
             dataInicio: '2023-06-18',
             estadoPedido: EstadoPedido.RECEBIDO,

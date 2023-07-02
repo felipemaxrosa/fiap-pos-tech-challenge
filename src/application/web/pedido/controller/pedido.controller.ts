@@ -1,28 +1,37 @@
 import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, Post } from '@nestjs/common';
-import { ApiConsumes, ApiCreatedResponse, ApiProduces, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { CriarNovoPedidoRequest } from '../request';
 import { PedidoConstants } from 'src/shared/constants';
 import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 import { IPedidoService } from 'src/domain/pedido/service/pedido.service.interface';
+import { BaseController } from '../../base.controller';
+import { SalvarPedidoRequest } from '../request';
+import { SalvarPedidoResponse } from '../response/salvar-pedido.response';
 
 @Controller('v1/pedido')
 @ApiTags('Pedido')
-@ApiConsumes('application/json')
-@ApiProduces('application/json')
-export class PedidoController {
+export class PedidoController extends BaseController{
    private logger: Logger = new Logger(PedidoController.name);
 
-   constructor(@Inject(PedidoConstants.ISERVICE) private service: IPedidoService) {}
+   constructor(@Inject(PedidoConstants.ISERVICE) private service: IPedidoService) {super()}
 
    @Post()
-   @ApiCreatedResponse({ description: 'Pedido gerado com sucesso' })
-   async salvar(@Body() novoPedido: CriarNovoPedidoRequest): Promise<Pedido> {
+   @ApiOperation({
+      summary: 'Adiciona um novo pedido',
+      description: 'Adiciona um novo pedido para o cliente, contendo o identificador do cliente, a data de início do pedido, o estado e indicador se é um pedido ativo',
+   })
+   @ApiCreatedResponse({ description: 'Pedido gerado com sucesso', type: SalvarPedidoResponse})
+   async salvar(@Body() novoPedido: SalvarPedidoRequest): Promise<Pedido> {
       this.logger.debug(`Criando Novo Pedido Request: ${JSON.stringify(novoPedido)}`);
-      return await this.service.save(novoPedido).then((pedidoCriado) => {
+      return await this.service.save({
+         clienteId: novoPedido.clienteId,
+         dataInicio: novoPedido.dataInicio,
+         estadoPedido: novoPedido.estadoPedido,
+         ativo: novoPedido.ativo
+      }).then((pedidoCriado) => {
          this.logger.log(`Pedido gerado com sucesso: ${pedidoCriado.id}}`);
-         return pedidoCriado;
+         return new SalvarPedidoResponse(pedidoCriado);
       });
    }
 
