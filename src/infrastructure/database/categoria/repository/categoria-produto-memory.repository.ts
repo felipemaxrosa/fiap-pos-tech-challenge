@@ -6,7 +6,6 @@ import { CategoriaProduto } from '../../../../domain/categoria/model/categoria-p
 
 @Injectable()
 export class CategoriaProdutoMemoryRepository implements IRepository<CategoriaProduto> {
-
    private repository: Array<CategoriaProduto> = [
       { id: 1, nome: 'Lanche' },
       { id: 2, nome: 'Acompanhamento' },
