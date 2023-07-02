@@ -52,7 +52,7 @@ export class ItemPedidoTypeormRepository implements IRepository<ItemPedido> {
          });
    }
 
-   async edit(itemPedido: ItemPedidoEntity): Promise<ItemPedido> {
+   async edit(itemPedido: ItemPedido): Promise<ItemPedido> {
       this.logger.debug(`Editando item do pedido: ${itemPedido}`);
       const { id, ...itemParaEdicao } = itemPedido;
 
