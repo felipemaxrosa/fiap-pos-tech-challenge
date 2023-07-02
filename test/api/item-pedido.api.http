@@ -7,3 +7,13 @@ Content-Type: application/json
    "produtoId": 1,
    "quantidade": 1 
 }
+
+### Edita um item do pedido
+PUT http://localhost:3000/v1/item/4
+Content-Type: application/json
+
+{
+   "pedidoId": 1,
+   "produtoId": 1,
+   "quantidade": 10
+}

@@ -32,6 +32,7 @@ export class ItemPedidoService implements IService<ItemPedido> {
 
    async edit(item: ItemPedido): Promise<ItemPedido> {
       await this.validate(this.editarValidators, item);
+      await this.validate(this.adicionarValidators, item);
 
       return await this.repository
          .edit(item)
