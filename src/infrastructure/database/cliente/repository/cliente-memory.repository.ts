@@ -17,7 +17,7 @@ export class ClienteMemoryRepository implements IRepository<Cliente> {
          resolve(
             this.repository.filter((cliente) => {
                return Object.entries(attributes).every(([key, value]) => {
-                  return cliente[key] == value;
+                  return cliente[key] === value;
                });
             }),
          );

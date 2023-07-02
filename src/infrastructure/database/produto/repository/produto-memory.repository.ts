@@ -25,7 +25,7 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
          resolve(
             this.repository.filter((produto) => {
                return Object.entries(attributesWithConvertedIds).every(([key, value]) => {
-                  return produto[key] == value;
+                  return produto[key] === value;
                });
             }),
          );
