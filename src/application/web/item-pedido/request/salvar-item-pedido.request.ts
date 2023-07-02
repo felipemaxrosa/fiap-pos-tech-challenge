@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsInt } from 'class-validator';
 
-export class AddItemPedidoRequest {
+export class SalvarItemPedidoRequest {
    @ApiProperty({ required: true, nullable: false, description: 'ID do pedido' })
    @IsNotEmpty({ message: 'ID do pedido não pode ser vazio' })
    @IsInt({ message: 'ID do pedido deve ser válido' })

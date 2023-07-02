@@ -3,16 +3,16 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 
 import { MainModule } from '../../src/main.module';
-import { AddItemPedidoRequest } from 'src/application/web/item-pedido/request';
-import { ItemPedido } from 'src/domain/item-pedido/model';
+import { SalvarItemPedidoRequest } from 'src/application/web/item-pedido/request';
+import { SalvarItemPedidoResponse } from 'src/application/web/item-pedido/request/salvar-item-pedido.response';
 
 describe('ItemPedidoController (e2e)', () => {
    let app: INestApplication;
-   let addItemPedidoRequest: AddItemPedidoRequest;
-   let itemPedido: ItemPedido;
+   let salvarItemPedidoRequest: SalvarItemPedidoRequest;
+   let itemPedido: SalvarItemPedidoResponse;
 
    beforeEach(() => {
-      addItemPedidoRequest = {
+      salvarItemPedidoRequest = {
          pedidoId: 1,
          produtoId: 1,
          quantidade: 1,
@@ -51,12 +51,12 @@ describe('ItemPedidoController (e2e)', () => {
       return await request(app.getHttpServer())
          .post('/v1/item')
          .set('Content-type', 'application/json')
-         .send(addItemPedidoRequest)
+         .send(salvarItemPedidoRequest)
          .then((response) => {
             expect(response.status).toEqual(201);
             expect(response.body).toEqual(itemPedido);
             expect(response.body).toHaveProperty('id');
-            expect(response.body.pedidoId).toEqual(addItemPedidoRequest.pedidoId);
+            expect(response.body.pedidoId).toEqual(salvarItemPedidoRequest.pedidoId);
          });
    });
 });

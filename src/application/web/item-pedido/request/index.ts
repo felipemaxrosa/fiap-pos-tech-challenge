@@ -1,1 +1,1 @@
-export * from './add-item-pedido.request';
+export * from './salvar-item-pedido.request';
