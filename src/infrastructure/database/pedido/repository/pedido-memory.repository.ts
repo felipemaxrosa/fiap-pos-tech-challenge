@@ -18,7 +18,7 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
          resolve(
             this.pedidosRepository.filter((pedido) => {
                return Object.entries(attributes).every(([key, value]) => {
-                  return pedido[key] == value;
+                  return pedido[key] === value;
                });
             }),
          );

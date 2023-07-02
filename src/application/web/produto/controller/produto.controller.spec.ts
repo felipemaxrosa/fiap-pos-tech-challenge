@@ -4,6 +4,7 @@ import { Produto } from 'src/domain/produto/model/produto.model';
 import { SalvarProdutoRequest } from '../request/salvar-produto.request';
 import { EditarProdutoRequest } from '../request/editar-produto.request';
 import { IProdutoService } from 'src/domain/produto/service/produto.service.interface';
+import { SalvarProdutoResponse } from '../response/salvar-produto.response';
 
 describe('ProdutoController', () => {
    let controller: ProdutoController;
@@ -20,7 +21,7 @@ describe('ProdutoController', () => {
    };
 
    // Define um objeto de produto esperado como resultado de salvar
-   const produtoSalvar: Produto = {
+   const produtoSalvar: SalvarProdutoResponse = {
       id: 1,
       nome: salvarProdutoRequest.nome,
       idCategoriaProduto: 1,
