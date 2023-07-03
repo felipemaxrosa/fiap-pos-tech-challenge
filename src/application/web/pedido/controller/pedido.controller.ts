@@ -120,7 +120,7 @@ export class PedidoController extends BaseController {
       this.logger.debug(`Listando pedidos pendentes`);
 
       return await this.service.listarPedidosPendentes().then((pedidos) => {
-         return pedidos.map((pedido) => new BuscarTodosPorEstadoPedidoResponse(pedido));
+         return pedidos.map((pedido) => new ListarPedidoPendenteResponse(pedido));
       });
    }
 }
