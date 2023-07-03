@@ -11,6 +11,7 @@ import { SalvarPedidoResponse } from '../response/salvar-pedido.response';
 import { BuscarPorIdEstadoPedidoResponse } from '../response/buscar-por-id-estado-pedido.response';
 import { BuscarPorIdPedidoResponse } from '../response/buscar-por-id-pedido.response';
 import { BuscarTodosPorEstadoPedidoResponse } from '../response/buscar-todos-por-estado-pedido.response';
+import { ListarPedidoPendenteResponse } from '../response/listar-pedido-pendente-response';
 
 @Controller('v1/pedido')
 @ApiTags('Pedido')
@@ -102,6 +103,24 @@ export class PedidoController extends BaseController {
 
          this.logger.debug(`Pedidos com estado: ${estado} não encontrados`);
          throw new NotFoundException(`Pedidos com estado: ${estado} não encontrados`);
+      });
+   }
+
+   @Get('pendentes')
+   @ApiOperation({
+      summary: 'Lista pedidos pendentes',
+      description: 'Lista pedidos com status recebido ou em preparo'
+   })
+   @ApiOkResponse({
+      description: 'Pedidos encontrados com sucesso',
+      type: ListarPedidoPendenteResponse,
+      isArray: true,
+   })
+   async listarPendentes(): Promise<ListarPedidoPendenteResponse[]> {
+      this.logger.debug(`Listando pedidos pendentes`);
+
+      return await this.service.listarPedidosPendentes().then((pedidos) => {
+         return pedidos.map((pedido) => new BuscarTodosPorEstadoPedidoResponse(pedido));
       });
    }
 }
