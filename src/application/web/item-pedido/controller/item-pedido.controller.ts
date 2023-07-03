@@ -1,5 +1,5 @@
-import { Body, Controller, Inject, Logger, Post, Put, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Inject, Logger, Post, Put, Delete, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
 import { ItemPedidoConstants } from '../../../../shared/constants';
@@ -51,4 +51,21 @@ export class ItemPedidoController extends BaseController {
             return itemPedido;
          });
    }
+
+   @Delete(':id')
+   @ApiOperation({
+      summary: 'Exclui um item do pedido',
+      description: 'Exclui um item de um pedido especificado pelo id',
+   })
+   @ApiOkResponse({ description: 'Item do pedido excluido com sucesso', type: Boolean })
+   async delete(@Param('id', ParseIntPipe) id: number): Promise<boolean> {
+      this.logger.debug(`Excluindo item do pedido id: ${id}`);
+
+      return await this.service
+         .delete(id)
+         .then((result) => {
+            this.logger.log(`Item do pedido excluido com sucesso: ${id}}`);
+            return result;
+         });
+   }   
 }
