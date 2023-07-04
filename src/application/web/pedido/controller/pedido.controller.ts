@@ -44,6 +44,24 @@ export class PedidoController extends BaseController {
          });
    }
 
+   @Get('/pendentes')
+   @ApiOperation({
+      summary: 'Lista pedidos pendentes',
+      description: 'Lista pedidos com status recebido ou em preparo'
+   })
+   @ApiOkResponse({
+      description: 'Pedidos encontrados com sucesso',
+      type: ListarPedidoPendenteResponse,
+      isArray: true,
+   })
+   async listarPendentes(): Promise<ListarPedidoPendenteResponse[]> {
+      this.logger.debug(`Listando pedidos pendentes`);
+
+      return await this.service.listarPedidosPendentes().then((pedidos) => {
+         return pedidos.map((pedido) => new ListarPedidoPendenteResponse(pedido));
+      });
+   }
+   
    @Get(':id')
    @ApiOperation({
       summary: 'Consulta pedido por ID',
@@ -103,24 +121,6 @@ export class PedidoController extends BaseController {
 
          this.logger.debug(`Pedidos com estado: ${estado} não encontrados`);
          throw new NotFoundException(`Pedidos com estado: ${estado} não encontrados`);
-      });
-   }
-
-   @Get('pendentes')
-   @ApiOperation({
-      summary: 'Lista pedidos pendentes',
-      description: 'Lista pedidos com status recebido ou em preparo'
-   })
-   @ApiOkResponse({
-      description: 'Pedidos encontrados com sucesso',
-      type: ListarPedidoPendenteResponse,
-      isArray: true,
-   })
-   async listarPendentes(): Promise<ListarPedidoPendenteResponse[]> {
-      this.logger.debug(`Listando pedidos pendentes`);
-
-      return await this.service.listarPedidosPendentes().then((pedidos) => {
-         return pedidos.map((pedido) => new ListarPedidoPendenteResponse(pedido));
       });
    }
 }
