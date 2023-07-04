@@ -11,6 +11,7 @@ import { SalvarPedidoRequest } from 'src/application/web/pedido/request/salvar-p
 import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from '../validation/estado-correto-novo-pedido.validator';
 import { IPedidoService } from './pedido.service.interface';
+import { IPedidoRepository } from '../repository/pedido.repository.interface';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
@@ -34,7 +35,7 @@ describe('PedidoService', () => {
                provide: PedidoConstants.ISERVICE,
                inject: [PedidoConstants.IREPOSITORY, 'SalvarPedidoValidator'],
                useFactory: (
-                  repository: IRepository<Pedido>,
+                  repository: IPedidoRepository,
                   criarNovoPedidoValidator: SalvarPedidoValidator[],
                ): IPedidoService => {
                   return new PedidoService(repository, criarNovoPedidoValidator);
