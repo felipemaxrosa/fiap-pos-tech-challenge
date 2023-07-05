@@ -33,7 +33,7 @@ describe('PagamentoController (e2e)', () => {
          .post('/v1/pagamento/1')
          .set('Content-type', 'application/json')
          .then((response) => {
-            expect(response.status).toEqual(200);
+            expect(response.status).toEqual(201);
          });
    });
 });
