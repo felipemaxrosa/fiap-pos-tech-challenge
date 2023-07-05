@@ -45,8 +45,11 @@ export class ItemPedidoService implements IService<ItemPedido> {
          });
    }
 
-   delete(): Promise<boolean> {
-      throw new ServiceException('Método não implementado.');
+   async delete(id: number): Promise<boolean> {
+      return await this.repository.delete(id).catch((error) => {
+         this.logger.error(`Erro ao deletar no banco de dados: ${error} `);
+         throw new ServiceException(`Houve um erro ao deletar o item do pedido: ${error}`);
+      });
    }
 
    findById(): Promise<ItemPedido> {

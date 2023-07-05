@@ -7,13 +7,14 @@ import { PedidoConstants } from 'src/shared/constants';
 import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';
 import { IPedidoService } from './pedido.service.interface';
 import { EstadoPedido } from '../enums/pedido';
+import { IPedidoRepository } from '../repository/pedido.repository.interface';
 
 @Injectable()
 export class PedidoService implements IPedidoService {
    private logger = new Logger(PedidoService.name);
 
    constructor(
-      @Inject(PedidoConstants.IREPOSITORY) private repository: IRepository<Pedido>,
+      @Inject(PedidoConstants.IREPOSITORY) private repository: IPedidoRepository,
       @Inject('SalvarPedidoValidator')
       private validators: SalvarPedidoValidator[],
    ) {}
@@ -87,6 +88,15 @@ export class PedidoService implements IPedidoService {
       const pedidos = await this.repository.findBy({ estadoPedido: estado }).catch((error) => {
          this.logger.error(`Erro ao buscar produtos com estadoPedido=${estado} no banco de dados: ${error}`);
          throw new ServiceException(`Erro ao buscar produtos com estadoPedido=${estado} no banco de dados: ${error}`);
+      });
+
+      return pedidos;
+   }
+
+   async listarPedidosPendentes(): Promise<Pedido[]> {
+      const pedidos = await this.repository.listarPedidosPendentes().catch((error) => {
+         this.logger.error(`Erro ao buscar pedidos pendentes no banco de dados: ${error}`);
+         throw new ServiceException(`Erro ao buscar pedidos pendentes no banco de dados: ${error}`);
       });
 
       return pedidos;
