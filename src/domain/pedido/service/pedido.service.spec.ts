@@ -15,7 +15,7 @@ import { IPedidoRepository } from '../repository/pedido.repository.interface';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
-   let repository: IRepository<Pedido>;
+   let repository: IPedidoRepository;
    let validators: SalvarPedidoValidator[];
 
    const pedido: Pedido = {
@@ -23,6 +23,14 @@ describe('PedidoService', () => {
       clienteId: 1,
       dataInicio: '2023-06-18',
       estadoPedido: EstadoPedido.RECEBIDO,
+      ativo: true,
+   };
+
+   const pedidoPendente: Pedido = {
+      id: 2,
+      clienteId: 2,
+      dataInicio: '2023-06-20',
+      estadoPedido: EstadoPedido.EM_PREPARO,
       ativo: true,
    };
 
@@ -57,6 +65,7 @@ describe('PedidoService', () => {
                   edit: jest.fn(() => Promise.resolve(pedido)),
                   // mock para a chamada repository.delete(id)
                   delete: jest.fn(() => Promise.resolve(true)),
+                  listarPedidosPendentes: jest.fn(() => Promise.resolve([pedidoPendente])),
                },
             },
             // Mock do SalvarPedidoValidator
@@ -74,7 +83,7 @@ describe('PedidoService', () => {
       module.useLogger(false);
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
-      repository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
+      repository = module.get<IPedidoRepository>(PedidoConstants.IREPOSITORY);
       validators = module.get<SalvarPedidoValidator[]>('SalvarPedidoValidator');
       service = module.get<IPedidoService>(PedidoConstants.ISERVICE);
    });
@@ -250,6 +259,21 @@ describe('PedidoService', () => {
 
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.findAllByEstadoDoPedido(EstadoPedido.FINALIZADO)).rejects.toThrowError(ServiceException);
+      });
+   });
+
+   describe('listarPedidosPendentes', () => {
+      it('deve listar pedidos pendentes', async () => {
+         await service.listarPedidosPendentes().then((pedidos) => {
+            expect(pedidos).toEqual([pedidoPendente]);
+         });
+      });
+
+      it('não deve encontrar pedido pendente quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'listarPedidosPendentes').mockRejectedValue(error);
+
+         await expect(service.listarPedidosPendentes()).rejects.toThrowError(ServiceException);
       });
    });
 });

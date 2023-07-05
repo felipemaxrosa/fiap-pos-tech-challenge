@@ -93,22 +93,15 @@ export class PedidoTypeormRepository implements IPedidoRepository {
    async listarPedidosPendentes(): Promise<Pedido[]> {
       this.logger.debug('Listando pedidos pendentes');
 
-      return this.repository.find({
-         where: [
-             { estadoPedido: EstadoPedido.RECEBIDO },
-             { estadoPedido: EstadoPedido.EM_PREPARO },
-         ]
-       })
-       .then((pedidoEntities) => {
-         return pedidoEntities.map((pedido) => pedido);
-      })
-      .catch((error) => {
-         throw new RepositoryException(
-            `Houve um erro ao listar pedidos pendentes: ${
-               error.message
-            }`
-         );
-      });
+      return this.repository
+         .find({
+            where: [{ estadoPedido: EstadoPedido.RECEBIDO }, { estadoPedido: EstadoPedido.EM_PREPARO }],
+         })
+         .then((pedidoEntities) => {
+            return pedidoEntities.map((pedido) => pedido);
+         })
+         .catch((error) => {
+            throw new RepositoryException(`Houve um erro ao listar pedidos pendentes: ${error.message}`);
+         });
    }
-
 }

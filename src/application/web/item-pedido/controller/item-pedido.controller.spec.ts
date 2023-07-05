@@ -47,6 +47,7 @@ describe('ItemPedidoController', () => {
                   findById: jest.fn((id) =>
                      id === itemPedido.id ? Promise.resolve(itemPedido) : Promise.resolve(undefined),
                   ),
+                  delete: jest.fn((request) => Promise.resolve(true)),
                },
             },
          ],
@@ -73,6 +74,15 @@ describe('ItemPedidoController', () => {
 
          expect(service.save).toHaveBeenCalledWith(novoItem);
          expect(result).toEqual(itemPedido);
+      });
+   });
+
+   describe('delete', () => {
+      it('deve deletar um item ao pedido', async () => {
+         const result = await controller.delete(itemPedido.id);
+
+         expect(service.delete).toHaveBeenCalledWith(itemPedido.id);
+         expect(result).toBeTruthy();
       });
    });
 

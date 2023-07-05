@@ -47,7 +47,7 @@ export class PedidoController extends BaseController {
    @Get('/pendentes')
    @ApiOperation({
       summary: 'Lista pedidos pendentes',
-      description: 'Lista pedidos com status recebido ou em preparo'
+      description: 'Lista pedidos com status recebido ou em preparo',
    })
    @ApiOkResponse({
       description: 'Pedidos encontrados com sucesso',
@@ -61,7 +61,7 @@ export class PedidoController extends BaseController {
          return pedidos.map((pedido) => new ListarPedidoPendenteResponse(pedido));
       });
    }
-   
+
    @Get(':id')
    @ApiOperation({
       summary: 'Consulta pedido por ID',

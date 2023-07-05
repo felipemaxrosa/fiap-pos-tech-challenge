@@ -59,11 +59,10 @@ export class PedidoMemoryRepository implements IPedidoRepository {
       this.logger.debug('Listando pedidos pendentes');
 
       return new Promise<Pedido[]>((resolve) => {
-         const pedidos = this.pedidosRepository
-            .filter((item) => 
-               item.estadoPedido === EstadoPedido.RECEBIDO || 
-               item.estadoPedido === EstadoPedido.EM_PREPARO);
+         const pedidos = this.pedidosRepository.filter(
+            (item) => item.estadoPedido === EstadoPedido.RECEBIDO || item.estadoPedido === EstadoPedido.EM_PREPARO,
+         );
          resolve(pedidos);
       });
-   }   
+   }
 }

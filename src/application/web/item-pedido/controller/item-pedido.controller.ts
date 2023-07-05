@@ -61,11 +61,9 @@ export class ItemPedidoController extends BaseController {
    async delete(@Param('id', ParseIntPipe) id: number): Promise<boolean> {
       this.logger.debug(`Excluindo item do pedido id: ${id}`);
 
-      return await this.service
-         .delete(id)
-         .then((result) => {
-            this.logger.log(`Item do pedido excluido com sucesso: ${id}}`);
-            return result;
-         });
-   }   
+      return await this.service.delete(id).then((result) => {
+         this.logger.log(`Item do pedido excluido com sucesso: ${id}}`);
+         return result;
+      });
+   }
 }

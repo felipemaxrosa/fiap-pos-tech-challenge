@@ -155,11 +155,7 @@ describe('ItemPedidoService', () => {
 
    describe('delete', () => {
       it('deletar deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(service.delete(1));
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
+         await service.delete(itemPedido.id).then((result) => expect(result).toBeTruthy());
       });
    });
 
@@ -170,6 +166,13 @@ describe('ItemPedidoService', () => {
          } catch (error) {
             expect(error.message).toEqual('Método não implementado.');
          }
+      });
+
+      it('nao deve deletar item quanto houver erro de banco', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'delete').mockRejectedValue(error);
+
+         await expect(service.delete(itemPedido.id)).rejects.toThrowError(ServiceException);
       });
    });
 });
