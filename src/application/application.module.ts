@@ -12,6 +12,7 @@ import { GeneralHttpExceptionHandler } from './web/handler/general-http-exceptio
 import { ProdutoController } from './web/produto/controller/produto.controller';
 import { CategoriaProdutoController } from './web/categoria/controller/categoria-produto.controller';
 import { ItemPedidoController } from './web/item-pedido/controller/item-pedido.controller';
+import { PagamentoController } from './web/pagamento/controller/pagamento.controller';
 
 @Module({
    imports: [InfrastructureModule, DomainModule],
@@ -27,6 +28,7 @@ import { ItemPedidoController } from './web/item-pedido/controller/item-pedido.c
       ItemPedidoController,
       ProdutoController,
       CategoriaProdutoController,
+      PagamentoController,
    ],
 })
 export class ApplicationModule {}
