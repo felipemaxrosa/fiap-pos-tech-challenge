@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from '../../../../domain/pedido/model/pedido.model';
-import { IRepository } from '../../../../domain/repository/repository';
 import { RepositoryException } from '../../../exception/repository.exception';
+import { IPedidoRepository } from 'src/domain/pedido/repository/pedido.repository.interface';
+import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 
 @Injectable()
-export class PedidoMemoryRepository implements IRepository<Pedido> {
+export class PedidoMemoryRepository implements IPedidoRepository {
    private logger: Logger = new Logger(PedidoMemoryRepository.name);
 
    private pedidosRepository: Array<Pedido> = [];
@@ -52,5 +53,16 @@ export class PedidoMemoryRepository implements IRepository<Pedido> {
 
    findAll(): Promise<Pedido[]> {
       throw new RepositoryException('Método não implementado.');
+   }
+
+   async listarPedidosPendentes(): Promise<Pedido[]> {
+      this.logger.debug('Listando pedidos pendentes');
+
+      return new Promise<Pedido[]>((resolve) => {
+         const pedidos = this.pedidosRepository.filter(
+            (item) => item.estadoPedido === EstadoPedido.RECEBIDO || item.estadoPedido === EstadoPedido.EM_PREPARO,
+         );
+         resolve(pedidos);
+      });
    }
 }

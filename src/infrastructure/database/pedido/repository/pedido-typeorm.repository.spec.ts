@@ -8,9 +8,10 @@ import { PedidoTypeormRepository } from './pedido-typeorm.repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 import { PedidoConstants } from 'src/shared/constants';
+import { IPedidoRepository } from 'src/domain/pedido/repository/pedido.repository.interface';
 
 describe('PedidoTypeormRepository', () => {
-   let repository: IRepository<Pedido>;
+   let repository: IPedidoRepository;
    let repositoryTypeOrm: Repository<PedidoEntity>;
 
    const mockedPedido: Pedido = {
@@ -46,6 +47,7 @@ describe('PedidoTypeormRepository', () => {
                provide: PedidoConstants.REPOSITORY_PEDIDO_ENTITY,
                useValue: {
                   save: jest.fn(),
+                  find: jest.fn(),
                   findBy: jest.fn(),
                   edit: jest.fn(),
                   delete: jest.fn(),
@@ -58,7 +60,7 @@ describe('PedidoTypeormRepository', () => {
       module.useLogger(false);
 
       // Obtém a instância dos repositórios
-      repository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
+      repository = module.get<IPedidoRepository>(PedidoConstants.IREPOSITORY);
       repositoryTypeOrm = module.get<Repository<PedidoEntity>>(PedidoConstants.REPOSITORY_PEDIDO_ENTITY);
    });
 
@@ -227,6 +229,21 @@ describe('PedidoTypeormRepository', () => {
          } catch (error) {
             expect(error.message).toEqual('Método não implementado.');
          }
+      });
+   });
+
+   describe('listarPedidosPendentes', () => {
+      it('deve listar pedidos pendentes', async () => {
+         jest.spyOn(repositoryTypeOrm, 'find').mockResolvedValue([pedidoEntity]);
+
+         await repository.listarPedidosPendentes().then((pedidos) => expect(pedidos).toEqual([pedidoEntity]));
+      });
+
+      it('não deve listar pedido pendentes quando houver um erro de banco ', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'find').mockRejectedValue(error);
+
+         await expect(repository.listarPedidosPendentes()).rejects.toThrowError(RepositoryException);
       });
    });
 });

@@ -9,6 +9,14 @@ describe('PedidoController', () => {
    let controller: PedidoController;
    let service: IPedidoService;
 
+   const pedido = {
+      clienteId: 1,
+      dataInicio: '2020-01-01',
+      estadoPedido: EstadoPedido.EM_PREPARO,
+      ativo: true,
+      id: 1,
+   };
+
    const salvarPedidoRequest = {
       clienteId: 1,
       dataInicio: '2023-06-18',
@@ -44,6 +52,7 @@ describe('PedidoController', () => {
                   findAllByEstadoDoPedido: jest.fn((estado) =>
                      Promise.resolve([salvarPedidoResponse].filter((pedido) => pedido.estadoPedido === estado)),
                   ),
+                  listarPedidosPendentes: jest.fn(() => Promise.resolve([pedido])),
                },
             },
          ],
@@ -113,6 +122,21 @@ describe('PedidoController', () => {
          const result = await controller.findByIdEstadoDoPedido(salvarPedidoResponse.id);
 
          expect(result).toEqual({ estadoPedido: salvarPedidoResponse.estadoPedido });
+      });
+
+      it('não deve encontrar o pedido', async () => {
+         await controller.findByIdEstadoDoPedido(2).catch((error) => {
+            expect(error.message).toEqual(`Pedido não encontrado: ${2}`);
+            expect(error.status).toEqual(404);
+         });
+      });
+   });
+
+   describe('listarPendentes', () => {
+      it('deve listar pedidos pendentes', async () => {
+         const result = await controller.listarPendentes();
+
+         expect(result).toEqual([pedido]);
       });
 
       it('não deve encontrar o pedido', async () => {

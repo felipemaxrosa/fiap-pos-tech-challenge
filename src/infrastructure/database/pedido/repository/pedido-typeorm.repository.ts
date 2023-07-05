@@ -3,12 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { IRepository } from 'src/domain/repository/repository';
 import { PedidoEntity } from '../../pedido/entity/pedido.entity';
 import { RepositoryException } from '../../../exception/repository.exception';
+import { IPedidoRepository } from 'src/domain/pedido/repository/pedido.repository.interface';
+import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 
 @Injectable()
-export class PedidoTypeormRepository implements IRepository<Pedido> {
+export class PedidoTypeormRepository implements IPedidoRepository {
    private logger = new Logger(PedidoTypeormRepository.name);
 
    constructor(
@@ -87,5 +88,20 @@ export class PedidoTypeormRepository implements IRepository<Pedido> {
 
    findAll(): Promise<Pedido[]> {
       throw new RepositoryException('Método não implementado.');
+   }
+
+   async listarPedidosPendentes(): Promise<Pedido[]> {
+      this.logger.debug('Listando pedidos pendentes');
+
+      return this.repository
+         .find({
+            where: [{ estadoPedido: EstadoPedido.RECEBIDO }, { estadoPedido: EstadoPedido.EM_PREPARO }],
+         })
+         .then((pedidoEntities) => {
+            return pedidoEntities.map((pedido) => pedido);
+         })
+         .catch((error) => {
+            throw new RepositoryException(`Houve um erro ao listar pedidos pendentes: ${error.message}`);
+         });
    }
 }
