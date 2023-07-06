@@ -1,7 +1,34 @@
-# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main)
+![Static Badge](https://img.shields.io/badge/backend-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v18.16.0-version?logo=nodedotjs&color=%23339933&labelColor=white&label=Node%2EJS) ![Static Badge](https://img.shields.io/badge/v9.x-version?logo=nestjs&logoColor=gray&color=gray&labelColor=white&label=NestJS) ![Static Badge](https://img.shields.io/badge/v5.x-version?logo=typescript&color=blue&labelColor=white&label=TypeScript)
+
+![Static Badge](https://img.shields.io/badge/database-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v8.X-version?logo=mysql&color=%234169E1&labelColor=white&label=MySQL) ![Static Badge](https://img.shields.io/badge/v9.x-version?logo=typeorm&logoColor=%232D3748&color=%232D3748&labelColor=white&label=TypeORM)
+
+![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker)
+
+# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v1.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da pós gradução em Software Architecture.
 
-###**[TLDR; Execução em modo produção (Avalidação FIAP)](#%EF%B8%8F-execução-em-modo-produção-avalidação-fiap)**
+* [Arquitetura](#arquitetura)
+* [Instalação de Dependências Node](#-instalação-de-dependências-node)
+* [Build da Aplicação](#-build-da-aplicação)
+* [Executando a Aplicação](#%EF%B8%8F-executando-a-aplicação)
+    * [Variáveis de Ambiente](#-variáveis-de-ambiente)
+    * [Execução em modo local (in-memory repository)](#%EF%B8%8F-execução-em-modo-local-in-memory-repository)
+    * [Execução em modo local (mysql repository)](#%EF%B8%8F-execução-em-modo-local-mysql-repository)
+    * [**Execução em modo produção (Avalidação FIAP)**](#%EF%B8%8F-execução-em-modo-produção-avalidação-fiap)
+        * [Docker Compose (Modo Fácil!)](#-docker-compose-modo-fácil)
+        * [Docker (Modo Desbravador!)](#-docker-modo-desbravador)
+* [Documentação da API](#-documentação-da-api)
+* [Testes](#-testes)
+* [Estrutura Base do Projeto](#%EF%B8%8F-estrutura-base-do-projeto)
+* [DDD](#ddd)
+    * [Dicionário de Linguagem Ubíqua](/docs/dicionario-linguagem-ubiqua.md)
+    * [Domain Storytelling](#domain-storytelling)
+        * [Auto Cadastro de Clientes](#auto-cadastro-de-clientes)
+        * [Realização de Pedidos](#realização-de-pedidos)
+        * [Pagamento de Pedidos](#pagamento-de-pedidos)
+        * [Preparo de Pedidos](#preparo-de-pedidos)
+        * [Entrega de Pedidos](#entrega-de-pedidos)
+        * [Fluxo de etapas dos Pedidos](#fluxo-de-etapas-dos-pedidos)
 
 ## Arquitetura
 - Arquitetura Hexagonal
@@ -215,3 +242,23 @@ test/                                                       # Implementações d
 ├── api                                                     # Implementações de testes isolados de API
 ├── e2e                                                     # Implementações de testes isolados e2e
 ````
+
+## DDD
+### Domain Storytelling
+#### Auto Cadastro de Clientes 
+![01-Auto-Cadastro-De-Clientes](docs/ddd/01-Auto-Cadastro-De-Clientes.png)
+
+#### Realização de Pedidos
+![02-Realizacao-De-Pedidos](docs/ddd/02-Realizacao-De-Pedidos.png)
+
+#### Pagamento de Pedidos
+![03-Pagamento-De-Pedidos](docs/ddd/03-Pagamento-De-Pedidos.png)
+
+#### Preparo de Pedidos
+![04-Preparo-De-Pedidos](docs/ddd/04-Preparo-De-Pedidos.png)
+
+#### Entrega de Pedidos
+![05-Entrega-De-Pedidos](docs/ddd/05-Entrega-De-Pedidos.png)
+
+#### Fluxo de Etapas dos Pedidos
+![Fluxo-De-Etapas-Do-Pedido](docs/ddd/Fluxo-De-Etapas-Do-Pedido.png)
