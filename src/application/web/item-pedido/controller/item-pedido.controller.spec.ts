@@ -47,7 +47,7 @@ describe('ItemPedidoController', () => {
                   findById: jest.fn((id) =>
                      id === itemPedido.id ? Promise.resolve(itemPedido) : Promise.resolve(undefined),
                   ),
-                  delete: jest.fn((request) => Promise.resolve(true)),
+                  delete: jest.fn(() => Promise.resolve(true)),
                },
             },
          ],

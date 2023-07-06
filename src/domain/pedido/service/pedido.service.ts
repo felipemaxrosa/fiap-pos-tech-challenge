@@ -1,7 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from '../model/pedido.model';
-import { IRepository } from 'src/domain/repository/repository';
 import { ServiceException } from 'src/domain/exception/service.exception';
 import { PedidoConstants } from 'src/shared/constants';
 import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';

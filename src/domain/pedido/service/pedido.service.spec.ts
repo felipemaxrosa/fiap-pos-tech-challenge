@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { IRepository } from 'src/domain/repository/repository';
 import { PedidoService } from './pedido.service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ServiceException } from 'src/domain/exception/service.exception';
