@@ -14,7 +14,7 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da p�
     * [Variáveis de Ambiente](#-variáveis-de-ambiente)
     * [Execução em modo local (in-memory repository)](#%EF%B8%8F-execução-em-modo-local-in-memory-repository)
     * [Execução em modo local (mysql repository)](#%EF%B8%8F-execução-em-modo-local-mysql-repository)
-    * [**Execução em modo produção (Avalidação FIAP)**](#%EF%B8%8F-execução-em-modo-produção-avalidação-fiap)
+    * [**Execução em modo produção (Avaliação FIAP)**](#%EF%B8%8F-execução-em-modo-produção-avaliação-fiap)
         * [Docker Compose (Modo Fácil!)](#-docker-compose-modo-fácil)
         * [Docker (Modo Desbravador!)](#-docker-modo-desbravador)
 * [Documentação da API](#-documentação-da-api)
@@ -123,8 +123,8 @@ CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS      
 $ NODE_ENV=local npm run start
 ```
 
-### 🚨⚡️ Execução em modo produção (Avalidação FIAP)
-Utilizado **`apenas para produção e para avalidação dos instrutores FIAP`**.
+### 🚨⚡️ Execução em modo produção (Avaliação FIAP)
+Utilizado **`apenas para produção e para avaliação dos instrutores FIAP`**.
 
 #### 🫧 Docker Compose (Modo Fácil!)
 Inicia o container da aplicação e do mysql com as variáveis de produção, utilizando o docker compose:
