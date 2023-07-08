@@ -31,25 +31,17 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da p�
         * [Fluxo de etapas dos Pedidos](#fluxo-de-etapas-dos-pedidos)
 
 ## Arquitetura
-- Arquitetura Hexagonal
-    - Camada de Aplicação
-    - Camada de Domínio
-    - Camada de Infraestrutura
-- Stack de Tecnologias/Frameworks
-    - Docker
-    - NodeJs
-    - NestJs
-    - TypeORM
-    - NPM
-    - Mysql
-    - Swagger
-    - Typescript
-    - Jest
+![fast-n-foodious-hexagonal](docs/diagramas/fast-n-foodious-hexagonal.png)
+
+- Arquitetura Hexagonal & Modular
+    - Camada de Aplicação, Domínio e Infraestrutura
+    - Módulo Main, Application, Domain, Infrastructure
+- Principais Tecnologias/Frameworks
+    - Docker, NodeJS, NestJS, TypeORM, NPM, Mysql, Swagger, Typescript, Jest
 - Qualidade / Testes
     - Validações pré-commit/push
         - Validação de cobertura de testes (threshold 95%)
-        - Testes unitários (all green)
-        - Testes e2e em memória (all green)
+        - Testes unitários, e2e em memória (all green)
         - Validação de implementação de testes (modo alerta para implementação de testes de controllers, services, validators, repositories)
     - CICD
         - Pipeline CircleCI para integração com a ```main```
