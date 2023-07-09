@@ -4,7 +4,7 @@
 
 ![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker)
 
-# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rs-renato/fast-n-foodious/tree/main.svg?style=svg&circle-token=4d9f077f0707a80120f9f8d11e38049c17fef595)](https://dl.circleci.com/status-badge/redirect/gh/rs-renato/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v1.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
+# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rs-renato/fast-n-foodious/tree/main.svg?style=shield&circle-token=4d9f077f0707a80120f9f8d11e38049c17fef595)](https://dl.circleci.com/status-badge/redirect/gh/rs-renato/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v1.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da pós gradução em Software Architecture.
 
 * [Arquitetura](#arquitetura)
