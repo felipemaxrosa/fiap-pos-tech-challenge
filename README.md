@@ -4,7 +4,7 @@
 
 ![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker)
 
-# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rs-renato/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rs-renato/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v1.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
+# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rs-renato/fast-n-foodious/tree/main.svg?style=svg&circle-token=4d9f077f0707a80120f9f8d11e38049c17fef595)](https://dl.circleci.com/status-badge/redirect/gh/rs-renato/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v1.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da pós gradução em Software Architecture.
 
 * [Arquitetura](#arquitetura)
@@ -52,7 +52,7 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da p�
             - run-check-test-impl   - Execução de validação de implementação de testes (implementação mandatória de testes de controllers, services, validators, repositories)
             - build-image           - Build de imagens docker e publicação no registry (publicação de imagens docker no DockerHub nas arquiteturas ADM & ARM)
             
-            [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rs-renato/fast-n-foodious/main/workflow/badge.svg?window=7d&circle-token=b58fa7f3f1c216768f2d59e57b0b9b257c68c36f)](https://app.circleci.com/insights/github/rs-renato/fast-n-foodious/workflows/workflow/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
+            [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rs-renato/fast-n-foodious/main/fast-n-foodious/badge.svg?window=7d&circle-token=262cc848cef3b37613eb8989bba0194f6230975b)](https://app.circleci.com/insights/github/rs-renato/fast-n-foodious/workflows/fast-n-foodious/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
 
 ## 🚀 Instalação de Dependências Node
 ```bash
