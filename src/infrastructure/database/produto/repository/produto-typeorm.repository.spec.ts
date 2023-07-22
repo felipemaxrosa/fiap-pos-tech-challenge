@@ -1,10 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { Produto } from 'src/domain/produto/model/produto.model';
-import { IRepository } from 'src/domain/repository/repository';
-import { ProdutoEntity } from '../entity/produto.entity';
 import { Repository, TypeORMError } from 'typeorm';
-import { ProdutoTypeormRepository } from './produto-typeorm.repository';
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { ProdutoConstants } from '../../../../shared/constants';
+import { Produto } from '../../../../domain/produto/model/produto.model';
+import { IRepository } from '../../../../domain/repository/repository';
 import { RepositoryException } from '../../../exception/repository.exception';
+import { ProdutoEntity } from '../entity/produto.entity';
+import { ProdutoTypeormRepository } from './produto-typeorm.repository';
 
 describe('ProdutoTypeormRepository', () => {
    let repository: IRepository<Produto>;
@@ -66,15 +68,15 @@ describe('ProdutoTypeormRepository', () => {
          providers: [
             //  IRepository<Produto> provider
             {
-               provide: 'IRepository<Produto>',
-               inject: ['Repository<ProdutoEntity>'],
+               provide: ProdutoConstants.IREPOSITORY,
+               inject: [ProdutoConstants.REPOSITORY_PRODUTO_ENTITY],
                useFactory: (repositoryTypeOrm: Repository<ProdutoEntity>): IRepository<Produto> => {
                   return new ProdutoTypeormRepository(repositoryTypeOrm);
                },
             },
             // Mock do serviço Repository<ProdutoEntity>
             {
-               provide: 'Repository<ProdutoEntity>',
+               provide: ProdutoConstants.REPOSITORY_PRODUTO_ENTITY,
                useValue: {
                   // mock para a chamada repositoryTypeOrm.save(produto)
                   save: jest.fn(),
@@ -91,8 +93,8 @@ describe('ProdutoTypeormRepository', () => {
       module.useLogger(false);
 
       // Obtém a instância dos repositórios
-      repository = module.get<IRepository<Produto>>('IRepository<Produto>');
-      repositoryTypeOrm = module.get<Repository<ProdutoEntity>>('Repository<ProdutoEntity>');
+      repository = module.get<IRepository<Produto>>(ProdutoConstants.IREPOSITORY);
+      repositoryTypeOrm = module.get<Repository<ProdutoEntity>>(ProdutoConstants.REPOSITORY_PRODUTO_ENTITY);
    });
 
    describe('injeção de dependências', () => {

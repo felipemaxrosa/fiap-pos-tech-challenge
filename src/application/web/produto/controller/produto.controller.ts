@@ -12,6 +12,8 @@ import {
    Put,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+
+import { ProdutoConstants } from '../../../../shared/constants';
 import { SalvarProdutoRequest } from '../request/salvar-produto.request';
 import { EditarProdutoRequest } from '../request/editar-produto.request';
 import { IProdutoService } from '../../../../domain/produto/service/produto.service.interface';
@@ -20,13 +22,12 @@ import { BaseController } from '../../base.controller';
 import { EditarProdutoResponse } from '../response/editar-produto.response';
 import { BuscaPorIdProdutoResponse } from '../response/busca-por-id-produto.response';
 import { BuscaTodosPorIdCategoriaProdutoResponse } from '../response/busca-todos-por-id-categoria-produto.response';
-
 @Controller('v1/produto')
 @ApiTags('Produto')
 export class ProdutoController extends BaseController {
    private logger: Logger = new Logger(ProdutoController.name);
 
-   constructor(@Inject('IService<Produto>') private service: IProdutoService) {
+   constructor(@Inject(ProdutoConstants.ISERVICE) private service: IProdutoService) {
       super();
    }
 

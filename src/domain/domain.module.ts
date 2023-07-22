@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common';
 
-import { CategoriaProdutoConstants, ClienteConstants, ItemPedidoConstants, PedidoConstants } from '../shared/constants';
+import {
+   CategoriaProdutoConstants,
+   ClienteConstants,
+   ItemPedidoConstants,
+   PedidoConstants,
+   ProdutoConstants,
+} from '../shared/constants';
 
 import {
    AddItemPedidoValidator,
@@ -52,10 +58,10 @@ import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-
       },
 
       // Produto
-      { provide: 'IService<Produto>', useClass: ProdutoService },
+      { provide: ProdutoConstants.ISERVICE, useClass: ProdutoService },
       {
-         provide: 'SalvarProdutoValidator',
-         inject: ['IRepository<Produto>'],
+         provide: ProdutoConstants.SALVAR_PRODUTO_VALIDATOR,
+         inject: [ProdutoConstants.IREPOSITORY],
          useFactory: (repository: IRepository<Produto>): SalvarProdutoValidator[] => [
             new CamposObrigatoriosProdutoValidator(repository),
          ],
@@ -86,7 +92,7 @@ import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-
       { provide: ClienteConstants.ISERVICE, useClass: ClienteService },
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
-      { provide: 'IService<Produto>', useClass: ProdutoService },
+      { provide: ProdutoConstants.ISERVICE, useClass: ProdutoService },
       { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
    ],
 })

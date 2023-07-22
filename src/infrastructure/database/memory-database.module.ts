@@ -5,6 +5,7 @@ import {
    ItemPedidoConstants,
    PedidoConstants,
    ClienteConstants,
+   ProdutoConstants,
 } from '../../shared/constants';
 import { PedidoMemoryRepository } from './pedido/repository/pedido-memory.repository';
 import { ClienteMemoryRepository } from './cliente/repository/cliente-memory.repository';
@@ -16,14 +17,14 @@ import { CategoriaProdutoMemoryRepository } from './categoria/repository/categor
    providers: [
       { provide: ClienteConstants.IREPOSITORY, useClass: ClienteMemoryRepository },
       { provide: PedidoConstants.IREPOSITORY, useClass: PedidoMemoryRepository },
-      { provide: 'IRepository<Produto>', useClass: ProdutoMemoryRepository },
+      { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoMemoryRepository },
       { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoMemoryRepository },
       { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoMemoryRepository },
    ],
    exports: [
       { provide: ClienteConstants.IREPOSITORY, useClass: ClienteMemoryRepository },
       { provide: PedidoConstants.IREPOSITORY, useClass: PedidoMemoryRepository },
-      { provide: 'IRepository<Produto>', useClass: ProdutoMemoryRepository },
+      { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoMemoryRepository },
       { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoMemoryRepository },
       { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoMemoryRepository },
    ],

@@ -6,6 +6,7 @@ import {
    ItemPedidoConstants,
    PedidoConstants,
    ClienteConstants,
+   ProdutoConstants,
 } from '../../shared/constants';
 import { ItemPedidoEntity } from './item-pedido/entity/item-pedido.entity';
 import { MysqlConfig } from './mysql/mysql.config';
@@ -33,14 +34,14 @@ import { ItemPedidoTypeormRepository } from './item-pedido/repository/item-pedid
    providers: [
       { provide: ClienteConstants.IREPOSITORY, useClass: ClienteTypeormRepository },
       { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
-      { provide: 'IRepository<Produto>', useClass: ProdutoTypeormRepository },
+      { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoTypeormRepository },
       { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoTypeormRepository },
       { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoTypeormRepository },
    ],
    exports: [
       { provide: ClienteConstants.IREPOSITORY, useClass: ClienteTypeormRepository },
       { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
-      { provide: 'IRepository<Produto>', useClass: ProdutoTypeormRepository },
+      { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoTypeormRepository },
       { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoTypeormRepository },
       { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoTypeormRepository },
    ],

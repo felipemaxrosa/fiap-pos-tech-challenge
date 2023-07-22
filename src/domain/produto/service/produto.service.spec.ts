@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Produto } from 'src/domain/produto/model/produto.model';
+
+import { ProdutoConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
+import { Produto } from '../../../domain/produto/model/produto.model';
+import { ServiceException } from '../../../domain/exception/service.exception';
 import { SalvarProdutoValidator } from '../validation/salvar-produto.validator';
-import { IRepository } from 'src/domain/repository/repository';
-import { ProdutoService } from './produto.service';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { ServiceException } from 'src/domain/exception/service.exception';
+import { RepositoryException } from '../../../infrastructure/exception/repository.exception';
 import { CamposObrigatoriosProdutoValidator } from '../validation/campos-obrigatorios-produto.validator';
+import { ProdutoService } from './produto.service';
 import { IProdutoService } from './produto.service.interface';
 
 const IMAGEM_BASE64_SAMPLE =
@@ -73,8 +75,8 @@ describe('ProdutoService', () => {
          providers: [
             //  IProdutoService provider
             {
-               provide: 'IProdutoService',
-               inject: ['IRepository<Produto>', 'SalvarProdutoValidator'],
+               provide: ProdutoConstants.IPRODUTO_SERVICE,
+               inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
                useFactory: (
                   repository: IRepository<Produto>,
                   salvarProdutoValidator: SalvarProdutoValidator[],
@@ -84,7 +86,7 @@ describe('ProdutoService', () => {
             },
             // Mock do serviço IRepository<Produto>
             {
-               provide: 'IRepository<Produto>',
+               provide: ProdutoConstants.IREPOSITORY,
                useValue: {
                   // mock para a chamada repository.save(produto)
                   save: jest.fn(() => Promise.resolve(produtoSalvar)),
@@ -110,8 +112,8 @@ describe('ProdutoService', () => {
             },
             // Mock do SalvarProdutoValidator
             {
-               provide: 'SalvarProdutoValidator',
-               inject: ['IRepository<Produto>'],
+               provide: ProdutoConstants.SALVAR_PRODUTO_VALIDATOR,
+               inject: [ProdutoConstants.IREPOSITORY],
                useFactory: (repository: IRepository<Produto>): SalvarProdutoValidator[] => {
                   return [new CamposObrigatoriosProdutoValidator(repository)];
                },
@@ -123,9 +125,9 @@ describe('ProdutoService', () => {
       module.useLogger(false);
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
-      repository = module.get<IRepository<Produto>>('IRepository<Produto>');
-      validators = module.get<SalvarProdutoValidator[]>('SalvarProdutoValidator');
-      service = module.get<IProdutoService>('IProdutoService');
+      repository = module.get<IRepository<Produto>>(ProdutoConstants.IREPOSITORY);
+      validators = module.get<SalvarProdutoValidator[]>(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR);
+      service = module.get<IProdutoService>(ProdutoConstants.IPRODUTO_SERVICE);
    });
 
    describe('injeção de dependências', () => {
