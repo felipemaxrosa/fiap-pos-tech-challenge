@@ -1,3 +1,4 @@
+import { Repository, TypeORMError } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { RepositoryException } from '../../../../infrastructure/exception/repository.exception';
@@ -5,7 +6,6 @@ import { Cliente } from '../../../../domain/cliente/model/cliente.model';
 import { IRepository } from '../../../../domain/repository/repository';
 import { ClienteConstants } from '../../../../shared/constants';
 import { ClienteEntity } from '../entity/cliente.entity';
-import { Repository, TypeORMError } from 'typeorm';
 import { ClienteTypeormRepository } from './cliente-typeorm.repository';
 
 describe('ClienteTypeormRepository', () => {

@@ -1,6 +1,6 @@
+import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
 
 import { MainModule } from '../../src/main.module';
 import { SalvarItemPedidoRequest } from 'src/application/web/item-pedido/request';

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { ProdutoConstants } from '../../../../shared/constants';
 import { Produto } from '../../../../domain/produto/model/produto.model';
 import { IProdutoService } from '../../../../domain/produto/service/produto.service.interface';
-import { ProdutoConstants } from '../../../../shared/constants';
 import { SalvarProdutoRequest } from '../request/salvar-produto.request';
 import { EditarProdutoRequest } from '../request/editar-produto.request';
 import { SalvarProdutoResponse } from '../response/salvar-produto.response';

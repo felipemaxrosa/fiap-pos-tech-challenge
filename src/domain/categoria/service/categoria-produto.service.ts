@@ -1,9 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { IRepository } from 'src/domain/repository/repository';
+
+import { IRepository } from '../../../domain/repository/repository';
+import { CategoriaProdutoConstants } from '../../../shared/constants';
+import { CategoriaProduto } from '../model/categoria-produto.model';
 import { ServiceException } from '../../exception/service.exception';
 import { ICategoriaProdutoService } from './categoria-produto.service.interface';
-import { CategoriaProduto } from '../model/categoria-produto.model';
-import { CategoriaProdutoConstants } from 'src/shared/constants';
 
 @Injectable()
 export class CategoriaProdutoService implements ICategoriaProdutoService {

@@ -1,7 +1,8 @@
-import { Cliente } from '../model/cliente.model';
-import { ValidationException } from 'src/domain/exception/validation.exception';
-import { SalvarClienteValidator } from './salvar-cliente.validator';
 import { Logger } from '@nestjs/common';
+
+import { ValidationException } from '../../../domain/exception/validation.exception';
+import { Cliente } from '../model/cliente.model';
+import { SalvarClienteValidator } from './salvar-cliente.validator';
 
 export class EmailValidoClienteValidator implements SalvarClienteValidator {
    public static EMAIL_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE = 'O email do cliente não é válido';

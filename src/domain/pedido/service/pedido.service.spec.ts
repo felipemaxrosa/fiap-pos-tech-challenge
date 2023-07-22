@@ -1,16 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { PedidoService } from './pedido.service';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { ServiceException } from 'src/domain/exception/service.exception';
+import { PedidoConstants } from '../../../shared/constants';
+import { Pedido } from '../../../domain/pedido/model/pedido.model';
+import { ServiceException } from '../../../domain/exception/service.exception';
+import { RepositoryException } from '../../../infrastructure/exception/repository.exception';
+import { SalvarPedidoRequest } from '../../../application/web/pedido/request/salvar-pedido.request';
 import { EstadoPedido } from '../enums/pedido';
-import { PedidoConstants } from 'src/shared/constants';
-import { SalvarPedidoRequest } from 'src/application/web/pedido/request/salvar-pedido.request';
 import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';
-import { EstadoCorretoNovoPedidoValidator } from '../validation/estado-correto-novo-pedido.validator';
-import { IPedidoService } from './pedido.service.interface';
 import { IPedidoRepository } from '../repository/pedido.repository.interface';
+import { EstadoCorretoNovoPedidoValidator } from '../validation/estado-correto-novo-pedido.validator';
+import { PedidoService } from './pedido.service';
+import { IPedidoService } from './pedido.service.interface';
 
 describe('PedidoService', () => {
    let service: IPedidoService;

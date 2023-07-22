@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { DatabaseConstants } from 'src/infrastructure/database/mysql/mysql.constants';
+import { DatabaseConstants } from '../../../infrastructure/database/mysql/mysql.constants';
 
 @Module({
    imports: [ConfigModule],

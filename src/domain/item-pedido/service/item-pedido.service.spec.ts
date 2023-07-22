@@ -1,21 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { ServiceException } from 'src/domain/exception/service.exception';
-import { IService } from 'src/domain/service/service';
+import { IService } from '../../../domain/service/service';
+import { ItemPedidoConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
+import { ServiceException } from '../../../domain/exception/service.exception';
+import { ValidationException } from '../../../domain/exception/validation.exception';
+import { SalvarItemPedidoRequest } from '../../../application/web/item-pedido/request';
+import { RepositoryException } from '../../../infrastructure/exception/repository.exception';
 
 import { ItemPedido } from '../model';
-import { IRepository } from 'src/domain/repository/repository';
-import { ItemPedidoService } from './item-pedido.service';
-import { ItemPedidoConstants } from 'src/shared/constants';
-import { SalvarItemPedidoRequest } from 'src/application/web/item-pedido/request';
 import {
    AddItemPedidoValidator,
    EditarItemPedidoValidator,
    QuantidadeMinimaItemValidator,
    ItemPedidoExistenteValidator,
 } from '../validation';
-import { ValidationException } from 'src/domain/exception/validation.exception';
+import { ItemPedidoService } from './item-pedido.service';
 
 describe('ItemPedidoService', () => {
    let service: IService<ItemPedido>;

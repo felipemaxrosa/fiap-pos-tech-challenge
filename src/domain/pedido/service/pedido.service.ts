@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
+import { PedidoConstants } from '../../../shared/constants';
+import { ServiceException } from '../../../domain/exception/service.exception';
 import { Pedido } from '../model/pedido.model';
-import { ServiceException } from 'src/domain/exception/service.exception';
-import { PedidoConstants } from 'src/shared/constants';
-import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';
-import { IPedidoService } from './pedido.service.interface';
 import { EstadoPedido } from '../enums/pedido';
 import { IPedidoRepository } from '../repository/pedido.repository.interface';
+import { SalvarPedidoValidator } from '../validation/salvar-pedido.validator';
+import { IPedidoService } from './pedido.service.interface';
 
 @Injectable()
 export class PedidoService implements IPedidoService {

@@ -1,11 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { IRepository } from 'src/domain/repository/repository';
-import { IService } from 'src/domain/service/service';
+
+import { IService } from '../../../domain/service/service';
+import { ItemPedidoConstants } from '../../../shared/constants';
+import { IValidator } from '../../../domain/validation/validator';
+import { IRepository } from '../../../domain/repository/repository';
 import { ServiceException } from '../../exception/service.exception';
 import { ItemPedido } from '../model/item-pedido.model';
-import { ItemPedidoConstants } from 'src/shared/constants';
 import { AddItemPedidoValidator, EditarItemPedidoValidator } from '../validation';
-import { IValidator } from 'src/domain/validation/validator';
 
 @Injectable()
 export class ItemPedidoService implements IService<ItemPedido> {

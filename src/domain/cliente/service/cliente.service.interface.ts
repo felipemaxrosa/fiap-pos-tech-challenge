@@ -1,4 +1,4 @@
-import { IService } from 'src/domain/service/service';
+import { IService } from '../../../domain/service/service';
 import { Cliente } from '../model/cliente.model';
 import { ClienteIdentificado } from '../model/cliente-identificado.model';
 

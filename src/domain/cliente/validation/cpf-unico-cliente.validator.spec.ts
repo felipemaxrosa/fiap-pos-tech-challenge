@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
-import { IRepository } from '../../../domain/repository/repository';
 import { ClienteConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
 import { Cliente } from '../../../domain/cliente/model/cliente.model';
+import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
 
 describe('CpfUnicoClienteValidator', () => {
    let validator: CpfUnicoClienteValidator;

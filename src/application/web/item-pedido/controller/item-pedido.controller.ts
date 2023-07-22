@@ -3,7 +3,7 @@ import { ApiCreatedResponse, ApiOperation, ApiOkResponse, ApiTags } from '@nestj
 
 import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
 import { ItemPedidoConstants } from '../../../../shared/constants';
-import { IService } from 'src/domain/service/service';
+import { IService } from '../../../../domain/service/service';
 import { SalvarItemPedidoRequest } from '../request';
 import { BaseController } from '../../base.controller';
 import { SalvarItemPedidoResponse } from '../request/salvar-item-pedido.response';

@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { IRepository } from 'src/domain/repository/repository';
+import { ItemPedidoConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
 import { ItemPedido } from '../model';
 import { ItemPedidoExistenteValidator } from './item-pedido-existe.validator';
-import { ItemPedidoConstants } from 'src/shared/constants';
 
 describe('ItemPedidoExistenteValidator', () => {
    let validator: ItemPedidoExistenteValidator;

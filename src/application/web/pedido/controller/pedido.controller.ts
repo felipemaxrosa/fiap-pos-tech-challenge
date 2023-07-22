@@ -1,17 +1,17 @@
 import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { PedidoConstants } from 'src/shared/constants';
-import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
-import { IPedidoService } from 'src/domain/pedido/service/pedido.service.interface';
+import { PedidoConstants } from '../../../../shared/constants';
+import { Pedido } from '../../../../domain/pedido/model/pedido.model';
+import { EstadoPedido } from '../../../../domain/pedido/enums/pedido';
+import { IPedidoService } from '../../../../domain/pedido/service/pedido.service.interface';
 import { BaseController } from '../../base.controller';
 import { SalvarPedidoRequest } from '../request';
 import { SalvarPedidoResponse } from '../response/salvar-pedido.response';
-import { BuscarPorIdEstadoPedidoResponse } from '../response/buscar-por-id-estado-pedido.response';
 import { BuscarPorIdPedidoResponse } from '../response/buscar-por-id-pedido.response';
-import { BuscarTodosPorEstadoPedidoResponse } from '../response/buscar-todos-por-estado-pedido.response';
 import { ListarPedidoPendenteResponse } from '../response/listar-pedido-pendente-response';
+import { BuscarPorIdEstadoPedidoResponse } from '../response/buscar-por-id-estado-pedido.response';
+import { BuscarTodosPorEstadoPedidoResponse } from '../response/buscar-todos-por-estado-pedido.response';
 
 @Controller('v1/pedido')
 @ApiTags('Pedido')
