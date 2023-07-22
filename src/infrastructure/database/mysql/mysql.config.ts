@@ -26,4 +26,4 @@ import { DatabaseConstants } from 'src/infrastructure/database/mysql/mysql.const
    ],
    exports: [DatabaseConstants.DATABASE_CONFIG_NAME],
 })
-export class MysqlConfg {}
+export class MysqlConfig {}

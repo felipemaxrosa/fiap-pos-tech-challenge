@@ -18,7 +18,7 @@ export class CategoriaProdutoController extends BaseController {
    @Get()
    @ApiOperation({
       summary: 'Lista categorias de produto',
-      description: 'Reliza buscas das categorias de produto',
+      description: 'Realiza buscas das categorias de produto',
    })
    @ApiOkResponse({
       description: 'Categorias de produto encontradas com sucesso',

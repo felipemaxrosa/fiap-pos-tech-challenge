@@ -8,7 +8,7 @@ import { Cliente } from 'src/domain/cliente/model/cliente.model';
 import { EmailUnicoClienteValidator } from 'src/domain/cliente/validation/email-unico-cliente.validator';
 import { CpfUnicoClienteValidator } from 'src/domain/cliente/validation/cpf-unico-cliente.validator';
 import { CpfValidoClienteValidator } from 'src/domain/cliente/validation/cpf-valido-cliente.validator';
-import { EmailValidoClienteValidator } from 'src/domain/cliente/validation/email-valido-cliente.validator.';
+import { EmailValidoClienteValidator } from 'src/domain/cliente/validation/email-valido-cliente.validator';
 
 describe('ClienteController (e2e)', () => {
    let app: INestApplication;

@@ -14,7 +14,7 @@ export class PedidoService implements IPedidoService {
 
    constructor(
       @Inject(PedidoConstants.IREPOSITORY) private repository: IPedidoRepository,
-      @Inject('SalvarPedidoValidator')
+      @Inject(PedidoConstants.SALVAR_PEDIDO_VALIDATOR)
       private validators: SalvarPedidoValidator[],
    ) {}
 

@@ -40,7 +40,7 @@ describe('PedidoService', () => {
             //  IService<Pedido> provider
             {
                provide: PedidoConstants.ISERVICE,
-               inject: [PedidoConstants.IREPOSITORY, 'SalvarPedidoValidator'],
+               inject: [PedidoConstants.IREPOSITORY, PedidoConstants.SALVAR_PEDIDO_VALIDATOR],
                useFactory: (
                   repository: IPedidoRepository,
                   criarNovoPedidoValidator: SalvarPedidoValidator[],
@@ -69,7 +69,7 @@ describe('PedidoService', () => {
             },
             // Mock do SalvarPedidoValidator
             {
-               provide: 'SalvarPedidoValidator',
+               provide: PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
                inject: [PedidoConstants.IREPOSITORY],
                useFactory: (): SalvarPedidoValidator[] => {
                   return [new EstadoCorretoNovoPedidoValidator()];
@@ -83,7 +83,7 @@ describe('PedidoService', () => {
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
       repository = module.get<IPedidoRepository>(PedidoConstants.IREPOSITORY);
-      validators = module.get<SalvarPedidoValidator[]>('SalvarPedidoValidator');
+      validators = module.get<SalvarPedidoValidator[]>(PedidoConstants.SALVAR_PEDIDO_VALIDATOR);
       service = module.get<IPedidoService>(PedidoConstants.ISERVICE);
    });
 

@@ -1,17 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
-import { SalvarClienteValidator } from '../validation/salvar-cliente.validator';
-import { IRepository } from 'src/domain/repository/repository';
-import { IService } from 'src/domain/service/service';
-import { ClienteService } from './cliente.service';
-import { EmailUnicoClienteValidator } from '../validation/email-unico-cliente.validator';
-import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { ServiceException } from 'src/domain/exception/service.exception';
-import { IClienteService } from './cliente.service.interface';
+
+import { IService } from '../../../domain/service/service';
+import { ClienteConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
+import { Cliente } from '../../../domain/cliente/model/cliente.model';
+import { ServiceException } from '../../../domain/exception/service.exception';
+import { RepositoryException } from '../../../infrastructure/exception/repository.exception';
+
 import { BuscarClienteValidator } from '../validation/buscar-cliente.validator';
+import { SalvarClienteValidator } from '../validation/salvar-cliente.validator';
+import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
 import { CpfValidoClienteValidator } from '../validation/cpf-valido-cliente.validator';
-import { EmailValidoClienteValidator } from '../validation/email-valido-cliente.validator.';
+import { EmailUnicoClienteValidator } from '../validation/email-unico-cliente.validator';
+import { EmailValidoClienteValidator } from '../validation/email-valido-cliente.validator';
+import { ClienteService } from './cliente.service';
+import { IClienteService } from './cliente.service.interface';
 
 describe('CienteService', () => {
    let service: IClienteService;
@@ -31,8 +34,12 @@ describe('CienteService', () => {
          providers: [
             //  IService<Cliente> provider
             {
-               provide: 'IService<Cliente>',
-               inject: ['IRepository<Cliente>', 'SalvarClienteValidator', 'BuscarClienteValidator'],
+               provide: ClienteConstants.ISERVICE,
+               inject: [
+                  ClienteConstants.IREPOSITORY,
+                  ClienteConstants.SALVAR_CLIENTE_VALIDATOR,
+                  ClienteConstants.BUSCAR_CLIENTE_VALIDATOR,
+               ],
                useFactory: (
                   repository: IRepository<Cliente>,
                   salvarClienteValidator: SalvarClienteValidator[],
@@ -43,11 +50,11 @@ describe('CienteService', () => {
             },
             // Mock do serviço IRepository<Cliente>
             {
-               provide: 'IRepository<Cliente>',
+               provide: ClienteConstants.IREPOSITORY,
                useValue: {
-                  // mock para a chamama repository.save(cliente)
+                  // mock para a chamada repository.save(cliente)
                   save: jest.fn(() => Promise.resolve(cliente)),
-                  // mock para a chamama repository.findBy(attributes)
+                  // mock para a chamada repository.findBy(attributes)
                   findBy: jest.fn(() => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
@@ -56,8 +63,8 @@ describe('CienteService', () => {
             },
             // Mock do SalvarClienteValidator
             {
-               provide: 'SalvarClienteValidator',
-               inject: ['IRepository<Cliente>'],
+               provide: ClienteConstants.SALVAR_CLIENTE_VALIDATOR,
+               inject: [ClienteConstants.IREPOSITORY],
                useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => {
                   return [
                      new EmailValidoClienteValidator(),
@@ -69,8 +76,8 @@ describe('CienteService', () => {
             },
 
             {
-               provide: 'BuscarClienteValidator',
-               inject: ['IRepository<Cliente>'],
+               provide: ClienteConstants.BUSCAR_CLIENTE_VALIDATOR,
+               inject: [ClienteConstants.IREPOSITORY],
                useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
             },
          ],
@@ -80,9 +87,9 @@ describe('CienteService', () => {
       module.useLogger(false);
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
-      repository = module.get<IRepository<Cliente>>('IRepository<Cliente>');
-      validators = module.get<SalvarClienteValidator[]>('SalvarClienteValidator');
-      service = module.get<IClienteService>('IService<Cliente>');
+      repository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
+      validators = module.get<SalvarClienteValidator[]>(ClienteConstants.SALVAR_CLIENTE_VALIDATOR);
+      service = module.get<IClienteService>(ClienteConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {
@@ -121,7 +128,7 @@ describe('CienteService', () => {
             return Promise.resolve(attributes['email'] === cliente.email ? [cliente] : {});
          });
 
-         // verifica se foi lançada uma exception com a mensagem de validção de email único
+         // verifica se foi lançada uma exception com a mensagem de validação de email único
          await expect(service.save(cliente)).rejects.toThrowError(
             EmailUnicoClienteValidator.EMAIL_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
          );
@@ -139,7 +146,7 @@ describe('CienteService', () => {
             return Promise.resolve(attributes['cpf'] === cliente.cpf ? [cliente] : {});
          });
 
-         // verifica se foi lançada uma exception com a mensagem de validção de cpf único
+         // verifica se foi lançada uma exception com a mensagem de validação de cpf único
          await expect(service.save(cliente)).rejects.toThrowError(
             CpfUnicoClienteValidator.CPF_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE,
          );
@@ -181,7 +188,7 @@ describe('CienteService', () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
          jest.spyOn(repository, 'save').mockRejectedValue(error);
 
-         // verifiaca se foi lançada uma exception na camada de serviço
+         // verifica se foi lançada uma exception na camada de serviço
          await expect(service.save(cliente)).rejects.toThrowError(ServiceException);
       });
    });

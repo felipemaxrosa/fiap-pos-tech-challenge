@@ -1,10 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { Pedido } from '../model/pedido.model';
-import { SalvarPedidoValidator } from './salvar-pedido.validator';
+import { ClienteConstants } from '../../../shared/constants';
 import { IRepository } from '../../../domain/repository/repository';
 import { Cliente } from '../../../domain/cliente/model/cliente.model';
 import { ValidationException } from '../../../domain/exception/validation.exception';
+import { Pedido } from '../model/pedido.model';
+import { SalvarPedidoValidator } from './salvar-pedido.validator';
 
 @Injectable()
 export class ClienteExistentePedidoValidator implements SalvarPedidoValidator {
@@ -12,7 +13,7 @@ export class ClienteExistentePedidoValidator implements SalvarPedidoValidator {
 
    private logger: Logger = new Logger(ClienteExistentePedidoValidator.name);
 
-   constructor(@Inject('IRepository<Cliente>') private repository: IRepository<Cliente>) {}
+   constructor(@Inject(ClienteConstants.IREPOSITORY) private repository: IRepository<Cliente>) {}
 
    async validate(pedido: Pedido): Promise<boolean> {
       this.logger.log(

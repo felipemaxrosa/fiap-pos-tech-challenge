@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
-import { IRepository } from 'src/domain/repository/repository';
+
 import { CpfUnicoClienteValidator } from '../validation/cpf-unico-cliente.validator';
+import { IRepository } from '../../../domain/repository/repository';
+import { ClienteConstants } from '../../../shared/constants';
+import { Cliente } from '../../../domain/cliente/model/cliente.model';
 
 describe('CpfUnicoClienteValidator', () => {
    let validator: CpfUnicoClienteValidator;
@@ -21,7 +23,7 @@ describe('CpfUnicoClienteValidator', () => {
             CpfUnicoClienteValidator,
             // Mock do serviço IRepository<Cliente>
             {
-               provide: 'IRepository<Cliente>',
+               provide: ClienteConstants.IREPOSITORY,
                useValue: {
                   findBy: jest.fn(() => {
                      // retorna vazio, sumulando que não encontrou registros pelo atributos passados por parâmetro
@@ -36,7 +38,7 @@ describe('CpfUnicoClienteValidator', () => {
       module.useLogger(false);
 
       // Obtém a instância do serviço e repositório a partir do módulo de teste
-      repository = module.get<IRepository<Cliente>>('IRepository<Cliente>');
+      repository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
       validator = module.get<CpfUnicoClienteValidator>(CpfUnicoClienteValidator);
    });
 
