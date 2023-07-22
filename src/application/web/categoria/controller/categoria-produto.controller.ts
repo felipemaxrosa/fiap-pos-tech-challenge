@@ -1,6 +1,8 @@
 import { Controller, Get, Inject, Logger } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { ICategoriaProdutoService } from '../../../../domain/categoria/service/categoria-produto.service.interface';
+import { CategoriaProdutoConstants } from '../../../../shared/constants';
 import { BaseController } from '../../base.controller';
 import { ListarCategoriaResponse } from './response/listar-categoria.response';
 
@@ -9,7 +11,7 @@ import { ListarCategoriaResponse } from './response/listar-categoria.response';
 export class CategoriaProdutoController extends BaseController {
    private logger: Logger = new Logger(CategoriaProdutoController.name);
 
-   constructor(@Inject('IService<CategoriaProduto>') private service: ICategoriaProdutoService) {
+   constructor(@Inject(CategoriaProdutoConstants.ISERVICE) private service: ICategoriaProdutoService) {
       super();
    }
 

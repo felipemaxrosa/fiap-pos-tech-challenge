@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IRepository } from 'src/domain/repository/repository';
-import { IService } from 'src/domain/service/service';
-import { ICategoriaProdutoService } from './categoria-produto.service.interface';
-import { CategoriaProduto } from '../model/categoria-produto.model';
-import { CategoriaProdutoService } from './categoria-produto.service';
+
+import { IService } from '../../../domain/service/service';
+import { IRepository } from '../../../domain/repository/repository';
+import { CategoriaProdutoConstants } from '../../../shared/constants';
 import { RepositoryException } from '../../../infrastructure/exception/repository.exception';
+import { CategoriaProduto } from '../model/categoria-produto.model';
 import { ServiceException } from '../../exception/service.exception';
+import { CategoriaProdutoService } from './categoria-produto.service';
+import { ICategoriaProdutoService } from './categoria-produto.service.interface';
 
 describe('CategoriaProdutoService', () => {
    let service: ICategoriaProdutoService;
@@ -24,15 +26,15 @@ describe('CategoriaProdutoService', () => {
          providers: [
             //  IService<CategoriaProduto> provider
             {
-               provide: 'IService<CategoriaProduto>',
-               inject: ['IRepository<CategoriaProduto>'],
+               provide: CategoriaProdutoConstants.ISERVICE,
+               inject: [CategoriaProdutoConstants.IREPOSITORY],
                useFactory: (repository: IRepository<CategoriaProduto>): IService<CategoriaProduto> => {
                   return new CategoriaProdutoService(repository);
                },
             },
             // Mock do serviço IRepository<CategoriaProduto>
             {
-               provide: 'IRepository<CategoriaProduto>',
+               provide: CategoriaProdutoConstants.IREPOSITORY,
                useValue: {
                   // mock para a chamada repository.find()
                   findAll: jest.fn(() => {
@@ -47,8 +49,8 @@ describe('CategoriaProdutoService', () => {
       module.useLogger(false);
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
-      repository = module.get<IRepository<CategoriaProduto>>('IRepository<CategoriaProduto>');
-      service = module.get<ICategoriaProdutoService>('IService<CategoriaProduto>');
+      repository = module.get<IRepository<CategoriaProduto>>(CategoriaProdutoConstants.IREPOSITORY);
+      service = module.get<ICategoriaProdutoService>(CategoriaProdutoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {

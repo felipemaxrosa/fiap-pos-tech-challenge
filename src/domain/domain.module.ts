@@ -8,7 +8,7 @@ import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.vali
 import { PedidoService } from './pedido/service/pedido.service';
 import { SalvarPedidoValidator } from './pedido/validation/salvar-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from './pedido/validation/estado-correto-novo-pedido.validator';
-import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
+import { CategoriaProdutoConstants, ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
 import { ProdutoService } from './produto/service/produto.service';
 import { Produto } from './produto/model/produto.model';
 import { SalvarProdutoValidator } from './produto/validation/salvar-produto.validator';
@@ -78,14 +78,14 @@ import { ItemPedido } from './item-pedido/model';
          ],
       },
       // Categoria de Produto
-      { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
+      { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
    ],
    exports: [
       { provide: 'IService<Cliente>', useClass: ClienteService },
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
       { provide: 'IService<Produto>', useClass: ProdutoService },
-      { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
+      { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
    ],
 })
 export class DomainModule {}
