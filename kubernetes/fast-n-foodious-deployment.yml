@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fast-n-foodious-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fast-n-foodious-app
+  template:
+    metadata:
+      labels:
+        app: fast-n-foodious-app
+    spec:
+      containers:
+      - name: fast-n-foodious-app
+        image: renators/fast-n-foodious-app:latest
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        envFrom:
+          - configMapRef:
+              name: fast-n-foodious-env
+        env:
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: fast-n-foodious-secret
+                key: MYSQL_PASSWORD
+          - name: SERVER_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: fast-n-foodious-env
+                key: SERVER_PORT
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fast-n-foodious-mysql
+spec:
+  selector:
+    matchLabels:
+      app: fast-n-foodious-mysql
+  template:
+    metadata:
+      labels:
+        app: fast-n-foodious-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        labels:
+          app: fast-n-foodious-mysql
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 3306
+        envFrom:
+          - configMapRef:
+              name: fast-n-foodious-env
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: fast-n-foodious-secret
+                key: MYSQL_ROOT_PASSWORD
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: fast-n-foodious-secret
+                key: MYSQL_PASSWORD
+        volumeMounts:
+          - name: mysql-init
+            mountPath: /docker-entrypoint-initdb.d
+          - name: fast-n-foodious-volume
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: fast-n-foodious-volume
+          persistentVolumeClaim:
+            claimName: fast-n-foodious-pvc
+        - name: mysql-init
+          configMap:
+            name: fast-n-foodious-mysql-env
+            items:
+              - key: init.sql
+                path: 1-init.sql
+              - key: populate.sql
+                path: 2-populate.sql
