@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: fast-n-foodious-app
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: fast-n-foodious-app
@@ -19,6 +18,22 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
+        livenessProbe:
+          httpGet:
+            port: 3000
+            path: /api
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            port: 3000
+            path: /api
+          initialDelaySeconds: 40
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
         ports:
         - containerPort: 3000
         envFrom:
@@ -60,6 +75,20 @@ spec:
             cpu: "500m"
         ports:
           - containerPort: 3306
+        livenessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
         envFrom:
           - configMapRef:
               name: fast-n-foodious-env
