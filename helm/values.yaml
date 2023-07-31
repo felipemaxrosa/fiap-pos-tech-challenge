@@ -1,0 +1,36 @@
+namespace: default
+
+application:
+  name: fast-n-foodious
+  image: renators/fast-n-foodious:latest
+
+mysql:
+  name: mysql
+  image: mysql:8.0
+
+configMap:
+  data:
+    NODE_ENV: prod
+    MYSQL_HOST: mysql
+    MYSQL_USER: fnf_user
+
+hpa:
+  minReplicas: 1
+  maxReplicas: 3
+  cpu:
+    averageUtilization: 80
+  memory:
+    averageUtilization: 80
+
+pv:
+  storage: 300Mi
+  hostPath: /Users/renatorodrigues/lib/mysql
+
+pvc:
+  requests:
+      storage: 100Mi
+
+secret:
+  data:
+    MYSQL_PASSWORD: Zm5mX3Bhc3M=
+    MYSQL_ROOT_PASSWORD: Zm5mX3Bhc3M=
