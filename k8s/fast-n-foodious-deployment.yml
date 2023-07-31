@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fast-n-foodious-app
+  name: fast-n-foodious
 spec:
   selector:
     matchLabels:
-      app: fast-n-foodious-app
+      app: fast-n-foodious
   template:
     metadata:
       labels:
-        app: fast-n-foodious-app
+        app: fast-n-foodious
     spec:
       containers:
-      - name: fast-n-foodious-app
-        image: renators/fast-n-foodious-app:latest
+      - name: fast-n-foodious
+        image: renators/fast-n-foodious:latest
         resources:
           limits:
             memory: "512Mi"
@@ -54,21 +54,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fast-n-foodious-mysql
+  name: mysql
 spec:
   selector:
     matchLabels:
-      app: fast-n-foodious-mysql
+      app: mysql
   template:
     metadata:
       labels:
-        app: fast-n-foodious-mysql
+        app: mysql
     spec:
       containers:
       - name: mysql
         image: mysql:8.0
         labels:
-          app: fast-n-foodious-mysql
+          app: mysql
         resources:
           limits:
             memory: "512Mi"
@@ -114,7 +114,7 @@ spec:
             claimName: fast-n-foodious-pvc
         - name: mysql-init
           configMap:
-            name: fast-n-foodious-mysql-env
+            name: mysql-env
             items:
               - key: init.sql
                 path: 1-init.sql

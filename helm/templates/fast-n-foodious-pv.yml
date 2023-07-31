@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.application.name }}-pv
+spec:
+  capacity:
+    storage: {{ .Values.pv.storage }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: {{ .Values.application.name }}-storage
+  hostPath:
+     path: {{ .Values.pv.hostPath }}
+     type: DirectoryOrCreate

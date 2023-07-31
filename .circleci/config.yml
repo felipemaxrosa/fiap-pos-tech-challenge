@@ -108,8 +108,8 @@ jobs:
               echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
               docker context create tls-env
               docker buildx create tls-env --use
-              docker buildx build --push --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $DOCKER_USER/fast-n-foodious-app:$CIRCLE_BUILD_NUM .
-              docker buildx build --push --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $DOCKER_USER/fast-n-foodious-app:latest .
+              docker buildx build --push --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $DOCKER_USER/fast-n-foodious:$CIRCLE_BUILD_NUM .
+              docker buildx build --push --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 --tag $DOCKER_USER/fast-n-foodious:latest .
               echo "Docker image pushed successfully!"
             else
               echo "Skipping image push as it's not the main branch."

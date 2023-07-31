@@ -4,7 +4,7 @@ metadata:
   name: fast-n-foodious-env
 data:
   MYSQL_DATABASE: FAST_N_FOODIOUS
-  MYSQL_HOST: fast-n-foodious-mysql
+  MYSQL_HOST: mysql
   MYSQL_PORT: "3306"
   MYSQL_USER: fnf_user
   MYSQL_ROOT_HOST: "%"
@@ -14,7 +14,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fast-n-foodious-mysql-env
+  name: mysql-env
 data:
   init.sql: |
     -- Criação de banco de dados
