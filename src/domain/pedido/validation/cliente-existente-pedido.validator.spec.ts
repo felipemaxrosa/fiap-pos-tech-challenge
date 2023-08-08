@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { IRepository } from 'src/domain/repository/repository';
+import { ClienteConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
+import { Cliente } from '../../../domain/cliente/model/cliente.model';
 import { Pedido } from '../model/pedido.model';
 import { EstadoPedido } from '../enums/pedido';
 import { ClienteExistentePedidoValidator } from './cliente-existente-pedido.validator';
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
 
 describe('ClienteExistentePedidoValidator', () => {
    let validator: ClienteExistentePedidoValidator;
@@ -32,7 +33,7 @@ describe('ClienteExistentePedidoValidator', () => {
             ClienteExistentePedidoValidator,
             // Mock do serviço IRepository<Pedido>
             {
-               provide: 'IRepository<Cliente>',
+               provide: ClienteConstants.IREPOSITORY,
                useValue: {
                   findBy: jest.fn(() => {
                      return Promise.resolve([cliente]);
@@ -46,7 +47,7 @@ describe('ClienteExistentePedidoValidator', () => {
       module.useLogger(false);
 
       // Obtém a instância do serviço e repositório a partir do módulo de teste
-      repository = module.get<IRepository<Cliente>>('IRepository<Cliente>');
+      repository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
       validator = module.get<ClienteExistentePedidoValidator>(ClienteExistentePedidoValidator);
    });
 

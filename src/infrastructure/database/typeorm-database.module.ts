@@ -1,14 +1,20 @@
-import { ItemPedidoEntity } from './item-pedido/entity/item-pedido.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-import { MysqlConfg } from './mysql/mysql.config';
+import {
+   CategoriaProdutoConstants,
+   ItemPedidoConstants,
+   PedidoConstants,
+   ClienteConstants,
+   ProdutoConstants,
+} from '../../shared/constants';
+import { ItemPedidoEntity } from './item-pedido/entity/item-pedido.entity';
+import { MysqlConfig } from './mysql/mysql.config';
 import { DatabaseConstants } from './mysql/mysql.constants';
 import { ClienteEntity } from './cliente/entity/cliente.entity';
 import { ClienteTypeormRepository } from './cliente/repository/cliente-typeorm.repository';
 import { ProdutoEntity } from './produto/entity/produto.entity';
 import { ProdutoTypeormRepository } from './produto/repository/produto-typeorm.repository';
-import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
 import { PedidoEntity } from './pedido/entity/pedido.entity';
 import { PedidoTypeormRepository } from './pedido/repository/pedido-typeorm.repository';
 import { CategoriaProdutoTypeormRepository } from './categoria/repository/categoria-produto-typeorm.repository';
@@ -20,23 +26,23 @@ import { ItemPedidoTypeormRepository } from './item-pedido/repository/item-pedid
       DatabaseConstants,
       TypeOrmModule.forFeature([ClienteEntity, PedidoEntity, ProdutoEntity, ItemPedidoEntity, CategoriaProdutoEntity]),
       TypeOrmModule.forRootAsync({
-         imports: [MysqlConfg],
+         imports: [MysqlConfig],
          useFactory: async (config: TypeOrmModuleOptions) => config,
          inject: [DatabaseConstants.DATABASE_CONFIG_NAME],
       }),
    ],
    providers: [
-      { provide: 'IRepository<Cliente>', useClass: ClienteTypeormRepository },
+      { provide: ClienteConstants.IREPOSITORY, useClass: ClienteTypeormRepository },
       { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
-      { provide: 'IRepository<Produto>', useClass: ProdutoTypeormRepository },
-      { provide: 'IRepository<CategoriaProduto>', useClass: CategoriaProdutoTypeormRepository },
+      { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoTypeormRepository },
+      { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoTypeormRepository },
       { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoTypeormRepository },
    ],
    exports: [
-      { provide: 'IRepository<Cliente>', useClass: ClienteTypeormRepository },
+      { provide: ClienteConstants.IREPOSITORY, useClass: ClienteTypeormRepository },
       { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
-      { provide: 'IRepository<Produto>', useClass: ProdutoTypeormRepository },
-      { provide: 'IRepository<CategoriaProduto>', useClass: CategoriaProdutoTypeormRepository },
+      { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoTypeormRepository },
+      { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoTypeormRepository },
       { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoTypeormRepository },
    ],
 })

@@ -1,11 +1,11 @@
+import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
 
 import { MainModule } from '../../src/main.module';
-import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
-import { SalvarPedidoRequest } from 'src/application/web/pedido/request';
-import { SalvarPedidoResponse } from 'src/application/web/pedido/response/salvar-pedido.response';
+import { EstadoPedido } from '../../src/domain/pedido/enums/pedido';
+import { SalvarPedidoRequest } from '../../src/application/web/pedido/request';
+import { SalvarPedidoResponse } from '../../src/application/web/pedido/response/salvar-pedido.response';
 
 describe('PedidoController (e2e)', () => {
    let app: INestApplication;

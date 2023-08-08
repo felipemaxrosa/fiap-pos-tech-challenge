@@ -1,4 +1,4 @@
-import { IRepository } from 'src/domain/repository/repository';
+import { IRepository } from '../../../domain/repository/repository';
 import { Pedido } from '../model/pedido.model';
 
 export interface IPedidoRepository extends IRepository<Pedido> {

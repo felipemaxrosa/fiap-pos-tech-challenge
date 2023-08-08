@@ -1,4 +1,4 @@
-import { IService } from 'src/domain/service/service';
+import { IService } from '../../../domain/service/service';
 import { Pedido } from '../model/pedido.model';
 import { EstadoPedido } from '../enums/pedido';
 

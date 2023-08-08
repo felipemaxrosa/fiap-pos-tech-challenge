@@ -1,6 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ValidationException } from 'src/domain/exception/validation.exception';
-import { IRepository } from 'src/domain/repository/repository';
+
+import { ProdutoConstants } from '../../../shared/constants';
+import { ValidationException } from '../../../domain/exception/validation.exception';
+import { IRepository } from '../../../domain/repository/repository';
 import { SalvarProdutoValidator } from './salvar-produto.validator';
 import { Produto } from '../model/produto.model';
 
@@ -16,7 +18,7 @@ export class CamposObrigatoriosProdutoValidator implements SalvarProdutoValidato
 
    private logger: Logger = new Logger(CamposObrigatoriosProdutoValidator.name);
 
-   constructor(@Inject('IRepository<Produto>') private repository: IRepository<Produto>) {}
+   constructor(@Inject(ProdutoConstants.IREPOSITORY) private repository: IRepository<Produto>) {}
 
    async validate(produto: Produto): Promise<boolean> {
       this.logger.log(

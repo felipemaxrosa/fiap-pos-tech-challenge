@@ -1,14 +1,16 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { IRepository } from 'src/domain/repository/repository';
+
+import { IRepository } from '../../../domain/repository/repository';
+import { CategoriaProdutoConstants } from '../../../shared/constants';
+import { CategoriaProduto } from '../model/categoria-produto.model';
 import { ServiceException } from '../../exception/service.exception';
 import { ICategoriaProdutoService } from './categoria-produto.service.interface';
-import { CategoriaProduto } from '../model/categoria-produto.model';
 
 @Injectable()
 export class CategoriaProdutoService implements ICategoriaProdutoService {
    private logger: Logger = new Logger(CategoriaProdutoService.name);
 
-   constructor(@Inject('IRepository<CategoriaProduto>') private repository: IRepository<CategoriaProduto>) {}
+   constructor(@Inject(CategoriaProdutoConstants.IREPOSITORY) private repository: IRepository<CategoriaProduto>) {}
 
    async save(): Promise<CategoriaProduto> {
       throw new ServiceException('Método não implementado.');

@@ -12,13 +12,14 @@ import {
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { SalvarClienteRequest } from '../request/salvar-cliente.request';
-import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
-import { BuscarPorCpfClienteRequest } from '../request/buscar-por-cpf-cliente.request';
-import { IdentificarPorCpfClienteRequest } from '../request/identificar-por-cpf-cliente.request';
-import { SalvarClienteResponse } from '../response/salvar-cliente.response';
-import { BuscarPorCpfClienteResponse } from '../response/buscar-por-cpf-cliente.response';
+import { ClienteConstants } from '../../../../shared/constants';
+import { IClienteService } from '../../../../domain/cliente/service/cliente.service.interface';
 import { BaseController } from '../../base.controller';
+import { SalvarClienteRequest } from '../request/salvar-cliente.request';
+import { SalvarClienteResponse } from '../response/salvar-cliente.response';
+import { BuscarPorCpfClienteRequest } from '../request/buscar-por-cpf-cliente.request';
+import { BuscarPorCpfClienteResponse } from '../response/buscar-por-cpf-cliente.response';
+import { IdentificarPorCpfClienteRequest } from '../request/identificar-por-cpf-cliente.request';
 import { IdentificarPorCpfClienteResponse } from '../response/identificar-por-cpf-cliente.response';
 
 @Controller('v1/cliente')
@@ -26,7 +27,7 @@ import { IdentificarPorCpfClienteResponse } from '../response/identificar-por-cp
 export class ClienteController extends BaseController {
    private logger: Logger = new Logger(ClienteController.name);
 
-   constructor(@Inject('IService<Cliente>') private service: IClienteService) {
+   constructor(@Inject(ClienteConstants.ISERVICE) private service: IClienteService) {
       super();
    }
 
