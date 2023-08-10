@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClienteController } from './cliente.controller';
+
+import { ClienteConstants } from '../../../../shared/constants';
+import { IClienteService } from '../../../../domain/cliente/service/cliente.service.interface';
+import { ClienteIdentificado } from '../../../../domain/cliente/model/cliente-identificado.model';
 import { SalvarClienteRequest } from '../request/salvar-cliente.request';
-import { IClienteService } from 'src/domain/cliente/service/cliente.service.interface';
-import { ClienteIdentificado } from 'src/domain/cliente/model/cliente-identificado.model';
 import { SalvarClienteResponse } from '../response/salvar-cliente.response';
+import { ClienteController } from './cliente.controller';
 
 describe('ClienteController', () => {
    let controller: ClienteController;
@@ -31,7 +33,7 @@ describe('ClienteController', () => {
          providers: [
             // Mock do serviço IService<Cliente>
             {
-               provide: 'IService<Cliente>',
+               provide: ClienteConstants.ISERVICE,
                useValue: {
                   // Mocka chamada para o save, rejeitando a promise em caso de request undefined
                   save: jest.fn((request) =>
@@ -55,7 +57,7 @@ describe('ClienteController', () => {
 
       // Obtém a instância do controller e do serviço a partir do módulo de teste
       controller = module.get<ClienteController>(ClienteController);
-      service = module.get<IClienteService>('IService<Cliente>');
+      service = module.get<IClienteService>(ClienteConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {

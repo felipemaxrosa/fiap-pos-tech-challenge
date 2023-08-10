@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
+
 import { CategoriaProdutoEntity } from '../entity/categoria-produto.entity';
 import { RepositoryException } from '../../../exception/repository.exception';
 import { CategoriaProduto } from '../../../../domain/categoria/model/categoria-produto.model';

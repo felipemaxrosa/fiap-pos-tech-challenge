@@ -1,8 +1,9 @@
-import { IValidator } from 'src/domain/validation/validator';
-import { Cliente } from '../model/cliente.model';
-import { cpf as cpfUtils } from 'cpf-cnpj-validator';
-import { ValidationException } from 'src/domain/exception/validation.exception';
 import { Logger } from '@nestjs/common';
+import { cpf as cpfUtils } from 'cpf-cnpj-validator';
+
+import { IValidator } from '../../../domain/validation/validator';
+import { ValidationException } from '../../../domain/exception/validation.exception';
+import { Cliente } from '../model/cliente.model';
 
 export class CpfValidoClienteValidator implements IValidator<Cliente> {
    public static CPF_VALIDO_CLIENTE_VALIDATOR_ERROR_MESSAGE = 'O CPF do cliente não é válido';

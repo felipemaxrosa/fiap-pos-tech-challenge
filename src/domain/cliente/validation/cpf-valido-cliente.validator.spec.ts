@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
+
+import { Cliente } from '../../../domain/cliente/model/cliente.model';
 import { CpfValidoClienteValidator } from './cpf-valido-cliente.validator';
 
 describe('CpfValidoClienteValidator', () => {

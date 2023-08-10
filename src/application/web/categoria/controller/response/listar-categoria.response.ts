@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CategoriaProduto } from 'src/domain/categoria/model/categoria-produto.model';
+
+import { CategoriaProduto } from '../../../../../domain/categoria/model/categoria-produto.model';
 
 export class ListarCategoriaResponse {
    @ApiProperty({ required: true, nullable: false, description: 'Nome da categoria' })

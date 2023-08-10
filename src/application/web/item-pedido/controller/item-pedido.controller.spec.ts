@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ItemPedido } from '../../../../domain/item-pedido/model';
+import { IService } from '../../../../domain/service/service';
 import { ItemPedidoConstants } from '../../../../shared/constants';
 import { SalvarItemPedidoRequest } from '../request';
 import { ItemPedidoController } from './item-pedido.controller';
-import { IService } from 'src/domain/service/service';
 import { SalvarItemPedidoResponse } from '../request/salvar-item-pedido.response';
 
 describe('ItemPedidoController', () => {

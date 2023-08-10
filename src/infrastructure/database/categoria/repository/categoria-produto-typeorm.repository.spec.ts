@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IRepository } from 'src/domain/repository/repository';
-import { CategoriaProdutoEntity } from '../entity/categoria-produto.entity';
 import { Repository, TypeORMError } from 'typeorm';
-import { CategoriaProdutoTypeormRepository } from './categoria-produto-typeorm.repository';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
+
+import { IRepository } from '../../../../domain/repository/repository';
 import { CategoriaProduto } from '../../../../domain/categoria/model/categoria-produto.model';
+import { RepositoryException } from '../../../../infrastructure/exception/repository.exception';
+import { CategoriaProdutoConstants } from '../../../../shared/constants';
+import { CategoriaProdutoEntity } from '../entity/categoria-produto.entity';
+import { CategoriaProdutoTypeormRepository } from './categoria-produto-typeorm.repository';
 
 describe('CategoriaProdutoTypeormRepository', () => {
    let repository: IRepository<CategoriaProduto>;
@@ -23,15 +25,15 @@ describe('CategoriaProdutoTypeormRepository', () => {
          providers: [
             //  IRepository<CategoriaProduto> provider
             {
-               provide: 'IRepository<CategoriaProduto>',
-               inject: ['Repository<CategoriaProdutoEntity>'],
+               provide: CategoriaProdutoConstants.IREPOSITORY,
+               inject: [CategoriaProdutoConstants.REPOSITORY_ENTITY],
                useFactory: (repositoryTypeOrm: Repository<CategoriaProdutoEntity>): IRepository<CategoriaProduto> => {
                   return new CategoriaProdutoTypeormRepository(repositoryTypeOrm);
                },
             },
             // Mock do serviço Repository<CategoriaProdutoEntity>
             {
-               provide: 'Repository<CategoriaProdutoEntity>',
+               provide: CategoriaProdutoConstants.REPOSITORY_ENTITY,
                useValue: {
                   // mock para a chamada repositoryTypeOrm.find()
                   find: jest.fn(() => {
@@ -46,8 +48,8 @@ describe('CategoriaProdutoTypeormRepository', () => {
       module.useLogger(false);
 
       // Obtém a instância dos repositórios
-      repository = module.get<IRepository<CategoriaProduto>>('IRepository<CategoriaProduto>');
-      repositoryTypeOrm = module.get<Repository<CategoriaProdutoEntity>>('Repository<CategoriaProdutoEntity>');
+      repository = module.get<IRepository<CategoriaProduto>>(CategoriaProdutoConstants.IREPOSITORY);
+      repositoryTypeOrm = module.get<Repository<CategoriaProdutoEntity>>(CategoriaProdutoConstants.REPOSITORY_ENTITY);
    });
 
    describe('injeção de dependências', () => {

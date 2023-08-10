@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
-import { EmailValidoClienteValidator } from './email-valido-cliente.validator.';
+
+import { Cliente } from '../../../domain/cliente/model/cliente.model';
+import { EmailValidoClienteValidator } from './email-valido-cliente.validator';
 
 describe('EmailValidoClienteValidator', () => {
    let validator: EmailValidoClienteValidator;

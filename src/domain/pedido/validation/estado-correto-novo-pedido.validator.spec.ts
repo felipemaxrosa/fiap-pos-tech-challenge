@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { IRepository } from 'src/domain/repository/repository';
+import { PedidoConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
 import { Pedido } from '../model/pedido.model';
-import { EstadoCorretoNovoPedidoValidator } from './estado-correto-novo-pedido.validator';
 import { EstadoPedido } from '../enums/pedido';
-import { PedidoConstants } from 'src/shared/constants';
+import { EstadoCorretoNovoPedidoValidator } from './estado-correto-novo-pedido.validator';
 
 describe('EstadoCorretoNovoPedidoValidator', () => {
    let validator: EstadoCorretoNovoPedidoValidator;

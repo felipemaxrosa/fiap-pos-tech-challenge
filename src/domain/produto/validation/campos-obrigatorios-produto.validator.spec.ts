@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Produto } from 'src/domain/produto/model/produto.model';
-import { IRepository } from 'src/domain/repository/repository';
+
+import { ProdutoConstants } from '../../../shared/constants';
+import { Produto } from '../../../domain/produto/model/produto.model';
+import { IRepository } from '../../../domain/repository/repository';
 import { CamposObrigatoriosProdutoValidator } from './campos-obrigatorios-produto.validator';
 
 // Stubs
@@ -55,7 +57,7 @@ describe('CamposObrigatoriosProdutoValidator', () => {
             CamposObrigatoriosProdutoValidator,
             // Mock do serviço IRepository<Produto>
             {
-               provide: 'IRepository<Produto>',
+               provide: ProdutoConstants.IREPOSITORY,
                useValue: {
                   findBy: jest.fn(() => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
@@ -70,7 +72,7 @@ describe('CamposObrigatoriosProdutoValidator', () => {
       module.useLogger(false);
 
       // Obtém a instância do serviço e repositório a partir do módulo de teste
-      repository = module.get<IRepository<Produto>>('IRepository<Produto>');
+      repository = module.get<IRepository<Produto>>(ProdutoConstants.IREPOSITORY);
       validator = module.get<CamposObrigatoriosProdutoValidator>(CamposObrigatoriosProdutoValidator);
    });
 

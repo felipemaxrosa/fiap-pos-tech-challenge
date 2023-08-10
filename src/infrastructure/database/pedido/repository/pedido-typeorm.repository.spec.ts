@@ -1,14 +1,14 @@
 import { Repository, TypeORMError } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { IRepository } from 'src/domain/repository/repository';
+import { PedidoConstants } from '../../../../shared/constants';
+import { Pedido } from '../../../../domain/pedido/model/pedido.model';
+import { EstadoPedido } from '../../../../domain/pedido/enums/pedido';
+import { IRepository } from '../../../../domain/repository/repository';
+import { RepositoryException } from '../../../../infrastructure/exception/repository.exception';
+import { IPedidoRepository } from '../../../../domain/pedido/repository/pedido.repository.interface';
 import { PedidoEntity } from '../../pedido/entity/pedido.entity';
 import { PedidoTypeormRepository } from './pedido-typeorm.repository';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
-import { PedidoConstants } from 'src/shared/constants';
-import { IPedidoRepository } from 'src/domain/pedido/repository/pedido.repository.interface';
 
 describe('PedidoTypeormRepository', () => {
    let repository: IPedidoRepository;

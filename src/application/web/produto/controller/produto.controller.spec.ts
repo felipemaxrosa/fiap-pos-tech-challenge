@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProdutoController } from './produto.controller';
-import { Produto } from 'src/domain/produto/model/produto.model';
+
+import { ProdutoConstants } from '../../../../shared/constants';
+import { Produto } from '../../../../domain/produto/model/produto.model';
+import { IProdutoService } from '../../../../domain/produto/service/produto.service.interface';
 import { SalvarProdutoRequest } from '../request/salvar-produto.request';
 import { EditarProdutoRequest } from '../request/editar-produto.request';
-import { IProdutoService } from 'src/domain/produto/service/produto.service.interface';
 import { SalvarProdutoResponse } from '../response/salvar-produto.response';
+import { ProdutoController } from './produto.controller';
 
 describe('ProdutoController', () => {
    let controller: ProdutoController;
@@ -60,7 +62,7 @@ describe('ProdutoController', () => {
          providers: [
             // Mock do serviço IService<Produto>
             {
-               provide: 'IService<Produto>',
+               provide: ProdutoConstants.ISERVICE,
                useValue: {
                   // Mocka chamada para o save, rejeitando a promise em caso de request undefined
                   save: jest.fn((salvarProdutoRequest) =>
@@ -84,7 +86,7 @@ describe('ProdutoController', () => {
 
       // Obtém a instância do controller e do serviço a partir do módulo de teste
       controller = module.get<ProdutoController>(ProdutoController);
-      service = module.get<IProdutoService>('IService<Produto>');
+      service = module.get<IProdutoService>(ProdutoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {

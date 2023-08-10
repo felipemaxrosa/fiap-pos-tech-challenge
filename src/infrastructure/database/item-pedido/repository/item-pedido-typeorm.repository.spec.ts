@@ -1,13 +1,13 @@
 import { Repository, TypeORMError } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { ItemPedidoConstants } from '../../../../shared/constants';
 import { IRepository } from '../../../../domain/repository/repository';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-
 import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
+import { RepositoryException } from '../../../../infrastructure/exception/repository.exception';
+
 import { ItemPedidoEntity } from '../entity/item-pedido.entity';
 import { ItemPedidoTypeormRepository } from './item-pedido-typeorm.repository';
-import { ItemPedidoConstants } from 'src/shared/constants';
 
 describe('ItemPedidoTypeormRepository', () => {
    let repository: IRepository<ItemPedido>;
