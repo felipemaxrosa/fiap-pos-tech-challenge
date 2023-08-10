@@ -69,8 +69,6 @@ spec:
       containers:
       - name: {{ .Values.mysql.name }}
         image: {{ .Values.mysql.image }}
-        labels:
-          app: {{ .Values.mysql.name }}
         resources:
           limits:
             memory: "512Mi"
