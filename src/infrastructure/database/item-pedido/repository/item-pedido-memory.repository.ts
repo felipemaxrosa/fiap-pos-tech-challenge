@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
 import { IRepository } from '../../../../domain/repository/repository';
 import { RepositoryException } from '../../../exception/repository.exception';
+import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
 
 @Injectable()
 export class ItemPedidoMemoryRepository implements IRepository<ItemPedido> {

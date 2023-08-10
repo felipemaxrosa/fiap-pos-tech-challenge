@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
-import { Pedido } from 'src/domain/pedido/model/pedido.model';
+
+import { EstadoPedido } from '../../../../domain/pedido/enums/pedido';
+import { Pedido } from '../../../../domain/pedido/model/pedido.model';
 
 export class BuscarTodosPorEstadoPedidoResponse {
    @ApiProperty({ required: true, nullable: false, description: 'ID do cliente' })

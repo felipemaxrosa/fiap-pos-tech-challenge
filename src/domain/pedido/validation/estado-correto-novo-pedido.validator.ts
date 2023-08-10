@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { ValidationException } from 'src/domain/exception/validation.exception';
+import { ValidationException } from '../../../domain/exception/validation.exception';
 import { Pedido } from '../model/pedido.model';
-import { SalvarPedidoValidator } from './salvar-pedido.validator';
 import { EstadoPedido } from '../enums/pedido';
+import { SalvarPedidoValidator } from './salvar-pedido.validator';
 
 @Injectable()
 export class EstadoCorretoNovoPedidoValidator implements SalvarPedidoValidator {

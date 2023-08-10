@@ -1,22 +1,23 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
-import { SalvarClienteValidator } from 'src/domain/cliente/validation/salvar-cliente.validator';
-import { IRepository } from 'src/domain/repository/repository';
-import { ServiceException } from 'src/domain/exception/service.exception';
-import { IClienteService } from './cliente.service.interface';
-import { BuscarClienteValidator } from '../validation/buscar-cliente.validator';
-import { IValidator } from 'src/domain/validation/validator';
+import { ClienteConstants } from '../../../shared/constants';
+import { IValidator } from '../../../domain/validation/validator';
+import { IRepository } from '../../../domain/repository/repository';
+import { Cliente } from '../../../domain/cliente/model/cliente.model';
+import { ServiceException } from '../../../domain/exception/service.exception';
+import { SalvarClienteValidator } from '../../../domain/cliente/validation/salvar-cliente.validator';
 import { ClienteIdentificado } from '../model/cliente-identificado.model';
+import { BuscarClienteValidator } from '../validation/buscar-cliente.validator';
+import { IClienteService } from './cliente.service.interface';
 
 @Injectable()
 export class ClienteService implements IClienteService {
    private logger: Logger = new Logger(ClienteService.name);
 
    constructor(
-      @Inject('IRepository<Cliente>') private repository: IRepository<Cliente>,
-      @Inject('SalvarClienteValidator') private salvarValidators: SalvarClienteValidator[],
-      @Inject('BuscarClienteValidator') private buscarValidators: BuscarClienteValidator[],
+      @Inject(ClienteConstants.IREPOSITORY) private repository: IRepository<Cliente>,
+      @Inject(ClienteConstants.SALVAR_CLIENTE_VALIDATOR) private salvarValidators: SalvarClienteValidator[],
+      @Inject(ClienteConstants.BUSCAR_CLIENTE_VALIDATOR) private buscarValidators: BuscarClienteValidator[],
    ) {}
 
    async findByCpf(cpf: string): Promise<Cliente> {

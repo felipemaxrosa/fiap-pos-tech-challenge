@@ -1,7 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { Produto } from 'src/domain/produto/model/produto.model';
-import { SalvarProdutoValidator } from 'src/domain/produto/validation/salvar-produto.validator';
-import { IRepository } from 'src/domain/repository/repository';
+
+import { ProdutoConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
+import { Produto } from '../../../domain/produto/model/produto.model';
+import { SalvarProdutoValidator } from '../../../domain/produto/validation/salvar-produto.validator';
 import { ServiceException } from '../../exception/service.exception';
 import { IProdutoService } from './produto.service.interface';
 
@@ -10,8 +12,8 @@ export class ProdutoService implements IProdutoService {
    private logger = new Logger(ProdutoService.name);
 
    constructor(
-      @Inject('IRepository<Produto>') private repository: IRepository<Produto>,
-      @Inject('SalvarProdutoValidator')
+      @Inject(ProdutoConstants.IREPOSITORY) private repository: IRepository<Produto>,
+      @Inject(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR)
       private validators: SalvarProdutoValidator[],
    ) {}
 

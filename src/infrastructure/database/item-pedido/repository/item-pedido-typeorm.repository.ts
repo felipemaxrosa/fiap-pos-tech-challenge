@@ -2,9 +2,9 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 
-import { IRepository } from 'src/domain/repository/repository';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
+import { IRepository } from '../../../../domain/repository/repository';
 import { ItemPedido } from '../../../../domain/item-pedido/model/item-pedido.model';
+import { RepositoryException } from '../../../../infrastructure/exception/repository.exception';
 import { ItemPedidoEntity } from '../entity/item-pedido.entity';
 
 @Injectable()
