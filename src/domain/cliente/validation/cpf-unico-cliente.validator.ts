@@ -1,9 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { SalvarClienteValidator } from './salvar-cliente.validator';
-import { ValidationException } from 'src/domain/exception/validation.exception';
+import { ClienteConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
+import { ValidationException } from '../../../domain/exception/validation.exception';
 import { Cliente } from '../model/cliente.model';
-import { IRepository } from 'src/domain/repository/repository';
+import { SalvarClienteValidator } from './salvar-cliente.validator';
 
 @Injectable()
 export class CpfUnicoClienteValidator implements SalvarClienteValidator {
@@ -11,7 +12,7 @@ export class CpfUnicoClienteValidator implements SalvarClienteValidator {
 
    private logger: Logger = new Logger(CpfUnicoClienteValidator.name);
 
-   constructor(@Inject('IRepository<Cliente>') private repository: IRepository<Cliente>) {}
+   constructor(@Inject(ClienteConstants.IREPOSITORY) private repository: IRepository<Cliente>) {}
 
    async validate(cliente: Cliente): Promise<boolean> {
       this.logger.log(`Inicializando validação ${CpfUnicoClienteValidator.name} de cpf único: ${cliente.cpf}`);

@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { ValidationException } from 'src/domain/exception/validation.exception';
-import { AddItemPedidoValidator } from './add-item-pedido.validator';
+import { ValidationException } from '../../../domain/exception/validation.exception';
 import { ItemPedido } from '../model/item-pedido.model';
+import { AddItemPedidoValidator } from './add-item-pedido.validator';
 
 @Injectable()
 export class QuantidadeMinimaItemValidator implements AddItemPedidoValidator {

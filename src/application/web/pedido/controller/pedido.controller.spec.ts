@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { PedidoConstants } from '../../../../shared/constants';
+import { EstadoPedido } from '../../../../domain/pedido/enums/pedido';
+import { IPedidoService } from '../../../../domain/pedido/service/pedido.service.interface';
 import { PedidoController } from './pedido.controller';
-import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
-import { PedidoConstants } from 'src/shared/constants';
-import { IPedidoService } from 'src/domain/pedido/service/pedido.service.interface';
 
 describe('PedidoController', () => {
    let controller: PedidoController;

@@ -1,7 +1,9 @@
+import { Test, TestingModule } from '@nestjs/testing';
+
 import { CategoriaProdutoController } from './categoria-produto.controller';
 import { ICategoriaProdutoService } from '../../../../domain/categoria/service/categoria-produto.service.interface';
 import { CategoriaProduto } from '../../../../domain/categoria/model/categoria-produto.model';
-import { Test, TestingModule } from '@nestjs/testing';
+import { CategoriaProdutoConstants } from '../../../../shared/constants';
 
 describe('CategoriaProdutoController', () => {
    let controller: CategoriaProdutoController;
@@ -19,9 +21,9 @@ describe('CategoriaProdutoController', () => {
       const module: TestingModule = await Test.createTestingModule({
          controllers: [CategoriaProdutoController],
          providers: [
-            // Mock do serviço IService<Produto>
+            // Mock do serviço IService<CategoriaProduto>
             {
-               provide: 'IService<CategoriaProduto>',
+               provide: CategoriaProdutoConstants.ISERVICE,
                useValue: {
                   // Mocka chamada para findAll
                   findAll: jest.fn(() => Promise.resolve(categoriaProdutos)),
@@ -35,7 +37,7 @@ describe('CategoriaProdutoController', () => {
 
       // Obtém a instância do controller e do serviço a partir do módulo de teste
       controller = module.get<CategoriaProdutoController>(CategoriaProdutoController);
-      service = module.get<ICategoriaProdutoService>('IService<CategoriaProduto>');
+      service = module.get<ICategoriaProdutoService>(CategoriaProdutoConstants.ISERVICE);
    });
 
    describe('listar todas as categorias de produto', () => {

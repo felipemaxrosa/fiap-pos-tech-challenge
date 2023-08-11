@@ -1,10 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { Cliente } from 'src/domain/cliente/model/cliente.model';
-import { IRepository } from 'src/domain/repository/repository';
-import { ClienteEntity } from '../entity/cliente.entity';
 import { Repository, TypeORMError } from 'typeorm';
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { RepositoryException } from '../../../../infrastructure/exception/repository.exception';
+import { Cliente } from '../../../../domain/cliente/model/cliente.model';
+import { IRepository } from '../../../../domain/repository/repository';
+import { ClienteConstants } from '../../../../shared/constants';
+import { ClienteEntity } from '../entity/cliente.entity';
 import { ClienteTypeormRepository } from './cliente-typeorm.repository';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 
 describe('ClienteTypeormRepository', () => {
    let repository: IRepository<Cliente>;
@@ -30,19 +32,19 @@ describe('ClienteTypeormRepository', () => {
          providers: [
             //  IRepository<Cliente> provider
             {
-               provide: 'IRepository<Cliente>',
-               inject: ['Repository<ClienteEntity>'],
+               provide: ClienteConstants.IREPOSITORY,
+               inject: [ClienteConstants.REPOSITORY_CLIENTE_ENTITY],
                useFactory: (repositoryTypeOrm: Repository<ClienteEntity>): IRepository<Cliente> => {
                   return new ClienteTypeormRepository(repositoryTypeOrm);
                },
             },
             // Mock do serviço Repository<ClienteEntity>
             {
-               provide: 'Repository<ClienteEntity>',
+               provide: ClienteConstants.REPOSITORY_CLIENTE_ENTITY,
                useValue: {
-                  // mock para a chamama repositoryTypeOrm.save(cliente)
+                  // mock para a chamada repositoryTypeOrm.save(cliente)
                   save: jest.fn(() => Promise.resolve(clienteEntity)),
-                  // mock para a chamama repositoryTypeOrm.findBy(attributes)
+                  // mock para a chamada repositoryTypeOrm.findBy(attributes)
                   findBy: jest.fn(() => {
                      return Promise.resolve([clienteEntity]);
                   }),
@@ -55,8 +57,8 @@ describe('ClienteTypeormRepository', () => {
       module.useLogger(false);
 
       // Obtém a instância dos repositórios
-      repository = module.get<IRepository<Cliente>>('IRepository<Cliente>');
-      repositoryTypeOrm = module.get<Repository<ClienteEntity>>('Repository<ClienteEntity>');
+      repository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
+      repositoryTypeOrm = module.get<Repository<ClienteEntity>>(ClienteConstants.REPOSITORY_CLIENTE_ENTITY);
    });
 
    describe('injeção de dependências', () => {

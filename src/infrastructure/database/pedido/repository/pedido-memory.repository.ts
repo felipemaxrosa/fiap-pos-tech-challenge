@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { Pedido } from '../../../../domain/pedido/model/pedido.model';
+import { EstadoPedido } from '../../../../domain/pedido/enums/pedido';
+import { IPedidoRepository } from '../../../../domain/pedido/repository/pedido.repository.interface';
 import { RepositoryException } from '../../../exception/repository.exception';
-import { IPedidoRepository } from 'src/domain/pedido/repository/pedido.repository.interface';
-import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
 
 @Injectable()
 export class PedidoMemoryRepository implements IPedidoRepository {

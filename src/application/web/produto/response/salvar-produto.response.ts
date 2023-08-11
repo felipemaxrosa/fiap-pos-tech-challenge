@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Produto } from 'src/domain/produto/model/produto.model';
+
+import { Produto } from '../../../../domain/produto/model/produto.model';
 
 export class SalvarProdutoResponse {
    @ApiProperty({

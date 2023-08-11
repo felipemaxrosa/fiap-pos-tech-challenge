@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 
-import { ValidationException } from 'src/domain/exception/validation.exception';
-import { IRepository } from 'src/domain/repository/repository';
-import { EditarItemPedidoValidator } from './editar-item-pedido.validator';
+import { ItemPedidoConstants } from '../../../shared/constants';
+import { IRepository } from '../../../domain/repository/repository';
+import { ValidationException } from '../../../domain/exception/validation.exception';
 import { ItemPedido } from '../model';
-import { ItemPedidoConstants } from 'src/shared/constants';
+import { EditarItemPedidoValidator } from './editar-item-pedido.validator';
 
 @Injectable()
 export class ItemPedidoExistenteValidator implements EditarItemPedidoValidator {

@@ -2,11 +2,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 
-import { Pedido } from 'src/domain/pedido/model/pedido.model';
-import { PedidoEntity } from '../../pedido/entity/pedido.entity';
+import { Pedido } from '../../../../domain/pedido/model/pedido.model';
+import { EstadoPedido } from '../../../../domain/pedido/enums/pedido';
 import { RepositoryException } from '../../../exception/repository.exception';
-import { IPedidoRepository } from 'src/domain/pedido/repository/pedido.repository.interface';
-import { EstadoPedido } from 'src/domain/pedido/enums/pedido';
+import { IPedidoRepository } from '../../../../domain/pedido/repository/pedido.repository.interface';
+import { PedidoEntity } from '../../pedido/entity/pedido.entity';
 
 @Injectable()
 export class PedidoTypeormRepository implements IPedidoRepository {

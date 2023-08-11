@@ -1,23 +1,13 @@
 import { Module } from '@nestjs/common';
-import { Cliente } from './cliente/model/cliente.model';
-import { ClienteService } from './cliente/service/cliente.service';
-import { IRepository } from './repository/repository';
-import { CpfUnicoClienteValidator } from './cliente/validation/cpf-unico-cliente.validator';
-import { EmailUnicoClienteValidator } from './cliente/validation/email-unico-cliente.validator';
-import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.validator';
-import { PedidoService } from './pedido/service/pedido.service';
-import { SalvarPedidoValidator } from './pedido/validation/salvar-pedido.validator';
-import { EstadoCorretoNovoPedidoValidator } from './pedido/validation/estado-correto-novo-pedido.validator';
-import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
-import { ProdutoService } from './produto/service/produto.service';
-import { Produto } from './produto/model/produto.model';
-import { SalvarProdutoValidator } from './produto/validation/salvar-produto.validator';
-import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-obrigatorios-produto.validator';
-import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.validator';
-import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
-import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator.';
-import { CategoriaProdutoService } from './categoria/service/categoria-produto.service';
-import { ItemPedidoService } from './item-pedido/service/item-pedido.service';
+
+import {
+   CategoriaProdutoConstants,
+   ClienteConstants,
+   ItemPedidoConstants,
+   PedidoConstants,
+   ProdutoConstants,
+} from '../shared/constants';
+
 import {
    AddItemPedidoValidator,
    EditarItemPedidoValidator,
@@ -25,14 +15,32 @@ import {
    ItemPedidoExistenteValidator,
 } from './item-pedido/validation';
 import { ItemPedido } from './item-pedido/model';
+import { IRepository } from './repository/repository';
+import { Cliente } from './cliente/model/cliente.model';
+import { Produto } from './produto/model/produto.model';
+import { PedidoService } from './pedido/service/pedido.service';
+import { ClienteService } from './cliente/service/cliente.service';
+import { ProdutoService } from './produto/service/produto.service';
+import { ItemPedidoService } from './item-pedido/service/item-pedido.service';
+import { SalvarPedidoValidator } from './pedido/validation/salvar-pedido.validator';
+import { SalvarProdutoValidator } from './produto/validation/salvar-produto.validator';
+import { SalvarClienteValidator } from './cliente/validation/salvar-cliente.validator';
+import { BuscarClienteValidator } from './cliente/validation/buscar-cliente.validator';
+import { CategoriaProdutoService } from './categoria/service/categoria-produto.service';
+import { CpfUnicoClienteValidator } from './cliente/validation/cpf-unico-cliente.validator';
+import { CpfValidoClienteValidator } from './cliente/validation/cpf-valido-cliente.validator';
+import { EmailUnicoClienteValidator } from './cliente/validation/email-unico-cliente.validator';
+import { EmailValidoClienteValidator } from './cliente/validation/email-valido-cliente.validator';
+import { EstadoCorretoNovoPedidoValidator } from './pedido/validation/estado-correto-novo-pedido.validator';
+import { CamposObrigatoriosProdutoValidator } from './produto/validation/campos-obrigatorios-produto.validator';
 
 @Module({
    providers: [
       // Cliente
-      { provide: 'IService<Cliente>', useClass: ClienteService },
+      { provide: ClienteConstants.ISERVICE, useClass: ClienteService },
       {
-         provide: 'SalvarClienteValidator',
-         inject: ['IRepository<Cliente>'],
+         provide: ClienteConstants.SALVAR_CLIENTE_VALIDATOR,
+         inject: [ClienteConstants.IREPOSITORY],
          useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => [
             new CpfValidoClienteValidator(),
             new EmailValidoClienteValidator(),
@@ -44,22 +52,22 @@ import { ItemPedido } from './item-pedido/model';
       // Pedido
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       {
-         provide: 'SalvarPedidoValidator',
-         inject: ['IRepository<Cliente>'],
+         provide: PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
+         inject: [ClienteConstants.IREPOSITORY],
          useFactory: (): SalvarPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
       },
 
       // Produto
-      { provide: 'IService<Produto>', useClass: ProdutoService },
+      { provide: ProdutoConstants.ISERVICE, useClass: ProdutoService },
       {
-         provide: 'SalvarProdutoValidator',
-         inject: ['IRepository<Produto>'],
+         provide: ProdutoConstants.SALVAR_PRODUTO_VALIDATOR,
+         inject: [ProdutoConstants.IREPOSITORY],
          useFactory: (repository: IRepository<Produto>): SalvarProdutoValidator[] => [
             new CamposObrigatoriosProdutoValidator(repository),
          ],
       },
       {
-         provide: 'BuscarClienteValidator',
+         provide: ClienteConstants.BUSCAR_CLIENTE_VALIDATOR,
          useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
       },
 
@@ -78,14 +86,14 @@ import { ItemPedido } from './item-pedido/model';
          ],
       },
       // Categoria de Produto
-      { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
+      { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
    ],
    exports: [
-      { provide: 'IService<Cliente>', useClass: ClienteService },
+      { provide: ClienteConstants.ISERVICE, useClass: ClienteService },
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
-      { provide: 'IService<Produto>', useClass: ProdutoService },
-      { provide: 'IService<CategoriaProduto>', useClass: CategoriaProdutoService },
+      { provide: ProdutoConstants.ISERVICE, useClass: ProdutoService },
+      { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
    ],
 })
 export class DomainModule {}
