@@ -17,8 +17,8 @@ spec:
         image: {{ .Values.application.image }}
         resources:
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            memory: {{ .Values.application.resources.limits.memory }}
+            cpu: {{ .Values.application.resources.limits.cpu }}
         livenessProbe:
           httpGet:
             port: 3000
@@ -71,8 +71,8 @@ spec:
         image: {{ .Values.mysql.image }}
         resources:
           limits:
-            memory: "768Mi"
-            cpu: "500m"
+            memory: {{ .Values.mysql.resources.limits.memory }}
+            cpu: {{ .Values.mysql.resources.limits.cpu }}
         ports:
           - containerPort: 3306
         livenessProbe:

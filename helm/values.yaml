@@ -3,10 +3,18 @@ namespace: default
 application:
   name: fast-n-foodious
   image: renators/fast-n-foodious:latest
+  resources:
+    limits:
+      memory: "768Mi"
+      cpu: "500m"
 
 mysql:
   name: mysql
   image: mysql:8.0
+  resources:
+    limits:
+      memory: "768Mi"
+      cpu: "500m"
 
 configMap:
   data:
@@ -18,9 +26,9 @@ hpa:
   minReplicas: 1
   maxReplicas: 3
   cpu:
-    averageUtilization: 80
+    averageUtilization: 70
   memory:
-    averageUtilization: 80
+    averageUtilization: 70
 
 pv:
   storage: 500Mi
