@@ -4,12 +4,12 @@ metadata:
   name: fast-n-foodious-pv
 spec:
   capacity:
-    storage: 300Mi
+    storage: 500Mi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: fast-n-foodious-storage
   hostPath:
-     path: /Users/renatorodrigues/lib/mysql
+     path: /tmp/lib/mysql
      type: DirectoryOrCreate

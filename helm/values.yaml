@@ -23,12 +23,12 @@ hpa:
     averageUtilization: 80
 
 pv:
-  storage: 300Mi
-  hostPath: /Users/renatorodrigues/lib/mysql
+  storage: 500Mi
+  hostPath: /tmp/lib/mysql
 
 pvc:
   requests:
-      storage: 100Mi
+      storage: 300Mi
 
 secret:
   data:

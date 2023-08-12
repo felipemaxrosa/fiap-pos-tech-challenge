@@ -71,7 +71,7 @@ spec:
           app: mysql
         resources:
           limits:
-            memory: "512Mi"
+            memory: "768Mi"
             cpu: "500m"
         ports:
           - containerPort: 3306
