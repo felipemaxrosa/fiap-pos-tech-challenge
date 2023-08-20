@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k6-stress-job
+spec:
+  ttlSecondsAfterFinished: 30
+  template:
+    spec:
+      containers:
+        - name: k6-stress-job
+          image: 24hoursmedia/k6-xarch
+          env:
+            - name: FAST_N_FOODIOUS_SVC
+              value: fast-n-foodious-svc
+          command:
+            - /bin/sh
+            - -c
+            - | 
+              k6 run \
+              -e FAST_N_FOODIOUS_SVC=$FAST_N_FOODIOUS_SVC \
+              --vus 20 \
+              --duration 60s \
+              -< /test/stress/k6-script.js
+          volumeMounts:
+            - name: k6-stress-script
+              mountPath: /test/stress
+      volumes:
+        - name: k6-stress-script
+          configMap:
+            name: k6-stress-env
+            items:
+              - key: k6-script.js
+                path: k6-script.js
+      restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k6-stress-env
+data:
+  k6-script.js: |
+    import http from 'k6/http';
+    export default function () {
+      let fnfSvc = __ENV.FAST_N_FOODIOUS_SVC || '127.0.0.1';
+      http.get(`http://${fnfSvc}/v1/categoria`);
+    }

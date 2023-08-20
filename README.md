@@ -109,7 +109,7 @@ Utilizado **`apenas para desenvolvimento local, modo watch, debug, testes e2e `*
 $ docker-compose --env-file ./envs/local.env up mysql
 $ docker ps
 CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                               NAMES
-83c9b4d8880a   mysql:8.0   "docker-entrypoint.s…"   3 seconds ago   Up 2 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   fast-n-foodious-mysql
+83c9b4d8880a   mysql:8.0   "docker-entrypoint.s…"   3 seconds ago   Up 2 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 
 # Executa a aplicação com as variáveis locais, conectando no container do mysql
 $ NODE_ENV=local npm run start
@@ -124,8 +124,8 @@ Inicia o container da aplicação e do mysql com as variáveis de produção, ut
 $ docker-compose --env-file ./envs/prod.env up -d
 $ docker ps
 CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS         PORTS                               NAMES
-2a0f11e4ffe3   fast-n-foodious-app   "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:3000->3000/tcp              fast-n-foodious-app
-06ebf6b90fa7   mysql:8.0             "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   fast-n-foodious-mysql
+2a0f11e4ffe3   fast-n-foodious   "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:3000->3000/tcp              fast-n-foodious
+06ebf6b90fa7   mysql:8.0             "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
 
 #### 💀 Docker (Modo Desbravador!)
@@ -139,13 +139,13 @@ $ docker run -d --rm --name mysql -p 3306:3306 \
     -v mysql-data:/data/db \
     mysql:8.0
 
-$ docker run -d --rm --name fast-n-foodious-app -p 3000:3000 \
+$ docker run -d --rm --name fast-n-foodious -p 3000:3000 \
     --env-file ./envs/prod.env --network fast-n-foodious-network \
-    rodrigo-ottero/fast-n-foodious-app
+    ottero/fast-n-foodious
 
 $ docker ps
 CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS         PORTS                               NAMES
-88bf7eae7e46   rodrigo-ottero/fast-n-foodious-app   "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious-app
+88bf7eae7e46   ottero/fast-n-foodious   "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious
 8b0268d435a6   mysql:8.0                            "docker-entrypoint.s…"   6 seconds ago   Up 5 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
 #### 🧾 Documentação da API
