@@ -2,7 +2,7 @@ namespace: default
 
 application:
   name: fast-n-foodious
-  image: renators/fast-n-foodious:latest
+  image: ottero/fast-n-foodious:latest
   resources:
     limits:
       memory: "768Mi"
