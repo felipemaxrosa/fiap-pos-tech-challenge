@@ -12,7 +12,13 @@ import { PedidoEntity } from 'src/infrastructure/persistence/pedido/entity/pedid
 import { PedidoTypeormRepository } from 'src/infrastructure/persistence/pedido/repository/pedido-typeorm.repository';
 import { ProdutoEntity } from 'src/infrastructure/persistence/produto/entity/produto.entity';
 import { ProdutoTypeormRepository } from 'src/infrastructure/persistence/produto/repository/produto-typeorm.repository';
-import { ClienteConstants, PedidoConstants, ProdutoConstants, CategoriaProdutoConstants, ItemPedidoConstants } from 'src/shared/constants';
+import {
+   ClienteConstants,
+   PedidoConstants,
+   ProdutoConstants,
+   CategoriaProdutoConstants,
+   ItemPedidoConstants,
+} from 'src/shared/constants';
 
 @Module({
    imports: [

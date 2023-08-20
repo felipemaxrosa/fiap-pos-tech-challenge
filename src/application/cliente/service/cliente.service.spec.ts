@@ -14,8 +14,6 @@ import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ClienteConstants } from 'src/shared/constants';
 
-
-
 describe('CienteService', () => {
    let service: IClienteService;
    let repository: IRepository<Cliente>;

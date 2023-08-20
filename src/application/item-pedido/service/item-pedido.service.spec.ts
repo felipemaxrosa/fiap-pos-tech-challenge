@@ -3,13 +3,17 @@ import { ItemPedidoService } from 'src/application/item-pedido/service/item-pedi
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { AddItemPedidoValidator, EditarItemPedidoValidator, QuantidadeMinimaItemValidator, ItemPedidoExistenteValidator } from 'src/enterprise/item-pedido/validation';
+import {
+   AddItemPedidoValidator,
+   EditarItemPedidoValidator,
+   QuantidadeMinimaItemValidator,
+   ItemPedidoExistenteValidator,
+} from 'src/enterprise/item-pedido/validation';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { SalvarItemPedidoRequest } from 'src/presentation/web/item-pedido/request';
 import { ItemPedidoConstants } from 'src/shared/constants';
-
 
 describe('ItemPedidoService', () => {
    let service: IService<ItemPedido>;

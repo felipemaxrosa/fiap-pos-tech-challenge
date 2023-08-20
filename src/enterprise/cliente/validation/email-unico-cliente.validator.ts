@@ -5,7 +5,6 @@ import { ValidationException } from 'src/enterprise/exception/validation.excepti
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ClienteConstants } from 'src/shared/constants';
 
-
 @Injectable()
 export class EmailUnicoClienteValidator implements SalvarClienteValidator {
    public static EMAIL_UNICO_CLIENTE_VALIDATOR_ERROR_MESSAGE = 'O email do cliente não é único';

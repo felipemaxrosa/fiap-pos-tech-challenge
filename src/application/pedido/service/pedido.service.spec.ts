@@ -11,7 +11,6 @@ import { RepositoryException } from 'src/infrastructure/exception/repository.exc
 import { SalvarPedidoRequest } from 'src/presentation/web/pedido/request';
 import { PedidoConstants } from 'src/shared/constants';
 
-
 describe('PedidoService', () => {
    let service: IPedidoService;
    let repository: IPedidoRepository;

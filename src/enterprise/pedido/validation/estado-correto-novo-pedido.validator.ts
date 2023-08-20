@@ -4,7 +4,6 @@ import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { SalvarPedidoValidator } from 'src/enterprise/pedido/validation/salvar-pedido.validator';
 
-
 @Injectable()
 export class EstadoCorretoNovoPedidoValidator implements SalvarPedidoValidator {
    public static ERROR_MESSAGE = `O estado inicial de um novo pedido deve ser ${EstadoPedido.RECEBIDO} (${

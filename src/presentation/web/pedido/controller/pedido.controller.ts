@@ -12,7 +12,6 @@ import { ListarPedidoPendenteResponse } from 'src/presentation/web/pedido/respon
 import { SalvarPedidoResponse } from 'src/presentation/web/pedido/response/salvar-pedido.response';
 import { PedidoConstants } from 'src/shared/constants';
 
-
 @Controller('v1/pedido')
 @ApiTags('Pedido')
 export class PedidoController extends BaseController {

@@ -6,7 +6,6 @@ import { SalvarPedidoValidator } from 'src/enterprise/pedido/validation/salvar-p
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ClienteConstants } from 'src/shared/constants';
 
-
 @Injectable()
 export class ClienteExistentePedidoValidator implements SalvarPedidoValidator {
    public static ERROR_MESSAGE = 'Código de cliente inexistente';

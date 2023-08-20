@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { CpfValidoClienteValidator } from 'src/enterprise/cliente/validation/cpf-valido-cliente.validator';
 
-
 describe('CpfValidoClienteValidator', () => {
    let validator: CpfValidoClienteValidator;
 

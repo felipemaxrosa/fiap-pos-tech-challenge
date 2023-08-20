@@ -5,7 +5,6 @@ import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { CategoriaProdutoConstants } from 'src/shared/constants';
 
-
 @Injectable()
 export class CategoriaProdutoService implements ICategoriaProdutoService {
    private logger: Logger = new Logger(CategoriaProdutoService.name);

@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PagamentoController } from 'src/presentation/web/pagamento/controller/pagamento.controller';
 
-
 describe('PagamentoController', () => {
    let controller: PagamentoController;
 

@@ -9,7 +9,6 @@ import { IRepository } from 'src/enterprise/repository/repository';
 import { IValidator } from 'src/enterprise/validation/validator';
 import { ClienteConstants } from 'src/shared/constants';
 
-
 @Injectable()
 export class ClienteService implements IClienteService {
    private logger: Logger = new Logger(ClienteService.name);

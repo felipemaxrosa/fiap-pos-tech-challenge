@@ -8,7 +8,6 @@ import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { CategoriaProdutoConstants } from 'src/shared/constants';
 
-
 describe('CategoriaProdutoService', () => {
    let service: ICategoriaProdutoService;
    let repository: IRepository<CategoriaProduto>;

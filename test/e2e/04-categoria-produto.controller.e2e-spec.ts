@@ -4,7 +4,6 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
 import { MainModule } from 'src/main.module';
 
-
 describe('CategoriaProdutoController (e2e)', () => {
    let app: INestApplication;
 

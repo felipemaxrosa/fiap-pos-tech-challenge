@@ -13,7 +13,6 @@ import { PagamentoController } from 'src/presentation/web/pagamento/controller/p
 import { PedidoController } from 'src/presentation/web/pedido/controller/pedido.controller';
 import { ProdutoController } from 'src/presentation/web/produto/controller/produto.controller';
 
-
 @Module({
    imports: [InfrastructureModule, EnterpriseModule],
    providers: [

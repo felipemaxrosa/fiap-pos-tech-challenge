@@ -21,7 +21,6 @@ import { IdentificarPorCpfClienteResponse } from 'src/presentation/web/cliente/r
 import { SalvarClienteResponse } from 'src/presentation/web/cliente/response/salvar-cliente.response';
 import { ClienteConstants } from 'src/shared/constants';
 
-
 @Controller('v1/cliente')
 @ApiTags('Cliente')
 export class ClienteController extends BaseController {

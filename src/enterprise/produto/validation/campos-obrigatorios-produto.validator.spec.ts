@@ -4,7 +4,6 @@ import { CamposObrigatoriosProdutoValidator } from 'src/enterprise/produto/valid
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
 
-
 // Stubs
 const produtoCorreto: Produto = {
    id: 1,

@@ -5,7 +5,6 @@ import { MainModule } from 'src/main.module';
 import { ApplicationConstants } from 'src/presentation/constants/application.constants';
 import { EnvUtils } from 'src/shared/env.utils';
 
-
 async function bootstrap(): Promise<void> {
    const logger: Logger = new Logger(MainModule.name);
 

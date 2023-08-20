@@ -7,7 +7,6 @@ import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repos
 import { SalvarPedidoValidator } from 'src/enterprise/pedido/validation/salvar-pedido.validator';
 import { PedidoConstants } from 'src/shared/constants';
 
-
 @Injectable()
 export class PedidoService implements IPedidoService {
    private logger = new Logger(PedidoService.name);

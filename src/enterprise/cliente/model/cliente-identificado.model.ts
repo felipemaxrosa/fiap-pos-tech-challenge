@@ -1,4 +1,4 @@
-import { Cliente } from "src/enterprise/cliente/model/cliente.model";
+import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 
 export class ClienteIdentificado {
    public nome: string;

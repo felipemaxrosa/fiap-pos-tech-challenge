@@ -6,7 +6,6 @@ import { SalvarProdutoValidator } from 'src/enterprise/produto/validation/salvar
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
 
-
 @Injectable()
 export class ProdutoService implements IProdutoService {
    private logger = new Logger(ProdutoService.name);

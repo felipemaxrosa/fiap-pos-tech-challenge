@@ -12,14 +12,25 @@ import { EmailUnicoClienteValidator } from 'src/enterprise/cliente/validation/em
 import { EmailValidoClienteValidator } from 'src/enterprise/cliente/validation/email-valido-cliente.validator';
 import { SalvarClienteValidator } from 'src/enterprise/cliente/validation/salvar-cliente.validator';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { AddItemPedidoValidator, QuantidadeMinimaItemValidator, EditarItemPedidoValidator, ItemPedidoExistenteValidator } from 'src/enterprise/item-pedido/validation';
+import {
+   AddItemPedidoValidator,
+   QuantidadeMinimaItemValidator,
+   EditarItemPedidoValidator,
+   ItemPedidoExistenteValidator,
+} from 'src/enterprise/item-pedido/validation';
 import { EstadoCorretoNovoPedidoValidator } from 'src/enterprise/pedido/validation/estado-correto-novo-pedido.validator';
 import { SalvarPedidoValidator } from 'src/enterprise/pedido/validation/salvar-pedido.validator';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { CamposObrigatoriosProdutoValidator } from 'src/enterprise/produto/validation/campos-obrigatorios-produto.validator';
 import { SalvarProdutoValidator } from 'src/enterprise/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { ClienteConstants, PedidoConstants, ProdutoConstants, ItemPedidoConstants, CategoriaProdutoConstants } from 'src/shared/constants';
+import {
+   ClienteConstants,
+   PedidoConstants,
+   ProdutoConstants,
+   ItemPedidoConstants,
+   CategoriaProdutoConstants,
+} from 'src/shared/constants';
 
 @Module({
    providers: [

@@ -1,4 +1,4 @@
-import { EstadoPedido } from "src/enterprise/pedido/enums/pedido";
+import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 
 export class Pedido {
    constructor(

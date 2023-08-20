@@ -14,7 +14,10 @@ export class ProdutoMemoryRepository implements IRepository<Produto> {
    async findBy(attributes: Partial<Produto>): Promise<Produto[]> {
       this.logger.debug(`Realizando consulta de produto: com os parâmetros ${JSON.stringify(attributes)}`);
       let attributesWithConvertedIds = RepositoryUtils.convertIdtoNumberTypeIfPresent(attributes, 'id');
-      attributesWithConvertedIds = RepositoryUtils.convertIdtoNumberTypeIfPresent(attributesWithConvertedIds, 'idCategoriaProduto');
+      attributesWithConvertedIds = RepositoryUtils.convertIdtoNumberTypeIfPresent(
+         attributesWithConvertedIds,
+         'idCategoriaProduto',
+      );
       return new Promise((resolve) => {
          resolve(
             this.repository.filter((produto) => {

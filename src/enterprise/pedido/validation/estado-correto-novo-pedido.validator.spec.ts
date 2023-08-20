@@ -5,7 +5,6 @@ import { EstadoCorretoNovoPedidoValidator } from 'src/enterprise/pedido/validati
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PedidoConstants } from 'src/shared/constants';
 
-
 describe('EstadoCorretoNovoPedidoValidator', () => {
    let validator: EstadoCorretoNovoPedidoValidator;
    let repository: IRepository<Pedido>;

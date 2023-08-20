@@ -4,7 +4,6 @@ import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produ
 import { CategoriaProdutoController } from 'src/presentation/web/categoria/controller/categoria-produto.controller';
 import { CategoriaProdutoConstants } from 'src/shared/constants';
 
-
 describe('CategoriaProdutoController', () => {
    let controller: CategoriaProdutoController;
    let service: ICategoriaProdutoService;

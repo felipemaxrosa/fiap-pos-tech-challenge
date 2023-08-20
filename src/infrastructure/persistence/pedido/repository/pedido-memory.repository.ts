@@ -4,7 +4,6 @@ import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 
-
 @Injectable()
 export class PedidoMemoryRepository implements IPedidoRepository {
    private logger: Logger = new Logger(PedidoMemoryRepository.name);
