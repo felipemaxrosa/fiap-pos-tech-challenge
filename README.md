@@ -141,11 +141,11 @@ $ docker run -d --rm --name mysql -p 3306:3306 \
 
 $ docker run -d --rm --name fast-n-foodious -p 3000:3000 \
     --env-file ./envs/prod.env --network fast-n-foodious-network \
-    rodrigo-ottero/fast-n-foodious
+    ottero/fast-n-foodious
 
 $ docker ps
 CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS         PORTS                               NAMES
-88bf7eae7e46   rodrigo-ottero/fast-n-foodious   "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious
+88bf7eae7e46   ottero/fast-n-foodious   "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious
 8b0268d435a6   mysql:8.0                            "docker-entrypoint.s…"   6 seconds ago   Up 5 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
 #### 🧾 Documentação da API
