@@ -5,7 +5,7 @@
 ![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker)
 
 # 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v1.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
-Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da pós gradução em Software Architecture.
+Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da pós gradução em Software Architecture.
 
 * [Arquitetura](#arquitetura)
 * [Instalação de Dependências Node](#-instalação-de-dependências-node)
@@ -31,9 +31,9 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 01 da p�
         * [Fluxo de etapas dos Pedidos](#fluxo-de-etapas-dos-pedidos)
 
 ## Arquitetura
-![fast-n-foodious-hexagonal](docs/diagramas/fast-n-foodious-hexagonal.png)
+![fast-n-foodious-clean](docs/diagramas/fast-n-foodious-clean.png)
 
-- Arquitetura Hexagonal & Modular
+- Arquitetura Clean & Modular
     - Camada de Aplicação, Domínio e Infraestrutura
     - Módulo Main, Application, Domain, Infrastructure
 - Principais Tecnologias/Frameworks

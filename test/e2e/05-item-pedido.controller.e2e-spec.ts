@@ -1,10 +1,8 @@
 import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-
-import { MainModule } from '../../src/main.module';
-import { SalvarItemPedidoRequest } from 'src/application/web/item-pedido/request';
-import { SalvarItemPedidoResponse } from 'src/application/web/item-pedido/request/salvar-item-pedido.response';
+import { MainModule } from 'src/main.module';
+import { SalvarItemPedidoRequest, SalvarItemPedidoResponse } from 'src/presentation/web/item-pedido/request';
 
 describe('ItemPedidoController (e2e)', () => {
    let app: INestApplication;

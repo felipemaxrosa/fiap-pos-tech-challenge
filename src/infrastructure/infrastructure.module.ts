@@ -1,6 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-
-import { DatabaseModule } from './database/database.module';
+import { DatabaseModule } from 'src/infrastructure/persistence/database.module';
 
 @Global()
 @Module({
