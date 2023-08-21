@@ -1,9 +1,8 @@
 import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-
-import { MainModule } from '../../src/main.module';
-import { CategoriaProduto } from '../../src/domain/categoria/model/categoria-produto.model';
+import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
+import { MainModule } from 'src/main.module';
 
 describe('CategoriaProdutoController (e2e)', () => {
    let app: INestApplication;
