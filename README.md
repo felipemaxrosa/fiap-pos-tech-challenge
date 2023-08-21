@@ -240,7 +240,7 @@ src/                                    # Source da solução
 │       ├── pedido
 │       ├── produto
 ├── presentation                        # Camada Presentation (rest api)
-│   └── web
+│   └── api
 │       ├── categoria
 │       ├── cliente
 │       │   ├── controller              # Rest API
