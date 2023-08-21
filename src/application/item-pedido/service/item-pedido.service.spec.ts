@@ -8,11 +8,11 @@ import {
    EditarItemPedidoValidator,
    QuantidadeMinimaItemValidator,
    ItemPedidoExistenteValidator,
-} from 'src/enterprise/item-pedido/validation';
+} from 'src/application/item-pedido/validation';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { SalvarItemPedidoRequest } from 'src/presentation/web/item-pedido/request';
+import { SalvarItemPedidoRequest } from 'src/presentation/api/item-pedido/request';
 import { ItemPedidoConstants } from 'src/shared/constants';
 
 describe('ItemPedidoService', () => {

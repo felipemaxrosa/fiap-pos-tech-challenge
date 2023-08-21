@@ -5,24 +5,24 @@ import { ItemPedidoService } from 'src/application/item-pedido/service/item-pedi
 import { PedidoService } from 'src/application/pedido/service/pedido.service';
 import { ProdutoService } from 'src/application/produto/service/produto.service';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
-import { BuscarClienteValidator } from 'src/enterprise/cliente/validation/buscar-cliente.validator';
-import { CpfUnicoClienteValidator } from 'src/enterprise/cliente/validation/cpf-unico-cliente.validator';
-import { CpfValidoClienteValidator } from 'src/enterprise/cliente/validation/cpf-valido-cliente.validator';
-import { EmailUnicoClienteValidator } from 'src/enterprise/cliente/validation/email-unico-cliente.validator';
-import { EmailValidoClienteValidator } from 'src/enterprise/cliente/validation/email-valido-cliente.validator';
-import { SalvarClienteValidator } from 'src/enterprise/cliente/validation/salvar-cliente.validator';
+import { BuscarClienteValidator } from 'src/application/cliente/validation/buscar-cliente.validator';
+import { CpfUnicoClienteValidator } from 'src/application/cliente/validation/cpf-unico-cliente.validator';
+import { CpfValidoClienteValidator } from 'src/application/cliente/validation/cpf-valido-cliente.validator';
+import { EmailUnicoClienteValidator } from 'src/application/cliente/validation/email-unico-cliente.validator';
+import { EmailValidoClienteValidator } from 'src/application/cliente/validation/email-valido-cliente.validator';
+import { SalvarClienteValidator } from 'src/application/cliente/validation/salvar-cliente.validator';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import {
    AddItemPedidoValidator,
    QuantidadeMinimaItemValidator,
    EditarItemPedidoValidator,
    ItemPedidoExistenteValidator,
-} from 'src/enterprise/item-pedido/validation';
-import { EstadoCorretoNovoPedidoValidator } from 'src/enterprise/pedido/validation/estado-correto-novo-pedido.validator';
-import { SalvarPedidoValidator } from 'src/enterprise/pedido/validation/salvar-pedido.validator';
+} from 'src/application/item-pedido/validation';
+import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
+import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { CamposObrigatoriosProdutoValidator } from 'src/enterprise/produto/validation/campos-obrigatorios-produto.validator';
-import { SalvarProdutoValidator } from 'src/enterprise/produto/validation/salvar-produto.validator';
+import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
+import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
 import {
    ClienteConstants,

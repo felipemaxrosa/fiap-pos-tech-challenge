@@ -5,10 +5,10 @@ import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { EstadoCorretoNovoPedidoValidator } from 'src/enterprise/pedido/validation/estado-correto-novo-pedido.validator';
-import { SalvarPedidoValidator } from 'src/enterprise/pedido/validation/salvar-pedido.validator';
+import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
+import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { SalvarPedidoRequest } from 'src/presentation/web/pedido/request';
+import { SalvarPedidoRequest } from 'src/presentation/api/pedido/request';
 import { PedidoConstants } from 'src/shared/constants';
 
 describe('PedidoService', () => {

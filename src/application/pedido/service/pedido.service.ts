@@ -4,7 +4,7 @@ import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { SalvarPedidoValidator } from 'src/enterprise/pedido/validation/salvar-pedido.validator';
+import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { PedidoConstants } from 'src/shared/constants';
 
 @Injectable()

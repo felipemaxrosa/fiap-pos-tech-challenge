@@ -2,10 +2,10 @@ import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { CamposObrigatoriosProdutoValidator } from 'src/enterprise/produto/validation/campos-obrigatorios-produto.validator';
+import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
 import { MainModule } from 'src/main.module';
-import { EditarProdutoRequest } from 'src/presentation/web/produto/request/editar-produto.request';
-import { SalvarProdutoRequest } from 'src/presentation/web/produto/request/salvar-produto.request';
+import { EditarProdutoRequest } from 'src/presentation/api/produto/request/editar-produto.request';
+import { SalvarProdutoRequest } from 'src/presentation/api/produto/request/salvar-produto.request';
 
 describe('ProdutoController (e2e)', () => {
    let app: INestApplication;

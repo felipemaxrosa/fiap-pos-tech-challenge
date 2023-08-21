@@ -2,12 +2,12 @@ import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
-import { CpfUnicoClienteValidator } from 'src/enterprise/cliente/validation/cpf-unico-cliente.validator';
-import { CpfValidoClienteValidator } from 'src/enterprise/cliente/validation/cpf-valido-cliente.validator';
-import { EmailUnicoClienteValidator } from 'src/enterprise/cliente/validation/email-unico-cliente.validator';
-import { EmailValidoClienteValidator } from 'src/enterprise/cliente/validation/email-valido-cliente.validator';
+import { CpfUnicoClienteValidator } from 'src/application/cliente/validation/cpf-unico-cliente.validator';
+import { CpfValidoClienteValidator } from 'src/application/cliente/validation/cpf-valido-cliente.validator';
+import { EmailUnicoClienteValidator } from 'src/application/cliente/validation/email-unico-cliente.validator';
+import { EmailValidoClienteValidator } from 'src/application/cliente/validation/email-valido-cliente.validator';
 import { MainModule } from 'src/main.module';
-import { SalvarClienteRequest } from 'src/presentation/web/cliente/request/salvar-cliente.request';
+import { SalvarClienteRequest } from 'src/presentation/api/cliente/request/salvar-cliente.request';
 
 describe('ClienteController (e2e)', () => {
    let app: INestApplication;

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { AddItemPedidoValidator, EditarItemPedidoValidator } from 'src/enterprise/item-pedido/validation';
+import { AddItemPedidoValidator, EditarItemPedidoValidator } from 'src/application/item-pedido/validation';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { IService } from 'src/enterprise/service/service';
 import { IValidator } from 'src/enterprise/validation/validator';

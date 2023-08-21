@@ -3,8 +3,8 @@ import { ProdutoService } from 'src/application/produto/service/produto.service'
 import { IProdutoService } from 'src/application/produto/service/produto.service.interface';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { CamposObrigatoriosProdutoValidator } from 'src/enterprise/produto/validation/campos-obrigatorios-produto.validator';
-import { SalvarProdutoValidator } from 'src/enterprise/produto/validation/salvar-produto.validator';
+import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
+import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ProdutoConstants } from 'src/shared/constants';

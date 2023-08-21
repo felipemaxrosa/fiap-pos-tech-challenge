@@ -3,8 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { MainModule } from 'src/main.module';
-import { SalvarPedidoRequest } from 'src/presentation/web/pedido/request';
-import { SalvarPedidoResponse } from 'src/presentation/web/pedido/response/salvar-pedido.response';
+import { SalvarPedidoRequest } from 'src/presentation/api/pedido/request';
+import { SalvarPedidoResponse } from 'src/presentation/api/pedido/response/salvar-pedido.response';
 
 describe('PedidoController (e2e)', () => {
    let app: INestApplication;

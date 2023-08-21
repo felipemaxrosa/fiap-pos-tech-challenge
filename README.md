@@ -4,7 +4,7 @@
 
 ![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker)
 
-# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v1.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
+# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v2.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da pós gradução em Software Architecture.
 
 * [Arquitetura](#arquitetura)
@@ -17,7 +17,9 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
     * [**Execução em modo produção (Avaliação FIAP)**](#%EF%B8%8F-execução-em-modo-produção-avaliação-fiap)
         * [Docker Compose (Modo Fácil!)](#-docker-compose-modo-fácil)
         * [Docker (Modo Desbravador!)](#-docker-modo-desbravador)
-* [Documentação da API](#-documentação-da-api)
+        * [Kubernetes (Modo Fácil!)](#-kubernetes-modo-fácil)
+        * [Kubernetes (Modo Desbravador!)](#-kubernetes-modo-desbravador)
+    * [Documentação da API](#-documentação-da-api)
 * [Testes](#-testes)
 * [Estrutura Base do Projeto](#%EF%B8%8F-estrutura-base-do-projeto)
 * [DDD](#ddd)
@@ -34,8 +36,8 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
 ![fast-n-foodious-clean](docs/diagramas/fast-n-foodious-clean.png)
 
 - Arquitetura Clean & Modular
-    - Camada de Aplicação, Domínio e Infraestrutura
-    - Módulo Main, Application, Domain, Infrastructure
+    - Camada de Application, Enterprise, Presentation e Infrastructure
+    - Módulo Main, Application, Enterprise, Presentation e Infrastructure
 - Principais Tecnologias/Frameworks
     - Docker, NodeJS, NestJS, TypeORM, NPM, Mysql, Swagger, Typescript, Jest
 - Qualidade / Testes
@@ -43,7 +45,7 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
         - Validação de cobertura de testes (threshold 95%)
         - Testes unitários, e2e em memória (all green)
         - Validação de implementação de testes (modo alerta para implementação de testes de controllers, services, validators, repositories)
-    - CICD
+    - CI/CD
         - Pipeline CircleCI para integração com a ```main```
             - run-unit-tests        - Execução de testes unitários (all green)
             - run-e2e-mysql         - Execução de testes e2e com mysql (all green)
@@ -124,7 +126,7 @@ Inicia o container da aplicação e do mysql com as variáveis de produção, ut
 $ docker-compose --env-file ./envs/prod.env up -d
 $ docker ps
 CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS         PORTS                               NAMES
-2a0f11e4ffe3   fast-n-foodious   "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:3000->3000/tcp              fast-n-foodious
+2a0f11e4ffe3   fast-n-foodious       "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:3000->3000/tcp              fast-n-foodious
 06ebf6b90fa7   mysql:8.0             "docker-entrypoint.s…"   5 seconds ago   Up 4 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
 
@@ -145,11 +147,17 @@ $ docker run -d --rm --name fast-n-foodious -p 3000:3000 \
 
 $ docker ps
 CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS         PORTS                               NAMES
-88bf7eae7e46   ottero/fast-n-foodious   "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious
+88bf7eae7e46   ottero/fast-n-foodious               "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious
 8b0268d435a6   mysql:8.0                            "docker-entrypoint.s…"   6 seconds ago   Up 5 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
-#### 🧾 Documentação da API
-Swagger: http://localhost:3000/api
+#### 🫧 Kubernetes (Modo Fácil!)
+//TODO documentar deploy cluster k8s com helm
+#### 💀 Kubernetes (Modo Desbravador!)
+//TODO documentar deploy cluster k8s com descriptors
+
+### 🧾 Documentação da API (Swagger)
+http://localhost:3000/api   `docker`
+http://localhost:80/api     `k8s`
 
 ### 🎮 Extras Docker Compose
 
@@ -194,45 +202,60 @@ $ NODE_ENV=local npm run test:e2e
 
 # 🏛️ Estrutura Base do Projeto
 ```
-.circleci/                                                  # Configurações de pipelines CICD
-envs/                                                       # Configurações de ambiente
-scripts/                                                    # Scripts gerais de inicialização e validação (git prepush, precommit - cobertura de testes, testes unitários, e2e MySQL e memória)
-src/                                                        # Source da solução
-├── application                                             # Camada de aplicação
-│   └── web                                                 # Camada WEB
-│       ├── categoria
-│       ├── cliente                                         # Camada web para o domínio de Clientes
-│       │   ├── controller                                  # Controlador Web de Clientes
-│       │   └── request                                     # DTOs de requisições de entrada
-│       ├── pedido
-│       └── produto
-│       ├── handler                                         # Handlers para tratamento centralizado de exceções (ValidationException, DomainException)
-├── domain                                                  # Camada de domínio
+.circleci/                              # Configurações de pipelines CI/CD
+docs/                                   # Documentação da aplicação
+envs/                                   # Configurações de ambiente
+helm/                                   # Configuração de descriptors Helm
+k8s/                                    # Configuração de descriptors kubernetes
+scripts/                                # Scripts gerais de inicialização e validação (git prepush, precommit - cobertura de testes, testes unitários, e2e MySQL e memória)
+src/                                    # Source da solução
+├── application                         # Camada de Application (use cases, validators)    
 │   ├── categoria
-│   ├── cliente                                             # Camada de domínio de Clientes
-│   │   ├── model                                           # Modelo de Clientes
-│   │   ├── service                                         # Serviço de Clientes (Implementação concreta)
-│   │   └── validation                                      # Validações de negócio de Clientes (Implementações concreta)
+│   ├── cliente
+│   │   └── service                     # Serviços (controllers) de composição de casos de uso
+│   │   └── usecase                     # Casos de usos
+│   ├── item-pedido
+│   ├── pedido
+│   └── produto
+├── enterprise                          # Camada Enterprise (domínio)
+│   ├── categoria
+│   ├── cliente
+│   │   ├── model                       # Entidades de domínio
+│   │   └── validation                  # Validators (regras de negócio)
+│   ├── exception                       # Exceções de domínio
+│   ├── item-pedido
 │   ├── pedido
 │   ├── produto
-│   ├── exception                                           # Exceções da camada de domínio
-│   ├── repository                                          # Contrato de repositórios da camana de domínio
-│   ├── service                                             # Contrato de serviços da camada de domínio
-│   └── validation                                          # Contrato de validações da camada de domínio
-├── infrastructure                                          # Camada de Infraestrutura
-│   ├── database                                            # Camada de banco de dados
-│   │   ├── categoria
-│   │   ├── cliente                                         # Camana de banco de dados de Clientes
-│   │   │   ├── entity                                      # Entidades de Cliente (ORM)
-│   │   │   └── repository                                  # Repositórios de Cliente (Impplementações contretas MySQL, memória)
-│   │   ├── pedido
-│   │   ├── produto
-│   │   ├── mysql                                           # Configurações de banco de dados MySQL
-│   ├── exception                                           # Exceções da camada de infraestrutura (InfrastructureException, RepositoryException)
-└── shared                                                  # Itens compartilhados
-test/                                                       # Implementações de testes
-├── api                                                     # Implementações de testes isolados de API
-├── e2e                                                     # Implementações de testes isolados e2e
+│   ├── repository                      # Portas de repositórios da camana de domínio
+│   ├── service                         # Portas de serviços da camana de domínio
+│   └── validation                      # Contrato de validações da camada de domínio
+├── infrastructure                      # Camada Infrastructure (banco de dados, ORM)
+│   ├── exception                       # Exceções de infraestrutura
+│   └── persistence
+│       ├── cliente
+│       │   ├── entity                  # Entitdades ORM
+│       │   └── repository              # Repositórios (mysql, in-memory)
+│       ├── item-pedido
+│       ├── mysql                       # Configurações de banco de dados MySQL 
+│       ├── pedido
+│       ├── produto
+├── presentation                        # Camada Presentation (rest api)
+│   └── web
+│       ├── categoria
+│       ├── cliente
+│       │   ├── controller              # Rest API
+│       │   ├── request                 # Contratos de entrada
+│       │   └── response                # Contratos de saída
+│       ├── handler                     # Handlers para tratamento centralizado de exceções (ValidationException, DomainException)
+│       ├── item-pedido
+│       ├── pagamento
+│       ├── pedido
+│       ├── produto
+└── shared                              # Itens compartilhados
+test/                                   # Implementações de testes
+├── api                                 # Testes de API (utilitário de desenvolvimento)
+├── e2e                                 # Testes E2E
+└── stress                              # Testes de stress (k6 e/ou cluster k8s)
 ````
 
 ## DDD
