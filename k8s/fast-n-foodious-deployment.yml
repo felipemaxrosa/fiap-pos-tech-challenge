@@ -67,8 +67,6 @@ spec:
       containers:
       - name: mysql
         image: mysql:8.0
-        labels:
-          app: mysql
         resources:
           limits:
             memory: "768Mi"

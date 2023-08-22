@@ -8,6 +8,10 @@ application:
       memory: "768Mi"
       cpu: "500m"
 
+service:
+  loadbalancer:
+    port: 80
+
 mysql:
   name: mysql
   image: mysql:8.0
