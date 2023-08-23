@@ -1,4 +1,4 @@
-export class ApplicationConstants {
+export class SwaggerConstants {
    //Swaggwer
    public static readonly SWAGGER_PATH: string = 'api';
    public static readonly SWAGGER_TITLE: string = '🍔 Fast & Foodious API';
