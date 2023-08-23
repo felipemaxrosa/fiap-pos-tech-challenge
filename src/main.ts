@@ -24,10 +24,7 @@ async function bootstrap(): Promise<void> {
       .setTitle(SwaggerConstants.SWAGGER_TITLE)
       .setVersion(SwaggerConstants.SWAGGER_VERSION)
       .setDescription(SwaggerConstants.SWAGGER_DESCRIPTION)
-      .setExternalDoc(
-         SwaggerConstants.SWAGGER_EXTERNAL_DOC_DESCRIPTION,
-         SwaggerConstants.SWAGGER_EXTERNAL_DOC_URL,
-      )
+      .setExternalDoc(SwaggerConstants.SWAGGER_EXTERNAL_DOC_DESCRIPTION, SwaggerConstants.SWAGGER_EXTERNAL_DOC_URL)
       .build();
 
    logger.log('Configurando swagger');
