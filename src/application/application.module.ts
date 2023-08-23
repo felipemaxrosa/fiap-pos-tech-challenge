@@ -94,4 +94,4 @@ import {
       { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
    ],
 })
-export class EnterpriseModule {}
+export class ApplicationModule {}

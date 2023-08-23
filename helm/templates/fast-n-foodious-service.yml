@@ -7,7 +7,7 @@ spec:
     app: {{ .Values.application.name }}
   type: LoadBalancer
   ports:
-  - port: 80
+  - port: {{ .Values.service.loadbalancer.port }}
     nodePort: 30000
     targetPort: 3000
 ---

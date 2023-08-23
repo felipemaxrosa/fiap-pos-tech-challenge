@@ -33,13 +33,14 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
         * [Fluxo de etapas dos Pedidos](#fluxo-de-etapas-dos-pedidos)
 
 ## Arquitetura
+//TODO: Criar diagrama fnf clean arch
 ![fast-n-foodious-clean](docs/diagramas/fast-n-foodious-clean.png)
 
 - Arquitetura Clean & Modular
     - Camada de Application, Enterprise, Presentation e Infrastructure
-    - Módulo Main, Application, Enterprise, Presentation e Infrastructure
+    - Módulo Main, Application, Presentation e Infrastructure
 - Principais Tecnologias/Frameworks
-    - Docker, NodeJS, NestJS, TypeORM, NPM, Mysql, Swagger, Typescript, Jest
+    - Docker, Kubernetes, Helm, Kubectl, NodeJS, NestJS, TypeORM, NPM, Mysql, Swagger, Typescript, Jest
 - Qualidade / Testes
     - Validações pré-commit/push
         - Validação de cobertura de testes (threshold 95%)
@@ -47,12 +48,12 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
         - Validação de implementação de testes (modo alerta para implementação de testes de controllers, services, validators, repositories)
     - CI/CD
         - Pipeline CircleCI para integração com a ```main```
-            - run-unit-tests        - Execução de testes unitários (all green)
-            - run-e2e-mysql         - Execução de testes e2e com mysql (all green)
-            - run-e2e-in-memory     - Execução de testes e2e em memória (all green)
-            - run-coverage-tests    - Execução de validação de cobertura de testes (all green)
-            - run-check-test-impl   - Execução de validação de implementação de testes (implementação mandatória de testes de controllers, services, validators, repositories)
-            - build-image           - Build de imagens docker e publicação no registry (publicação de imagens docker no DockerHub nas arquiteturas ADM & ARM)
+            - ci/circleci: run-unit-tests       - Execução de testes unitários (all green)
+            - ci/circleci: run-e2e-mysql        - Execução de testes e2e com mysql (all green)
+            - ci/circleci: run-e2e-in-memory    - Execução de testes e2e em memória (all green)
+            - ci/circleci: run-coverage-tests   - Execução de validação de cobertura de testes (all green)
+            - ci/circleci: run-check-test-impl  - Execução de validação de implementação de testes (mandatório para controllers, services, validators, repositories)
+            - ci/circleci: build                - Build de imagens docker (AMD & ARM) e publicação no DockerHub
             
             [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/workflow/badge.svg?window=7d&circle-token=b58fa7f3f1c216768f2d59e57b0b9b257c68c36f)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/workflow/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
 
@@ -151,10 +152,89 @@ CONTAINER ID   IMAGE                                COMMAND                  CRE
 8b0268d435a6   mysql:8.0                            "docker-entrypoint.s…"   6 seconds ago   Up 5 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
 #### 🫧 Kubernetes (Modo Fácil!)
-//TODO documentar deploy cluster k8s com helm
-#### 💀 Kubernetes (Modo Desbravador!)
-//TODO documentar deploy cluster k8s com descriptors
+Inicia o pod da aplicação e do mysql com as variáveis de produção, assim como suas dependências (services, deployments, replicasets, hpas, configmaps, secrets, pv, pvc) utilizando o helm:
+*Nota: Assume k8s pod/metrics-server up & running para habilitação de escalabilidade via HPA*
+```
+$ helm install fast-n-foodious helm/
 
+NAME: fast-n-foodious
+LAST DEPLOYED: Mon Aug 21 22:02:05 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+$ kubectl get all
+
+NAME                                   READY   STATUS    RESTARTS        AGE
+pod/fast-n-foodious-5c6cbcbf76-v4bgd   1/1     Running   1 (2m29s ago)   3m28s
+pod/mysql-595c5c9d4f-x7grb             1/1     Running   0               3m28s
+
+NAME                          TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/fast-n-foodious-svc   LoadBalancer   10.97.158.122    localhost     80:30000/TCP   3m28s
+service/kubernetes            ClusterIP      10.96.0.1        <none>        443/TCP        9d
+service/mysql                 ClusterIP      10.109.101.116   <none>        3306/TCP       3m28s
+
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/fast-n-foodious   1/1     1            1           3m28s
+deployment.apps/mysql             1/1     1            1           3m28s
+
+NAME                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/fast-n-foodious-5c6cbcbf76   1         1         1       3m28s
+replicaset.apps/mysql-595c5c9d4f             1         1         1       3m28s
+
+NAME                                                      REFERENCE                    TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa   Deployment/fast-n-foodious   46%/70%, 0%/70%   1         3         1          3m28s
+```
+#### 💀 Kubernetes (Modo Desbravador!)
+Inicia o pod da aplicação e do mysql com as variáveis de produção, assim como suas dependências (services, deployments, replicasets, hpas, configmaps, secrets, pv, pvc) utilizando o CLI kubectl:
+*Nota: Assume k8s pod/metrics-server up & running para habilitação de escalabilidade via HPA*
+```
+$ kubectl apply -f k8s/fast-n-foodious-secret.yml 
+secret/fast-n-foodious-secret created
+
+$ kubectl apply -f k8s/fast-n-foodious-configmap.yml 
+configmap/fast-n-foodious-env created
+configmap/mysql-env created
+
+$ kubectl apply -f k8s/fast-n-foodious-pv.yml 
+persistentvolume/fast-n-foodious-pv created
+
+$ kubectl apply -f k8s/fast-n-foodious-pvc.yml 
+persistentvolumeclaim/fast-n-foodious-pvc created
+
+$ kubectl apply -f k8s/fast-n-foodious-deployment.yml 
+deployment.apps/fast-n-foodious created
+deployment.apps/mysql created
+
+$ kubectl apply -f k8s/fast-n-foodious-service.yml 
+service/fast-n-foodious-svc created
+service/mysql created
+
+$ kubectl apply -f k8s/fast-n-foodious-hpa.yml 
+horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa created
+
+$ kubectl get all
+NAME                                   READY   STATUS    RESTARTS   AGE
+pod/fast-n-foodious-7fc6f95bdb-krcnm   1/1     Running   0          2m58s
+pod/mysql-595c5c9d4f-5vpj8             1/1     Running   0          2m58s
+
+NAME                          TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+service/fast-n-foodious-svc   LoadBalancer   10.110.74.44   localhost     80:30000/TCP     2m53s
+service/kubernetes            ClusterIP      10.96.0.1      <none>        443/TCP          5m52s
+service/mysql                 ClusterIP      10.108.3.249   <none>        3306/TCP         2m53s
+
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/fast-n-foodious   1/1     1            1           2m59s
+deployment.apps/mysql             1/1     1            1           2m59s
+
+NAME                                         DESIRED   CURRENT   READY   AGE
+replicaset.apps/fast-n-foodious-7fc6f95bdb   1         1         1       2m59s
+replicaset.apps/mysql-595c5c9d4f             1         1         1       2m58s
+
+NAME                                                      REFERENCE                    TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa   Deployment/fast-n-foodious   69%/80%, 0%/80%   1         3         1          2m48s 
+```
 ### 🧾 Documentação da API (Swagger)
 http://localhost:3000/api   `docker`
 http://localhost:80/api     `k8s`
@@ -179,8 +259,8 @@ $ docker-compose --env-file ./envs/{env-name}.env down {service}
 ```
 **Nota:** Os serviços registrados no docker-compose são:
 ```
+- fast-n-foodious
 - mysql
-- app
 ```
 ## 🧪 Testes
 O projeto cobre testes unitários, testes e2e e testes isolados de api (para desenvolvedor), além de verifiar a cobertura dos testes:
@@ -199,7 +279,31 @@ $ NODE_ENV=local-mock-repository npm run test:e2e
 # 2. Considere remover o volume criado no mysql caso execute o teste mais de uma vez!
 $ NODE_ENV=local npm run test:e2e
 ```
+### 🧪 Testes Stress 
+Excução de testes de stress cluster k8s, utilizando job k6.
+*Nota: A execução tem duração de 60s, estressando o path /v1/categoria. Assume a aplicação e mysql up & running no cluster kubernetes*
+```
+$ kubectl apply -f k8s/fast-n-foodious-job.yml 
+job.batch/k6-stress-job created
+configmap/k6-stress-env created
 
+$ kubectl get po
+NAME                               READY   STATUS    RESTARTS        AGE
+fast-n-foodious-5c6cbcbf76-n5vn5   1/1     Running   1 (6m49s ago)   7m46s
+fast-n-foodious-5c6cbcbf76-q5q7t   1/1     Running   0               106s
+k6-stress-job-fkjv9                1/1     Running   0               6s
+mysql-595c5c9d4f-chlrx             1/1     Running   0               7m46s
+
+$ kubectl logs -f k6-stress-job-fkjv9
+
+          /\      |‾‾| /‾‾/   /‾‾/   
+     /\  /  \     |  |/  /   /  /    
+    /  \/    \    |     (   /   ‾‾\  
+   /          \   |  |\  \ |  (‾)  | 
+  / __________ \  |__| \__\ \_____/ .io
+
+  execution: local
+```
 # 🏛️ Estrutura Base do Projeto
 ```
 .circleci/                              # Configurações de pipelines CI/CD

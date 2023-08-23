@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { EnterpriseModule } from 'src/enterprise/enterprise.module';
-import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
+import { ApplicationModule } from 'src/application/application.module';
 import { CategoriaProdutoController } from 'src/presentation/api/categoria/controller/categoria-produto.controller';
 import { ClienteController } from 'src/presentation/api/cliente/controller/cliente.controller';
 import { GeneralExceptionHandler } from 'src/presentation/api/handler/general-exception.handler';
@@ -14,7 +13,7 @@ import { PedidoController } from 'src/presentation/api/pedido/controller/pedido.
 import { ProdutoController } from 'src/presentation/api/produto/controller/produto.controller';
 
 @Module({
-   imports: [InfrastructureModule, EnterpriseModule],
+   imports: [ApplicationModule],
    providers: [
       { provide: APP_FILTER, useClass: GeneralExceptionHandler },
       { provide: APP_FILTER, useClass: GeneralHttpExceptionHandler },
