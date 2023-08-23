@@ -45,14 +45,14 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
     - Validações pré-commit/push
         - Validação de cobertura de testes (threshold 95%)
         - Testes unitários, e2e em memória (all green)
-        - Validação de implementação de testes (modo alerta para implementação de testes de controllers, services, validators, repositories)
+        - Validação de implementação de testes (modo alerta para implementação de testes de rest apis, services, validators, repositories)
     - CI/CD
         - Pipeline CircleCI para integração com a ```main```
             - ci/circleci: run-unit-tests       - Execução de testes unitários (all green)
             - ci/circleci: run-e2e-mysql        - Execução de testes e2e com mysql (all green)
             - ci/circleci: run-e2e-in-memory    - Execução de testes e2e em memória (all green)
             - ci/circleci: run-coverage-tests   - Execução de validação de cobertura de testes (all green)
-            - ci/circleci: run-check-test-impl  - Execução de validação de implementação de testes (mandatório para controllers, services, validators, repositories)
+            - ci/circleci: run-check-test-impl  - Execução de validação de implementação de testes (mandatório para rest apis, services, validators, repositories)
             - ci/circleci: build                - Build de imagens docker (AMD & ARM) e publicação no DockerHub
             
             [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/workflow/badge.svg?window=7d&circle-token=b58fa7f3f1c216768f2d59e57b0b9b257c68c36f)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/workflow/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
@@ -236,8 +236,8 @@ NAME                                                      REFERENCE             
 horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa   Deployment/fast-n-foodious   69%/80%, 0%/80%   1         3         1          2m48s 
 ```
 ### 🧾 Documentação da API (Swagger)
-http://localhost:3000/api   `docker`
-http://localhost:80/api     `k8s`
+`docker`    http://localhost:3000/api
+`k8s`       http://localhost:80/api
 
 ### 🎮 Extras Docker Compose
 
@@ -344,10 +344,10 @@ src/                                    # Source da solução
 │       ├── pedido
 │       ├── produto
 ├── presentation                        # Camada Presentation (rest api)
-│   └── api
+│   └── rest
 │       ├── categoria
 │       ├── cliente
-│       │   ├── controller              # Rest API
+│       │   ├── api                     # Rest API
 │       │   ├── request                 # Contratos de entrada
 │       │   └── response                # Contratos de saída
 │       ├── handler                     # Handlers para tratamento centralizado de exceções (ValidationException, DomainException)

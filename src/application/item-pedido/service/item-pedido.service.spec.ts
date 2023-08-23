@@ -12,7 +12,7 @@ import {
 import { IRepository } from 'src/enterprise/repository/repository';
 import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { SalvarItemPedidoRequest } from 'src/presentation/api/item-pedido/request';
+import { SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request';
 import { ItemPedidoConstants } from 'src/shared/constants';
 
 describe('ItemPedidoService', () => {
