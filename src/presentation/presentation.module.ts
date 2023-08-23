@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { ApplicationModule } from 'src/application/application.module';
-import { CategoriaProdutoController } from 'src/presentation/api/categoria/controller/categoria-produto.controller';
-import { ClienteController } from 'src/presentation/api/cliente/controller/cliente.controller';
-import { GeneralExceptionHandler } from 'src/presentation/api/handler/general-exception.handler';
-import { GeneralHttpExceptionHandler } from 'src/presentation/api/handler/general-http-exception.handler';
-import { InfraestructureExceptionHandler } from 'src/presentation/api/handler/infraestructure-exception.handler';
-import { ValidationExceptionHandler } from 'src/presentation/api/handler/validation-exception.handler';
-import { ItemPedidoController } from 'src/presentation/api/item-pedido/controller/item-pedido.controller';
-import { PagamentoController } from 'src/presentation/api/pagamento/controller/pagamento.controller';
-import { PedidoController } from 'src/presentation/api/pedido/controller/pedido.controller';
-import { ProdutoController } from 'src/presentation/api/produto/controller/produto.controller';
+import { CategoriaProdutoRestApi } from 'src/presentation/rest/categoria/api/categoria-produto.api';
+import { ClienteRestApi } from 'src/presentation/rest/cliente/api/cliente.api';
+import { GeneralExceptionHandler } from 'src/presentation/rest/handler/general-exception.handler';
+import { GeneralHttpExceptionHandler } from 'src/presentation/rest/handler/general-http-exception.handler';
+import { InfraestructureExceptionHandler } from 'src/presentation/rest/handler/infraestructure-exception.handler';
+import { ValidationExceptionHandler } from 'src/presentation/rest/handler/validation-exception.handler';
+import { ItemPedidoRestApi } from 'src/presentation/rest/item-pedido/api/item-pedido.api';
+import { PagamentoRestApi } from 'src/presentation/rest/pagamento/api/pagamento.api';
+import { PedidoRestApi } from 'src/presentation/rest/pedido/api/pedido.api';
+import { ProdutoRestApi } from 'src/presentation/rest/produto/api/produto.api';
 
 @Module({
    imports: [ApplicationModule],
@@ -21,12 +21,12 @@ import { ProdutoController } from 'src/presentation/api/produto/controller/produ
       { provide: APP_FILTER, useClass: ValidationExceptionHandler },
    ],
    controllers: [
-      ClienteController,
-      PedidoController,
-      ItemPedidoController,
-      ProdutoController,
-      CategoriaProdutoController,
-      PagamentoController,
+      ClienteRestApi,
+      PedidoRestApi,
+      ItemPedidoRestApi,
+      ProdutoRestApi,
+      CategoriaProdutoRestApi,
+      PagamentoRestApi,
    ],
 })
 export class PresentationModule {}

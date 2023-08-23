@@ -72,7 +72,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.controller.(t|j)s",
+      "**/*.api.(t|j)s",
       "**/*.service.(t|j)s",
       "**/*.validator.(t|j)s",
       "**/!(*-memory).repository.(t|j)s"

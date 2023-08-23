@@ -8,7 +8,7 @@ import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repos
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { SalvarPedidoRequest } from 'src/presentation/api/pedido/request';
+import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
 import { PedidoConstants } from 'src/shared/constants';
 
 describe('PedidoService', () => {

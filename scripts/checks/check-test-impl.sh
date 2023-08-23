@@ -4,7 +4,7 @@
 start_path="src"
 
 # Define the component names
-components=("controller" "service" "validator" "repository")
+components=("api" "service" "validator" "repository")
 
 # Iterate over the components
 for component in "${components[@]}"; do
@@ -26,8 +26,8 @@ for component in "${components[@]}"; do
     # Check if the test file exists
     if [ ! -f "$test_file" ]; then
 
-      # Ignore files that contain "export abstract class .*Controller" if component is "controller"
-      if [ "$component" == "controller" ] && grep -q "export abstract class .*Controller" "$file"; then
+      # Ignore files that contain "export abstract class .*RestApi" if component is "api"
+      if [ "$component" == "api" ] && grep -q "export abstract class .*RestApi" "$file"; then
         continue
       fi
 
@@ -47,8 +47,8 @@ for component in "${components[@]}"; do
     #   echo "$test_file: Found test implementation for this component."
     fi
 
-    # Check for e2e test file for controller components
-    if [ "$component" == "controller" ]; then
+    # Check for e2e test file for api components
+    if [ "$component" == "api" ]; then
 
       # Get the corresponding e2e test file in the test folder
       e2e_test_files=$(find "test/e2e" -type f -regex ".*/[0-9][0-9]-${component_name}\.${component}\.e2e-spec\.ts$" 2>/dev/null)
