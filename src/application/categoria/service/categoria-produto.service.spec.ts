@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoriaProdutoService } from 'src/application/categoria/service/categoria-produto.service';
 import { ICategoriaProdutoService } from 'src/application/categoria/service/categoria-produto.service.interface';
+import { BuscarTodasCategoriasUseCase } from 'src/application/categoria/usecase/buscar-todas-categorias.usecase';
 import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { IRepository } from 'src/enterprise/repository/repository';
@@ -10,7 +11,7 @@ import { CategoriaProdutoConstants } from 'src/shared/constants';
 
 describe('CategoriaProdutoService', () => {
    let service: ICategoriaProdutoService;
-   let repository: IRepository<CategoriaProduto>;
+   let usecase: BuscarTodasCategoriasUseCase;
 
    const categoriaProdutos: Array<CategoriaProduto> = [
       { id: 1, nome: 'Lanche' },
@@ -26,17 +27,16 @@ describe('CategoriaProdutoService', () => {
             //  IService<CategoriaProduto> provider
             {
                provide: CategoriaProdutoConstants.ISERVICE,
-               inject: [CategoriaProdutoConstants.IREPOSITORY],
-               useFactory: (repository: IRepository<CategoriaProduto>): IService<CategoriaProduto> => {
-                  return new CategoriaProdutoService(repository);
+               inject: [CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE],
+               useFactory: (usecase: BuscarTodasCategoriasUseCase): IService<CategoriaProduto> => {
+                  return new CategoriaProdutoService(usecase);
                },
             },
-            // Mock do serviço IRepository<CategoriaProduto>
             {
-               provide: CategoriaProdutoConstants.IREPOSITORY,
+               provide: CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE,
                useValue: {
-                  // mock para a chamada repository.find()
-                  findAll: jest.fn(() => {
+                  // mock para a chamada usecase.buscarTodasCategorias()
+                  buscarTodasCategorias: jest.fn(() => {
                      return Promise.resolve(categoriaProdutos);
                   }),
                },
@@ -48,43 +48,16 @@ describe('CategoriaProdutoService', () => {
       module.useLogger(false);
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
-      repository = module.get<IRepository<CategoriaProduto>>(CategoriaProdutoConstants.IREPOSITORY);
+      usecase = module.get<BuscarTodasCategoriasUseCase>(CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE);
       service = module.get<ICategoriaProdutoService>(CategoriaProdutoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {
       it('deve existir instâncias de repositório definida', async () => {
-         expect(repository).toBeDefined();
+         expect(usecase).toBeDefined();
       });
    });
 
-   describe('save', () => {
-      it('save deve falhar porque não foi implementado', async () => {
-         await expect(service.save(new CategoriaProduto(1, 'empty'))).rejects.toThrow(
-            new Error('Método não implementado.'),
-         );
-      });
-   }); // end describe save
-
-   describe('edit', () => {
-      it('edit deve falhar porque não foi implementado', async () => {
-         await expect(service.edit(new CategoriaProduto(1, 'empty'))).rejects.toThrow(
-            new Error('Método não implementado.'),
-         );
-      });
-   }); // end describe edit
-
-   describe('delete', () => {
-      it('delete deve falhar porque não foi implementado', async () => {
-         await expect(service.delete(1)).rejects.toThrow(new Error('Método não implementado.'));
-      });
-   }); // end describe delete
-
-   describe('findById', () => {
-      it('findById deve falhar porque não foi implementado', async () => {
-         await expect(service.findById(1)).rejects.toThrow(new Error('Método não implementado.'));
-      });
-   }); // end describe findById
 
    describe('findAll', () => {
       it('findAll deve retornar uma lista de categorias de produtos', async () => {
@@ -92,8 +65,8 @@ describe('CategoriaProdutoService', () => {
          expect(result).toEqual(categoriaProdutos);
       });
       it('não deve buscar lista de categorias de produto quando houver um erro de banco ', async () => {
-         const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'findAll').mockRejectedValue(error);
+         const error = new ServiceException('Erro genérico de banco de dados');
+         jest.spyOn(usecase, 'buscarTodasCategorias').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.findAll()).rejects.toThrowError(ServiceException);

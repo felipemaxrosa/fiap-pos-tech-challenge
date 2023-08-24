@@ -31,6 +31,8 @@ import {
    ItemPedidoConstants,
    CategoriaProdutoConstants,
 } from 'src/shared/constants';
+import { BuscarTodasCategoriasUseCase } from 'src/application/categoria/usecase/buscar-todas-categorias.usecase';
+import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
 
 @Module({
    providers: [
@@ -51,7 +53,6 @@ import {
       { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
       {
          provide: PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
-         inject: [ClienteConstants.IREPOSITORY],
          useFactory: (): SalvarPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
       },
 
@@ -73,7 +74,6 @@ import {
       { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
       {
          provide: ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR,
-         inject: [ItemPedidoConstants.IREPOSITORY],
          useFactory: (): AddItemPedidoValidator[] => [new QuantidadeMinimaItemValidator()],
       },
       {
@@ -85,6 +85,12 @@ import {
       },
       // Categoria de Produto
       { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
+      {
+         provide: CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE,
+         inject: [CategoriaProdutoConstants.IREPOSITORY],
+         useFactory: (repository: IRepository<CategoriaProduto>): BuscarTodasCategoriasUseCase =>
+            new BuscarTodasCategoriasUseCase(repository),      
+      },
    ],
    exports: [
       { provide: ClienteConstants.ISERVICE, useClass: ClienteService },
