@@ -58,7 +58,6 @@ describe('CategoriaProdutoService', () => {
       });
    });
 
-
    describe('findAll', () => {
       it('findAll deve retornar uma lista de categorias de produtos', async () => {
          const result = await service.findAll();

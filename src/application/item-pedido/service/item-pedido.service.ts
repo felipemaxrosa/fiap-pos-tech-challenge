@@ -3,12 +3,12 @@ import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { AddItemPedidoValidator, EditarItemPedidoValidator } from 'src/application/item-pedido/validation';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { IService } from 'src/enterprise/service/service';
 import { IValidator } from 'src/enterprise/validation/validator';
 import { ItemPedidoConstants } from 'src/shared/constants';
+import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 
 @Injectable()
-export class ItemPedidoService implements IService<ItemPedido> {
+export class ItemPedidoService implements IItemPedidoService {
    private logger = new Logger(ItemPedidoService.name);
 
    constructor(
@@ -50,10 +50,6 @@ export class ItemPedidoService implements IService<ItemPedido> {
          this.logger.error(`Erro ao deletar no banco de dados: ${error} `);
          throw new ServiceException(`Houve um erro ao deletar o item do pedido: ${error}`);
       });
-   }
-
-   findById(): Promise<ItemPedido> {
-      throw new ServiceException('Método não implementado.');
    }
 
    private async validate(validators: IValidator<ItemPedido>[], cliente: ItemPedido): Promise<void> {

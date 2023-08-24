@@ -89,7 +89,7 @@ import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produ
          provide: CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE,
          inject: [CategoriaProdutoConstants.IREPOSITORY],
          useFactory: (repository: IRepository<CategoriaProduto>): BuscarTodasCategoriasUseCase =>
-            new BuscarTodasCategoriasUseCase(repository),      
+            new BuscarTodasCategoriasUseCase(repository),
       },
    ],
    exports: [

@@ -268,34 +268,4 @@ describe('CienteService', () => {
          });
       });
    });
-
-   describe('edit', () => {
-      it('editar deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(service.edit(cliente));
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
-      });
-   });
-
-   describe('delete', () => {
-      it('deletar deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(service.delete(1));
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
-      });
-   });
-
-   describe('findById', () => {
-      it('findById deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(service.findById(1));
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
-      });
-   });
 });

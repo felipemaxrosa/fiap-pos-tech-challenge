@@ -3,6 +3,7 @@ import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { IService } from 'src/enterprise/service/service';
 
 export interface IClienteService extends IService<Cliente> {
+   save(type: Cliente): Promise<Cliente>;
    findByCpf(cpf: string): Promise<Cliente>;
    identifyByCpf(cpf: string): Promise<ClienteIdentificado>;
 }

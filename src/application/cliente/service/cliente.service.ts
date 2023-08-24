@@ -58,18 +58,6 @@ export class ClienteService implements IClienteService {
       });
    }
 
-   edit(): Promise<Cliente> {
-      throw new ServiceException(`Método não implementado.`);
-   }
-
-   delete(): Promise<boolean> {
-      throw new ServiceException('Método não implementado.');
-   }
-
-   findById(): Promise<Cliente> {
-      throw new ServiceException('Método não implementado.');
-   }
-
    private async validate(validators: IValidator<Cliente>[], cliente: Cliente): Promise<void> {
       for (const validator of validators) {
          await validator.validate(cliente);

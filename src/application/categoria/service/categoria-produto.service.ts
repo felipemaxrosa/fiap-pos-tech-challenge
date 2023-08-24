@@ -6,10 +6,11 @@ import { CategoriaProdutoConstants } from 'src/shared/constants';
 
 @Injectable()
 export class CategoriaProdutoService implements ICategoriaProdutoService {
-
-   constructor(@Inject(CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE) private useCase: BuscarTodasCategoriasUseCase) {}
+   constructor(
+      @Inject(CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE) private useCase: BuscarTodasCategoriasUseCase,
+   ) {}
 
    async findAll(): Promise<CategoriaProduto[]> {
-      return this.useCase.buscarTodasCategorias()
+      return this.useCase.buscarTodasCategorias();
    }
 }

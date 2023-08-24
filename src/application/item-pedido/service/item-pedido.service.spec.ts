@@ -10,13 +10,13 @@ import {
    ItemPedidoExistenteValidator,
 } from 'src/application/item-pedido/validation';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request';
 import { ItemPedidoConstants } from 'src/shared/constants';
+import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 
 describe('ItemPedidoService', () => {
-   let service: IService<ItemPedido>;
+   let service: IItemPedidoService;
    let repository: IRepository<ItemPedido>;
    let validators: AddItemPedidoValidator[];
 
@@ -47,7 +47,7 @@ describe('ItemPedidoService', () => {
                   repository: IRepository<ItemPedido>,
                   adicionarValidators: AddItemPedidoValidator[],
                   editarValidators: EditarItemPedidoValidator[],
-               ): IService<ItemPedido> => {
+               ): IItemPedidoService => {
                   return new ItemPedidoService(repository, adicionarValidators, editarValidators);
                },
             },
@@ -83,7 +83,7 @@ describe('ItemPedidoService', () => {
 
       repository = module.get<IRepository<ItemPedido>>(IREPOSITORY);
       validators = module.get<AddItemPedidoValidator[]>(ADD_ITEM_PEDIDO_VALIDATOR);
-      service = module.get<IService<ItemPedido>>(ISERVICE);
+      service = module.get<IItemPedidoService>(ISERVICE);
    });
 
    describe('injeção de dependências', () => {
@@ -154,16 +154,6 @@ describe('ItemPedidoService', () => {
    describe('delete', () => {
       it('deletar deve falhar porque não foi implementado', async () => {
          await service.delete(itemPedido.id).then((result) => expect(result).toBeTruthy());
-      });
-   });
-
-   describe('findById', () => {
-      it('findById deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(service.findById(1));
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
       });
 
       it('nao deve deletar item quanto houver erro de banco', async () => {
