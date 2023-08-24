@@ -6,6 +6,7 @@ import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { PedidoConstants } from 'src/shared/constants';
+import { ValidatorUtils } from 'src/shared/validator.utils';
 
 @Injectable()
 export class PedidoService implements IPedidoService {
@@ -18,10 +19,7 @@ export class PedidoService implements IPedidoService {
    ) {}
 
    async save(pedido: Pedido): Promise<Pedido> {
-      for (const validator of this.validators) {
-         await validator.validate(pedido);
-      }
-
+      await ValidatorUtils.executeValidators(this.validators, pedido);
       return await this.repository
          .save(pedido)
          .then((novoPedido) => novoPedido)
@@ -32,9 +30,7 @@ export class PedidoService implements IPedidoService {
    }
 
    async edit(pedido: Pedido): Promise<Pedido> {
-      for (const validator of this.validators) {
-         await validator.validate(pedido);
-      }
+      await ValidatorUtils.executeValidators(this.validators, pedido);
 
       return await this.repository
          .edit(pedido)
