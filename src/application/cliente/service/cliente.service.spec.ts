@@ -13,6 +13,9 @@ import { IRepository } from 'src/enterprise/repository/repository';
 import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ClienteConstants } from 'src/shared/constants';
+import { BuscarClientePorCpfUsecase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
+import { IdentificarClienteUseCase } from 'src/application/cliente/usecase/identificar-cliente-por-cpf.usecase';
+import { SalvarClienteUseCase } from 'src/application/cliente/usecase/salvar-cliente.usecase';
 
 describe('CienteService', () => {
    let service: IClienteService;
@@ -34,17 +37,39 @@ describe('CienteService', () => {
             {
                provide: ClienteConstants.ISERVICE,
                inject: [
-                  ClienteConstants.IREPOSITORY,
-                  ClienteConstants.SALVAR_CLIENTE_VALIDATOR,
-                  ClienteConstants.BUSCAR_CLIENTE_VALIDATOR,
+                  ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE,
+                  ClienteConstants.SALVAR_CLIENTE_USECASE,
+                  ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE,
                ],
                useFactory: (
-                  repository: IRepository<Cliente>,
-                  salvarClienteValidator: SalvarClienteValidator[],
-                  buscarClienteValidator: BuscarClienteValidator[],
+                  buscarClienteUsecase: BuscarClientePorCpfUsecase,
+                  salvarClienteUsecase: SalvarClienteUseCase,
+                  identificarClienteUsecase: IdentificarClienteUseCase,
                ): IService<Cliente> => {
-                  return new ClienteService(repository, salvarClienteValidator, buscarClienteValidator);
+                  return new ClienteService(buscarClienteUsecase, salvarClienteUsecase, identificarClienteUsecase);
                },
+            },
+            {
+               provide: ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE,
+               inject: [ClienteConstants.IREPOSITORY, ClienteConstants.BUSCAR_CLIENTE_VALIDATOR],
+               useFactory: (
+                  repository: IRepository<Cliente>,
+                  validators: BuscarClienteValidator[],
+               ): BuscarClientePorCpfUsecase => new BuscarClientePorCpfUsecase(repository, validators),
+            },
+            {
+               provide: ClienteConstants.SALVAR_CLIENTE_USECASE,
+               inject: [ClienteConstants.IREPOSITORY, ClienteConstants.SALVAR_CLIENTE_VALIDATOR],
+               useFactory: (
+                  repository: IRepository<Cliente>,
+                  validators: SalvarClienteValidator[],
+               ): SalvarClienteUseCase => new SalvarClienteUseCase(repository, validators),
+            },
+            {
+               provide: ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE,
+               inject: [ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE],
+               useFactory: (usecase: BuscarClientePorCpfUsecase): IdentificarClienteUseCase =>
+                  new IdentificarClienteUseCase(usecase),
             },
             // Mock do serviço IRepository<Cliente>
             {

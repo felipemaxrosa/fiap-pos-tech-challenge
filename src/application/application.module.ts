@@ -33,11 +33,34 @@ import {
 } from 'src/shared/constants';
 import { BuscarTodasCategoriasUseCase } from 'src/application/categoria/usecase/buscar-todas-categorias.usecase';
 import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
+import { BuscarClientePorCpfUsecase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
+import { SalvarClienteUseCase } from 'src/application/cliente/usecase/salvar-cliente.usecase';
+import { IdentificarClienteUseCase } from 'src/application/cliente/usecase/identificar-cliente-por-cpf.usecase';
 
 @Module({
    providers: [
       // Cliente
       { provide: ClienteConstants.ISERVICE, useClass: ClienteService },
+      {
+         provide: ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE,
+         inject: [ClienteConstants.IREPOSITORY, ClienteConstants.BUSCAR_CLIENTE_VALIDATOR],
+         useFactory: (
+            repository: IRepository<Cliente>,
+            validators: BuscarClienteValidator[],
+         ): BuscarClientePorCpfUsecase => new BuscarClientePorCpfUsecase(repository, validators),
+      },
+      {
+         provide: ClienteConstants.SALVAR_CLIENTE_USECASE,
+         inject: [ClienteConstants.IREPOSITORY, ClienteConstants.SALVAR_CLIENTE_VALIDATOR],
+         useFactory: (repository: IRepository<Cliente>, validators: SalvarClienteValidator[]): SalvarClienteUseCase =>
+            new SalvarClienteUseCase(repository, validators),
+      },
+      {
+         provide: ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE,
+         inject: [ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE],
+         useFactory: (usecase: BuscarClientePorCpfUsecase): IdentificarClienteUseCase =>
+            new IdentificarClienteUseCase(usecase),
+      },
       {
          provide: ClienteConstants.SALVAR_CLIENTE_VALIDATOR,
          inject: [ClienteConstants.IREPOSITORY],

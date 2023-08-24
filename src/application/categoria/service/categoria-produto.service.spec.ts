@@ -4,9 +4,7 @@ import { ICategoriaProdutoService } from 'src/application/categoria/service/cate
 import { BuscarTodasCategoriasUseCase } from 'src/application/categoria/usecase/buscar-todas-categorias.usecase';
 import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { IRepository } from 'src/enterprise/repository/repository';
 import { IService } from 'src/enterprise/service/service';
-import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { CategoriaProdutoConstants } from 'src/shared/constants';
 
 describe('CategoriaProdutoService', () => {
