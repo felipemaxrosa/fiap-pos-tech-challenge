@@ -5,6 +5,7 @@ import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
+import { ValidatorUtils } from 'src/shared/validator.utils';
 
 @Injectable()
 export class ProdutoService implements IProdutoService {
@@ -17,7 +18,7 @@ export class ProdutoService implements IProdutoService {
    ) {}
 
    async save(produto: Produto): Promise<Produto> {
-      await this.validate(produto);
+      await ValidatorUtils.executeValidators(this.validators, produto);
 
       return await this.repository
          .save({
@@ -35,7 +36,7 @@ export class ProdutoService implements IProdutoService {
    }
 
    async edit(produto: Produto): Promise<Produto> {
-      await this.validate(produto);
+      await ValidatorUtils.executeValidators(this.validators, produto);
       return await this.repository
          .edit({
             id: produto.id,
@@ -80,12 +81,6 @@ export class ProdutoService implements IProdutoService {
       });
       if (produtos.length > 0) {
          return produtos;
-      }
-   }
-
-   private async validate(produto: Produto): Promise<void> {
-      for (const validator of this.validators) {
-         await validator.validate(produto);
       }
    }
 }

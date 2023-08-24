@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { IService } from 'src/enterprise/service/service';
 import { ItemPedidoRestApi } from 'src/presentation/rest/item-pedido/api/item-pedido.api';
 import { SalvarItemPedidoRequest, SalvarItemPedidoResponse } from 'src/presentation/rest/item-pedido/request';
 import { ItemPedidoConstants } from 'src/shared/constants';
 
 describe('ItemPedidoRestApi', () => {
    let restApi: ItemPedidoRestApi;
-   let service: IService<ItemPedido>;
+   let service: IItemPedidoService;
 
    const { ISERVICE } = ItemPedidoConstants;
 
@@ -56,7 +56,7 @@ describe('ItemPedidoRestApi', () => {
 
       // Obtém a instância do restApi e do serviço a partir do módulo de teste
       restApi = module.get<ItemPedidoRestApi>(ItemPedidoRestApi);
-      service = module.get<IService<ItemPedido>>(ISERVICE);
+      service = module.get<IItemPedidoService>(ISERVICE);
    });
 
    describe('injeção de dependências', () => {

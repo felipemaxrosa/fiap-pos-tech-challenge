@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Logger, Post, Put, Delete, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { IService } from 'src/enterprise/service/service';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
 import { SalvarItemPedidoResponse, SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request';
 import { ItemPedidoConstants } from 'src/shared/constants';
@@ -11,7 +11,7 @@ import { ItemPedidoConstants } from 'src/shared/constants';
 export class ItemPedidoRestApi extends BaseRestApi {
    private logger: Logger = new Logger(ItemPedidoRestApi.name);
 
-   constructor(@Inject(ItemPedidoConstants.ISERVICE) private service: IService<ItemPedido>) {
+   constructor(@Inject(ItemPedidoConstants.ISERVICE) private service: IItemPedidoService) {
       super();
    }
 
