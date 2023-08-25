@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS ITEM_PEDIDO (
 -- Tabela PAGAMENTO
 CREATE TABLE IF NOT EXISTS PAGAMENTO (
                                        ID INT AUTO_INCREMENT PRIMARY KEY,
-                                       PEDIDO_ID INT NOT NULL, CONSTRAINT FK_PEDIDO_ID FOREIGN KEY (PEDIDO_ID) REFERENCES PEDIDO(ID),
+                                       PEDIDO_ID INT NOT NULL, CONSTRAINT FK_PAGAMENTO_PEDIDO_ID FOREIGN KEY (PEDIDO_ID) REFERENCES PEDIDO(ID),
                                        TRANSACAO_ID INT NOT NULL,
                                        ESTADO_PAGAMENTO INT NOT NULL,
                                        TOTAL DECIMAL(8,2) NOT NULL,
