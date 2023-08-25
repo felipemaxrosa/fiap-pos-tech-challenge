@@ -62,3 +62,13 @@ CREATE TABLE IF NOT EXISTS ITEM_PEDIDO (
                                        PRODUTO_ID INT NOT NULL, CONSTRAINT FK_PRODUTO_ID FOREIGN KEY (PRODUTO_ID) REFERENCES PRODUTO(ID),
                                        QUANTIDADE INT NOT NULL
 );
+
+-- Tabela PAGAMENTO
+CREATE TABLE IF NOT EXISTS PAGAMENTO (
+                                       ID INT AUTO_INCREMENT PRIMARY KEY,
+                                       PEDIDO_ID INT NOT NULL, CONSTRAINT FK_PEDIDO_ID FOREIGN KEY (PEDIDO_ID) REFERENCES PEDIDO(ID),
+                                       TRANSACAO_ID INT NOT NULL,
+                                       ESTADO_PAGAMENTO INT NOT NULL,
+                                       TOTAL DECIMAL(8,2) NOT NULL,
+                                       DATA_HORA_PAGAMENTO DATETIME NOT NULL,
+);
