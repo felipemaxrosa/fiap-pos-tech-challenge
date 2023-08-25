@@ -13,13 +13,12 @@ import { EmailValidoClienteValidator } from 'src/application/cliente/validation/
 import { SalvarClienteValidator } from 'src/application/cliente/validation/salvar-cliente.validator';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import {
-   AddItemPedidoValidator,
    QuantidadeMinimaItemValidator,
-   EditarItemPedidoValidator,
    ItemPedidoExistenteValidator,
+   AddItemPedidoValidator,
+   EditarItemPedidoValidator,
 } from 'src/application/item-pedido/validation';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
-import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
 import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
@@ -36,6 +35,12 @@ import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produ
 import { BuscarClientePorCpfUsecase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
 import { SalvarClienteUseCase } from 'src/application/cliente/usecase/salvar-cliente.usecase';
 import { IdentificarClienteUseCase } from 'src/application/cliente/usecase/identificar-cliente-por-cpf.usecase';
+import { SalvarProdutoUseCase } from 'src/application/produto/usecase/salvar-produto.usecase';
+import { EditarProdutoUseCase } from 'src/application/produto/usecase/editar-produto.usecase';
+import { DeletarProdutoUseCase } from 'src/application/produto/usecase/deletar-produto.usecase';
+import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
+import { BuscarProdutoPorIdCategoriaUseCase } from 'src/application/produto/usecase/buscar-produto-por-id-categoria.usecase';
+import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 
 @Module({
    providers: [
@@ -81,6 +86,35 @@ import { IdentificarClienteUseCase } from 'src/application/cliente/usecase/ident
 
       // Produto
       { provide: ProdutoConstants.ISERVICE, useClass: ProdutoService },
+      {
+         provide: ProdutoConstants.SALVAR_PRODUTO_USECASE,
+         inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
+         useFactory: (repository: IRepository<Produto>, validators: SalvarProdutoValidator[]): SalvarProdutoUseCase =>
+            new SalvarProdutoUseCase(repository, validators),
+      },
+      {
+         provide: ProdutoConstants.EDITAR_PRODUTO_USECASE,
+         inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
+         useFactory: (repository: IRepository<Produto>, validators: SalvarProdutoValidator[]): EditarProdutoUseCase =>
+            new EditarProdutoUseCase(repository, validators),
+      },
+      {
+         provide: ProdutoConstants.DELETAR_PRODUTO_USECASE,
+         inject: [ProdutoConstants.IREPOSITORY],
+         useFactory: (repository: IRepository<Produto>): DeletarProdutoUseCase => new DeletarProdutoUseCase(repository),
+      },
+      {
+         provide: ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
+         inject: [ProdutoConstants.IREPOSITORY],
+         useFactory: (repository: IRepository<Produto>): BuscarProdutoPorIdUseCase =>
+            new BuscarProdutoPorIdUseCase(repository),
+      },
+      {
+         provide: ProdutoConstants.BUSCAR_PRODUTO_POR_ID_CATEGORIA_USECASE,
+         inject: [ProdutoConstants.IREPOSITORY],
+         useFactory: (repository: IRepository<Produto>): BuscarProdutoPorIdCategoriaUseCase =>
+            new BuscarProdutoPorIdCategoriaUseCase(repository),
+      },
       {
          provide: ProdutoConstants.SALVAR_PRODUTO_VALIDATOR,
          inject: [ProdutoConstants.IREPOSITORY],

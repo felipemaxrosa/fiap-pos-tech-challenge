@@ -8,6 +8,12 @@ import { SalvarProdutoValidator } from 'src/application/produto/validation/salva
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ProdutoConstants } from 'src/shared/constants';
+import { BuscarProdutoPorIdCategoriaUseCase } from 'src/application/produto/usecase/buscar-produto-por-id-categoria.usecase';
+import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
+import { DeletarProdutoUseCase } from 'src/application/produto/usecase/deletar-produto.usecase';
+import { EditarProdutoUseCase } from 'src/application/produto/usecase/editar-produto.usecase';
+import { SalvarProdutoUseCase } from 'src/application/produto/usecase/salvar-produto.usecase';
+import { IService } from 'src/enterprise/service/service';
 
 const IMAGEM_BASE64_SAMPLE =
    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=';
@@ -75,12 +81,27 @@ describe('ProdutoService', () => {
             //  IProdutoService provider
             {
                provide: ProdutoConstants.IPRODUTO_SERVICE,
-               inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
+               inject: [
+                  ProdutoConstants.SALVAR_PRODUTO_USECASE,
+                  ProdutoConstants.EDITAR_PRODUTO_USECASE,
+                  ProdutoConstants.DELETAR_PRODUTO_USECASE,
+                  ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
+                  ProdutoConstants.BUSCAR_PRODUTO_POR_ID_CATEGORIA_USECASE,
+               ],
                useFactory: (
-                  repository: IRepository<Produto>,
-                  salvarProdutoValidator: SalvarProdutoValidator[],
-               ): IProdutoService => {
-                  return new ProdutoService(repository, salvarProdutoValidator);
+                  salvarProdutoUseCase: SalvarProdutoUseCase,
+                  editarProdutoUseCase: EditarProdutoUseCase,
+                  deletarProdutoUseCase: DeletarProdutoUseCase,
+                  buscarProdutoPorIdUseCase: BuscarProdutoPorIdUseCase,
+                  buscarProdutoPorIdCategoriaUseCase: BuscarProdutoPorIdCategoriaUseCase,
+               ): IService<Produto> => {
+                  return new ProdutoService(
+                     salvarProdutoUseCase,
+                     editarProdutoUseCase,
+                     deletarProdutoUseCase,
+                     buscarProdutoPorIdUseCase,
+                     buscarProdutoPorIdCategoriaUseCase,
+                  );
                },
             },
             // Mock do serviço IRepository<Produto>
@@ -108,6 +129,33 @@ describe('ProdutoService', () => {
                   // mock para a chamada repository.delete(id)
                   delete: jest.fn(() => Promise.resolve(true)),
                },
+            },
+            {
+               provide: ProdutoConstants.SALVAR_PRODUTO_USECASE,
+               inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
+               useFactory: (repository: IRepository<Produto>, validators: SalvarProdutoValidator[]) =>
+                  new SalvarProdutoUseCase(repository, validators),
+            },
+            {
+               provide: ProdutoConstants.EDITAR_PRODUTO_USECASE,
+               inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
+               useFactory: (repository: IRepository<Produto>, validators: SalvarProdutoValidator[]) =>
+                  new EditarProdutoUseCase(repository, validators),
+            },
+            {
+               provide: ProdutoConstants.DELETAR_PRODUTO_USECASE,
+               inject: [ProdutoConstants.IREPOSITORY],
+               useFactory: (repository: IRepository<Produto>) => new DeletarProdutoUseCase(repository),
+            },
+            {
+               provide: ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
+               inject: [ProdutoConstants.IREPOSITORY],
+               useFactory: (repository: IRepository<Produto>) => new BuscarProdutoPorIdUseCase(repository),
+            },
+            {
+               provide: ProdutoConstants.BUSCAR_PRODUTO_POR_ID_CATEGORIA_USECASE,
+               inject: [ProdutoConstants.IREPOSITORY],
+               useFactory: (repository: IRepository<Produto>) => new BuscarProdutoPorIdCategoriaUseCase(repository),
             },
             // Mock do SalvarProdutoValidator
             {

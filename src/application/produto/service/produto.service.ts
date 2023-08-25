@@ -1,86 +1,41 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IProdutoService } from 'src/application/produto/service/produto.service.interface';
-import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
-import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
-import { ValidatorUtils } from 'src/shared/validator.utils';
+import { SalvarProdutoUseCase } from 'src/application/produto/usecase/salvar-produto.usecase';
+import { EditarProdutoUseCase } from 'src/application/produto/usecase/editar-produto.usecase';
+import { DeletarProdutoUseCase } from 'src/application/produto/usecase/deletar-produto.usecase';
+import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
+import { BuscarProdutoPorIdCategoriaUseCase } from 'src/application/produto/usecase/buscar-produto-por-id-categoria.usecase';
 
 @Injectable()
 export class ProdutoService implements IProdutoService {
-   private logger = new Logger(ProdutoService.name);
-
    constructor(
-      @Inject(ProdutoConstants.IREPOSITORY) private repository: IRepository<Produto>,
-      @Inject(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR)
-      private validators: SalvarProdutoValidator[],
+      @Inject(ProdutoConstants.SALVAR_PRODUTO_USECASE) private salvarUseCase: SalvarProdutoUseCase,
+      @Inject(ProdutoConstants.EDITAR_PRODUTO_USECASE) private editarUseCase: EditarProdutoUseCase,
+      @Inject(ProdutoConstants.DELETAR_PRODUTO_USECASE) private deletarUseCase: DeletarProdutoUseCase,
+      @Inject(ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE) private buscarPorIdUseCase: BuscarProdutoPorIdUseCase,
+      @Inject(ProdutoConstants.BUSCAR_PRODUTO_POR_ID_CATEGORIA_USECASE)
+      private buscarPorIdCategoriaUseCase: BuscarProdutoPorIdCategoriaUseCase,
    ) {}
 
    async save(produto: Produto): Promise<Produto> {
-      await ValidatorUtils.executeValidators(this.validators, produto);
-
-      return await this.repository
-         .save({
-            nome: produto.nome,
-            idCategoriaProduto: produto.idCategoriaProduto,
-            descricao: produto.descricao,
-            preco: produto.preco,
-            imagemBase64: produto.imagemBase64,
-            ativo: produto.ativo,
-         })
-         .catch((error) => {
-            this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
-            throw new ServiceException(`Houve um erro ao salvar o produto: ${error}`);
-         });
+      return await this.salvarUseCase.salvarProduto(produto);
    }
 
    async edit(produto: Produto): Promise<Produto> {
-      await ValidatorUtils.executeValidators(this.validators, produto);
-      return await this.repository
-         .edit({
-            id: produto.id,
-            nome: produto.nome,
-            idCategoriaProduto: produto.idCategoriaProduto,
-            descricao: produto.descricao,
-            preco: produto.preco,
-            imagemBase64: produto.imagemBase64,
-            ativo: produto.ativo,
-         })
-         .catch((error) => {
-            this.logger.error(`Erro ao editar no banco de dados: ${error} `);
-            throw new ServiceException(`Houve um erro ao editar o produto: ${error}`);
-         });
+      return await this.editarUseCase.editarProduto(produto);
    }
 
    async delete(id: number): Promise<boolean> {
-      return await this.repository.delete(id).catch((error) => {
-         this.logger.error(`Erro ao deletar no banco de dados: ${error} `);
-         throw new ServiceException(`Houve um erro ao deletar o produto: ${error}`);
-      });
+      return await this.deletarUseCase.deletarProduto(id);
    }
 
    async findById(id: number): Promise<Produto> {
-      const produtos = await this.repository.findBy({ id: id }).catch((error) => {
-         this.logger.error(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
-         throw new ServiceException(`Erro ao buscar produto id=${id} no banco de dados: ${error}`);
-      });
-      if (produtos.length > 0) {
-         return produtos[0];
-      }
+      return await this.buscarPorIdUseCase.buscarProdutoPorID(id);
    }
 
    async findByIdCategoriaProduto(idCategoriaProduto: number): Promise<Produto[]> {
-      const produtos = await this.repository.findBy({ idCategoriaProduto: idCategoriaProduto }).catch((error) => {
-         this.logger.error(
-            `Erro ao buscar produto idCategoriaProduto=${idCategoriaProduto} no banco de dados: ${error}`,
-         );
-         throw new ServiceException(
-            `Erro ao buscar produto idCategoriaProduto=${idCategoriaProduto} no banco de dados: ${error}`,
-         );
-      });
-      if (produtos.length > 0) {
-         return produtos;
-      }
+      return await this.buscarPorIdCategoriaUseCase.buscarProdutoPorIdCategoria(idCategoriaProduto);
    }
 }
