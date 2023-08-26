@@ -1,22 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PedidoService } from 'src/application/pedido/service/pedido.service';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
+import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
+import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
+import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
+import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
+import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
+import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-pedido.usecase';
+import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
+import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
+import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
+import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
+import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
-import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
 import { PedidoConstants } from 'src/shared/constants';
-import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
-import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
-import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
-import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
-import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
-import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
-import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
@@ -29,6 +31,7 @@ describe('PedidoService', () => {
       dataInicio: '2023-06-18',
       estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
       ativo: true,
+      total: 10,
    };
 
    const pedidoPendente: Pedido = {
@@ -37,6 +40,7 @@ describe('PedidoService', () => {
       dataInicio: '2023-06-20',
       estadoPedido: EstadoPedido.EM_PREPARO,
       ativo: true,
+      total: 10,
    };
 
    beforeEach(async () => {
@@ -54,6 +58,8 @@ describe('PedidoService', () => {
                   PedidoConstants.BUSCAR_ESTADO_PEDIDO_POR_ID_USECASE,
                   PedidoConstants.BUSCAR_TODOS_PEDIDOS_POR_ESTADO_USECASE,
                   PedidoConstants.BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE,
+                  PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
+                  PedidoConstants.CHECKOUT_PEDIDO_USECASE,
                ],
                useFactory: (
                   salvarUsecase: SalvarPedidoUseCase,
@@ -63,6 +69,8 @@ describe('PedidoService', () => {
                   buscarEstadoPorIdUsecase: BuscarEstadoPedidoPorIdUseCase,
                   buscarTodosPorEstadoUsecase: BuscarTodosPedidosPorEstadoUseCase,
                   buscarTodosPendentesUsecase: BuscarTodosPedidosPendentesUseCase,
+                  buscarItensPedidoPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
+                  checkoutPedidoUsecase: CheckoutPedidoUseCase,
                ): IPedidoService => {
                   return new PedidoService(
                      salvarUsecase,
@@ -72,6 +80,8 @@ describe('PedidoService', () => {
                      buscarEstadoPorIdUsecase,
                      buscarTodosPorEstadoUsecase,
                      buscarTodosPendentesUsecase,
+                     buscarItensPedidoPorPedidoIdUsecase,
+                     checkoutPedidoUsecase,
                   );
                },
             },

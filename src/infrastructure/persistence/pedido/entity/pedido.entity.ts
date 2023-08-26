@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'PEDIDO' })
 export class PedidoEntity {
@@ -16,4 +16,7 @@ export class PedidoEntity {
 
    @Column({ name: 'ATIVO' })
    ativo: boolean;
+
+   @Column({ name: 'TOTAL' })
+   total: number;
 }
