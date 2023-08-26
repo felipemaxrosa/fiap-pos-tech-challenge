@@ -56,8 +56,8 @@ describe('PedidoService', () => {
          ativo: true,
       },
       {
-         id: 4,
-         clienteId: 4,
+         id: 3,
+         clienteId: 3,
          dataInicio: '2023-06-20',
          estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
@@ -404,8 +404,8 @@ describe('PedidoService', () => {
                ativo: true,
             },
             {
-               id: 4,
-               clienteId: 4,
+               id: 3,
+               clienteId: 3,
                dataInicio: '2023-06-20',
                estadoPedido: 1,
                ativo: true,
