@@ -3,14 +3,16 @@ import { IPedidoService } from 'src/application/pedido/service/pedido.service.in
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoConstants } from 'src/shared/constants';
-import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
-import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
-import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
-import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
-import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
-import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
-import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
-import { BuscarTodosPedidosNaoFinalizadosUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-nao-finalizados.usecase';
+import {
+   BuscarEstadoPedidoPorIdUseCase,
+   BuscarPedidoPorIdUseCase,
+   BuscarTodosPedidosPendentesUseCase,
+   BuscarTodosPedidosPorEstadoUseCase,
+   DeletarPedidoUseCase,
+   EditarPedidoUseCase,
+   SalvarPedidoUseCase,
+   BuscarTodosPedidosNaoFinalizadosUseCase,
+} from 'src/application/pedido/usecase';
 
 @Injectable()
 export class PedidoService implements IPedidoService {
