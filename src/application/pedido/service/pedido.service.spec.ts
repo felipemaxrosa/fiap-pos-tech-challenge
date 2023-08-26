@@ -17,6 +17,7 @@ import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/useca
 import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
+import { BuscarTodosPedidosNaoFinalizadosUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-nao-finalizados.usecase';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
@@ -63,6 +64,7 @@ describe('PedidoService', () => {
                   buscarEstadoPorIdUsecase: BuscarEstadoPedidoPorIdUseCase,
                   buscarTodosPorEstadoUsecase: BuscarTodosPedidosPorEstadoUseCase,
                   buscarTodosPendentesUsecase: BuscarTodosPedidosPendentesUseCase,
+                  buscarTodosNaoFinalizadosUsecase: BuscarTodosPedidosNaoFinalizadosUseCase,
                ): IPedidoService => {
                   return new PedidoService(
                      salvarUsecase,
@@ -72,6 +74,7 @@ describe('PedidoService', () => {
                      buscarEstadoPorIdUsecase,
                      buscarTodosPorEstadoUsecase,
                      buscarTodosPendentesUsecase,
+                     buscarTodosNaoFinalizadosUsecase,
                   );
                },
             },

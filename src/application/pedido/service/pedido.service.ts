@@ -10,6 +10,7 @@ import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/useca
 import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
+import { BuscarTodosPedidosNaoFinalizadosUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-nao-finalizados.usecase';
 
 @Injectable()
 export class PedidoService implements IPedidoService {
@@ -24,6 +25,8 @@ export class PedidoService implements IPedidoService {
       private buscarTodosPorEstadoUsecase: BuscarTodosPedidosPorEstadoUseCase,
       @Inject(PedidoConstants.BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE)
       private buscarTodosPendentesUsecase: BuscarTodosPedidosPendentesUseCase,
+      @Inject(PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE)
+      private buscarTodosNaoFinalizadosUsecase: BuscarTodosPedidosNaoFinalizadosUseCase,
    ) {}
 
    async save(pedido: Pedido): Promise<Pedido> {
@@ -52,5 +55,9 @@ export class PedidoService implements IPedidoService {
 
    async listarPedidosPendentes(): Promise<Pedido[]> {
       return await this.buscarTodosPendentesUsecase.buscarTodosPedidosPendentes();
+   }
+
+   async listarPedidosNaoFinalizados(): Promise<Pedido[]> {
+      return await this.buscarTodosNaoFinalizadosUsecase.buscarTodosPedidos();
    }
 }
