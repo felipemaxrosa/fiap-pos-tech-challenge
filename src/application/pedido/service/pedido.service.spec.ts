@@ -281,7 +281,7 @@ describe('PedidoService', () => {
 
    describe('findAllByEstadoPedido', () => {
       const mockedPedidos = [pedido];
-      it('retorna pedidos com estado - Recebido (1)', async () => {
+      it('retorna pedidos com estado - Pagamento Pendente (0)', async () => {
          repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
