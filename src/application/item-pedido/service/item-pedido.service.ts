@@ -1,54 +1,28 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ServiceException } from 'src/enterprise/exception/service.exception';
+import { Inject, Injectable } from '@nestjs/common';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { AddItemPedidoValidator, EditarItemPedidoValidator } from 'src/application/item-pedido/validation';
-import { IRepository } from 'src/enterprise/repository/repository';
 import { ItemPedidoConstants } from 'src/shared/constants';
 import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
-import { ValidatorUtils } from 'src/shared/validator.utils';
+import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/deletar-item-pedido.usecase';
+import { EditarItemPedidoUsecase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
+import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/salvar-item-pedido.usecase';
 
 @Injectable()
 export class ItemPedidoService implements IItemPedidoService {
-   private logger = new Logger(ItemPedidoService.name);
-
    constructor(
-      @Inject(ItemPedidoConstants.IREPOSITORY) private repository: IRepository<ItemPedido>,
-      @Inject(ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR)
-      private adicionarValidators: AddItemPedidoValidator[],
-      @Inject(ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR)
-      private editarValidators: EditarItemPedidoValidator[],
+      @Inject(ItemPedidoConstants.SALVAR_ITEM_PEDIDO_USECASE) private salvarUsecase: SalvarItemPedidoUseCase,
+      @Inject(ItemPedidoConstants.EDITAR_ITEM_PEDIDO_USECASE) private editarUsecase: EditarItemPedidoUsecase,
+      @Inject(ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE) private deletarUsecase: DeletarItemPedidoUseCase,
    ) {}
 
    async save(item: ItemPedido): Promise<ItemPedido> {
-      await ValidatorUtils.executeValidators(this.adicionarValidators, item);
-
-      return await this.repository.save(item).catch((error) => {
-         this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
-         throw new ServiceException(
-            `Houve um erro ao adicionar o produto: ${item.produtoId} ao pedido: ${item.pedidoId} - ${error}`,
-         );
-      });
+      return await this.salvarUsecase.salvarItemPedido(item);
    }
 
    async edit(item: ItemPedido): Promise<ItemPedido> {
-      await ValidatorUtils.executeValidators(this.editarValidators, item);
-      await ValidatorUtils.executeValidators(this.adicionarValidators, item);
-
-      return await this.repository
-         .edit(item)
-         .then((itemEditado) => itemEditado)
-         .catch((error) => {
-            this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
-            throw new ServiceException(
-               `Houve um erro ao editar o item: ${item.produtoId} ao pedido: ${item.pedidoId} - ${error}`,
-            );
-         });
+      return await this.editarUsecase.editarItemPedido(item);
    }
 
    async delete(id: number): Promise<boolean> {
-      return await this.repository.delete(id).catch((error) => {
-         this.logger.error(`Erro ao deletar no banco de dados: ${error} `);
-         throw new ServiceException(`Houve um erro ao deletar o item do pedido: ${error}`);
-      });
+      return await this.deletarUsecase.deletarItemPedido(id);
    }
 }

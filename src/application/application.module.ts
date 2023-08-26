@@ -49,6 +49,9 @@ import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-
 import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
 import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
 import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
+import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/salvar-item-pedido.usecase';
+import { EditarItemPedidoUsecase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
+import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/deletar-item-pedido.usecase';
 
 @Module({
    providers: [
@@ -189,6 +192,34 @@ import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/useca
             new ItemPedidoExistenteValidator(repository),
          ],
       },
+      {
+         provide: ItemPedidoConstants.SALVAR_ITEM_PEDIDO_USECASE,
+         inject: [ItemPedidoConstants.IREPOSITORY, ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR],
+         useFactory: (
+            repository: IRepository<ItemPedido>,
+            validators: AddItemPedidoValidator[],
+         ): SalvarItemPedidoUseCase => new SalvarItemPedidoUseCase(repository, validators),
+      },
+      {
+         provide: ItemPedidoConstants.EDITAR_ITEM_PEDIDO_USECASE,
+         inject: [
+            ItemPedidoConstants.IREPOSITORY,
+            ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR,
+            ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR,
+         ],
+         useFactory: (
+            repository: IRepository<ItemPedido>,
+            adicionarValidators: AddItemPedidoValidator[],
+            editarValidators: EditarItemPedidoValidator[],
+         ): EditarItemPedidoUsecase => new EditarItemPedidoUsecase(repository, adicionarValidators, editarValidators),
+      },
+      {
+         provide: ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE,
+         inject: [ItemPedidoConstants.IREPOSITORY],
+         useFactory: (repository: IRepository<ItemPedido>): DeletarItemPedidoUseCase =>
+            new DeletarItemPedidoUseCase(repository),
+      },
+
       // Categoria de Produto
       { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
       {
