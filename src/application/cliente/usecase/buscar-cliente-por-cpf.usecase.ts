@@ -7,8 +7,8 @@ import { ClienteConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
 
 @Injectable()
-export class BuscarClientePorCpfUsecase {
-   private logger: Logger = new Logger(BuscarClientePorCpfUsecase.name);
+export class BuscarClientePorCpfUseCase {
+   private logger: Logger = new Logger(BuscarClientePorCpfUseCase.name);
 
    constructor(
       @Inject(ClienteConstants.IREPOSITORY) private repository: IRepository<Cliente>,

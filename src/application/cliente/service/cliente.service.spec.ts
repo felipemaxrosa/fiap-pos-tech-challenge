@@ -13,7 +13,7 @@ import { IRepository } from 'src/enterprise/repository/repository';
 import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ClienteConstants } from 'src/shared/constants';
-import { BuscarClientePorCpfUsecase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
+import { BuscarClientePorCpfUseCase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
 import { IdentificarClienteUseCase } from 'src/application/cliente/usecase/identificar-cliente-por-cpf.usecase';
 import { SalvarClienteUseCase } from 'src/application/cliente/usecase/salvar-cliente.usecase';
 
@@ -42,7 +42,7 @@ describe('CienteService', () => {
                   ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE,
                ],
                useFactory: (
-                  buscarClienteUsecase: BuscarClientePorCpfUsecase,
+                  buscarClienteUsecase: BuscarClientePorCpfUseCase,
                   salvarClienteUsecase: SalvarClienteUseCase,
                   identificarClienteUsecase: IdentificarClienteUseCase,
                ): IService<Cliente> => {
@@ -55,7 +55,7 @@ describe('CienteService', () => {
                useFactory: (
                   repository: IRepository<Cliente>,
                   validators: BuscarClienteValidator[],
-               ): BuscarClientePorCpfUsecase => new BuscarClientePorCpfUsecase(repository, validators),
+               ): BuscarClientePorCpfUseCase => new BuscarClientePorCpfUseCase(repository, validators),
             },
             {
                provide: ClienteConstants.SALVAR_CLIENTE_USECASE,
@@ -68,7 +68,7 @@ describe('CienteService', () => {
             {
                provide: ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE,
                inject: [ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE],
-               useFactory: (usecase: BuscarClientePorCpfUsecase): IdentificarClienteUseCase =>
+               useFactory: (usecase: BuscarClientePorCpfUseCase): IdentificarClienteUseCase =>
                   new IdentificarClienteUseCase(usecase),
             },
             // Mock do serviço IRepository<Cliente>

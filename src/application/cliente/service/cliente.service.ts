@@ -4,14 +4,14 @@ import { ClienteIdentificado } from 'src/enterprise/cliente/model/cliente-identi
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 
 import { ClienteConstants } from 'src/shared/constants';
-import { BuscarClientePorCpfUsecase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
+import { BuscarClientePorCpfUseCase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
 import { SalvarClienteUseCase } from 'src/application/cliente/usecase/salvar-cliente.usecase';
 import { IdentificarClienteUseCase } from 'src/application/cliente/usecase/identificar-cliente-por-cpf.usecase';
 
 @Injectable()
 export class ClienteService implements IClienteService {
    constructor(
-      @Inject(ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE) private buscarUsecase: BuscarClientePorCpfUsecase,
+      @Inject(ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE) private buscarUsecase: BuscarClientePorCpfUseCase,
       @Inject(ClienteConstants.SALVAR_CLIENTE_USECASE) private salvarUsecase: SalvarClienteUseCase,
       @Inject(ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE)
       private identificarUsecase: IdentificarClienteUseCase,
