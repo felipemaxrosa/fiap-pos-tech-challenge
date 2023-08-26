@@ -6,8 +6,8 @@ import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-
 
 @Injectable()
 export class EstadoCorretoNovoPedidoValidator implements SalvarPedidoValidator {
-   public static ERROR_MESSAGE = `O estado inicial de um novo pedido deve ser ${EstadoPedido.RECEBIDO} (${
-      EstadoPedido[EstadoPedido.RECEBIDO]
+   public static ERROR_MESSAGE = `O estado inicial de um novo pedido deve ser ${EstadoPedido.PAGAMENTO_PENDENTE} (${
+      EstadoPedido[EstadoPedido.PAGAMENTO_PENDENTE]
    })`;
 
    private logger: Logger = new Logger(EstadoCorretoNovoPedidoValidator.name);
@@ -17,7 +17,7 @@ export class EstadoCorretoNovoPedidoValidator implements SalvarPedidoValidator {
          `Inicializando validação ${EstadoCorretoNovoPedidoValidator.name} para criar o pedido com o estado correto.`,
       );
 
-      if (estadoPedido === EstadoPedido.RECEBIDO) {
+      if (estadoPedido === EstadoPedido.PAGAMENTO_PENDENTE) {
          this.logger.debug(
             `${EstadoCorretoNovoPedidoValidator.name} finalizado com sucesso para novo pedido com estado: ${estadoPedido}`,
          );

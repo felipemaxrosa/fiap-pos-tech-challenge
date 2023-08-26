@@ -27,7 +27,7 @@ describe('PedidoService', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: EstadoPedido.RECEBIDO,
+      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
       ativo: true,
    };
 
@@ -168,7 +168,7 @@ describe('PedidoService', () => {
          const novoPedido: SalvarPedidoRequest = {
             clienteId: 1,
             dataInicio: '2023-06-18',
-            estadoPedido: EstadoPedido.RECEBIDO,
+            estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
             ativo: true,
          };
 
@@ -260,7 +260,7 @@ describe('PedidoService', () => {
          });
 
          await service.findByIdEstadoDoPedido(1).then((pedido) => {
-            expect(pedido).toEqual({ estadoPedido: EstadoPedido.RECEBIDO });
+            expect(pedido).toEqual({ estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE });
          });
       });
 
@@ -286,7 +286,7 @@ describe('PedidoService', () => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
 
-         await service.findAllByEstadoDoPedido(EstadoPedido.RECEBIDO).then((pedidos) => {
+         await service.findAllByEstadoDoPedido(EstadoPedido.PAGAMENTO_PENDENTE).then((pedidos) => {
             expect(pedidos).toEqual([pedido]);
          });
       });
