@@ -1,98 +1,56 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
-import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
-import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { PedidoConstants } from 'src/shared/constants';
-import { ValidatorUtils } from 'src/shared/validator.utils';
+import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
+import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
+import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
+import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
+import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
+import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
+import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
 
 @Injectable()
 export class PedidoService implements IPedidoService {
-   private logger = new Logger(PedidoService.name);
-
    constructor(
-      @Inject(PedidoConstants.IREPOSITORY) private repository: IPedidoRepository,
-      @Inject(PedidoConstants.SALVAR_PEDIDO_VALIDATOR)
-      private validators: SalvarPedidoValidator[],
+      @Inject(PedidoConstants.SALVAR_PEDIDO_USECASE) private salvarUsecase: SalvarPedidoUseCase,
+      @Inject(PedidoConstants.EDITAR_PEDIDO_USECASE) private editarUsecase: EditarPedidoUseCase,
+      @Inject(PedidoConstants.DELETAR_PEDIDO_USECASE) private deletarUsecase: DeletarPedidoUseCase,
+      @Inject(PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE) private buscarPorIdUsecase: BuscarPedidoPorIdUseCase,
+      @Inject(PedidoConstants.BUSCAR_ESTADO_PEDIDO_POR_ID_USECASE)
+      private buscarEstadoPorIdUsecase: BuscarEstadoPedidoPorIdUseCase,
+      @Inject(PedidoConstants.BUSCAR_TODOS_PEDIDOS_POR_ESTADO_USECASE)
+      private buscarTodosPorEstadoUsecase: BuscarTodosPedidosPorEstadoUseCase,
+      @Inject(PedidoConstants.BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE)
+      private buscarTodosPendentesUsecase: BuscarTodosPedidosPendentesUseCase,
    ) {}
 
    async save(pedido: Pedido): Promise<Pedido> {
-      await ValidatorUtils.executeValidators(this.validators, pedido);
-      return await this.repository
-         .save(pedido)
-         .then((novoPedido) => novoPedido)
-         .catch((error) => {
-            this.logger.error(`Erro ao salvar no banco de dados: ${error} `);
-            throw new ServiceException(`Houve um erro ao criar novo pedido: ${error}`);
-         });
+      return await this.salvarUsecase.salvarPedido(pedido);
    }
 
    async edit(pedido: Pedido): Promise<Pedido> {
-      await ValidatorUtils.executeValidators(this.validators, pedido);
-
-      return await this.repository
-         .edit(pedido)
-         .then((pedidoEditado) => pedidoEditado)
-         .catch((error) => {
-            this.logger.error(`Erro ao editar no banco de dados: ${error} `);
-            throw new ServiceException(`Houve um erro ao editar pedido: ${error}`);
-         });
+      return await this.editarUsecase.editarPedido(pedido);
    }
 
    async delete(pedidoId: number): Promise<boolean> {
-      return await this.repository
-         .delete(pedidoId)
-         .then(() => true)
-         .catch((error) => {
-            this.logger.error(`Erro ao deletar no banco de dados: ${error} `);
-            throw new ServiceException(`Houve um erro ao deletar o produto: ${error}`);
-         });
+      return await this.deletarUsecase.deletarPedido(pedidoId);
    }
 
    async findById(id: number): Promise<Pedido> {
-      return await this.repository
-         .findBy({ id })
-         .then((pedidos) => {
-            return pedidos[0];
-         })
-         .catch((error) => {
-            this.logger.error(`Erro ao consultar pedido no banco de dados: ${error} `);
-            throw new ServiceException(`Houve um erro ao consultar o pedido: ${error}`);
-         });
+      return await this.buscarPorIdUsecase.buscarPedidoPorId(id);
    }
 
    async findByIdEstadoDoPedido(pedidoId: number): Promise<{ estadoPedido: EstadoPedido }> {
-      const pedidos = await this.repository.findBy({ id: pedidoId }).catch((error) => {
-         this.logger.error(`Erro ao buscar produto pedidoId=${pedidoId} no banco de dados: ${error}`);
-         throw new ServiceException(`Erro ao buscar produto pedidoId=${pedidoId} no banco de dados: ${error}`);
-      });
-
-      if (pedidos.length > 0) {
-         const pedidoEncontrado = pedidos[0];
-         return {
-            estadoPedido: pedidoEncontrado.estadoPedido,
-         };
-      }
-      return;
+      return await this.buscarEstadoPorIdUsecase.buscarEstadoPedidoPorId(pedidoId);
    }
 
    async findAllByEstadoDoPedido(estado: EstadoPedido): Promise<Pedido[]> {
-      const pedidos = await this.repository.findBy({ estadoPedido: estado }).catch((error) => {
-         this.logger.error(`Erro ao buscar produtos com estadoPedido=${estado} no banco de dados: ${error}`);
-         throw new ServiceException(`Erro ao buscar produtos com estadoPedido=${estado} no banco de dados: ${error}`);
-      });
-
-      return pedidos;
+      return await this.buscarTodosPorEstadoUsecase.buscarTodosPedidosPorEstado(estado);
    }
 
    async listarPedidosPendentes(): Promise<Pedido[]> {
-      const pedidos = await this.repository.listarPedidosPendentes().catch((error) => {
-         this.logger.error(`Erro ao buscar pedidos pendentes no banco de dados: ${error}`);
-         throw new ServiceException(`Erro ao buscar pedidos pendentes no banco de dados: ${error}`);
-      });
-
-      return pedidos;
+      return await this.buscarTodosPendentesUsecase.buscarTodosPedidosPendentes();
    }
 }

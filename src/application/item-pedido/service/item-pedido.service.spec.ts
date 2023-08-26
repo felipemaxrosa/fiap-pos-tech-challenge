@@ -14,13 +14,14 @@ import { RepositoryException } from 'src/infrastructure/exception/repository.exc
 import { SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request';
 import { ItemPedidoConstants } from 'src/shared/constants';
 import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
+import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/deletar-item-pedido.usecase';
+import { EditarItemPedidoUsecase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
+import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/salvar-item-pedido.usecase';
 
 describe('ItemPedidoService', () => {
    let service: IItemPedidoService;
    let repository: IRepository<ItemPedido>;
    let validators: AddItemPedidoValidator[];
-
-   const { ISERVICE, IREPOSITORY, ADD_ITEM_PEDIDO_VALIDATOR, EDITAR_ITEM_PEDIDO_VALIDATOR } = ItemPedidoConstants;
 
    const itemPedido: ItemPedido = {
       id: 1,
@@ -41,18 +42,22 @@ describe('ItemPedidoService', () => {
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             {
-               provide: ISERVICE,
-               inject: [IREPOSITORY, ADD_ITEM_PEDIDO_VALIDATOR, EDITAR_ITEM_PEDIDO_VALIDATOR],
+               provide: ItemPedidoConstants.ISERVICE,
+               inject: [
+                  ItemPedidoConstants.SALVAR_ITEM_PEDIDO_USECASE,
+                  ItemPedidoConstants.EDITAR_ITEM_PEDIDO_USECASE,
+                  ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE,
+               ],
                useFactory: (
-                  repository: IRepository<ItemPedido>,
-                  adicionarValidators: AddItemPedidoValidator[],
-                  editarValidators: EditarItemPedidoValidator[],
+                  salvarUsecase: SalvarItemPedidoUseCase,
+                  editarUsecase: EditarItemPedidoUsecase,
+                  deletarUsecase: DeletarItemPedidoUseCase,
                ): IItemPedidoService => {
-                  return new ItemPedidoService(repository, adicionarValidators, editarValidators);
+                  return new ItemPedidoService(salvarUsecase, editarUsecase, deletarUsecase);
                },
             },
             {
-               provide: IREPOSITORY,
+               provide: ItemPedidoConstants.IREPOSITORY,
                useValue: {
                   save: jest.fn(() => Promise.resolve(itemPedido)),
                   findBy: jest.fn(() => {
@@ -63,27 +68,55 @@ describe('ItemPedidoService', () => {
                },
             },
             {
-               provide: ADD_ITEM_PEDIDO_VALIDATOR,
-               inject: [IREPOSITORY],
+               provide: ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR,
+               inject: [ItemPedidoConstants.IREPOSITORY],
                useFactory: (): AddItemPedidoValidator[] => {
                   return [new QuantidadeMinimaItemValidator()];
                },
             },
             {
-               provide: EDITAR_ITEM_PEDIDO_VALIDATOR,
-               inject: [IREPOSITORY],
+               provide: ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR,
+               inject: [ItemPedidoConstants.IREPOSITORY],
                useFactory: (repository: IRepository<ItemPedido>): EditarItemPedidoValidator[] => {
                   return [new ItemPedidoExistenteValidator(repository)];
                },
+            },
+            {
+               provide: ItemPedidoConstants.SALVAR_ITEM_PEDIDO_USECASE,
+               inject: [ItemPedidoConstants.IREPOSITORY, ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR],
+               useFactory: (
+                  repository: IRepository<ItemPedido>,
+                  validators: AddItemPedidoValidator[],
+               ): SalvarItemPedidoUseCase => new SalvarItemPedidoUseCase(repository, validators),
+            },
+            {
+               provide: ItemPedidoConstants.EDITAR_ITEM_PEDIDO_USECASE,
+               inject: [
+                  ItemPedidoConstants.IREPOSITORY,
+                  ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR,
+                  ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR,
+               ],
+               useFactory: (
+                  repository: IRepository<ItemPedido>,
+                  adicionarValidators: AddItemPedidoValidator[],
+                  editarValidators: EditarItemPedidoValidator[],
+               ): EditarItemPedidoUsecase =>
+                  new EditarItemPedidoUsecase(repository, adicionarValidators, editarValidators),
+            },
+            {
+               provide: ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE,
+               inject: [ItemPedidoConstants.IREPOSITORY],
+               useFactory: (repository: IRepository<ItemPedido>): DeletarItemPedidoUseCase =>
+                  new DeletarItemPedidoUseCase(repository),
             },
          ],
       }).compile();
 
       module.useLogger(false);
 
-      repository = module.get<IRepository<ItemPedido>>(IREPOSITORY);
-      validators = module.get<AddItemPedidoValidator[]>(ADD_ITEM_PEDIDO_VALIDATOR);
-      service = module.get<IItemPedidoService>(ISERVICE);
+      repository = module.get<IRepository<ItemPedido>>(ItemPedidoConstants.IREPOSITORY);
+      validators = module.get<AddItemPedidoValidator[]>(ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR);
+      service = module.get<IItemPedidoService>(ItemPedidoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {
