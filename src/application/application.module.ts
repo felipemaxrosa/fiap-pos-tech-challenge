@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
+
 import { CategoriaProdutoService } from 'src/application/categoria/service/categoria-produto.service';
 import { ClienteService } from 'src/application/cliente/service/cliente.service';
 import { ItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service';
 import { PedidoService } from 'src/application/pedido/service/pedido.service';
 import { ProdutoService } from 'src/application/produto/service/produto.service';
-import { BuscarClienteValidator } from 'src/application/cliente/validation/buscar-cliente.validator';
-import { CpfValidoClienteValidator } from 'src/application/cliente/validation/cpf-valido-cliente.validator';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import {
    QuantidadeMinimaItemValidator,
@@ -13,9 +12,6 @@ import {
    AddItemPedidoValidator,
    EditarItemPedidoValidator,
 } from 'src/application/item-pedido/validation';
-import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
 import {
    ClienteConstants,
@@ -26,11 +22,6 @@ import {
 } from 'src/shared/constants';
 import { BuscarTodasCategoriasUseCase } from 'src/application/categoria/usecase/buscar-todas-categorias.usecase';
 import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
-import { SalvarProdutoUseCase } from 'src/application/produto/usecase/salvar-produto.usecase';
-import { EditarProdutoUseCase } from 'src/application/produto/usecase/editar-produto.usecase';
-import { DeletarProdutoUseCase } from 'src/application/produto/usecase/deletar-produto.usecase';
-import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
-import { BuscarProdutoPorIdCategoriaUseCase } from 'src/application/produto/usecase/buscar-produto-por-id-categoria.usecase';
 import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/salvar-item-pedido.usecase';
 import { EditarItemPedidoUsecase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
 import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/deletar-item-pedido.usecase';
