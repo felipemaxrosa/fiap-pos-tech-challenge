@@ -55,6 +55,7 @@ describe('PedidoService', () => {
                   PedidoConstants.BUSCAR_ESTADO_PEDIDO_POR_ID_USECASE,
                   PedidoConstants.BUSCAR_TODOS_PEDIDOS_POR_ESTADO_USECASE,
                   PedidoConstants.BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE,
+                  PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE,
                ],
                useFactory: (
                   salvarUsecase: SalvarPedidoUseCase,
@@ -97,7 +98,6 @@ describe('PedidoService', () => {
                   listarPedidosPendentes: jest.fn(() => Promise.resolve([pedidoPendente])),
                },
             },
-            // Mock do SalvarPedidoValidator
             {
                provide: PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
                inject: [PedidoConstants.IREPOSITORY],
@@ -146,6 +146,12 @@ describe('PedidoService', () => {
                inject: [PedidoConstants.IREPOSITORY],
                useFactory: (repository: IPedidoRepository): BuscarTodosPedidosPendentesUseCase =>
                   new BuscarTodosPedidosPendentesUseCase(repository),
+            },
+            {
+               provide: PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE,
+               inject: [PedidoConstants.IREPOSITORY],
+               useFactory: (repository: IPedidoRepository): BuscarTodosPedidosNaoFinalizadosUseCase =>
+                  new BuscarTodosPedidosNaoFinalizadosUseCase(repository),
             },
          ],
       }).compile();

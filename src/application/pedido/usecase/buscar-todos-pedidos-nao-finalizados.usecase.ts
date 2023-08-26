@@ -26,9 +26,9 @@ export class BuscarTodosPedidosNaoFinalizadosUseCase {
    }
 
    async buscarTodosPedidos(): Promise<Pedido[]> {
-      const pedidos = await this.repository.listarPedidosPendentes().catch((error) => {
-         this.logger.error(`Erro ao buscar pedidos pendentes no banco de dados: ${error}`);
-         throw new ServiceException(`Erro ao buscar pedidos pendentes no banco de dados: ${error}`);
+      const pedidos = await this.repository.findAll().catch((error) => {
+         this.logger.error(`Erro ao buscar todos os pedidos no banco de dados: ${error}`);
+         throw new ServiceException(`Erro ao buscar todos os pedidos no banco de dados: ${error}`);
       });
 
       const pedidosNaoFinalizados = pedidos.filter((pedido) =>

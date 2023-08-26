@@ -51,7 +51,12 @@ export class PedidoMemoryRepository implements IPedidoRepository {
    }
 
    findAll(): Promise<Pedido[]> {
-      throw new RepositoryException('Método não implementado.');
+      this.logger.debug('Listando todos os pedidos');
+
+      return new Promise<Pedido[]>((resolve) => {
+         const pedidos = this.pedidosRepository;
+         resolve(pedidos);
+      });
    }
 
    async listarPedidosPendentes(): Promise<Pedido[]> {

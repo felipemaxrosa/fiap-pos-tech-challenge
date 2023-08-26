@@ -85,8 +85,17 @@ export class PedidoTypeormRepository implements IPedidoRepository {
          });
    }
 
-   findAll(): Promise<Pedido[]> {
-      throw new RepositoryException('Método não implementado.');
+   async findAll(): Promise<Pedido[]> {
+      this.logger.debug('Listando todos os pedidos');
+
+      return this.repository
+         .find()
+         .then((pedidoEntities) => {
+            return pedidoEntities.map((pedido) => pedido);
+         })
+         .catch((error) => {
+            throw new RepositoryException(`Houve um erro ao listar todos os pedidos: ${error.message}`);
+         });
    }
 
    async listarPedidosPendentes(): Promise<Pedido[]> {

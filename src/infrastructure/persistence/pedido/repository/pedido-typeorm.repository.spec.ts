@@ -222,12 +222,17 @@ describe('PedidoTypeormRepository', () => {
    });
 
    describe('findAll', () => {
-      it('findAll deve falhar porque não foi implementado', async () => {
-         try {
-            await expect(repository.findAll());
-         } catch (error) {
-            expect(error.message).toEqual('Método não implementado.');
-         }
+      it('findAll deve listar todos os pedidos', async () => {
+         jest.spyOn(repositoryTypeOrm, 'find').mockResolvedValue([pedidoEntity]);
+
+         await repository.findAll().then((pedidos) => expect(pedidos).toEqual([pedidoEntity]));
+      });
+
+      it('findAll não deve listar pedido pendentes quando houver um erro de banco', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'find').mockRejectedValue(error);
+
+         await expect(repository.findAll()).rejects.toThrowError(RepositoryException);
       });
    });
 
@@ -238,7 +243,7 @@ describe('PedidoTypeormRepository', () => {
          await repository.listarPedidosPendentes().then((pedidos) => expect(pedidos).toEqual([pedidoEntity]));
       });
 
-      it('não deve listar pedido pendentes quando houver um erro de banco ', async () => {
+      it('não deve listar pedido pendentes quando houver um erro de banco', async () => {
          const error = new TypeORMError('Erro genérico do TypeORM');
          jest.spyOn(repositoryTypeOrm, 'find').mockRejectedValue(error);
 
