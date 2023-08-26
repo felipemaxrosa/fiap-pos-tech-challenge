@@ -37,54 +37,13 @@ import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/de
 
 import { ClienteProviders } from 'src/application/cliente/providers/cliente.providers';
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
+import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
 
 @Module({
    providers: [
       ...ClienteProviders,
       ...PedidoProviders,
-
-      // Produto
-      { provide: ProdutoConstants.ISERVICE, useClass: ProdutoService },
-      {
-         provide: ProdutoConstants.SALVAR_PRODUTO_USECASE,
-         inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
-         useFactory: (repository: IRepository<Produto>, validators: SalvarProdutoValidator[]): SalvarProdutoUseCase =>
-            new SalvarProdutoUseCase(repository, validators),
-      },
-      {
-         provide: ProdutoConstants.EDITAR_PRODUTO_USECASE,
-         inject: [ProdutoConstants.IREPOSITORY, ProdutoConstants.SALVAR_PRODUTO_VALIDATOR],
-         useFactory: (repository: IRepository<Produto>, validators: SalvarProdutoValidator[]): EditarProdutoUseCase =>
-            new EditarProdutoUseCase(repository, validators),
-      },
-      {
-         provide: ProdutoConstants.DELETAR_PRODUTO_USECASE,
-         inject: [ProdutoConstants.IREPOSITORY],
-         useFactory: (repository: IRepository<Produto>): DeletarProdutoUseCase => new DeletarProdutoUseCase(repository),
-      },
-      {
-         provide: ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
-         inject: [ProdutoConstants.IREPOSITORY],
-         useFactory: (repository: IRepository<Produto>): BuscarProdutoPorIdUseCase =>
-            new BuscarProdutoPorIdUseCase(repository),
-      },
-      {
-         provide: ProdutoConstants.BUSCAR_PRODUTO_POR_ID_CATEGORIA_USECASE,
-         inject: [ProdutoConstants.IREPOSITORY],
-         useFactory: (repository: IRepository<Produto>): BuscarProdutoPorIdCategoriaUseCase =>
-            new BuscarProdutoPorIdCategoriaUseCase(repository),
-      },
-      {
-         provide: ProdutoConstants.SALVAR_PRODUTO_VALIDATOR,
-         inject: [ProdutoConstants.IREPOSITORY],
-         useFactory: (repository: IRepository<Produto>): SalvarProdutoValidator[] => [
-            new CamposObrigatoriosProdutoValidator(repository),
-         ],
-      },
-      {
-         provide: ClienteConstants.BUSCAR_CLIENTE_VALIDATOR,
-         useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
-      },
+      ...ProdutoProviders,
 
       // Item do Pedido
       { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
