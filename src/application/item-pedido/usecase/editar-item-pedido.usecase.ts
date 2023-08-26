@@ -7,8 +7,8 @@ import { ItemPedidoConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
 
 @Injectable()
-export class EditarItemPedidoUsecase {
-   private logger = new Logger(EditarItemPedidoUsecase.name);
+export class EditarItemPedidoUseCase {
+   private logger = new Logger(EditarItemPedidoUseCase.name);
 
    constructor(
       @Inject(ItemPedidoConstants.IREPOSITORY) private repository: IRepository<ItemPedido>,

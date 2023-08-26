@@ -15,7 +15,7 @@ import { SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/reque
 import { ItemPedidoConstants } from 'src/shared/constants';
 import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/deletar-item-pedido.usecase';
-import { EditarItemPedidoUsecase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
+import { EditarItemPedidoUseCase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
 import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/salvar-item-pedido.usecase';
 
 describe('ItemPedidoService', () => {
@@ -50,7 +50,7 @@ describe('ItemPedidoService', () => {
                ],
                useFactory: (
                   salvarUsecase: SalvarItemPedidoUseCase,
-                  editarUsecase: EditarItemPedidoUsecase,
+                  editarUsecase: EditarItemPedidoUseCase,
                   deletarUsecase: DeletarItemPedidoUseCase,
                ): IItemPedidoService => {
                   return new ItemPedidoService(salvarUsecase, editarUsecase, deletarUsecase);
@@ -100,8 +100,8 @@ describe('ItemPedidoService', () => {
                   repository: IRepository<ItemPedido>,
                   adicionarValidators: AddItemPedidoValidator[],
                   editarValidators: EditarItemPedidoValidator[],
-               ): EditarItemPedidoUsecase =>
-                  new EditarItemPedidoUsecase(repository, adicionarValidators, editarValidators),
+               ): EditarItemPedidoUseCase =>
+                  new EditarItemPedidoUseCase(repository, adicionarValidators, editarValidators),
             },
             {
                provide: ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE,
