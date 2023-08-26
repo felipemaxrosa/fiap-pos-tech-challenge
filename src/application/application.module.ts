@@ -5,7 +5,11 @@ import { ClienteService } from 'src/application/cliente/service/cliente.service'
 import { ItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service';
 import { PedidoService } from 'src/application/pedido/service/pedido.service';
 import { ProdutoService } from 'src/application/produto/service/produto.service';
-import { IRepository } from 'src/enterprise/repository/repository';
+import { ClienteProviders } from 'src/application/cliente/providers/cliente.providers';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
+import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
+import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
+import { CategoriaProdutosProviders } from 'src/application/categoria/providers/categoria.providers';
 import {
    ClienteConstants,
    PedidoConstants,
@@ -13,12 +17,6 @@ import {
    ItemPedidoConstants,
    CategoriaProdutoConstants,
 } from 'src/shared/constants';
-import { BuscarTodasCategoriasUseCase } from 'src/application/categoria/usecase/buscar-todas-categorias.usecase';
-import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
-import { ClienteProviders } from 'src/application/cliente/providers/cliente.providers';
-import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
-import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
-import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
 
 @Module({
    providers: [
@@ -26,15 +24,7 @@ import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-
       ...PedidoProviders,
       ...ProdutoProviders,
       ...ItemPedidoProviders,
-
-      // Categoria de Produto
-      { provide: CategoriaProdutoConstants.ISERVICE, useClass: CategoriaProdutoService },
-      {
-         provide: CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE,
-         inject: [CategoriaProdutoConstants.IREPOSITORY],
-         useFactory: (repository: IRepository<CategoriaProduto>): BuscarTodasCategoriasUseCase =>
-            new BuscarTodasCategoriasUseCase(repository),
-      },
+      ...CategoriaProdutosProviders,
    ],
    exports: [
       { provide: ClienteConstants.ISERVICE, useClass: ClienteService },
