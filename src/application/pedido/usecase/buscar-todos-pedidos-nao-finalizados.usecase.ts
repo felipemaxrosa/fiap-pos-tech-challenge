@@ -5,7 +5,7 @@ import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { PedidoConstants } from 'src/shared/constants';
 
-const estadosDePedidoParaListagem = [EstadoPedido.RECEBIDO, EstadoPedido.EM_PREPARO, EstadoPedido.PRONTO];
+const estadosDePedidoParaListagem = [EstadoPedido.RECEBIDO, EstadoPedido.EM_PREPARACAO, EstadoPedido.PRONTO];
 
 @Injectable()
 export class BuscarTodosPedidosNaoFinalizadosUseCase {
@@ -13,12 +13,24 @@ export class BuscarTodosPedidosNaoFinalizadosUseCase {
 
    constructor(@Inject(PedidoConstants.IREPOSITORY) private repository: IPedidoRepository) {}
 
-   private ordenarPedidos(pedidoA: Pedido, pedidoB: Pedido): number {
+   private ordenarPorEstadoDoPedido(pedidoA: Pedido, pedidoB: Pedido): number {
       if (pedidoA.estadoPedido > pedidoB.estadoPedido) {
-         return 1;
+         return -1;
       }
 
       if (pedidoA.estadoPedido < pedidoB.estadoPedido) {
+         return 1;
+      }
+
+      return 0;
+   }
+
+   private ordenarPorIdDoPedido(pedidoA: Pedido, pedidoB: Pedido): number {
+      if (pedidoA.id > pedidoB.id) {
+         return 1;
+      }
+
+      if (pedidoA.id < pedidoB.id) {
          return -1;
       }
 
@@ -34,8 +46,10 @@ export class BuscarTodosPedidosNaoFinalizadosUseCase {
       const pedidosNaoFinalizados = pedidos.filter((pedido) =>
          estadosDePedidoParaListagem.includes(pedido.estadoPedido),
       );
-      const pedidosNaoFinalizadosOrdenados = pedidosNaoFinalizados.sort(this.ordenarPedidos);
-      console.log({ pedidosOrdenados: pedidosNaoFinalizadosOrdenados });
+
+      const pedidosNaoFinalizadosOrdenadosPorId = pedidosNaoFinalizados.sort(this.ordenarPorIdDoPedido);
+      const pedidosNaoFinalizadosOrdenados = pedidosNaoFinalizadosOrdenadosPorId.sort(this.ordenarPorEstadoDoPedido);
+
       return pedidosNaoFinalizadosOrdenados;
    }
 }

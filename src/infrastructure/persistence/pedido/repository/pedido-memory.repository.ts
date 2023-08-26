@@ -64,7 +64,7 @@ export class PedidoMemoryRepository implements IPedidoRepository {
 
       return new Promise<Pedido[]>((resolve) => {
          const pedidos = this.pedidosRepository.filter(
-            (item) => item.estadoPedido === EstadoPedido.RECEBIDO || item.estadoPedido === EstadoPedido.EM_PREPARO,
+            (item) => item.estadoPedido === EstadoPedido.RECEBIDO || item.estadoPedido === EstadoPedido.EM_PREPARACAO,
          );
          resolve(pedidos);
       });

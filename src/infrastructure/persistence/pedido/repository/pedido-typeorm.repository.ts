@@ -103,7 +103,7 @@ export class PedidoTypeormRepository implements IPedidoRepository {
 
       return this.repository
          .find({
-            where: [{ estadoPedido: EstadoPedido.RECEBIDO }, { estadoPedido: EstadoPedido.EM_PREPARO }],
+            where: [{ estadoPedido: EstadoPedido.RECEBIDO }, { estadoPedido: EstadoPedido.EM_PREPARACAO }],
          })
          .then((pedidoEntities) => {
             return pedidoEntities.map((pedido) => pedido);
