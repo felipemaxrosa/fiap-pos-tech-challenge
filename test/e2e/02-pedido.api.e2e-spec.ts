@@ -16,7 +16,7 @@ describe('PedidoRestApi (e2e)', () => {
       salvarPedidoRequest = {
          clienteId: 1,
          dataInicio: '2023-06-24',
-         estadoPedido: EstadoPedido.RECEBIDO,
+         estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
          ativo: true,
       };
       // Define um objeto de pedido esperado como resultado
@@ -24,7 +24,7 @@ describe('PedidoRestApi (e2e)', () => {
          id: 1,
          clienteId: 1,
          dataInicio: '2023-06-24',
-         estadoPedido: EstadoPedido.RECEBIDO,
+         estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
          ativo: true,
       };
    });

@@ -27,7 +27,7 @@ describe('PedidoService', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: EstadoPedido.RECEBIDO,
+      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
       ativo: true,
    };
 
@@ -168,7 +168,7 @@ describe('PedidoService', () => {
          const novoPedido: SalvarPedidoRequest = {
             clienteId: 1,
             dataInicio: '2023-06-18',
-            estadoPedido: EstadoPedido.RECEBIDO,
+            estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
             ativo: true,
          };
 
@@ -260,7 +260,7 @@ describe('PedidoService', () => {
          });
 
          await service.findByIdEstadoDoPedido(1).then((pedido) => {
-            expect(pedido).toEqual({ estadoPedido: EstadoPedido.RECEBIDO });
+            expect(pedido).toEqual({ estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE });
          });
       });
 
@@ -281,12 +281,12 @@ describe('PedidoService', () => {
 
    describe('findAllByEstadoPedido', () => {
       const mockedPedidos = [pedido];
-      it('retorna pedidos com estado - Recebido (1)', async () => {
+      it('retorna pedidos com estado - Pagamento Pendente (0)', async () => {
          repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
 
-         await service.findAllByEstadoDoPedido(EstadoPedido.RECEBIDO).then((pedidos) => {
+         await service.findAllByEstadoDoPedido(EstadoPedido.PAGAMENTO_PENDENTE).then((pedidos) => {
             expect(pedidos).toEqual([pedido]);
          });
       });

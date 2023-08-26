@@ -13,7 +13,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
       id: 1,
       clienteId: 1,
       dataInicio: '2023-06-18',
-      estadoPedido: EstadoPedido.RECEBIDO,
+      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
       ativo: true,
    };
 
@@ -61,6 +61,18 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
          await validator.validate(criarNovoPedido()).then((unique) => {
             expect(unique).toBeTruthy();
          });
+      });
+
+      it('deve disparar um ERRO devido ao estado invalido do novo pedido - RECEBIDO', async () => {
+         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: EstadoPedido.RECEBIDO });
+         // mock de repositório retornando um cliente
+         repository.findBy = jest.fn().mockImplementation(() => {
+            return Promise.resolve([pedidoComEstadoErrado]);
+         });
+
+         await expect(validator.validate(pedidoComEstadoErrado)).rejects.toThrowError(
+            EstadoCorretoNovoPedidoValidator.ERROR_MESSAGE,
+         );
       });
 
       it('deve disparar um ERRO devido ao estado invalido do novo pedido - FINALIZADO', async () => {
