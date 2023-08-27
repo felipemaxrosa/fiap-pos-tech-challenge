@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoRestApi } from 'src/presentation/rest/pedido/api/pedido.api';
+import { ListarPedidoNaoFinalizadoResponse } from 'src/presentation/rest/pedido/response/listar-pedido-nao-finalizado-response';
 import { PedidoConstants } from 'src/shared/constants';
 
 describe('PedidoRestApi', () => {
@@ -52,6 +54,7 @@ describe('PedidoRestApi', () => {
                      Promise.resolve([salvarPedidoResponse].filter((pedido) => pedido.estadoPedido === estado)),
                   ),
                   listarPedidosPendentes: jest.fn(() => Promise.resolve([pedido])),
+                  listarPedidosNaoFinalizados: jest.fn(() => Promise.resolve([pedido])),
                },
             },
          ],
@@ -173,6 +176,28 @@ describe('PedidoRestApi', () => {
             expect(error.message).toEqual(`Pedidos com estado: ${EstadoPedido.FINALIZADO} não encontrados`);
             expect(error.status).toEqual(404);
          });
+      });
+   });
+
+   describe('listarPedidosNaoFinalizados', () => {
+      it('deve listar pedidos não finalizados', async () => {
+         // Chama o método listarPedidosNaoFinalizados do restApi
+         const result = await restApi.listarPedidosNaoFinalizados();
+
+         // Verifica se o método listarPedidosNaoFinalizados do serviço foi chamado corretamente
+         expect(service.listarPedidosNaoFinalizados).toHaveBeenCalled();
+
+         // Verifica se o resultado obtido é um array do tipo ListarPedidoNaoFinalizadoResponse
+         expect(result).toBeInstanceOf(Array<Pedido>);
+         expect(result[0]).toBeInstanceOf(ListarPedidoNaoFinalizadoResponse);
+
+         // Verifica se o resultado obtido tem as propriedades esperadas
+         const pedidoResponse = result[0];
+         expect(pedidoResponse.clienteId).toEqual(1);
+         expect(pedidoResponse.dataInicio).toEqual('2020-01-01');
+         expect(pedidoResponse.estadoPedido).toEqual(EstadoPedido.EM_PREPARACAO);
+         expect(pedidoResponse.ativo).toEqual(true);
+         expect(pedidoResponse.id).toEqual(1);
       });
    });
 });
