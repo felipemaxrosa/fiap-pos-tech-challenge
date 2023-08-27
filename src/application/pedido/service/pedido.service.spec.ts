@@ -33,7 +33,7 @@ describe('PedidoService', () => {
       email: 'teste@teste.com',
       cpf: '25634428777',
    };
-   
+
    const pedidoPendente: Pedido = {
       id: 2,
       clienteId: 2,

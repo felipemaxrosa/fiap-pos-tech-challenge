@@ -11,8 +11,8 @@ describe('PedidoRestApi (e2e)', () => {
    let salvarPedidoRequest: SalvarPedidoRequest;
    let salvarPedidoResponse: SalvarPedidoResponse;
 
-     // Define um objeto de requisição
-   let salvarClienteRequest = {
+   // Define um objeto de requisição
+   const salvarClienteRequest = {
       nome: 'Teste',
       email: 'teste@teste.com',
       cpf: '25634428777',
@@ -53,9 +53,9 @@ describe('PedidoRestApi (e2e)', () => {
 
       // salvar cliente mandatório
       await request(app.getHttpServer())
-      .post('/v1/cliente')
-      .set('Content-type', 'application/json')
-      .send(salvarClienteRequest)
+         .post('/v1/cliente')
+         .set('Content-type', 'application/json')
+         .send(salvarClienteRequest);
    });
 
    afterAll(async () => {
