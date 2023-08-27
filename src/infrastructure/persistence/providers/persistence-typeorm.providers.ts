@@ -16,8 +16,8 @@ import { ProdutoTypeormRepository } from 'src/infrastructure/persistence/produto
 
 export const PersistenceTypeOrmProviders: Provider[] = [
    { provide: ClienteConstants.IREPOSITORY, useClass: ClienteTypeormRepository },
-      { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
-      { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoTypeormRepository },
-      { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoTypeormRepository },
-      { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoTypeormRepository },
+   { provide: PedidoConstants.IREPOSITORY, useClass: PedidoTypeormRepository },
+   { provide: ProdutoConstants.IREPOSITORY, useClass: ProdutoTypeormRepository },
+   { provide: CategoriaProdutoConstants.IREPOSITORY, useClass: CategoriaProdutoTypeormRepository },
+   { provide: ItemPedidoConstants.IREPOSITORY, useClass: ItemPedidoTypeormRepository },
 ];

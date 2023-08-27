@@ -19,11 +19,7 @@ import { PersistenceTypeOrmProviders } from 'src/infrastructure/persistence/prov
          inject: [DatabaseConstants.DATABASE_CONFIG_NAME],
       }),
    ],
-   providers: [
-      ...PersistenceTypeOrmProviders
-   ],
-   exports: [
-      ...PersistenceTypeOrmProviders
-   ],
+   providers: [...PersistenceTypeOrmProviders],
+   exports: [...PersistenceTypeOrmProviders],
 })
 export class TypeormDatabaseModule {}
