@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CategoriaProdutoService } from 'src/application/categoria/service/categoria-produto.service';
+import { CategoriaProdutosProviders } from 'src/application/categoria/providers/categoria.providers';
 import { ICategoriaProdutoService } from 'src/application/categoria/service/categoria-produto.service.interface';
 import { BuscarTodasCategoriasUseCase } from 'src/application/categoria/usecase/buscar-todas-categorias.usecase';
 import { CategoriaProduto } from 'src/enterprise/categoria/model/categoria-produto.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { IService } from 'src/enterprise/service/service';
+import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { CategoriaProdutoConstants } from 'src/shared/constants';
 
 describe('CategoriaProdutoService', () => {
@@ -21,25 +21,7 @@ describe('CategoriaProdutoService', () => {
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
-         providers: [
-            //  IService<CategoriaProduto> provider
-            {
-               provide: CategoriaProdutoConstants.ISERVICE,
-               inject: [CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE],
-               useFactory: (usecase: BuscarTodasCategoriasUseCase): IService<CategoriaProduto> => {
-                  return new CategoriaProdutoService(usecase);
-               },
-            },
-            {
-               provide: CategoriaProdutoConstants.BUSCAR_TODAS_CATEGORIAS_USECASE,
-               useValue: {
-                  // mock para a chamada usecase.buscarTodasCategorias()
-                  buscarTodasCategorias: jest.fn(() => {
-                     return Promise.resolve(categoriaProdutos);
-                  }),
-               },
-            },
-         ],
+         providers: [...CategoriaProdutosProviders, ...PersistenceInMemoryProviders],
       }).compile();
 
       // Desabilita a saída de log

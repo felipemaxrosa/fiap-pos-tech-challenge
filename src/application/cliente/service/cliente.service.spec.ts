@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClienteService } from 'src/application/cliente/service/cliente.service';
 import { IClienteService } from 'src/application/cliente/service/cliente.service.interface';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
-import { BuscarClienteValidator } from 'src/application/cliente/validation/buscar-cliente.validator';
 import { CpfUnicoClienteValidator } from 'src/application/cliente/validation/cpf-unico-cliente.validator';
 import { CpfValidoClienteValidator } from 'src/application/cliente/validation/cpf-valido-cliente.validator';
 import { EmailUnicoClienteValidator } from 'src/application/cliente/validation/email-unico-cliente.validator';
@@ -10,12 +8,10 @@ import { EmailValidoClienteValidator } from 'src/application/cliente/validation/
 import { SalvarClienteValidator } from 'src/application/cliente/validation/salvar-cliente.validator';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { IService } from 'src/enterprise/service/service';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { ClienteConstants } from 'src/shared/constants';
-import { BuscarClientePorCpfUseCase } from 'src/application/cliente/usecase/buscar-cliente-por-cpf.usecase';
-import { IdentificarClienteUseCase } from 'src/application/cliente/usecase/identificar-cliente-por-cpf.usecase';
-import { SalvarClienteUseCase } from 'src/application/cliente/usecase/salvar-cliente.usecase';
+import { ClienteProviders } from 'src/application/cliente/providers/cliente.providers';
+import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 
 describe('CienteService', () => {
    let service: IClienteService;
@@ -33,44 +29,9 @@ describe('CienteService', () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
          providers: [
-            //  IService<Cliente> provider
-            {
-               provide: ClienteConstants.ISERVICE,
-               inject: [
-                  ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE,
-                  ClienteConstants.SALVAR_CLIENTE_USECASE,
-                  ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE,
-               ],
-               useFactory: (
-                  buscarClienteUsecase: BuscarClientePorCpfUseCase,
-                  salvarClienteUsecase: SalvarClienteUseCase,
-                  identificarClienteUsecase: IdentificarClienteUseCase,
-               ): IService<Cliente> => {
-                  return new ClienteService(buscarClienteUsecase, salvarClienteUsecase, identificarClienteUsecase);
-               },
-            },
-            {
-               provide: ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE,
-               inject: [ClienteConstants.IREPOSITORY, ClienteConstants.BUSCAR_CLIENTE_VALIDATOR],
-               useFactory: (
-                  repository: IRepository<Cliente>,
-                  validators: BuscarClienteValidator[],
-               ): BuscarClientePorCpfUseCase => new BuscarClientePorCpfUseCase(repository, validators),
-            },
-            {
-               provide: ClienteConstants.SALVAR_CLIENTE_USECASE,
-               inject: [ClienteConstants.IREPOSITORY, ClienteConstants.SALVAR_CLIENTE_VALIDATOR],
-               useFactory: (
-                  repository: IRepository<Cliente>,
-                  validators: SalvarClienteValidator[],
-               ): SalvarClienteUseCase => new SalvarClienteUseCase(repository, validators),
-            },
-            {
-               provide: ClienteConstants.IDENTIFICAR_CLIENTE_POR_CPF_USECASE,
-               inject: [ClienteConstants.BUSCAR_CLIENTE_POR_CPF_USECASE],
-               useFactory: (usecase: BuscarClientePorCpfUseCase): IdentificarClienteUseCase =>
-                  new IdentificarClienteUseCase(usecase),
-            },
+            ...ClienteProviders,
+            ...PersistenceInMemoryProviders,
+
             // Mock do serviço IRepository<Cliente>
             {
                provide: ClienteConstants.IREPOSITORY,
@@ -83,25 +44,6 @@ describe('CienteService', () => {
                      return Promise.resolve({});
                   }),
                },
-            },
-            // Mock do SalvarClienteValidator
-            {
-               provide: ClienteConstants.SALVAR_CLIENTE_VALIDATOR,
-               inject: [ClienteConstants.IREPOSITORY],
-               useFactory: (repository: IRepository<Cliente>): SalvarClienteValidator[] => {
-                  return [
-                     new EmailValidoClienteValidator(),
-                     new CpfValidoClienteValidator(),
-                     new EmailUnicoClienteValidator(repository),
-                     new CpfUnicoClienteValidator(repository),
-                  ];
-               },
-            },
-
-            {
-               provide: ClienteConstants.BUSCAR_CLIENTE_VALIDATOR,
-               inject: [ClienteConstants.IREPOSITORY],
-               useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
             },
          ],
       }).compile();
