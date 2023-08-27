@@ -1,28 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PedidoService } from 'src/application/pedido/service/pedido.service';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
-import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
-import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
-import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
-import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
-import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
-import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-pedido.usecase';
-import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
-import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
-import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
-import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
+import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
-import { ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
+import { PedidoConstants } from 'src/shared/constants';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
@@ -51,44 +39,8 @@ describe('PedidoService', () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
          providers: [
-            //  IService<Pedido> provider
-            {
-               provide: PedidoConstants.ISERVICE,
-               inject: [
-                  PedidoConstants.SALVAR_PEDIDO_USECASE,
-                  PedidoConstants.EDITAR_PEDIDO_USECASE,
-                  PedidoConstants.DELETAR_PEDIDO_USECASE,
-                  PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE,
-                  PedidoConstants.BUSCAR_ESTADO_PEDIDO_POR_ID_USECASE,
-                  PedidoConstants.BUSCAR_TODOS_PEDIDOS_POR_ESTADO_USECASE,
-                  PedidoConstants.BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE,
-                  PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
-                  PedidoConstants.CHECKOUT_PEDIDO_USECASE,
-               ],
-               useFactory: (
-                  salvarUsecase: SalvarPedidoUseCase,
-                  editarUsecase: EditarPedidoUseCase,
-                  deletarUsecase: DeletarPedidoUseCase,
-                  buscarPorIdUsecase: BuscarPedidoPorIdUseCase,
-                  buscarEstadoPorIdUsecase: BuscarEstadoPedidoPorIdUseCase,
-                  buscarTodosPorEstadoUsecase: BuscarTodosPedidosPorEstadoUseCase,
-                  buscarTodosPendentesUsecase: BuscarTodosPedidosPendentesUseCase,
-                  buscarItensPedidoPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
-                  checkoutPedidoUsecase: CheckoutPedidoUseCase,
-               ): IPedidoService => {
-                  return new PedidoService(
-                     salvarUsecase,
-                     editarUsecase,
-                     deletarUsecase,
-                     buscarPorIdUsecase,
-                     buscarEstadoPorIdUsecase,
-                     buscarTodosPorEstadoUsecase,
-                     buscarTodosPendentesUsecase,
-                     buscarItensPedidoPorPedidoIdUsecase,
-                     checkoutPedidoUsecase,
-                  );
-               },
-            },
+            ...PedidoProviders,
+            ...PersistenceInMemoryProviders,
             // Mock do serviço IRepository<Pedido>
             {
                provide: PedidoConstants.IREPOSITORY,
@@ -107,98 +59,6 @@ describe('PedidoService', () => {
                   delete: jest.fn(() => Promise.resolve(true)),
                   listarPedidosPendentes: jest.fn(() => Promise.resolve([pedidoPendente])),
                },
-            },
-            // Mock do serviço IRepository<ItemPedido>
-            {
-               provide: ItemPedidoConstants.IREPOSITORY,
-               useValue: {},
-            },
-            // Mock do serviço IRepository<Produto>
-            {
-               provide: ProdutoConstants.IREPOSITORY,
-               useValue: {},
-            },
-            // Mock do SalvarPedidoValidator
-            {
-               provide: PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
-               inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (): SalvarPedidoValidator[] => {
-                  return [new EstadoCorretoNovoPedidoValidator()];
-               },
-            },
-            {
-               provide: PedidoConstants.SALVAR_PEDIDO_USECASE,
-               inject: [PedidoConstants.IREPOSITORY, PedidoConstants.SALVAR_PEDIDO_VALIDATOR],
-               useFactory: (repository: IPedidoRepository, validators: SalvarPedidoValidator[]): SalvarPedidoUseCase =>
-                  new SalvarPedidoUseCase(repository, validators),
-            },
-            {
-               provide: PedidoConstants.EDITAR_PEDIDO_USECASE,
-               inject: [PedidoConstants.IREPOSITORY, PedidoConstants.SALVAR_PEDIDO_VALIDATOR],
-               useFactory: (repository: IPedidoRepository, validators: SalvarPedidoValidator[]): EditarPedidoUseCase =>
-                  new EditarPedidoUseCase(repository, validators),
-            },
-            {
-               provide: PedidoConstants.DELETAR_PEDIDO_USECASE,
-               inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (repository: IPedidoRepository): DeletarPedidoUseCase =>
-                  new DeletarPedidoUseCase(repository),
-            },
-            {
-               provide: PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE,
-               inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (repository: IPedidoRepository): BuscarPedidoPorIdUseCase =>
-                  new BuscarPedidoPorIdUseCase(repository),
-            },
-            {
-               provide: PedidoConstants.BUSCAR_ESTADO_PEDIDO_POR_ID_USECASE,
-               inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (repository: IPedidoRepository): BuscarEstadoPedidoPorIdUseCase =>
-                  new BuscarEstadoPedidoPorIdUseCase(repository),
-            },
-            {
-               provide: PedidoConstants.BUSCAR_TODOS_PEDIDOS_POR_ESTADO_USECASE,
-               inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (repository: IPedidoRepository): BuscarTodosPedidosPorEstadoUseCase =>
-                  new BuscarTodosPedidosPorEstadoUseCase(repository),
-            },
-            {
-               provide: PedidoConstants.BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE,
-               inject: [PedidoConstants.IREPOSITORY],
-               useFactory: (repository: IPedidoRepository): BuscarTodosPedidosPendentesUseCase =>
-                  new BuscarTodosPedidosPendentesUseCase(repository),
-            },
-            {
-               provide: PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
-               inject: [ItemPedidoConstants.IREPOSITORY],
-               useFactory: (repository: IRepository<ItemPedido>): BuscarItensPorPedidoIdUseCase =>
-                  new BuscarItensPorPedidoIdUseCase(repository),
-            },
-            {
-               provide: ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
-               inject: [ProdutoConstants.IREPOSITORY],
-               useFactory: (repository: IRepository<Produto>): BuscarProdutoPorIdUseCase =>
-                  new BuscarProdutoPorIdUseCase(repository),
-            },
-            {
-               provide: PedidoConstants.CHECKOUT_PEDIDO_USECASE,
-               inject: [
-                  ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
-                  PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
-                  PedidoConstants.EDITAR_PEDIDO_USECASE,
-               ],
-               useFactory: (
-                  buscarProdutoPorIdUsecase: BuscarProdutoPorIdUseCase,
-                  buscarItensPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
-                  editarPedidoUsecase: EditarPedidoUseCase,
-                  validators: SalvarPedidoValidator[],
-               ): CheckoutPedidoUseCase =>
-                  new CheckoutPedidoUseCase(
-                     buscarProdutoPorIdUsecase,
-                     buscarItensPorPedidoIdUsecase,
-                     editarPedidoUsecase,
-                     validators,
-                  ),
             },
          ],
       }).compile();
