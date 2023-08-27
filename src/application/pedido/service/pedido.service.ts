@@ -1,18 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
-import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
-import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
-import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
-import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
-import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
-import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-pedido.usecase';
-import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
-import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
-import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
-import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoConstants } from 'src/shared/constants';
+import { ItemPedido } from 'src/enterprise/item-pedido/model';
+import {
+   BuscarEstadoPedidoPorIdUseCase,
+   BuscarPedidoPorIdUseCase,
+   BuscarTodosPedidosPendentesUseCase,
+   BuscarTodosPedidosPorEstadoUseCase,
+   DeletarPedidoUseCase,
+   EditarPedidoUseCase,
+   SalvarPedidoUseCase,
+   BuscarTodosPedidosNaoFinalizadosUseCase,
+   BuscarItensPorPedidoIdUseCase,
+   CheckoutPedidoUseCase,
+} from 'src/application/pedido/usecase';
 
 @Injectable()
 export class PedidoService implements IPedidoService {
@@ -27,6 +30,8 @@ export class PedidoService implements IPedidoService {
       private buscarTodosPorEstadoUsecase: BuscarTodosPedidosPorEstadoUseCase,
       @Inject(PedidoConstants.BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE)
       private buscarTodosPendentesUsecase: BuscarTodosPedidosPendentesUseCase,
+      @Inject(PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE)
+      private buscarTodosNaoFinalizadosUsecase: BuscarTodosPedidosNaoFinalizadosUseCase,
       @Inject(PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE)
       private buscarItensPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
       @Inject(PedidoConstants.CHECKOUT_PEDIDO_USECASE)
@@ -59,6 +64,10 @@ export class PedidoService implements IPedidoService {
 
    async listarPedidosPendentes(): Promise<Pedido[]> {
       return await this.buscarTodosPendentesUsecase.buscarTodosPedidosPendentes();
+   }
+
+   async listarPedidosNaoFinalizados(): Promise<Pedido[]> {
+      return await this.buscarTodosNaoFinalizadosUsecase.buscarTodosPedidos();
    }
 
    async checkout(pedido: Pedido): Promise<Pedido> {

@@ -5,11 +5,14 @@ import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
-import { BuscarPorIdEstadoPedidoResponse } from 'src/presentation/rest/pedido/response/buscar-por-id-estado-pedido.response';
-import { BuscarPorIdPedidoResponse } from 'src/presentation/rest/pedido/response/buscar-por-id-pedido.response';
-import { BuscarTodosPorEstadoPedidoResponse } from 'src/presentation/rest/pedido/response/buscar-todos-por-estado-pedido.response';
-import { ListarPedidoPendenteResponse } from 'src/presentation/rest/pedido/response/listar-pedido-pendente-response';
-import { SalvarPedidoResponse } from 'src/presentation/rest/pedido/response/salvar-pedido.response';
+import {
+   BuscarPorIdEstadoPedidoResponse,
+   BuscarPorIdPedidoResponse,
+   BuscarTodosPorEstadoPedidoResponse,
+   ListarPedidoPendenteResponse,
+   ListarPedidoNaoFinalizadoResponse,
+   SalvarPedidoResponse,
+} from 'src/presentation/rest/pedido/response';
 import { PedidoConstants } from 'src/shared/constants';
 
 @Controller('v1/pedido')
@@ -19,6 +22,24 @@ export class PedidoRestApi extends BaseRestApi {
 
    constructor(@Inject(PedidoConstants.ISERVICE) private service: IPedidoService) {
       super();
+   }
+
+   @Get()
+   @ApiOperation({
+      summary: 'Lista todos os pedidos nao finalizados',
+      description: 'Lista de pedidos com status diferente de pagamento pendente e entregue',
+   })
+   @ApiOkResponse({
+      description: 'Pedidos encontrados com sucesso',
+      type: ListarPedidoNaoFinalizadoResponse,
+      isArray: true,
+   })
+   async listarPedidosNaoFinalizados(): Promise<ListarPedidoNaoFinalizadoResponse[]> {
+      this.logger.debug(`Listando pedidos nao finalizados`);
+
+      return await this.service.listarPedidosNaoFinalizados().then((pedidos) => {
+         return pedidos.map((pedido) => new ListarPedidoNaoFinalizadoResponse(pedido));
+      });
    }
 
    @Post()

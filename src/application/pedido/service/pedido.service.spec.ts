@@ -38,10 +38,41 @@ describe('PedidoService', () => {
       id: 2,
       clienteId: 2,
       dataInicio: '2023-06-20',
-      estadoPedido: EstadoPedido.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARACAO,
       ativo: true,
       total: 10,
    };
+
+   const todosOsPedidos: Pedido[] = [
+      {
+         id: 3,
+         clienteId: 3,
+         dataInicio: '2023-06-20',
+         estadoPedido: EstadoPedido.RECEBIDO,
+         ativo: true,
+      },
+      {
+         id: 4,
+         clienteId: 4,
+         dataInicio: '2023-06-20',
+         estadoPedido: EstadoPedido.PRONTO,
+         ativo: true,
+      },
+      {
+         id: 10,
+         clienteId: 10,
+         dataInicio: '2023-06-20',
+         estadoPedido: EstadoPedido.RECEBIDO,
+         ativo: true,
+      },
+      {
+         id: 13,
+         clienteId: 13,
+         dataInicio: '2023-06-20',
+         estadoPedido: EstadoPedido.PRONTO,
+         ativo: true,
+      },
+   ];
 
    beforeEach(async () => {
       // Configuração do módulo de teste
@@ -60,6 +91,7 @@ describe('PedidoService', () => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
+                  findAll: jest.fn(() => Promise.resolve(todosOsPedidos)),
                   findByIdEstadoDoPedido: jest.fn(() => Promise.resolve({ estadoPedido: pedido.estadoPedido })),
                   // mock para a chamada repository.edit(produto)
                   edit: jest.fn(() => Promise.resolve(pedido)),
@@ -227,7 +259,7 @@ describe('PedidoService', () => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
 
-         await service.findAllByEstadoDoPedido(EstadoPedido.EM_PREPARO).then((pedidos) => {
+         await service.findAllByEstadoDoPedido(EstadoPedido.EM_PREPARACAO).then((pedidos) => {
             expect(pedidos).toHaveLength(0);
          });
       });
@@ -273,6 +305,51 @@ describe('PedidoService', () => {
          jest.spyOn(repository, 'listarPedidosPendentes').mockRejectedValue(error);
 
          await expect(service.listarPedidosPendentes()).rejects.toThrowError(ServiceException);
+      });
+   });
+
+   describe('listarPedidosNaoFinalizados', () => {
+      it('deve listar pedidos pendentes', async () => {
+         const pedidosOrdenadosEsperados = [
+            {
+               id: 4,
+               clienteId: 4,
+               dataInicio: '2023-06-20',
+               estadoPedido: 3,
+               ativo: true,
+            },
+            {
+               id: 13,
+               clienteId: 13,
+               dataInicio: '2023-06-20',
+               estadoPedido: 3,
+               ativo: true,
+            },
+            {
+               id: 3,
+               clienteId: 3,
+               dataInicio: '2023-06-20',
+               estadoPedido: 1,
+               ativo: true,
+            },
+            {
+               id: 10,
+               clienteId: 10,
+               dataInicio: '2023-06-20',
+               estadoPedido: 1,
+               ativo: true,
+            },
+         ];
+         await service.listarPedidosNaoFinalizados().then((pedidos) => {
+            expect(pedidos).toEqual(pedidosOrdenadosEsperados);
+         });
+      });
+
+      it('não deve encontrar pedido pendente quando houver um erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(repository, 'findAll').mockRejectedValue(error);
+
+         await expect(service.listarPedidosNaoFinalizados()).rejects.toThrowError(ServiceException);
       });
    });
 });
