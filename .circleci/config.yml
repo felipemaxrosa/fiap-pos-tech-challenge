@@ -13,6 +13,7 @@ jobs:
       - run:
           name: Run Unit Tests
           command: npm install && npm run test
+          no_output_timeout: 1m
 
   run-coverage-tests:
     working_directory: ~/fast-n-foodious
@@ -27,6 +28,7 @@ jobs:
       - run:
           name: Run Coverage Tests
           command: npm install && npm run test:cov
+          no_output_timeout: 1m
 
   run-check-test-impl:
     working_directory: ~/fast-n-foodious
@@ -41,6 +43,7 @@ jobs:
       - run:
           name: Verify Components Without Unit/E2E Tests
           command: npm install && npm run test:check
+          no_output_timeout: 1m
 
   run-e2e-in-memory:
     working_directory: ~/fast-n-foodious
@@ -55,6 +58,7 @@ jobs:
       - run:
           name: Run E2E Tests (With In-Memory Repositories)
           command: npm install && NODE_ENV=local-mock-repository npm run test:e2e
+          no_output_timeout: 1m
 
   run-e2e-mysql:
     working_directory: ~/fast-n-foodious
@@ -77,21 +81,26 @@ jobs:
       - run:
           name: Start Docker Containers
           command: docker-compose --env-file ./envs/prod.env up -d
+          no_output_timeout: 1m
       - run:
           name: Wait for MySQL to Accept Connections
           command: |
             docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "until mysqladmin ping -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD ; do sleep 1; done"
+          no_output_timeout: 1m
       - run:
           name: Create schema MySQL Schema & Populate Database
           command: |
             docker cp ./scripts/schema/. $(docker-compose ps -q mysql):/docker-entrypoint-initdb.d
             docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "mysql -uroot -p$MYSQL_ROOT_PASSWORD -e 'source /docker-entrypoint-initdb.d/1-init.sql; source /docker-entrypoint-initdb.d/2-populate.sql;'"
+          no_output_timeout: 1m
       - run:
           name: Run E2E Tests (With TypeORM Repositories - MySQL)
           command: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
+          no_output_timeout: 1m
       - run:
           name: Stop and Remove Docker Containers
           command: docker-compose --env-file ./envs/prod.env down
+          no_output_timeout: 1m
   build:
     working_directory: ~/fast-n-foodious
     docker:
@@ -113,12 +122,14 @@ jobs:
               echo "Docker image pushed successfully!"
             else
               echo "Skipping image push as it's not the main branch."
-            fi 
+            fi
+          no_output_timeout: 1m 
       - run:
           when: on_fail
           name: Build failed
           command: |
             echo "ERROR building the project from branch $CIRCLE_BRANCH"
+          no_output_timeout: 1m
 workflows:
   fast-n-foodious:
     jobs:
