@@ -1,21 +1,21 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
 import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
-import { PedidoConstants } from 'src/shared/constants';
+import { PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
 
 @Injectable()
 export class CheckoutPedidoUseCase {
-   private logger = new Logger(CheckoutPedidoUseCase.name);
-
    constructor(
-      @Inject(BuscarProdutoPorIdUseCase) private buscarProdutoPorIdUseCase: BuscarProdutoPorIdUseCase,
-      @Inject(BuscarItensPorPedidoIdUseCase) private buscarItensPorPedidoIdUseCase: BuscarItensPorPedidoIdUseCase,
-      @Inject(EditarPedidoUseCase) private editarPedidoUseCase: EditarPedidoUseCase,
-      @Inject(PedidoConstants.SALVAR_PEDIDO_VALIDATOR)
+      @Inject(ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE)
+      private buscarProdutoPorIdUseCase: BuscarProdutoPorIdUseCase,
+      @Inject(PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE)
+      private buscarItensPorPedidoIdUseCase: BuscarItensPorPedidoIdUseCase,
+      @Inject(PedidoConstants.EDITAR_PEDIDO_USECASE) private editarPedidoUseCase: EditarPedidoUseCase,
+      @Inject(PedidoConstants.SALVAR_PEDIDO_VALIDATOR) private validators: SalvarPedidoValidator[],
       private validators: CheckoutPedidoValidator[],
    ) {}
 

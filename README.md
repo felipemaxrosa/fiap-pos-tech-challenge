@@ -2,7 +2,7 @@
 
 ![Static Badge](https://img.shields.io/badge/database-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v8.X-version?logo=mysql&color=%234169E1&labelColor=white&label=MySQL) ![Static Badge](https://img.shields.io/badge/v9.x-version?logo=typeorm&logoColor=%232D3748&color=%232D3748&labelColor=white&label=TypeORM)
 
-![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker)
+![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker) ![Static Badge](https://img.shields.io/badge/v1.27x-version?logo=kubernetes&color=%232496ED&labelColor=white&label=Kubernetes)
 
 # 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v2.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da pós gradução em Software Architecture.
@@ -45,7 +45,7 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
     - Validações pré-commit/push
         - Validação de cobertura de testes (threshold 95%)
         - Testes unitários, e2e em memória (all green)
-        - Validação de implementação de testes (modo alerta para implementação de testes de rest apis, services, validators, repositories)
+        - Validação de implementação de testes (modo alerta para implementação de testes de rest apis, services, validators, usecases, repositories)
     - CI/CD
         - Pipeline CircleCI para integração com a ```main```
             - ci/circleci: run-unit-tests       - Execução de testes unitários (all green)
@@ -74,14 +74,14 @@ O sistema pode ser executado com ou sem dependências externas.
 
 ```bash
 # env_name:
+- local-mock-repository   # Variáveis usadas para rodar a aplicação em ambiente local, SEM dependência de container mysql
+                          # Exemplo de caso de uso: debugar local rodando com o banco em memória
+                          # $ NODE_ENV=local-mock-repository npm run start:debug
+
 - local                   # Variáveis usadas para rodar a aplicação em ambiente local, COM dependência de container mysql
                           # Presume mysql rodando e a necessidade de atachar a aplicação ao container para desenvolver
                           # Exemplo de caso de uso: debugar local e apontando para o banco no container.
                           # $ NODE_ENV=local npm run start:debug
-
-- local-mock-repository   # Variáveis usadas para rodar a aplicação em ambiente local, SEM dependência de container mysql
-                          # Exemplo de caso de uso: debugar local rodando com o banco em memória
-                          # $ NODE_ENV=local-mock-repository npm run start:debug
 
 - prod                    # Variáveis usadas para rodar a aplicação em ambiente de produção, COM dependøencia de container mysql
                           # $ NODE_ENV=prod npm run start:debug
@@ -316,8 +316,10 @@ src/                                    # Source da solução
 ├── application                         # Camada de Application (use cases, validators)    
 │   ├── categoria
 │   ├── cliente
+│   │   └── providers                   # Registro de providers (services, usecases, validators). utilizados via DI
 │   │   └── service                     # Serviços (controllers) de composição de casos de uso
 │   │   └── usecase                     # Casos de usos
+│   │   └── validation                  # Validators (regras de negócio)
 │   ├── item-pedido
 │   ├── pedido
 │   └── produto
@@ -325,7 +327,6 @@ src/                                    # Source da solução
 │   ├── categoria
 │   ├── cliente
 │   │   ├── model                       # Entidades de domínio
-│   │   └── validation                  # Validators (regras de negócio)
 │   ├── exception                       # Exceções de domínio
 │   ├── item-pedido
 │   ├── pedido
@@ -336,6 +337,7 @@ src/                                    # Source da solução
 ├── infrastructure                      # Camada Infrastructure (banco de dados, ORM)
 │   ├── exception                       # Exceções de infraestrutura
 │   └── persistence
+│       ├── categoria
 │       ├── cliente
 │       │   ├── entity                  # Entitdades ORM
 │       │   └── repository              # Repositórios (mysql, in-memory)
@@ -343,18 +345,21 @@ src/                                    # Source da solução
 │       ├── mysql                       # Configurações de banco de dados MySQL 
 │       ├── pedido
 │       ├── produto
+│       ├── providers                   # Registro de providers (repositorório in-memory, typeorm). utilizados via DI
 ├── presentation                        # Camada Presentation (rest api)
 │   └── rest
-│       ├── categoria
-│       ├── cliente
-│       │   ├── api                     # Rest API
-│       │   ├── request                 # Contratos de entrada
-│       │   └── response                # Contratos de saída
-│       ├── handler                     # Handlers para tratamento centralizado de exceções (ValidationException, DomainException)
-│       ├── item-pedido
-│       ├── pagamento
-│       ├── pedido
-│       ├── produto
+│   │   ├── categoria
+│   │   ├── cliente
+│   │   │   ├── api                     # Rest API
+│   │   │   ├── request                 # Contratos de entrada
+│   │   │   └── response                # Contratos de saída
+│   │   ├── handler                     # Handlers para tratamento centralizado de exceções (ValidationException, DomainException)
+│   │   ├── item-pedido
+│   │   ├── pagamento
+│   │   ├── pedido
+│   │   ├── produto
+│   │   ├── response                    # Contrato de resposta de erro http padrão
+│   └── swagger                         # Configurações (constantes) Swagger
 └── shared                              # Itens compartilhados
 test/                                   # Implementações de testes
 ├── api                                 # Testes de API (utilitário de desenvolvimento)

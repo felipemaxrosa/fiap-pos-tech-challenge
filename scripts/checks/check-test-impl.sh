@@ -4,7 +4,7 @@
 start_path="src"
 
 # Define the component names
-components=("api" "service" "validator" "repository")
+components=("api" "service" "validator" "usecase" "repository")
 
 # Iterate over the components
 for component in "${components[@]}"; do
@@ -63,18 +63,23 @@ done
 
 # Check if there are any missing components
 if [ ${#missing_components[@]} -eq 0 ]; then
-  echo "All components have test implementations."
+  echo "╔═══════════════════════════════════════════╗"
+  echo "║   ✅ Great! You did your best in tests!   ║"
+  echo "╚═══════════════════════════════════════════╝"
   exit 0  # Exit with success status
 else
-  echo "╔═══════════════════════════════════════════╗"
-  echo "║     ⚠️ Missing test implementations ⚠️      ║"
-  echo "║     THIS WILL BREAT YOUR PULL REQUEST     ║"
-  echo "║      CONSIDER IMPLEMENTING THE TEST       ║"
-  echo "╚═══════════════════════════════════════════╝"
-
+   counter=0
    for component in "${missing_components[@]}"; do
-    echo "$component"
-    done
+    ((counter++))
+    echo "$counter - $component"
+   done
+  
+  echo "╔═══════════════════════════════════════════╗"
+  echo "║    🚨 Missing test implementations 🚨     ║"
+  echo "║     THIS WILL BREAK YOUR PULL REQUEST     ║"
+  echo "║ CONSIDER IMPLEMENTING ALL MANDATORY TESTS ║"
+  echo "╚═══════════════════════════════════════════╝"
+  
   # Check if the "--silent" parameter is provided, if it is, exit with success status
   [[ "$*" == *"--silent"* ]] && exit 0 || exit 1
 fi

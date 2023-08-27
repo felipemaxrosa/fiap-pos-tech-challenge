@@ -13,6 +13,13 @@ describe('PedidoRestApi (e2e)', () => {
    let salvarPedidoResponse: SalvarPedidoResponse;
    let checkoutResponse: CheckoutPedidoResponse;
 
+   // Define um objeto de requisição
+   const salvarClienteRequest = {
+      nome: 'Teste',
+      email: 'teste@teste.com',
+      cpf: '25634428777',
+   };
+
    beforeEach(() => {
       // Define um objeto de requisição
       salvarPedidoRequest = {
@@ -48,13 +55,22 @@ describe('PedidoRestApi (e2e)', () => {
       }).compile();
 
       // Desabilita a saída de log
-      module.useLogger(false);
+      // module.useLogger(false);
 
       app = module.createNestApplication();
 
       // Configuração de validações global inputs request
       app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true }));
       await app.init();
+
+      // salvar cliente mandatório
+      //TODO: remover quando reutilizar TestingModule entre os testes
+      if (process.env.NODE_ENV === 'local-mock-repository') {
+         await request(app.getHttpServer())
+            .post('/v1/cliente')
+            .set('Content-type', 'application/json')
+            .send(salvarClienteRequest);
+      }
    });
 
    afterAll(async () => {
