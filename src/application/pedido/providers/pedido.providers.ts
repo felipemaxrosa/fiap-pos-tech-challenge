@@ -67,7 +67,7 @@ export const PedidoProviders: Provider[] = [
 
    {
       provide: PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
-      inject: [PedidoConstants.IREPOSITORY, ItemPedidoConstants.IREPOSITORY],
+      inject: [ItemPedidoConstants.IREPOSITORY],
       useFactory: (repository: IRepository<ItemPedido>): BuscarItensPorPedidoIdUseCase =>
          new BuscarItensPorPedidoIdUseCase(repository),
    },
