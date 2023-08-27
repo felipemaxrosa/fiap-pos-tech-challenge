@@ -11,6 +11,7 @@ import { PedidoProviders } from 'src/application/pedido/providers/pedido.provide
 import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
 import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
 import { CategoriaProdutosProviders } from 'src/application/categoria/providers/categoria.providers';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import {
    ClienteConstants,
    PedidoConstants,
@@ -27,6 +28,7 @@ import {
       ...ProdutoProviders,
       ...ItemPedidoProviders,
       ...CategoriaProdutosProviders,
+      ...PagamentoProviders,
    ],
    exports: [
       { provide: ClienteConstants.ISERVICE, useClass: ClienteService },
