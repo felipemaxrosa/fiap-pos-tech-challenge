@@ -45,4 +45,8 @@ export const ClienteProviders: Provider[] = [
          new CpfUnicoClienteValidator(repository),
       ],
    },
+   {
+      provide: ClienteConstants.BUSCAR_CLIENTE_VALIDATOR,
+      useFactory: (): BuscarClienteValidator[] => [new CpfValidoClienteValidator()],
+   },
 ];

@@ -16,6 +16,7 @@ import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-
 import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
+import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 
@@ -81,18 +82,18 @@ export const PedidoProviders: Provider[] = [
    {
       provide: PedidoConstants.CHECKOUT_PEDIDO_USECASE,
       inject: [
-         ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
+         ProdutoConstants.IREPOSITORY,
          PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
          PedidoConstants.EDITAR_PEDIDO_USECASE,
       ],
       useFactory: (
-         buscarProdutoPorIdUsecase: BuscarProdutoPorIdUseCase,
+         repository: IRepository<Produto>,
          buscarItensPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
          editarPedidoUsecase: EditarPedidoUseCase,
          validators: SalvarPedidoValidator[],
       ): CheckoutPedidoUseCase =>
          new CheckoutPedidoUseCase(
-            buscarProdutoPorIdUsecase,
+            new BuscarProdutoPorIdUseCase(repository),
             buscarItensPorPedidoIdUsecase,
             editarPedidoUsecase,
             validators,
