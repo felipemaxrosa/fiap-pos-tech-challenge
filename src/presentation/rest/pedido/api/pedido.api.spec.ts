@@ -11,7 +11,7 @@ describe('PedidoRestApi', () => {
    const pedido = {
       clienteId: 1,
       dataInicio: '2020-01-01',
-      estadoPedido: EstadoPedido.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARACAO,
       ativo: true,
       id: 1,
    };
@@ -155,8 +155,8 @@ describe('PedidoRestApi', () => {
       });
 
       it('nao deve buscar pedidos com estado: EM PREPARO (2)', async () => {
-         await restApi.findAllByEstadoDoPedido(EstadoPedido.EM_PREPARO).catch((error) => {
-            expect(error.message).toEqual(`Pedidos com estado: ${EstadoPedido.EM_PREPARO} não encontrados`);
+         await restApi.findAllByEstadoDoPedido(EstadoPedido.EM_PREPARACAO).catch((error) => {
+            expect(error.message).toEqual(`Pedidos com estado: ${EstadoPedido.EM_PREPARACAO} não encontrados`);
             expect(error.status).toEqual(404);
          });
       });

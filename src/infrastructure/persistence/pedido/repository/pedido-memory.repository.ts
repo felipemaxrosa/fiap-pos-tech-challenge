@@ -51,7 +51,12 @@ export class PedidoMemoryRepository implements IPedidoRepository {
    }
 
    findAll(): Promise<Pedido[]> {
-      throw new RepositoryException('Método não implementado.');
+      this.logger.debug('Listando todos os pedidos');
+
+      return new Promise<Pedido[]>((resolve) => {
+         const pedidos = this.pedidosRepository;
+         resolve(pedidos);
+      });
    }
 
    async listarPedidosPendentes(): Promise<Pedido[]> {
@@ -59,7 +64,7 @@ export class PedidoMemoryRepository implements IPedidoRepository {
 
       return new Promise<Pedido[]>((resolve) => {
          const pedidos = this.pedidosRepository.filter(
-            (item) => item.estadoPedido === EstadoPedido.RECEBIDO || item.estadoPedido === EstadoPedido.EM_PREPARO,
+            (item) => item.estadoPedido === EstadoPedido.RECEBIDO || item.estadoPedido === EstadoPedido.EM_PREPARACAO,
          );
          resolve(pedidos);
       });

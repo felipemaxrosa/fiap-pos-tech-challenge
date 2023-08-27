@@ -6,6 +6,7 @@ import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/bu
 import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
 import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
 import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
+import { BuscarTodosPedidosNaoFinalizadosUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-nao-finalizados.usecase';
 import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-pedido.usecase';
 import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
@@ -65,7 +66,12 @@ export const PedidoProviders: Provider[] = [
       useFactory: (repository: IPedidoRepository): BuscarTodosPedidosPendentesUseCase =>
          new BuscarTodosPedidosPendentesUseCase(repository),
    },
-
+   {
+      provide: PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE,
+      inject: [PedidoConstants.IREPOSITORY],
+      useFactory: (repository: IPedidoRepository): BuscarTodosPedidosNaoFinalizadosUseCase =>
+         new BuscarTodosPedidosNaoFinalizadosUseCase(repository),
+   },
    {
       provide: PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
       inject: [ItemPedidoConstants.IREPOSITORY],

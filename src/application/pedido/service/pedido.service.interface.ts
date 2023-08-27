@@ -10,4 +10,5 @@ export interface IPedidoService extends IService<Pedido> {
    findByIdEstadoDoPedido(pedidoId: number): Promise<{ estadoPedido: EstadoPedido }>;
    findAllByEstadoDoPedido(estado: EstadoPedido): Promise<Pedido[]>;
    listarPedidosPendentes(): Promise<Pedido[]>;
+   listarPedidosNaoFinalizados(): Promise<Pedido[]>;
 }

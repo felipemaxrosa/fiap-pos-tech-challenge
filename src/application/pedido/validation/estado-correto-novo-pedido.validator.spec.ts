@@ -88,7 +88,7 @@ describe('EstadoCorretoNovoPedidoValidator', () => {
       });
 
       it('deve disparar um ERRO devido ao estado invalido do novo pedido - EM PREPARO', async () => {
-         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: EstadoPedido.EM_PREPARO });
+         const pedidoComEstadoErrado = criarNovoPedido({ estadoPedido: EstadoPedido.EM_PREPARACAO });
          // mock de repositório retornando um cliente
          repository.findBy = jest.fn().mockImplementation(() => {
             return Promise.resolve([pedidoComEstadoErrado]);
