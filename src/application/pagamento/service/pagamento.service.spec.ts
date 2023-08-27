@@ -48,7 +48,6 @@ describe('PagamentoService', () => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve(pagamentos);
                   }),
-                  // buscarEstadoPagamentoPedido: jest.fn(() => Promise.resolve(pagamentoEncontrado)),
                },
             },
          ],
