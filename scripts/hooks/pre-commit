@@ -11,11 +11,30 @@ restoreNodeEnv() {
   unset NODE_ENV_CURRENT
 }
 
+# Função para centralizar a mensagem e exibir em uma caixa
+displayBoxedMessage() {
+  message=$1
+  total_width=80  # Largura total da caixa
+  padding=3       # Espaço de preenchimento entre a mensagem e as bordas
+
+  # Ajusta a mensagem para ter o mesmo comprimento total
+  message=$(printf "%-${total_width}s" "$message")
+
+  # Gera a linha superior da caixa
+  echo "╔$(printf '═%.0s' $(seq 1 $((total_width - 3))))╗"
+
+  # Gera a linha com a mensagem centralizada
+  echo "║$(printf "%-${total_width}s" "$message")║"
+
+  # Gera a linha inferior da caixa
+  echo "╚$(printf '═%.0s' $(seq 1 $((total_width - 3))))╝"
+}
+
 # Termina o programa, retornando a mensagem e status
 exitWithMessage() {
   message=$1
   status=$2
-  echo "$message"
+  displayBoxedMessage "$message"
   restoreNodeEnv
   exit $status
 }
@@ -33,7 +52,7 @@ npm run lint
 
 # Verifica se os testes unitário falharam
 if [ $testStatus -ne 0 ]; then
-  exitWithMessage "Testes unitários falharam. Abortando o commit." 1
+  exitWithMessage " 🚨 Testes unitários falharam. Abortando o commit." 1 
 fi
 
 # Verifica cobertura de testes
@@ -43,7 +62,7 @@ coverageStatus=$?
 
 # Verifica se a cobertura de teste atende os threasholds
 if [ $coverageStatus -ne 0 ]; then
-  exitWithMessage "Cobertura de testes unitários insuficientes. Abortando o commit." 1
+  exitWithMessage " 🚨 Cobertura de testes unitários insuficientes. Abortando o commit." 1
 fi
 
-exitWithMessage "Validação pre-commit finalizada com sucesso" 0
+exitWithMessage " ✅ Validação pre-commit finalizada com sucesso" 0
