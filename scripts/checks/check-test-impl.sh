@@ -76,7 +76,7 @@ else
   
   echo "╔═══════════════════════════════════════════╗"
   echo "║    🚨 Missing test implementations 🚨     ║"
-  echo "║     THIS WILL BREAT YOUR PULL REQUEST     ║"
+  echo "║     THIS WILL BREAK YOUR PULL REQUEST     ║"
   echo "║ CONSIDER IMPLEMENTING ALL MANDATORY TESTS ║"
   echo "╚═══════════════════════════════════════════╝"
   
