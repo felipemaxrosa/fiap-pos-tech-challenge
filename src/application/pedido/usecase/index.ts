@@ -6,3 +6,5 @@ export * from './buscar-todos-pedidos-por-estado.usecase';
 export * from './deletar-pedido.usecase';
 export * from './editar-pedido.usecase';
 export * from './salvar-pedido.usecase';
+export * from './buscar-itens-por-pedido-id.usecase';
+export * from './checkout-pedido.usecase';

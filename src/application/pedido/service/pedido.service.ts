@@ -3,6 +3,7 @@ import { IPedidoService } from 'src/application/pedido/service/pedido.service.in
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoConstants } from 'src/shared/constants';
+import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import {
    BuscarEstadoPedidoPorIdUseCase,
    BuscarPedidoPorIdUseCase,
@@ -12,6 +13,8 @@ import {
    EditarPedidoUseCase,
    SalvarPedidoUseCase,
    BuscarTodosPedidosNaoFinalizadosUseCase,
+   BuscarItensPorPedidoIdUseCase,
+   CheckoutPedidoUseCase,
 } from 'src/application/pedido/usecase';
 
 @Injectable()
@@ -29,6 +32,10 @@ export class PedidoService implements IPedidoService {
       private buscarTodosPendentesUsecase: BuscarTodosPedidosPendentesUseCase,
       @Inject(PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE)
       private buscarTodosNaoFinalizadosUsecase: BuscarTodosPedidosNaoFinalizadosUseCase,
+      @Inject(PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE)
+      private buscarItensPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
+      @Inject(PedidoConstants.CHECKOUT_PEDIDO_USECASE)
+      private checkoutPedidoUsecase: CheckoutPedidoUseCase,
    ) {}
 
    async save(pedido: Pedido): Promise<Pedido> {
@@ -61,5 +68,13 @@ export class PedidoService implements IPedidoService {
 
    async listarPedidosNaoFinalizados(): Promise<Pedido[]> {
       return await this.buscarTodosNaoFinalizadosUsecase.buscarTodosPedidos();
+   }
+
+   async checkout(pedido: Pedido): Promise<Pedido> {
+      return await this.checkoutPedidoUsecase.checkout(pedido);
+   }
+
+   async buscarItensPedidoPorPedidoId(pedidoId: number): Promise<ItemPedido[]> {
+      return await this.buscarItensPorPedidoIdUsecase.buscarItensPedidoPorPedidoId(pedidoId);
    }
 }

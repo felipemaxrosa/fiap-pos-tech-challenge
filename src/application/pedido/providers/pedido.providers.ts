@@ -1,18 +1,23 @@
 import { Provider } from '@nestjs/common';
 
 import { PedidoService } from 'src/application/pedido/service/pedido.service';
-import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
-import { PedidoConstants } from 'src/shared/constants';
-import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
-import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
-import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
-import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
-import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
 import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
+import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
+import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-pedido-por-id.usecase';
 import { BuscarTodosPedidosPendentesUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-pendentes.usecase';
 import { BuscarTodosPedidosPorEstadoUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-por-estado.usecase';
 import { BuscarTodosPedidosNaoFinalizadosUseCase } from 'src/application/pedido/usecase/buscar-todos-pedidos-nao-finalizados.usecase';
+import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-pedido.usecase';
+import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
+import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
+import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
+import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
+import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
+import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
+import { ItemPedido } from 'src/enterprise/item-pedido/model';
+import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
+import { IRepository } from 'src/enterprise/repository/repository';
+import { ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 
 export const PedidoProviders: Provider[] = [
    { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
@@ -65,5 +70,32 @@ export const PedidoProviders: Provider[] = [
       inject: [PedidoConstants.IREPOSITORY],
       useFactory: (repository: IPedidoRepository): BuscarTodosPedidosNaoFinalizadosUseCase =>
          new BuscarTodosPedidosNaoFinalizadosUseCase(repository),
+   },
+   {
+      provide: PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
+      inject: [ItemPedidoConstants.IREPOSITORY],
+      useFactory: (repository: IRepository<ItemPedido>): BuscarItensPorPedidoIdUseCase =>
+         new BuscarItensPorPedidoIdUseCase(repository),
+   },
+
+   {
+      provide: PedidoConstants.CHECKOUT_PEDIDO_USECASE,
+      inject: [
+         ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE,
+         PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
+         PedidoConstants.EDITAR_PEDIDO_USECASE,
+      ],
+      useFactory: (
+         buscarProdutoPorIdUsecase: BuscarProdutoPorIdUseCase,
+         buscarItensPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
+         editarPedidoUsecase: EditarPedidoUseCase,
+         validators: SalvarPedidoValidator[],
+      ): CheckoutPedidoUseCase =>
+         new CheckoutPedidoUseCase(
+            buscarProdutoPorIdUsecase,
+            buscarItensPorPedidoIdUsecase,
+            editarPedidoUsecase,
+            validators,
+         ),
    },
 ];
