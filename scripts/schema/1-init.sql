@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS PEDIDO (
                                        PEDIDO_CLIENTE_ID INT NOT NULL, CONSTRAINT FK_PEDIDO_CLIENTE_ID FOREIGN KEY (PEDIDO_CLIENTE_ID) REFERENCES CLIENTE(ID),
                                        DATA_INICIO VARCHAR(255) NOT NULL,
                                        ESTADO_PEDIDO INT NOT NULL,
-                                       ATIVO BOOLEAN NOT NULL DEFAULT TRUE
+                                       ATIVO BOOLEAN NOT NULL DEFAULT TRUE,
+                                       TOTAL DECIMAL(8,2) NULL
 );
 
 -- Tabela ITEMS DE PEDIDO

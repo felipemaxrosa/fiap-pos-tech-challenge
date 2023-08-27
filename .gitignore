@@ -35,5 +35,9 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # misc
+## scripts for local dev
 local.sh
 e2e.sh
+bt.sh
+## sql for local test
+scripts/schema/3-manual-test.sql
