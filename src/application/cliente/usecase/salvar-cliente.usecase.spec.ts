@@ -24,6 +24,9 @@ describe('SalvarClienteUseCase', () => {
          providers: [...ClienteProviders, ...PersistenceInMemoryProviders],
       }).compile();
 
+      // Desabilita a saída de log
+      module.useLogger(false);
+
       useCase = module.get<SalvarClienteUseCase>(ClienteConstants.SALVAR_CLIENTE_USECASE);
       repository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
       salvarValidators = module.get<SalvarClienteValidator[]>(ClienteConstants.SALVAR_CLIENTE_VALIDATOR);

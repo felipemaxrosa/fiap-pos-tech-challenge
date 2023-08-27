@@ -11,7 +11,6 @@ import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-p
 import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
-import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
 import { ClienteExistentePedidoValidator } from 'src/application/pedido/validation/cliente-existente-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';

@@ -16,7 +16,7 @@ describe('BuscarTodosPedidosPorEstadoUseCase', () => {
       id: 1,
       clienteId: 101,
       dataInicio: '2023-08-26',
-      estadoPedido: EstadoPedido.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARACAO,
       ativo: true,
       total: 50.0,
    };
@@ -25,7 +25,7 @@ describe('BuscarTodosPedidosPorEstadoUseCase', () => {
       id: 2,
       clienteId: 102,
       dataInicio: '2023-08-26',
-      estadoPedido: EstadoPedido.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARACAO,
       ativo: true,
       total: 75.0,
    };
@@ -48,7 +48,7 @@ describe('BuscarTodosPedidosPorEstadoUseCase', () => {
       it('deve buscar todos os pedidos por estado com sucesso', async () => {
          jest.spyOn(repository, 'findBy').mockResolvedValue(pedidosEmPreparoMock);
 
-         const result = await useCase.buscarTodosPedidosPorEstado(EstadoPedido.EM_PREPARO);
+         const result = await useCase.buscarTodosPedidosPorEstado(EstadoPedido.EM_PREPARACAO);
 
          expect(result).toEqual(pedidosEmPreparoMock);
       });
@@ -57,7 +57,7 @@ describe('BuscarTodosPedidosPorEstadoUseCase', () => {
          const error = new Error('Erro no repositório');
          jest.spyOn(repository, 'findBy').mockRejectedValue(error);
 
-         await expect(useCase.buscarTodosPedidosPorEstado(EstadoPedido.EM_PREPARO)).rejects.toThrowError(
+         await expect(useCase.buscarTodosPedidosPorEstado(EstadoPedido.EM_PREPARACAO)).rejects.toThrowError(
             ServiceException,
          );
       });

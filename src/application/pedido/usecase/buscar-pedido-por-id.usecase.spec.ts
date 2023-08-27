@@ -17,7 +17,7 @@ describe('BuscarPedidoPorIdUseCase', () => {
       id: pedidoId,
       clienteId: 456,
       dataInicio: '2023-08-26',
-      estadoPedido: EstadoPedido.EM_PREPARO,
+      estadoPedido: EstadoPedido.EM_PREPARACAO,
       ativo: true,
       total: 100.0,
    };

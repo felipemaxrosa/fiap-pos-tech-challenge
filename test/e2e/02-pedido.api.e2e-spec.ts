@@ -52,10 +52,13 @@ describe('PedidoRestApi (e2e)', () => {
       await app.init();
 
       // salvar cliente mandatório
-      await request(app.getHttpServer())
-         .post('/v1/cliente')
-         .set('Content-type', 'application/json')
-         .send(salvarClienteRequest);
+      //TODO: remover quando reutilizar TestingModule entre os testes
+      if (process.env.NODE_ENV === 'local-mock-repository') {
+         await request(app.getHttpServer())
+            .post('/v1/cliente')
+            .set('Content-type', 'application/json')
+            .send(salvarClienteRequest);
+      }
    });
 
    afterAll(async () => {

@@ -21,7 +21,6 @@ describe('CheckoutPedidoUseCase', () => {
    let buscarProdutoPorIdUseCase: BuscarProdutoPorIdUseCase;
    let editarPedidoUseCase: EditarPedidoUseCase;
    let clienteRepository: IRepository<Cliente>;
-   let pedidoRepository: IRepository<Pedido>;
 
    const pedido: Pedido = {
       id: 1,
@@ -98,7 +97,6 @@ describe('CheckoutPedidoUseCase', () => {
       buscarProdutoPorIdUseCase = module.get<BuscarProdutoPorIdUseCase>(ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE);
       editarPedidoUseCase = module.get<EditarPedidoUseCase>(PedidoConstants.EDITAR_PEDIDO_USECASE);
       clienteRepository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
-      pedidoRepository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
    });
 
    describe('checkout', () => {
@@ -138,14 +136,5 @@ describe('CheckoutPedidoUseCase', () => {
 
          await expect(useCase.checkout(pedidoInvalido)).rejects.toThrowError(ValidationException);
       });
-
-      // it('deve lançar uma ValidationException se o pedido não existir', async () => {
-      //    jest.spyOn(pedidoRepository, 'findBy').mockResolvedValue([]);
-      //    jest.spyOn(buscarItensPorPedidoIdUseCase, 'buscarItensPedidoPorPedidoId').mockResolvedValue([]);
-      //    jest.spyOn(buscarProdutoPorIdUseCase, 'buscarProdutoPorID').mockResolvedValue(produtoMock);
-      //    // jest.spyOn(editarPedidoUseCase, 'editarPedido').mockResolvedValue(pedido);
-
-      //    await expect(useCase.checkout(pedido)).rejects.toThrowError(ValidationException);
-      // });
    });
 });
