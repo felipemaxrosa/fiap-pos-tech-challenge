@@ -6,10 +6,8 @@ import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
-import { BuscarEstadoPagamentoPedidoRequest } from 'src/presentation/rest/pagamento/request';
 import { PagamentoConstants } from 'src/shared/constants';
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
-import { BuscarEstadoPagamentoPedidoResponse } from 'src/presentation/rest/pagamento/response';
 
 describe('PagamentoService', () => {
    let service: IPagamentoService;
@@ -35,10 +33,6 @@ describe('PagamentoService', () => {
          id: 2,
       },
    ];
-
-   const pagamentoEncontrado: BuscarEstadoPagamentoPedidoResponse = {
-      estadoPagamento: pagamento.estadoPagamento,
-   };
 
    beforeEach(async () => {
       // Configuração do módulo de teste

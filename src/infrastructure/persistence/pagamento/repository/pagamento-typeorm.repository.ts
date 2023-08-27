@@ -36,23 +36,19 @@ export class PagamentoTypeormRepository implements IRepository<Pagamento> {
          });
    }
 
-   async delete(id: number): Promise<boolean> {
-      // TODO - Precisa implementar
-      return true;
+   async delete(): Promise<boolean> {
+      throw new RepositoryException('Método não implementado.');
    }
 
-   async edit(pagamento: Pagamento): Promise<Pagamento> {
-      // TODO - Precisa implementar
-      return {} as Pagamento;
+   async edit(): Promise<Pagamento> {
+      throw new RepositoryException('Método não implementado.');
    }
 
-   async save(type: Pagamento): Promise<Pagamento> {
-      // TODO - Precisa implementar
-      return {} as Pagamento;
+   async save(): Promise<Pagamento> {
+      throw new RepositoryException('Método não implementado.');
    }
 
    async findAll(): Promise<Pagamento[]> {
-      // TODO - Precisa implementar
-      return [] as Pagamento[];
+      throw new RepositoryException('Método não implementado.');
    }
 }
