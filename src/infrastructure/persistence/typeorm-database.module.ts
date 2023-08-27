@@ -8,11 +8,19 @@ import { DatabaseConstants } from 'src/infrastructure/persistence/mysql/mysql.co
 import { PedidoEntity } from 'src/infrastructure/persistence/pedido/entity/pedido.entity';
 import { ProdutoEntity } from 'src/infrastructure/persistence/produto/entity/produto.entity';
 import { PersistenceTypeOrmProviders } from 'src/infrastructure/persistence/providers/persistence-typeorm.providers';
+import { PagamentoEntity } from './pagamento/entity/pagamento.entity';
 
 @Module({
    imports: [
       DatabaseConstants,
-      TypeOrmModule.forFeature([ClienteEntity, PedidoEntity, ProdutoEntity, ItemPedidoEntity, CategoriaProdutoEntity]),
+      TypeOrmModule.forFeature([
+         ClienteEntity,
+         PedidoEntity,
+         ProdutoEntity,
+         ItemPedidoEntity,
+         CategoriaProdutoEntity,
+         PagamentoEntity,
+      ]),
       TypeOrmModule.forRootAsync({
          imports: [MysqlConfig],
          useFactory: async (config: TypeOrmModuleOptions) => config,
