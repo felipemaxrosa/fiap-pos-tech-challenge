@@ -25,18 +25,6 @@ export class BuscarTodosPedidosNaoFinalizadosUseCase {
       return 0;
    }
 
-   private ordenarPorIdDoPedido(pedidoA: Pedido, pedidoB: Pedido): number {
-      if (pedidoA.id > pedidoB.id) {
-         return 1;
-      }
-
-      if (pedidoA.id < pedidoB.id) {
-         return -1;
-      }
-
-      return 0;
-   }
-
    async buscarTodosPedidos(): Promise<Pedido[]> {
       const pedidos = await this.repository.findAll().catch((error) => {
          this.logger.error(`Erro ao buscar todos os pedidos no banco de dados: ${error}`);
