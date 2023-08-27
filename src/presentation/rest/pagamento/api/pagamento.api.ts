@@ -54,7 +54,7 @@ export class PagamentoRestApi extends BaseRestApi {
       this.logger.debug(`Consultando estado do pagamento por ID do pedido: ${query}`);
       return await this.service.buscarEstadoPagamentoPedido(query.pedidoId).then((pagamento) => {
          if (pagamento === undefined) {
-            throw new NotFoundException('Cliente não encontrado');
+            throw new NotFoundException('Pagamento para o pedido não encontrado');
          }
 
          return new BuscarEstadoPagamentoPedidoResponse(pagamento);

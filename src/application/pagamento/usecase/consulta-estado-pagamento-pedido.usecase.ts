@@ -12,15 +12,16 @@ export class ConsultaEstadoPagamentoPedidoUseCase {
 
    constructor(@Inject(PagamentoConstants.IREPOSITORY) private repository: IRepository<Pagamento>) {}
 
-   async buscaEstadoPagamento(pedidoId: number): Promise<{ estadoPagamento: EstadoPagamento }> {
+   async buscaEstadoPagamento(pedidoId: number): Promise<{ estadoPagamento: EstadoPagamento } | undefined> {
       return await this.repository
          .findBy({ pedidoId })
          .then((pagamentos) => {
-            const { estadoPagamento } = pagamentos[0];
-
-            return {
-               estadoPagamento,
-            };
+            if (pagamentos.length > 0) {
+               const { estadoPagamento } = pagamentos[0];
+               return {
+                  estadoPagamento,
+               };
+            }
          })
          .catch((error) => {
             this.logger.error(`Erro ao consultar pagamento no banco de dados: ${error} `);
