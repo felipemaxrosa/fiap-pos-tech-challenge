@@ -42,10 +42,10 @@ describe('PedidoService', () => {
 
    const todosOsPedidos: Pedido[] = [
       {
-         id: 13,
-         clienteId: 13,
+         id: 3,
+         clienteId: 3,
          dataInicio: '2023-06-20',
-         estadoPedido: EstadoPedido.PRONTO,
+         estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
       },
       {
@@ -56,17 +56,17 @@ describe('PedidoService', () => {
          ativo: true,
       },
       {
-         id: 3,
-         clienteId: 3,
+         id: 10,
+         clienteId: 10,
          dataInicio: '2023-06-20',
          estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
       },
       {
-         id: 10,
-         clienteId: 10,
+         id: 13,
+         clienteId: 13,
          dataInicio: '2023-06-20',
-         estadoPedido: EstadoPedido.RECEBIDO,
+         estadoPedido: EstadoPedido.PRONTO,
          ativo: true,
       },
    ];

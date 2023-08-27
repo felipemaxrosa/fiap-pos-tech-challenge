@@ -47,8 +47,7 @@ export class BuscarTodosPedidosNaoFinalizadosUseCase {
          estadosDePedidoParaListagem.includes(pedido.estadoPedido),
       );
 
-      const pedidosNaoFinalizadosOrdenadosPorId = pedidosNaoFinalizados.sort(this.ordenarPorIdDoPedido);
-      const pedidosNaoFinalizadosOrdenados = pedidosNaoFinalizadosOrdenadosPorId.sort(this.ordenarPorEstadoDoPedido);
+      const pedidosNaoFinalizadosOrdenados = pedidosNaoFinalizados.sort(this.ordenarPorEstadoDoPedido);
 
       return pedidosNaoFinalizadosOrdenados;
    }

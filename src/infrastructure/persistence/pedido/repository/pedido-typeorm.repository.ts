@@ -89,7 +89,11 @@ export class PedidoTypeormRepository implements IPedidoRepository {
       this.logger.debug('Listando todos os pedidos');
 
       return this.repository
-         .find()
+         .find({
+            order: {
+               id: 'ASC',
+            },
+         })
          .then((pedidoEntities) => {
             return pedidoEntities.map((pedido) => pedido);
          })
