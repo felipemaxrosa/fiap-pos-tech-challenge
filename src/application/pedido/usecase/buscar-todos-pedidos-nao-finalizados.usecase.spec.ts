@@ -50,12 +50,17 @@ describe('BuscarTodosPedidosNaoFinalizadosUseCase', () => {
          ],
       }).compile();
 
-      useCase = module.get<BuscarTodosPedidosNaoFinalizadosUseCase>(PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE);
+      useCase = module.get<BuscarTodosPedidosNaoFinalizadosUseCase>(
+         PedidoConstants.BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE,
+      );
       repository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
    });
 
-   it('deve buscar todos os pedidos não finalizados ordenados por estado', async () => {
+   it('deve existir instância de repositório definida', async () => {
+      expect(repository).toBeDefined();
+   });
 
+   it('deve buscar todos os pedidos não finalizados ordenados por estado', async () => {
       const resultado = await useCase.buscarTodosPedidos();
 
       expect(resultado).toEqual([pedido3, pedido2, pedido1]);

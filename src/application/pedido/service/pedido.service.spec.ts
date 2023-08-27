@@ -5,17 +5,20 @@ import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validat
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
+import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
+import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
-import { ClienteConstants, PedidoConstants } from 'src/shared/constants';
+import { ClienteConstants, ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
-   let repository: IPedidoRepository;
+   let pedidoRepository: IPedidoRepository;
+   let itemPedidoRepository: IRepository<ItemPedido>;
    let validators: SalvarPedidoValidator[];
 
    const pedido: Pedido = {
@@ -74,6 +77,12 @@ describe('PedidoService', () => {
       },
    ];
 
+   const pedidoId = 123;
+   const itensPedidoMock: ItemPedido[] = [
+      { pedidoId, produtoId: 1, quantidade: 2, id: 1 },
+      { pedidoId, produtoId: 2, quantidade: 1, id: 2 },
+   ];
+
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
@@ -92,7 +101,6 @@ describe('PedidoService', () => {
                      return Promise.resolve({});
                   }),
                   findAll: jest.fn(() => Promise.resolve(todosOsPedidos)),
-                  findByIdEstadoDoPedido: jest.fn(() => Promise.resolve({ estadoPedido: pedido.estadoPedido })),
                   // mock para a chamada repository.edit(produto)
                   edit: jest.fn(() => Promise.resolve(pedido)),
                   // mock para a chamada repository.delete(id)
@@ -114,14 +122,16 @@ describe('PedidoService', () => {
       module.useLogger(false);
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
-      repository = module.get<IPedidoRepository>(PedidoConstants.IREPOSITORY);
+      pedidoRepository = module.get<IPedidoRepository>(PedidoConstants.IREPOSITORY);
+      itemPedidoRepository = module.get<IRepository<ItemPedido>>(ItemPedidoConstants.IREPOSITORY);
       validators = module.get<SalvarPedidoValidator[]>(PedidoConstants.SALVAR_PEDIDO_VALIDATOR);
       service = module.get<IPedidoService>(PedidoConstants.ISERVICE);
    });
 
    describe('injeção de dependências', () => {
       it('deve existir instância de repositório definida', async () => {
-         expect(repository).toBeDefined();
+         expect(pedidoRepository).toBeDefined();
+         expect(itemPedidoRepository).toBeDefined();
          expect(validators).toBeDefined();
       });
    });
@@ -152,7 +162,7 @@ describe('PedidoService', () => {
 
       it('não deve criar um novo pedido quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'save').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'save').mockRejectedValue(error);
 
          // verifiaca se foi lançada uma exception na camada de serviço
          await expect(service.save(pedido)).rejects.toThrowError(ServiceException);
@@ -171,7 +181,7 @@ describe('PedidoService', () => {
 
       it('não deve editar produto quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'edit').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'edit').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.edit(pedido)).rejects.toThrowError(ServiceException);
@@ -185,7 +195,7 @@ describe('PedidoService', () => {
 
       it('não deve deletar produto quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'delete').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'delete').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.delete(1)).rejects.toThrowError(ServiceException);
@@ -194,7 +204,7 @@ describe('PedidoService', () => {
 
    describe('buscar por ID', () => {
       it('encontra pedido por id', async () => {
-         repository.findBy = jest.fn().mockImplementation((attributes) => {
+         pedidoRepository.findBy = jest.fn().mockImplementation((attributes) => {
             return Promise.resolve(attributes['id'] === pedido.id ? [pedido] : undefined);
          });
          await service.findById(1).then((produtoEncontrado) => {
@@ -210,7 +220,7 @@ describe('PedidoService', () => {
 
       it('não deve encontrar pedido por id quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'findBy').mockRejectedValue(error);
 
          await expect(service.findById(1)).rejects.toThrowError(ServiceException);
       });
@@ -218,7 +228,7 @@ describe('PedidoService', () => {
 
    describe('findByIdEstadoProduto', () => {
       it('retorna estado do produto de ID 1 como Recebido (1)', async () => {
-         repository.findBy = jest.fn().mockImplementation((attributes) => {
+         pedidoRepository.findBy = jest.fn().mockImplementation((attributes) => {
             return Promise.resolve(attributes['id'] === pedido.id ? [pedido] : undefined);
          });
 
@@ -235,7 +245,7 @@ describe('PedidoService', () => {
 
       it('não deve encontrar pedido por ID quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'findBy').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.findByIdEstadoDoPedido(1)).rejects.toThrowError(ServiceException);
@@ -245,7 +255,7 @@ describe('PedidoService', () => {
    describe('findAllByEstadoPedido', () => {
       const mockedPedidos = [pedido];
       it('retorna pedidos com estado - Pagamento Pendente (0)', async () => {
-         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+         pedidoRepository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
 
@@ -255,7 +265,7 @@ describe('PedidoService', () => {
       });
 
       it('nao retorna produtos com estado - EM PREPARO (2)', async () => {
-         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+         pedidoRepository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
 
@@ -265,7 +275,7 @@ describe('PedidoService', () => {
       });
 
       it('nao retorna produtos com estado - PRONTO (3)', async () => {
-         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+         pedidoRepository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
 
@@ -275,7 +285,7 @@ describe('PedidoService', () => {
       });
 
       it('nao retorna produtos com estado - FINALIZADO (4)', async () => {
-         repository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
+         pedidoRepository.findBy = jest.fn().mockImplementation((attributes: Partial<Pedido>) => {
             return Promise.resolve(mockedPedidos.filter((pedido) => pedido.estadoPedido === attributes.estadoPedido));
          });
 
@@ -286,7 +296,7 @@ describe('PedidoService', () => {
 
       it('não deve encontrar pedidos por ESTADO quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'findBy').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
          await expect(service.findAllByEstadoDoPedido(EstadoPedido.FINALIZADO)).rejects.toThrowError(ServiceException);
@@ -302,7 +312,7 @@ describe('PedidoService', () => {
 
       it('não deve encontrar pedido pendente quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'listarPedidosPendentes').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'listarPedidosPendentes').mockRejectedValue(error);
 
          await expect(service.listarPedidosPendentes()).rejects.toThrowError(ServiceException);
       });
@@ -347,9 +357,26 @@ describe('PedidoService', () => {
 
       it('não deve encontrar pedido pendente quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(repository, 'findAll').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'findAll').mockRejectedValue(error);
 
          await expect(service.listarPedidosNaoFinalizados()).rejects.toThrowError(ServiceException);
+      });
+   });
+
+   describe('checkout', () => {
+      it('deve chamar o caso de uso de checkout com o pedido correto', async () => {
+         const resultado = await service.checkout(pedido);
+         expect(resultado).toEqual(pedido);
+      });
+   });
+
+   describe('buscarItensPedidoPorPedidoId', () => {
+      it('deve chamar o caso de uso de buscar itens por pedido ID com o ID correto', async () => {
+         jest.spyOn(itemPedidoRepository, 'findBy').mockResolvedValue(itensPedidoMock);
+
+         const pedidoId = 1;
+         const resultado = await service.buscarItensPedidoPorPedidoId(pedidoId);
+         expect(resultado).toEqual(itensPedidoMock);
       });
    });
 });
