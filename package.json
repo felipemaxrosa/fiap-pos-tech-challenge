@@ -75,6 +75,7 @@
       "**/*.api.(t|j)s",
       "**/*.service.(t|j)s",
       "**/*.validator.(t|j)s",
+      "**/*.usecase.(t|j)s",
       "**/!(*-memory).repository.(t|j)s"
     ],
     "moduleNameMapper": {

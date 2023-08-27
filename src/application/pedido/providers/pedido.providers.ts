@@ -10,20 +10,32 @@ import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-p
 import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
+import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
+import { ClienteExistentePedidoValidator } from 'src/application/pedido/validation/cliente-existente-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
+import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
+import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
+import { ClienteConstants, ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 
 export const PedidoProviders: Provider[] = [
    { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
    {
       provide: PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
-      useFactory: (): SalvarPedidoValidator[] => [new EstadoCorretoNovoPedidoValidator()],
+      inject: [PedidoConstants.IREPOSITORY, ClienteConstants.IREPOSITORY],
+      useFactory: (
+         pedidoRepository: IRepository<Pedido>,
+         clienteRepository: IRepository<Cliente>,
+      ): SalvarPedidoValidator[] => [
+         new EstadoCorretoNovoPedidoValidator(),
+         new ClienteExistentePedidoValidator(clienteRepository),
+         // new CheckoutPedidoValidator(pedidoRepository),
+      ],
    },
    {
       provide: PedidoConstants.SALVAR_PEDIDO_USECASE,
@@ -79,6 +91,7 @@ export const PedidoProviders: Provider[] = [
          ProdutoConstants.IREPOSITORY,
          PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
          PedidoConstants.EDITAR_PEDIDO_USECASE,
+         PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
       ],
       useFactory: (
          repository: IRepository<Produto>,

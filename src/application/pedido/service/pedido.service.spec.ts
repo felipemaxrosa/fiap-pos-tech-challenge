@@ -3,6 +3,7 @@ import { PedidoProviders } from 'src/application/pedido/providers/pedido.provide
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
+import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
@@ -10,7 +11,7 @@ import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repos
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
-import { PedidoConstants } from 'src/shared/constants';
+import { ClienteConstants, PedidoConstants } from 'src/shared/constants';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
@@ -26,6 +27,13 @@ describe('PedidoService', () => {
       total: 10,
    };
 
+   const cliente: Cliente = {
+      id: 1,
+      nome: 'Teste',
+      email: 'teste@teste.com',
+      cpf: '25634428777',
+   };
+   
    const pedidoPendente: Pedido = {
       id: 2,
       clienteId: 2,
@@ -58,6 +66,13 @@ describe('PedidoService', () => {
                   // mock para a chamada repository.delete(id)
                   delete: jest.fn(() => Promise.resolve(true)),
                   listarPedidosPendentes: jest.fn(() => Promise.resolve([pedidoPendente])),
+               },
+            },
+            // Mock do serviço IRepository<Cliente>
+            {
+               provide: ClienteConstants.IREPOSITORY,
+               useValue: {
+                  findBy: jest.fn(() => Promise.resolve([cliente])),
                },
             },
          ],
