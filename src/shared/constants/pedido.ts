@@ -9,3 +9,5 @@ export const BUSCAR_PEDIDO_POR_ID_USECASE = 'BuscarPedidoPorIdUseCase';
 export const BUSCAR_ESTADO_PEDIDO_POR_ID_USECASE = 'BuscarEstadoPedidoPorIdUseCase';
 export const BUSCAR_TODOS_PEDIDOS_POR_ESTADO_USECASE = 'BuscarTodosPedidosPorEstadoUseCase';
 export const BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE = 'BuscarTodosPedidosPendentesUseCase';
+export const BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE = 'BuscarItensPorPedidoIdUseCase';
+export const CHECKOUT_PEDIDO_USECASE = 'CheckoutPedidoUseCase';

@@ -1,4 +1,3 @@
-import { Repository, TypeORMError } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
@@ -8,6 +7,7 @@ import { RepositoryException } from 'src/infrastructure/exception/repository.exc
 import { PedidoEntity } from 'src/infrastructure/persistence/pedido/entity/pedido.entity';
 import { PedidoTypeormRepository } from 'src/infrastructure/persistence/pedido/repository/pedido-typeorm.repository';
 import { PedidoConstants } from 'src/shared/constants';
+import { Repository, TypeORMError } from 'typeorm';
 
 describe('PedidoTypeormRepository', () => {
    let repository: IPedidoRepository;
@@ -19,6 +19,7 @@ describe('PedidoTypeormRepository', () => {
       dataInicio: '2023-06-18',
       estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
+      total: 10,
    };
 
    const pedidoEntity: PedidoEntity = {
@@ -27,6 +28,7 @@ describe('PedidoTypeormRepository', () => {
       dataInicio: '2023-06-18',
       estadoPedido: EstadoPedido.RECEBIDO,
       ativo: true,
+      total: 10,
    };
 
    beforeEach(async () => {
@@ -80,6 +82,7 @@ describe('PedidoTypeormRepository', () => {
             expect(pedidoSalvo.dataInicio).toEqual(mockedPedido.dataInicio);
             expect(pedidoSalvo.estadoPedido).toEqual(mockedPedido.estadoPedido);
             expect(pedidoSalvo.ativo).toEqual(mockedPedido.ativo);
+            expect(pedidoSalvo.total).toEqual(mockedPedido.total);
          });
 
          expect(repositorySaveSpy).toBeCalled();
@@ -107,6 +110,8 @@ describe('PedidoTypeormRepository', () => {
                expect(pedido.clienteId).not.toBeUndefined();
                expect(pedido.dataInicio).not.toBeUndefined();
                expect(pedido.estadoPedido).not.toBeUndefined();
+               expect(pedido.ativo).not.toBeUndefined();
+               expect(pedido.total).not.toBeUndefined();
             });
          });
       });
@@ -124,6 +129,7 @@ describe('PedidoTypeormRepository', () => {
                expect(pedido.clienteId).not.toBeUndefined();
                expect(pedido.estadoPedido).not.toBeUndefined();
                expect(pedido.ativo).not.toBeUndefined();
+               expect(pedido.total).not.toBeUndefined();
             });
          });
       });
@@ -141,6 +147,7 @@ describe('PedidoTypeormRepository', () => {
                expect(pedido.dataInicio).not.toBeUndefined();
                expect(pedido.estadoPedido).not.toBeUndefined();
                expect(pedido.ativo).not.toBeUndefined();
+               expect(pedido.total).not.toBeUndefined();
             });
          });
       });
@@ -158,6 +165,7 @@ describe('PedidoTypeormRepository', () => {
                expect(pedido.dataInicio).not.toBeUndefined();
                expect(pedido.clienteId).not.toBeUndefined();
                expect(pedido.ativo).not.toBeUndefined();
+               expect(pedido.total).not.toBeUndefined();
             });
          });
       });

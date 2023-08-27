@@ -7,5 +7,6 @@ export class Pedido {
       public estadoPedido: EstadoPedido,
       public ativo: boolean,
       public id?: number,
+      public total?: number,
    ) {}
 }
