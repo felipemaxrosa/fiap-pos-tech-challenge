@@ -21,25 +21,19 @@ export class CheckoutPedidoUseCase {
    ) {}
 
    async checkout(pedido: Pedido): Promise<Pedido> {
-      this.logger.log('1');
       await ValidatorUtils.executeValidators(this.validators, pedido);
-      this.logger.log('2');
       // listar items pedido
       const itemPedidos = await this.buscarItensPorPedidoIdUseCase.buscarItensPedidoPorPedidoId(pedido.id);
-      this.logger.log('3');
       // calcular o total do pedido
       let totalPedido = 0;
       for (const itemPedido of itemPedidos) {
-         this.logger.log('4');
          const produto = await this.buscarProdutoPorIdUseCase.buscarProdutoPorID(itemPedido.produtoId);
          totalPedido += itemPedido.quantidade * produto.preco;
       }
-      this.logger.log('5');
       pedido.total = totalPedido;
 
-      // TODO: invocar usecase para gerar solicitação de pagamentoquando o estiver pronto
+      // TODO: invocar usecase para gerar solicitação de pagamento quando estiver pronto
 
-      this.logger.log('6');
       const pedidoRetornado = await this.editarPedidoUseCase.editarPedido(pedido);
       this.logger.log(`pedidoRetornado: ${pedidoRetornado}`);
 

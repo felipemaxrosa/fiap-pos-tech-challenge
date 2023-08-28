@@ -91,10 +91,10 @@ describe('PedidoRestApi (e2e)', () => {
          });
    });
 
-   it('GET /v1/pedido/checkout/1 - Deve realizer o checkout e retornar o novo objeto pedido', async () => {
+   it('POST /v1/pedido/checkout/1 - Deve realizar o checkout e retornar o novo objeto pedido', async () => {
       // realiza requisição e compara a resposta
       return await request(app.getHttpServer())
-         .get('/v1/pedido/checkout/1')
+         .post('/v1/pedido/checkout/1')
          .set('Content-type', 'application/json')
          .then((response) => {
             expect(response.status).toEqual(201);
