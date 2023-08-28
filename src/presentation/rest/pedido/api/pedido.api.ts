@@ -170,7 +170,7 @@ export class PedidoRestApi extends BaseRestApi {
             return new CheckoutPedidoResponse(pedidoCheckout);
          }
          this.logger.debug(`Erro durante realização de checkout do pedido: ${id}`);
-         throw new ServiceException('Pedido não encontrado');
+         throw new ServiceException(`Erro durante realização de checkout do pedido: ${id}`);
       });
    }
 }

@@ -91,14 +91,14 @@ describe('PedidoRestApi (e2e)', () => {
          });
    });
 
-   // it('GET /v1/pedido/checkout/1 - Deve realizer o checkout e retornar o novo objeto pedido', async () => {
-   //    // realiza requisição e compara a resposta
-   //    return await request(app.getHttpServer())
-   //       .get('/v1/pedido/checkout/1')
-   //       .set('Content-type', 'application/json')
-   //       .then((response) => {
-   //          expect(response.status).toEqual(201);
-   //          expect(response.body).toEqual(checkoutResponse);
-   //       });
-   // });
+   it('GET /v1/pedido/checkout/1 - Deve realizer o checkout e retornar o novo objeto pedido', async () => {
+      // realiza requisição e compara a resposta
+      return await request(app.getHttpServer())
+         .get('/v1/pedido/checkout/1')
+         .set('Content-type', 'application/json')
+         .then((response) => {
+            expect(response.status).toEqual(201);
+            expect(response.body).toEqual(checkoutResponse);
+         });
+   });
 });
