@@ -33,6 +33,47 @@ describe('PedidoRestApi', () => {
       ativo: true,
    };
 
+   const checkoutPedidoResponse = {
+      id: 100,
+      clienteId: 1,
+      dataInicio: '2023-06-18',
+      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
+      ativo: true,
+      total: 27,
+   };
+
+   const itemPedidoCheckout = {
+      id: 1,
+      pedidoId: 100,
+      produtoId: 1,
+      quantidade: 1,
+   };
+
+   const produtoItemPedidoCheckout = {
+      id: 1,
+      nome: 'Produto 1',
+      descricao: 'Produto 1',
+      preco: 27,
+      ativo: true,
+   };
+
+   const pedidoAntesCheckout: Pedido = {
+      clienteId: 1,
+      dataInicio: '2023-06-18',
+      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
+      ativo: true,
+      id: 100,
+      total: 27,
+   };
+   const pedidoDepoisCheckout = {
+      clienteId: 1,
+      dataInicio: '2023-06-18',
+      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
+      ativo: true,
+      id: 100,
+      total: 27,
+   };
+
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
@@ -48,6 +89,8 @@ describe('PedidoRestApi', () => {
                   findById: jest.fn((id) =>
                      id === salvarPedidoResponse.id
                         ? Promise.resolve(salvarPedidoResponse)
+                        : id === pedidoAntesCheckout.id
+                        ? Promise.resolve(pedidoAntesCheckout)
                         : Promise.resolve(undefined),
                   ),
                   findAllByEstadoDoPedido: jest.fn((estado) =>
@@ -55,6 +98,11 @@ describe('PedidoRestApi', () => {
                   ),
                   listarPedidosPendentes: jest.fn(() => Promise.resolve([pedido])),
                   listarPedidosNaoFinalizados: jest.fn(() => Promise.resolve([pedido])),
+                  checkout: jest.fn((pedido) =>
+                     pedido.id === checkoutPedidoResponse.id
+                        ? Promise.resolve(checkoutPedidoResponse)
+                        : Promise.reject(new Error('error')),
+                  ),
                },
             },
          ],
@@ -198,6 +246,27 @@ describe('PedidoRestApi', () => {
          expect(pedidoResponse.estadoPedido).toEqual(EstadoPedido.EM_PREPARACAO);
          expect(pedidoResponse.ativo).toEqual(true);
          expect(pedidoResponse.id).toEqual(1);
+      });
+   });
+
+   describe('checkout', () => {
+      it('deve realizar checkout do pedido', async () => {
+         const response = await restApi.checkout(100);
+
+         // Verifica se o resultado obtido tem as propriedades esperadas
+         expect(response.clienteId).toEqual(pedidoDepoisCheckout.clienteId);
+         expect(response.dataInicio).toEqual(pedidoDepoisCheckout.dataInicio);
+         expect(response.estadoPedido).toEqual(pedidoDepoisCheckout.estadoPedido);
+         expect(response.ativo).toEqual(pedidoDepoisCheckout.ativo);
+         expect(response.id).toEqual(pedidoDepoisCheckout.id);
+         expect(response.total).toEqual(pedidoDepoisCheckout.total);
+      });
+
+      it('deve falhar se pedido não existir', async () => {
+         await restApi.checkout(10000).catch((error) => {
+            expect(error.message).toEqual(`Pedido não encontrado: 10000`);
+            expect(error.status).toEqual(404);
+         });
       });
    });
 });

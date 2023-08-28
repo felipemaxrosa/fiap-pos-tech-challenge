@@ -1,33 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
-import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
-import { IRepository } from 'src/enterprise/repository/repository';
-import { PedidoConstants } from 'src/shared/constants';
+import { IValidator } from 'src/enterprise/validation/validator';
 
-@Injectable()
-export class CheckoutPedidoValidator implements SalvarPedidoValidator {
-   public static PEDIDO_INEXISTENTE_ERROR_MESSAGE = 'Código de pedido inexistente';
-
-   private logger: Logger = new Logger(CheckoutPedidoValidator.name);
-
-   constructor(@Inject(PedidoConstants.IREPOSITORY) private repositoryPedido: IRepository<Pedido>) {}
-
-   async validate({ id }: Pedido): Promise<boolean> {
-      this.logger.log(
-         `Inicializando validação ${CheckoutPedidoValidator.name} para realizar o checkout para o pedido com id: ${id}`,
-      );
-
-      if (!id) {
-         throw new ValidationException(CheckoutPedidoValidator.PEDIDO_INEXISTENTE_ERROR_MESSAGE);
-      }
-
-      await this.repositoryPedido.findBy({ id: id }).then((pedidos) => {
-         if (pedidos.length !== 1) {
-            throw new ValidationException(CheckoutPedidoValidator.PEDIDO_INEXISTENTE_ERROR_MESSAGE);
-         }
-      });
-
-      return true;
-   }
-}
+export type CheckoutPedidoValidator = IValidator<Pedido>;

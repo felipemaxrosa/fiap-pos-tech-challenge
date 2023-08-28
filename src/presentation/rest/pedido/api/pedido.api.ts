@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
+import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
@@ -9,10 +10,11 @@ import {
    BuscarPorIdEstadoPedidoResponse,
    BuscarPorIdPedidoResponse,
    BuscarTodosPorEstadoPedidoResponse,
-   ListarPedidoPendenteResponse,
    ListarPedidoNaoFinalizadoResponse,
+   ListarPedidoPendenteResponse,
    SalvarPedidoResponse,
 } from 'src/presentation/rest/pedido/response';
+import { CheckoutPedidoResponse } from 'src/presentation/rest/pedido/response/checkout-pedido.response';
 import { PedidoConstants } from 'src/shared/constants';
 
 @Controller('v1/pedido')
@@ -141,6 +143,34 @@ export class PedidoRestApi extends BaseRestApi {
 
          this.logger.debug(`Pedidos com estado: ${estado} não encontrados`);
          throw new NotFoundException(`Pedidos com estado: ${estado} não encontrados`);
+      });
+   }
+
+   @Post('checkout/:id')
+   @ApiOperation({
+      summary: 'Realiza o checkout do pedido',
+      description: 'Realiza o checkout do pedido',
+   })
+   @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: CheckoutPedidoResponse })
+   async checkout(@Param('id', ParseIntPipe) id: number): Promise<CheckoutPedidoResponse> {
+      this.logger.debug(`Realizando checkout do pedido id: ${id}`);
+
+      const pedido = await this.service.findById(id).then((pedidoBuscado) => {
+         if (pedidoBuscado) {
+            this.logger.log(`Pedido encontrado com sucesso: ${pedidoBuscado.id}}`);
+            return pedidoBuscado;
+         }
+         this.logger.debug(`Pedido não encontrado: ${id}`);
+         throw new NotFoundException(`Pedido não encontrado: ${id}`);
+      });
+
+      return await this.service.checkout(pedido).then((pedidoCheckout) => {
+         if (pedidoCheckout) {
+            this.logger.log(`Checkout realizado com sucesso para pedido: ${pedidoCheckout.id}}`);
+            return new CheckoutPedidoResponse(pedidoCheckout);
+         }
+         this.logger.debug(`Erro durante realização de checkout do pedido: ${id}`);
+         throw new ServiceException(`Erro durante realização de checkout do pedido: ${id}`);
       });
    }
 }

@@ -1,15 +1,17 @@
-import * as request from 'supertest';
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { MainModule } from 'src/main.module';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
+import { CheckoutPedidoResponse } from 'src/presentation/rest/pedido/response/checkout-pedido.response';
 import { SalvarPedidoResponse } from 'src/presentation/rest/pedido/response/salvar-pedido.response';
+import * as request from 'supertest';
 
 describe('PedidoRestApi (e2e)', () => {
    let app: INestApplication;
    let salvarPedidoRequest: SalvarPedidoRequest;
    let salvarPedidoResponse: SalvarPedidoResponse;
+   let checkoutResponse: CheckoutPedidoResponse;
 
    // Define um objeto de requisição
    const salvarClienteRequest = {
@@ -33,6 +35,16 @@ describe('PedidoRestApi (e2e)', () => {
          dataInicio: '2023-06-24',
          estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
          ativo: true,
+      };
+
+      // Response esperada para checkout
+      checkoutResponse = {
+         id: 1,
+         clienteId: 1,
+         dataInicio: '2023-06-24',
+         estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
+         ativo: true,
+         total: 0,
       };
    });
 
@@ -76,6 +88,17 @@ describe('PedidoRestApi (e2e)', () => {
             expect(response.body).toEqual(salvarPedidoResponse);
             expect(response.body).toHaveProperty('id');
             expect(response.body.clienteId).toEqual(salvarPedidoRequest.clienteId);
+         });
+   });
+
+   it('POST /v1/pedido/checkout/1 - Deve realizar o checkout e retornar o novo objeto pedido', async () => {
+      // realiza requisição e compara a resposta
+      return await request(app.getHttpServer())
+         .post('/v1/pedido/checkout/1')
+         .set('Content-type', 'application/json')
+         .then((response) => {
+            expect(response.status).toEqual(201);
+            expect(response.body).toEqual(checkoutResponse);
          });
    });
 });

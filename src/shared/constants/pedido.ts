@@ -12,3 +12,4 @@ export const BUSCAR_TODOS_PEDIDOS_PENDENTES_USECASE = 'BuscarTodosPedidosPendent
 export const BUSCAR_TODOS_PEDIDOS_NAO_FINALIZADOS_USECASE = 'BuscarTodosPedidosNaoFinalizadosUseCase';
 export const BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE = 'BuscarItensPorPedidoIdUseCase';
 export const CHECKOUT_PEDIDO_USECASE = 'CheckoutPedidoUseCase';
+export const CHECKOUT_PEDIDO_VALIDATOR = 'CheckoutPedidoValidator';
