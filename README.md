@@ -4,7 +4,8 @@
 
 ![Static Badge](https://img.shields.io/badge/environment-black?style=for-the-badge) ![Static Badge](https://img.shields.io/badge/v23.x-version?logo=docker&color=%232496ED&labelColor=white&label=Docker) ![Static Badge](https://img.shields.io/badge/v1.27x-version?logo=kubernetes&color=%232496ED&labelColor=white&label=Kubernetes)
 
-# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=cdecd596e539bf2fa591f72946e9de612e83bda3)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v2.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious) 
+# 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=12e7b6fd014f65fe4658af215a97de00d7bc0858)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v2.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious)
+
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da pós gradução em Software Architecture.
 
 * [Arquitetura](#arquitetura)
@@ -33,7 +34,6 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
         * [Fluxo de etapas dos Pedidos](#fluxo-de-etapas-dos-pedidos)
 
 ## Arquitetura
-//TODO: Criar diagrama fnf clean arch
 ![fast-n-foodious-clean](docs/diagramas/fast-n-foodious-clean.png)
 
 - Arquitetura Clean & Modular
@@ -45,17 +45,17 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
     - Validações pré-commit/push
         - Validação de cobertura de testes (threshold 95%)
         - Testes unitários, e2e em memória (all green)
-        - Validação de implementação de testes (modo alerta para implementação de testes de rest apis, services, validators, usecases, repositories)
+        - Validação de implementação de testes (modo alerta para implementação de testes de rest apis, services, usecases, validators, repositories)
     - CI/CD
         - Pipeline CircleCI para integração com a ```main```
             - ci/circleci: run-unit-tests       - Execução de testes unitários (all green)
             - ci/circleci: run-e2e-mysql        - Execução de testes e2e com mysql (all green)
             - ci/circleci: run-e2e-in-memory    - Execução de testes e2e em memória (all green)
             - ci/circleci: run-coverage-tests   - Execução de validação de cobertura de testes (all green)
-            - ci/circleci: run-check-test-impl  - Execução de validação de implementação de testes (mandatório para rest apis, services, validators, repositories)
+            - ci/circleci: run-check-test-impl  - Execução de validação de implementação de testes (mandatório para rest apis, services, usecases,  validators, repositories)
             - ci/circleci: build                - Build de imagens docker (AMD & ARM) e publicação no DockerHub
             
-            [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/workflow/badge.svg?window=7d&circle-token=b58fa7f3f1c216768f2d59e57b0b9b257c68c36f)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/workflow/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
+            [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/fast-n-foodious/badge.svg?window=7d&circle-token=b9e60e9eea697022b96bf40bfec96876943129c1)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/fast-n-foodious/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
 
 ## 🚀 Instalação de Dependências Node
 ```bash
@@ -237,6 +237,7 @@ horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa   Deployment/fast-n-food
 ```
 ### 🧾 Documentação da API (Swagger)
 `docker`    http://localhost:3000/api
+
 `k8s`       http://localhost:80/api
 
 ### 🎮 Extras Docker Compose
@@ -321,6 +322,7 @@ src/                                    # Source da solução
 │   │   └── usecase                     # Casos de usos
 │   │   └── validation                  # Validators (regras de negócio)
 │   ├── item-pedido
+│   ├── pagamento
 │   ├── pedido
 │   └── produto
 ├── enterprise                          # Camada Enterprise (domínio)
@@ -329,6 +331,7 @@ src/                                    # Source da solução
 │   │   ├── model                       # Entidades de domínio
 │   ├── exception                       # Exceções de domínio
 │   ├── item-pedido
+│   ├── pagamento
 │   ├── pedido
 │   ├── produto
 │   ├── repository                      # Portas de repositórios da camana de domínio
@@ -343,6 +346,7 @@ src/                                    # Source da solução
 │       │   └── repository              # Repositórios (mysql, in-memory)
 │       ├── item-pedido
 │       ├── mysql                       # Configurações de banco de dados MySQL 
+│       ├── pagamento
 │       ├── pedido
 │       ├── produto
 │       ├── providers                   # Registro de providers (repositorório in-memory, typeorm). utilizados via DI
