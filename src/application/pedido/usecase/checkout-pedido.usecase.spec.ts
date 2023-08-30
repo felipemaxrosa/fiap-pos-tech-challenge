@@ -1,25 +1,28 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CheckoutPedidoUseCase } from './checkout-pedido.usecase';
-import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
-import { ClienteConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
+import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
+import { SolicitaPagamentoPedidoUseCase } from 'src/application/pagamento/usecase';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
-import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
-import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
-import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
-import { ItemPedido } from 'src/enterprise/item-pedido/model/item-pedido.model';
-import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
+import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
+import { ItemPedido } from 'src/enterprise/item-pedido/model/item-pedido.model';
+import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
+import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
+import { ClienteConstants, PagamentoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
+import { CheckoutPedidoUseCase } from './checkout-pedido.usecase';
 
 describe('CheckoutPedidoUseCase', () => {
    let useCase: CheckoutPedidoUseCase;
    let buscarItensPorPedidoIdUseCase: BuscarItensPorPedidoIdUseCase;
    let buscarProdutoPorIdUseCase: BuscarProdutoPorIdUseCase;
    let editarPedidoUseCase: EditarPedidoUseCase;
+   let solicitaPagamentoPedidoUseCase: SolicitaPagamentoPedidoUseCase;
    let clienteRepository: IRepository<Cliente>;
 
    const pedido: Pedido = {
@@ -60,6 +63,7 @@ describe('CheckoutPedidoUseCase', () => {
             ...PedidoProviders,
             ...ProdutoProviders,
             ...ItemPedidoProviders,
+            ...PagamentoProviders,
             ...PersistenceInMemoryProviders,
 
             // Mock do serviço IRepository<Cliente>
@@ -96,6 +100,9 @@ describe('CheckoutPedidoUseCase', () => {
       );
       buscarProdutoPorIdUseCase = module.get<BuscarProdutoPorIdUseCase>(ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE);
       editarPedidoUseCase = module.get<EditarPedidoUseCase>(PedidoConstants.EDITAR_PEDIDO_USECASE);
+      solicitaPagamentoPedidoUseCase = module.get<SolicitaPagamentoPedidoUseCase>(
+         PagamentoConstants.SOLICITA_PAGAMENTO_PEDIDO_USECASE,
+      );
       clienteRepository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
    });
 

@@ -1,17 +1,28 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IPagamentoService } from 'src/application/pagamento/service/pagamento.service.interface';
+import {
+   ConsultaEstadoPagamentoPedidoUseCase,
+   SolicitaPagamentoPedidoUseCase,
+} from 'src/application/pagamento/usecase';
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
+import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PagamentoConstants } from 'src/shared/constants';
-import { ConsultaEstadoPagamentoPedidoUseCase } from 'src/application/pagamento/usecase';
 
 @Injectable()
 export class PagamentoService implements IPagamentoService {
    constructor(
       @Inject(PagamentoConstants.CONSULTA_ESTADO_PAGAMENTO_USECASE)
       private consultaEstadoUsecase: ConsultaEstadoPagamentoPedidoUseCase,
+      @Inject(PagamentoConstants.SOLICITA_PAGAMENTO_PEDIDO_USECASE)
+      private solicitarPagamentoPedidoUsecase: SolicitaPagamentoPedidoUseCase,
    ) {}
 
    async buscarEstadoPagamentoPedido(pedidoId: number): Promise<{ estadoPagamento: EstadoPagamento }> {
       return await this.consultaEstadoUsecase.buscaEstadoPagamento(pedidoId);
+   }
+
+   async solicitarPagamentoPedido(pedido: Pedido): Promise<Pagamento> {
+      return await this.solicitarPagamentoPedidoUsecase.solicitaPagamento(pedido);
    }
 }

@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BuscarPedidoPorIdUseCase } from './buscar-pedido-por-id.usecase';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
+import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { PedidoConstants } from 'src/shared/constants';
-import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { PedidoConstants } from 'src/shared/constants';
+import { BuscarPedidoPorIdUseCase } from './buscar-pedido-por-id.usecase';
 
 describe('BuscarPedidoPorIdUseCase', () => {
    let useCase: BuscarPedidoPorIdUseCase;
@@ -24,7 +25,7 @@ describe('BuscarPedidoPorIdUseCase', () => {
 
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
-         providers: [...PedidoProviders, ...PersistenceInMemoryProviders],
+         providers: [...PedidoProviders, ...PagamentoProviders, ...PersistenceInMemoryProviders],
       }).compile();
 
       // Desabilita a saída de log

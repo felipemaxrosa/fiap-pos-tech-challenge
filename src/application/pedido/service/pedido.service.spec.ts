@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
@@ -89,6 +90,7 @@ describe('PedidoService', () => {
          providers: [
             ...PedidoProviders,
             ...PersistenceInMemoryProviders,
+            ...PagamentoProviders,
             // Mock do serviço IRepository<Pedido>
             {
                provide: PedidoConstants.IREPOSITORY,
