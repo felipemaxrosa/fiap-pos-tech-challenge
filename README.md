@@ -321,6 +321,15 @@ configmap "mysql-env" deleted
 
 $ kubectl delete -f k8s/fast-n-foodious-secret.yml 
 secret "fast-n-foodious-secret" deleted
+
+$ docker image rm ottero/fast-n-foodious
+Untagged: ottero/fast-n-foodious:latest
+Untagged: ottero/fast-n-foodious@sha256:58d0731f992f2755ee311a25603fde8c8c9ecd57e3f5aad34c32b41783284625
+Deleted: sha256:e206061037e125c6b6b93bcc3b3ef61a59d8919753759d34527e38abe17c712e
+Deleted: sha256:8cc3b430e851d9d31ff5049bb95e8032398a32203b7fbc49d1ac0ef65b4d1387
+Deleted: sha256:a7fa60af5472f99af1f84d0f245d8e64f3897dcbd02f0c63f1817a09479a31cd
+Deleted: sha256:3b012aad6f4a48c30a61d8834cebd0a48d3ef2e0680cd86545243618f782d778
+Deleted: sha256:f93cb6531dabccc23848e273402d3fbef0515206efab1a29ccc1be81bf273dea
 ```
 
 5. Extra: se os testes de stress foram realizados no cluster kubernetes, via job k6:
@@ -329,6 +338,14 @@ secret "fast-n-foodious-secret" deleted
 $ kubectl delete -f k8s/fast-n-foodious-job.yml 
 job.batch "k6-stress-job" deleted
 configmap "k6-stress-env" deleted
+
+$ docker image rm 24hoursmedia/k6-xarch
+Untagged: 24hoursmedia/k6-xarch:latest
+Untagged: 24hoursmedia/k6-xarch@sha256:62f55c01e327d15bef89275168cab9a7bb11c8450203bf15d052cfe2654d8a29
+Deleted: sha256:0ea08d7adac52324b25f57d126491c6b7c2bf48ea0c714c893cdcebc1f2b8929
+Deleted: sha256:4f90d3b645cdd7184811448c570951ee7c3c032770c1956f25e8fcdfd4d79e9b
+Deleted: sha256:6f16c4dda6e7ae2562218ba06bae1285ff33934b991620db4f591ac60d35ee5c
+Deleted: sha256:0f7b3ff8b310adb0c38fa8108967e51e3431bc4b7ce350de93839eeffcefd34c
 ```
 
 ### 🎮 Extras Docker Compose
