@@ -103,11 +103,14 @@ export class PedidoTypeormRepository implements IPedidoRepository {
    }
 
    async listarPedidosPendentes(): Promise<Pedido[]> {
-      this.logger.debug('Listando pedidos pendentes');
+      this.logger.debug('Listando pedidos com pagamento pendente');
 
       return this.repository
          .find({
-            where: [{ estadoPedido: EstadoPedido.RECEBIDO }, { estadoPedido: EstadoPedido.EM_PREPARACAO }],
+            where: [{ estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE }],
+            order: {
+               id: 'ASC',
+            },
          })
          .then((pedidoEntities) => {
             return pedidoEntities.map((pedido) => pedido);
