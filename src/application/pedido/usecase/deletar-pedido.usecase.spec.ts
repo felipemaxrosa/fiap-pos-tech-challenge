@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DeletarPedidoUseCase } from './deletar-pedido.usecase';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { PedidoConstants } from 'src/shared/constants';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
-import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
+import { PedidoConstants } from 'src/shared/constants';
+import { DeletarPedidoUseCase } from './deletar-pedido.usecase';
 
 describe('DeletarPedidoUseCase', () => {
    let useCase: DeletarPedidoUseCase;
@@ -14,7 +15,7 @@ describe('DeletarPedidoUseCase', () => {
 
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
-         providers: [...PedidoProviders, ...PersistenceInMemoryProviders],
+         providers: [...PedidoProviders, ...PagamentoProviders, ...PersistenceInMemoryProviders],
       }).compile();
 
       // Desabilita a saída de log

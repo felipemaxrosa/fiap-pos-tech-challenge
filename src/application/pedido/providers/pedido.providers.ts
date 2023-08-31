@@ -1,4 +1,5 @@
 import { Provider } from '@nestjs/common';
+import { SolicitaPagamentoPedidoUseCase } from 'src/application/pagamento/usecase';
 
 import { PedidoService } from 'src/application/pedido/service/pedido.service';
 import { BuscarEstadoPedidoPorIdUseCase } from 'src/application/pedido/usecase/buscar-estado-pedido-por-id.usecase';
@@ -22,7 +23,13 @@ import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { ClienteConstants, ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
+import {
+   ClienteConstants,
+   ItemPedidoConstants,
+   PagamentoConstants,
+   PedidoConstants,
+   ProdutoConstants,
+} from 'src/shared/constants';
 
 export const PedidoProviders: Provider[] = [
    { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
@@ -97,18 +104,21 @@ export const PedidoProviders: Provider[] = [
          ProdutoConstants.IREPOSITORY,
          PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
          PedidoConstants.EDITAR_PEDIDO_USECASE,
+         PagamentoConstants.SOLICITA_PAGAMENTO_PEDIDO_USECASE,
          PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
       ],
       useFactory: (
          repository: IRepository<Produto>,
          buscarItensPorPedidoIdUsecase: BuscarItensPorPedidoIdUseCase,
          editarPedidoUsecase: EditarPedidoUseCase,
+         solicitaPagamentoPedidoUseCase: SolicitaPagamentoPedidoUseCase,
          validators: CheckoutPedidoValidator[],
       ): CheckoutPedidoUseCase =>
          new CheckoutPedidoUseCase(
             new BuscarProdutoPorIdUseCase(repository),
             buscarItensPorPedidoIdUsecase,
             editarPedidoUsecase,
+            solicitaPagamentoPedidoUseCase,
             validators,
          ),
    },

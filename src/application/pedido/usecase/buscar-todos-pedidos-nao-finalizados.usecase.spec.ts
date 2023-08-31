@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BuscarTodosPedidosNaoFinalizadosUseCase } from './buscar-todos-pedidos-nao-finalizados.usecase';
-import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
-import { PedidoConstants } from 'src/shared/constants';
-import { IRepository } from 'src/enterprise/repository/repository';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
+import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
+import { IRepository } from 'src/enterprise/repository/repository';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
+import { PedidoConstants } from 'src/shared/constants';
+import { BuscarTodosPedidosNaoFinalizadosUseCase } from './buscar-todos-pedidos-nao-finalizados.usecase';
 
 describe('BuscarTodosPedidosNaoFinalizadosUseCase', () => {
    let useCase: BuscarTodosPedidosNaoFinalizadosUseCase;
@@ -39,6 +40,7 @@ describe('BuscarTodosPedidosNaoFinalizadosUseCase', () => {
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             ...PedidoProviders,
+            ...PagamentoProviders,
             ...PersistenceInMemoryProviders,
             // Mock do serviço IRepository<Pedido>
             {

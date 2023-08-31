@@ -1,10 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { SolicitaPagamentoPedidoUseCase } from 'src/application/pagamento/usecase';
 import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
 import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
-import { PedidoConstants, ProdutoConstants } from 'src/shared/constants';
+import { PagamentoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
 
 @Injectable()
@@ -16,6 +17,8 @@ export class CheckoutPedidoUseCase {
       @Inject(PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE)
       private buscarItensPorPedidoIdUseCase: BuscarItensPorPedidoIdUseCase,
       @Inject(PedidoConstants.EDITAR_PEDIDO_USECASE) private editarPedidoUseCase: EditarPedidoUseCase,
+      @Inject(PagamentoConstants.SOLICITA_PAGAMENTO_PEDIDO_USECASE)
+      private solicitaPagamentoPedidoUseCase: SolicitaPagamentoPedidoUseCase,
       @Inject(PedidoConstants.CHECKOUT_PEDIDO_VALIDATOR)
       private validators: CheckoutPedidoValidator[],
    ) {}
@@ -32,7 +35,8 @@ export class CheckoutPedidoUseCase {
       }
       pedido.total = totalPedido;
 
-      // TODO: invocar usecase para gerar solicitação de pagamento quando estiver pronto
+      // registra a necessidade de pagamento do pedido
+      await this.solicitaPagamentoPedidoUseCase.solicitaPagamento(pedido);
 
       const pedidoRetornado = await this.editarPedidoUseCase.editarPedido(pedido);
       this.logger.log(`pedidoRetornado: ${pedidoRetornado}`);

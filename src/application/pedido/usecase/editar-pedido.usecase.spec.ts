@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EditarPedidoUseCase } from './editar-pedido.usecase';
-import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { ClienteConstants, PedidoConstants } from 'src/shared/constants';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
-import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
+import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
+import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
+import { ClienteConstants, PedidoConstants } from 'src/shared/constants';
+import { EditarPedidoUseCase } from './editar-pedido.usecase';
 
 describe('EditarPedidoUseCase', () => {
    let useCase: EditarPedidoUseCase;
@@ -31,6 +32,7 @@ describe('EditarPedidoUseCase', () => {
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             ...PedidoProviders,
+            ...PagamentoProviders,
             ...PersistenceInMemoryProviders,
             // Mock do serviço IRepository<Cliente>
             {

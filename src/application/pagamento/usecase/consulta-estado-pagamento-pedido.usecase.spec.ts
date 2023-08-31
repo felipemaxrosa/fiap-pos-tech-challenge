@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
-import { PagamentoConstants } from 'src/shared/constants';
-import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { ConsultaEstadoPagamentoPedidoUseCase } from './consulta-estado-pagamento-pedido.usecase';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
+import { PagamentoConstants } from 'src/shared/constants';
+import { ConsultaEstadoPagamentoPedidoUseCase } from './consulta-estado-pagamento-pedido.usecase';
 
 describe('ConsultaEstadoPagamentoPedidoUseCase', () => {
    let useCase: ConsultaEstadoPagamentoPedidoUseCase;
@@ -18,7 +18,7 @@ describe('ConsultaEstadoPagamentoPedidoUseCase', () => {
       estadoPagamento: EstadoPagamento.CONFIRMADO,
       pedidoId: 1,
       total: 10,
-      transacaoId: 1,
+      transacaoId: '1',
       id: 1,
    };
 
