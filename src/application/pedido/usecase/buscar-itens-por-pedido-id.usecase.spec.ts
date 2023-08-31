@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BuscarItensPorPedidoIdUseCase } from './buscar-itens-por-pedido-id.usecase';
+import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
+import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
-import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
-import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
+import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
+import { BuscarItensPorPedidoIdUseCase } from './buscar-itens-por-pedido-id.usecase';
 
 describe('BuscarItensPorPedidoIdUseCase', () => {
    let useCase: BuscarItensPorPedidoIdUseCase;
@@ -20,7 +21,12 @@ describe('BuscarItensPorPedidoIdUseCase', () => {
 
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
-         providers: [...ItemPedidoProviders, ...PedidoProviders, ...PersistenceInMemoryProviders],
+         providers: [
+            ...ItemPedidoProviders,
+            ...PedidoProviders,
+            ...PagamentoProviders,
+            ...PersistenceInMemoryProviders,
+         ],
       }).compile();
 
       // Desabilita a saída de log

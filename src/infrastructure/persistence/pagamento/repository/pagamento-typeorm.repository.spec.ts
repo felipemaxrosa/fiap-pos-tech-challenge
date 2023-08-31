@@ -1,11 +1,11 @@
-import { Repository, TypeORMError } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
+import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { PagamentoEntity } from 'src/infrastructure/persistence/pagamento/entity/pagamento.entity';
-import { IRepository } from 'src/enterprise/repository/repository';
 import { PagamentoConstants } from 'src/shared/constants';
+import { Repository, TypeORMError } from 'typeorm';
 import { PagamentoTypeormRepository } from './pagamento-typeorm.repository';
 
 describe('PagamentoTypeormRepository', () => {
@@ -13,20 +13,20 @@ describe('PagamentoTypeormRepository', () => {
    let repositoryTypeOrm: Repository<PagamentoEntity>;
 
    const mockedPagamento: Pagamento = {
-      dataHoraPagamento: new Date(),
+      dataHoraPagamento: new Date('2023-08-30'),
       estadoPagamento: EstadoPagamento.CONFIRMADO,
       pedidoId: 1,
       total: 10,
-      transacaoId: 1,
+      transacaoId: '1',
       id: 1,
    };
 
    const mockedPagamentoEntity: PagamentoEntity = {
-      dataHoraPagamento: new Date(),
+      dataHoraPagamento: new Date('2023-08-30'),
       estadoPagamento: EstadoPagamento.CONFIRMADO,
       pedidoId: 1,
       total: 10,
-      transacaoId: 1,
+      transacaoId: '1',
       id: 1,
    };
 
@@ -37,7 +37,7 @@ describe('PagamentoTypeormRepository', () => {
          estadoPagamento: EstadoPagamento.PENDENTE,
          pedidoId: 2,
          total: 20,
-         transacaoId: 2,
+         transacaoId: '2',
          id: 2,
       },
    ];
@@ -59,6 +59,7 @@ describe('PagamentoTypeormRepository', () => {
                provide: PagamentoConstants.REPOSITORY_PAGAMENTO_ENTITY,
                useValue: {
                   findBy: jest.fn(),
+                  save: jest.fn(),
                },
             },
          ],
@@ -101,11 +102,27 @@ describe('PagamentoTypeormRepository', () => {
    });
 
    describe('save', () => {
-      it('salvar deve falhar porque não foi implementado', async () => {
-         await expect(repository.save(mockedPagamento)).rejects.toThrow(
-            new RepositoryException('Método não implementado.'),
-         );
-      });
+      it('deve salvar pagamento corretamente', async () => {
+         jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(mockedPagamentoEntity);
+
+         await repository.save(mockedPagamento).then((pagamentoSalvo) => {
+            // verifica se o pagamento salvo contém os mesmos dados passados como input
+            expect(pagamentoSalvo.id).toEqual(mockedPagamento.id);
+            expect(pagamentoSalvo.pedidoId).toEqual(mockedPagamento.pedidoId);
+            expect(pagamentoSalvo.estadoPagamento).toEqual(mockedPagamento.estadoPagamento);
+            expect(pagamentoSalvo.total).toEqual(mockedPagamento.total);
+            expect(pagamentoSalvo.transacaoId).toEqual(mockedPagamento.transacaoId);
+            expect(pagamentoSalvo.dataHoraPagamento.getTime()).toEqual(mockedPagamento.dataHoraPagamento.getTime());
+         });
+      }); // end it deve salvar pagamento corretamente
+
+      it('não deve salvar pagamento quando houver um erro de banco ', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada infra
+         await expect(repository.save(mockedPagamento)).rejects.toThrowError(RepositoryException);
+      }); // end it não deve salvar pagamento quando houver um erro de banco
    });
 
    describe('edit', () => {

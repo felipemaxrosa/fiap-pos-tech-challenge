@@ -9,7 +9,7 @@ export class PagamentoEntity {
    pedidoId: number;
 
    @Column({ name: 'TRANSACAO_ID' })
-   transacaoId: number;
+   transacaoId: string;
 
    @Column({ name: 'ESTADO_PAGAMENTO' })
    estadoPagamento: number;

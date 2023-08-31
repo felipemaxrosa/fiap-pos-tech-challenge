@@ -1,10 +1,10 @@
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
+import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { PagamentoEntity } from 'src/infrastructure/persistence/pagamento/entity/pagamento.entity';
-import { IRepository } from 'src/enterprise/repository/repository';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PagamentoTypeormRepository implements IRepository<Pagamento> {
@@ -44,8 +44,32 @@ export class PagamentoTypeormRepository implements IRepository<Pagamento> {
       throw new RepositoryException('Método não implementado.');
    }
 
-   async save(): Promise<Pagamento> {
-      throw new RepositoryException('Método não implementado.');
+   async save(pagamento: Pagamento): Promise<Pagamento> {
+      this.logger.debug(`Salvando pagamento: ${pagamento}`);
+      return this.repository
+         .save({
+            pedidoId: pagamento.id,
+            transacaoId: pagamento.transacaoId,
+            estadoPagamento: pagamento.estadoPagamento,
+            total: pagamento.total,
+            dataHoraPagamento: pagamento.dataHoraPagamento,
+         })
+         .then((pagamentoEntity) => {
+            this.logger.debug(`Pagamento salvo com sucesso no banco de dados: ${pagamentoEntity.id}`);
+            return {
+               id: pagamentoEntity.id,
+               pedidoId: pagamentoEntity.pedidoId,
+               transacaoId: pagamentoEntity.transacaoId,
+               estadoPagamento: pagamentoEntity.estadoPagamento,
+               total: pagamentoEntity.total,
+               dataHoraPagamento: pagamentoEntity.dataHoraPagamento,
+            };
+         })
+         .catch((error) => {
+            throw new RepositoryException(
+               `Houve um erro ao salvar o pagamento no banco de dados: '${pagamento}': ${error.message}`,
+            );
+         });
    }
 
    async findAll(): Promise<Pagamento[]> {

@@ -1,13 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { IPagamentoService } from 'src/application/pagamento/service/pagamento.service.interface';
-import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
+import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
+import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { PagamentoConstants } from 'src/shared/constants';
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
 
 describe('PagamentoService', () => {
    let service: IPagamentoService;
@@ -18,7 +20,7 @@ describe('PagamentoService', () => {
       estadoPagamento: EstadoPagamento.CONFIRMADO,
       pedidoId: 1,
       total: 10,
-      transacaoId: 1,
+      transacaoId: '1',
       id: 1,
    };
 
@@ -29,10 +31,28 @@ describe('PagamentoService', () => {
          estadoPagamento: EstadoPagamento.PENDENTE,
          pedidoId: 2,
          total: 20,
-         transacaoId: 2,
+         transacaoId: '2',
          id: 2,
       },
    ];
+
+   const pedido: Pedido = {
+      id: 1,
+      clienteId: 1,
+      dataInicio: '2023-06-18',
+      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
+      ativo: true,
+      total: 10,
+   };
+
+   const pagamentoSolicitado: Pagamento = {
+      dataHoraPagamento: new Date(),
+      estadoPagamento: EstadoPagamento.PENDENTE,
+      pedidoId: 1,
+      total: 10,
+      transacaoId: '1',
+      id: 1,
+   };
 
    beforeEach(async () => {
       // Configuração do módulo de teste
@@ -47,6 +67,10 @@ describe('PagamentoService', () => {
                   findBy: jest.fn(() => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve(pagamentos);
+                  }),
+                  save: jest.fn(() => {
+                     // retorna o pagamentoSolicitado
+                     return Promise.resolve(pagamentoSolicitado);
                   }),
                },
             },
@@ -80,6 +104,20 @@ describe('PagamentoService', () => {
          jest.spyOn(pagamentoRepository, 'findBy').mockRejectedValue(error);
 
          await expect(service.buscarEstadoPagamentoPedido(1)).rejects.toThrowError(ServiceException);
+      });
+   });
+
+   describe('solicitarPagamentoPedido', () => {
+      it('deve solicitar pagamento corretamente', async () => {
+         await service.solicitarPagamentoPedido(pedido).then((pagamento) => {
+            expect(pagamento.id).toEqual(pedido.id);
+         });
+      });
+      it('não deve fazer solicitação de pagamento quando houver erro de banco ', async () => {
+         const error = new RepositoryException('Erro genérico de banco de dados');
+         jest.spyOn(pagamentoRepository, 'save').mockRejectedValue(error);
+
+         await expect(service.solicitarPagamentoPedido(pedido)).rejects.toThrowError(ServiceException);
       });
    });
 });
