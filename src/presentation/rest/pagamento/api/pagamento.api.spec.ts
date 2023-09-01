@@ -52,7 +52,7 @@ describe('PagamentoRestApi', () => {
 
    describe('confirmar pagamento', () => {
       it('o pagamento deve ser confirmado com sucesso', async () => {
-         const result = await restApi.webhook(1);
+         const result = await restApi.webhook('1');
 
          // Verifica se o resultado obtido é igual ao esperado
          expect(result).toBeTruthy();

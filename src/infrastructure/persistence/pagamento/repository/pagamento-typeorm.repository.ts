@@ -40,8 +40,21 @@ export class PagamentoTypeormRepository implements IRepository<Pagamento> {
       throw new RepositoryException('Método não implementado.');
    }
 
-   async edit(): Promise<Pagamento> {
-      throw new RepositoryException('Método não implementado.');
+   async edit(pagamento: Pagamento): Promise<Pagamento> {
+      this.logger.debug(`Editando pagamento: ${pagamento}`);
+
+      return this.repository
+         .save(pagamento)
+         .then((pagamentoEditado) => {
+            this.logger.debug(`Pagamento editado com sucesso no banco de dados: ${pagamentoEditado.id}`);
+
+            return pagamentoEditado;
+         })
+         .catch((error) => {
+            throw new RepositoryException(
+               `Houve um erro ao editar o pagamento no banco de dados: '${pagamento}': ${error.message}`,
+            );
+         });
    }
 
    async save(pagamento: Pagamento): Promise<Pagamento> {

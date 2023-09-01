@@ -1,15 +1,4 @@
-import {
-   Controller,
-   Get,
-   Inject,
-   Logger,
-   NotFoundException,
-   Param,
-   ParseIntPipe,
-   Post,
-   Query,
-   ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, Inject, Logger, NotFoundException, Param, Post, Query, ValidationPipe } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IPagamentoService } from 'src/application/pagamento/service/pagamento.service.interface';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
@@ -34,7 +23,7 @@ export class PagamentoRestApi extends BaseRestApi {
    @ApiOkResponse({
       description: 'Pagamento confirmado com sucesso',
    })
-   async webhook(@Param('transacaoId', ParseIntPipe) transacaoId: number): Promise<boolean> {
+   async webhook(@Param('transacaoId') transacaoId: string): Promise<boolean> {
       const response = await this.service.webhookPagamentoPedido(transacaoId);
       this.logger.debug('Pagamento confirmado com sucesso para a transactionId ' + transacaoId + '.');
       return response;
