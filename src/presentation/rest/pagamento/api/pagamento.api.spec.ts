@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IPagamentoService } from 'src/application/pagamento/service/pagamento.service.interface';
+import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
 import { PagamentoRestApi } from 'src/presentation/rest/pagamento/api/pagamento.api';
+import { PagamentoConstants } from 'src/shared/constants';
 import { BuscarEstadoPagamentoPedidoRequest } from '../request';
 import { BuscarEstadoPagamentoPedidoResponse } from '../response';
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
-import { PagamentoConstants } from 'src/shared/constants';
 
 describe('PagamentoRestApi', () => {
    let restApi: PagamentoRestApi;
@@ -29,6 +29,7 @@ describe('PagamentoRestApi', () => {
                   buscarEstadoPagamentoPedido: jest.fn((pedidoId) =>
                      pedidoId === 1 ? Promise.resolve(response) : Promise.reject(new Error('error')),
                   ),
+                  webhookPagamentoPedido: jest.fn((transacaoId) => Promise.resolve(true)),
                },
             },
          ],
@@ -49,9 +50,9 @@ describe('PagamentoRestApi', () => {
       });
    });
 
-   describe('efetuar pagamento', () => {
-      it('o pagamento deve ser realizado com sucesso', async () => {
-         const result = await restApi.pagar(1);
+   describe('confirmar pagamento', () => {
+      it('o pagamento deve ser confirmado com sucesso', async () => {
+         const result = await restApi.webhook(1);
 
          // Verifica se o resultado obtido é igual ao esperado
          expect(result).toBeTruthy();

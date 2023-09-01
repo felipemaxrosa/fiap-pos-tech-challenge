@@ -1,21 +1,22 @@
 import {
-   Inject,
    Controller,
+   Get,
+   Inject,
    Logger,
+   NotFoundException,
    Param,
    ParseIntPipe,
    Post,
-   Get,
    Query,
    ValidationPipe,
-   NotFoundException,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IPagamentoService } from 'src/application/pagamento/service/pagamento.service.interface';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
-import { PagamentoConstants } from 'src/shared/constants';
-import { BuscarEstadoPagamentoPedidoResponse } from 'src/presentation/rest/pagamento/response';
 import { BuscarEstadoPagamentoPedidoRequest } from 'src/presentation/rest/pagamento/request';
+import { BuscarEstadoPagamentoPedidoResponse } from 'src/presentation/rest/pagamento/response';
+import { PagamentoConstants } from 'src/shared/constants';
+
 @Controller('v1/pagamento')
 @ApiTags('Pagamento')
 export class PagamentoRestApi extends BaseRestApi {
@@ -25,18 +26,18 @@ export class PagamentoRestApi extends BaseRestApi {
       super();
    }
 
-   @Post(':id')
+   @Post(':transacaoId')
    @ApiOperation({
-      summary: 'Realiza o pagamento de um pedido',
-      description:
-         'Realiza o pagamento de um pedido. Neste momento, ainda não há implementação da integração com o gateway de pagamento.',
+      summary: 'Webhook para confirmação do pagamento de um pedido',
+      description: 'Confirma o pagamento de um pedido através da integração com o gateway de pagamento.',
    })
    @ApiOkResponse({
-      description: 'Pagamento realizado com sucesso',
+      description: 'Pagamento confirmado com sucesso',
    })
-   async pagar(@Param('id', ParseIntPipe) id: number): Promise<boolean> {
-      this.logger.debug('Pagamento realizado com sucesso para o pedido ' + id + '.');
-      return Promise.resolve(true);
+   async webhook(@Param('transacaoId', ParseIntPipe) transacaoId: number): Promise<boolean> {
+      const response = await this.service.webhookPagamentoPedido(transacaoId);
+      this.logger.debug('Pagamento confirmado com sucesso para a transactionId ' + transacaoId + '.');
+      return response;
    }
 
    @Get('estado')
