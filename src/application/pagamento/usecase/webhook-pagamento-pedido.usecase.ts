@@ -14,10 +14,10 @@ export class WebhookPagamentoPedidoUseCase {
 
    constructor(
       @Inject(PagamentoConstants.IREPOSITORY) private repository: IRepository<Pagamento>,
-      @Inject(PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE)
-      private buscarPedidoPorIdUseCase: BuscarPedidoPorIdUseCase,
       @Inject(PedidoConstants.EDITAR_PEDIDO_USECASE)
       private editarPedidoUseCase: EditarPedidoUseCase,
+      @Inject(PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE)
+      private buscarPedidoPorIdUseCase: BuscarPedidoPorIdUseCase,
    ) {}
 
    async webhook(transacaoId: string): Promise<boolean> {

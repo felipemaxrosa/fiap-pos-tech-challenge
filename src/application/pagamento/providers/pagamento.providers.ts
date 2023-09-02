@@ -37,9 +37,9 @@ export const PagamentoProviders: Provider[] = [
       ],
       useFactory: (
          repository: IRepository<Pagamento>,
-         buscarPedidoPorIdUseCase: BuscarPedidoPorIdUseCase,
          editarPedidoUseCase: EditarPedidoUseCase,
+         buscarPedidoPorIdUseCase: BuscarPedidoPorIdUseCase,
       ): WebhookPagamentoPedidoUseCase =>
-         new WebhookPagamentoPedidoUseCase(repository, buscarPedidoPorIdUseCase, editarPedidoUseCase),
+         new WebhookPagamentoPedidoUseCase(repository, editarPedidoUseCase, buscarPedidoPorIdUseCase),
    },
 ];
