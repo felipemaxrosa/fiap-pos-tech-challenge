@@ -79,6 +79,10 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run:
+          name: Build Docker Images for Tests
+          command: docker-compose --env-file ./envs/prod.env build
+          no_output_timeout: 1m
+      - run:
           name: Start Docker Containers
           command: docker-compose --env-file ./envs/prod.env up -d
           no_output_timeout: 1m
