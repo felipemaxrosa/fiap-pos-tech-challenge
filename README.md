@@ -21,7 +21,8 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
         * [Docker (Modo Desbravador!)](#-docker-modo-desbravador)
         * [Kubernetes (Modo Fácil!)](#-kubernetes-modo-fácil)
         * [Kubernetes (Modo Desbravador!)](#-kubernetes-modo-desbravador)
-    * [Documentação da API](#-documentação-da-api)
+* [Documentação da API (Swagger)](#-documentação-da-api-swagger)
+* [Desinstalação & Cleanup](#-desinstalação--cleanup)
 * [Testes](#-testes)
 * [Estrutura Base do Projeto](#%EF%B8%8F-estrutura-base-do-projeto)
 * [DDD](#ddd)
@@ -246,12 +247,12 @@ NAME                                                      REFERENCE             
 horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa   Deployment/fast-n-foodious   69%/80%, 0%/80%   1         3         1          2m48s 
 ```
 
-### 🧾 Documentação da API (Swagger)
+## 🧾 Documentação da API (Swagger)
 `docker`    http://localhost:3000/api
 
 `k8s`       http://localhost:80/api
 
-### Desistalação & Cleanup
+## 🧼 Desinstalação & Cleanup
 Para realizar a desistalação da aplicação e o cleanup da infraestrutura, basta realizar os comandos abaixos de acordo com o modo de instalação.
 1. Se você utilizou o `docker` para subir a aplicação:
 
@@ -348,7 +349,7 @@ Deleted: sha256:6f16c4dda6e7ae2562218ba06bae1285ff33934b991620db4f591ac60d35ee5c
 Deleted: sha256:0f7b3ff8b310adb0c38fa8108967e51e3431bc4b7ce350de93839eeffcefd34c
 ```
 
-### 🎮 Extras Docker Compose
+## 🎮 Extras Docker Compose
 
 ```bash
 # Build com docker-compose utilizando env específica
