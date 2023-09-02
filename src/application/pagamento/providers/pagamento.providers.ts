@@ -32,8 +32,8 @@ export const PagamentoProviders: Provider[] = [
       provide: PagamentoConstants.WEBHOOK_PAGAMENTO_PEDIDO_USECASE,
       inject: [
          PagamentoConstants.IREPOSITORY,
-         PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE,
          PedidoConstants.EDITAR_PEDIDO_USECASE,
+         PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE,
       ],
       useFactory: (
          repository: IRepository<Pagamento>,
