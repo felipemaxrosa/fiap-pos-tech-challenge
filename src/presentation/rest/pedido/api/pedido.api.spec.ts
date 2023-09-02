@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
+import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoRestApi } from 'src/presentation/rest/pedido/api/pedido.api';
+import { EditarPedidoRequest } from 'src/presentation/rest/pedido/request/editar-pedido.request';
 import { ListarPedidoNaoFinalizadoResponse } from 'src/presentation/rest/pedido/response/listar-pedido-nao-finalizado-response';
 import { PedidoConstants } from 'src/shared/constants';
 
@@ -42,21 +44,6 @@ describe('PedidoRestApi', () => {
       total: 27,
    };
 
-   const itemPedidoCheckout = {
-      id: 1,
-      pedidoId: 100,
-      produtoId: 1,
-      quantidade: 1,
-   };
-
-   const produtoItemPedidoCheckout = {
-      id: 1,
-      nome: 'Produto 1',
-      descricao: 'Produto 1',
-      preco: 27,
-      ativo: true,
-   };
-
    const pedidoAntesCheckout: Pedido = {
       clienteId: 1,
       dataInicio: '2023-06-18',
@@ -85,6 +72,9 @@ describe('PedidoRestApi', () => {
                useValue: {
                   save: jest.fn((request) =>
                      request ? Promise.resolve(salvarPedidoResponse) : Promise.reject(new Error('error')),
+                  ),
+                  edit: jest.fn((pedido) =>
+                     pedido.id === 1 ? Promise.resolve(pedido) : Promise.reject(new ValidationException('error')),
                   ),
                   findById: jest.fn((id) =>
                      id === salvarPedidoResponse.id
@@ -148,6 +138,38 @@ describe('PedidoRestApi', () => {
 
          // Verifica se método save foi chamado com o parametro esperado
          expect(service.save).toHaveBeenCalledWith(salvarPedidoRequest);
+      });
+   });
+
+   describe('editar', () => {
+      it('deve editar um pedido com sucesso', async () => {
+         const request: EditarPedidoRequest = {
+            clienteId: 1,
+            dataInicio: '2023-06-18',
+            estadoPedido: 1,
+            ativo: true,
+         };
+
+         const result = await restApi.editar(1, request);
+
+         expect(result.clienteId).toEqual(request.clienteId);
+         expect(result.dataInicio).toEqual(request.dataInicio);
+         expect(result.estadoPedido).toEqual(request.estadoPedido);
+         expect(result.ativo).toEqual(request.ativo);
+         expect(result.id).toEqual(1);
+
+         expect(service.edit).toHaveBeenCalledWith({ ...request, id: 1 });
+      });
+
+      it('deve tratar um pedido não encontrado', async () => {
+         const request: EditarPedidoRequest = {
+            clienteId: 1,
+            dataInicio: '2023-06-18',
+            estadoPedido: 1,
+            ativo: true,
+         };
+
+         await expect(restApi.editar(2, request)).rejects.toThrowError(ValidationException);
       });
    });
 

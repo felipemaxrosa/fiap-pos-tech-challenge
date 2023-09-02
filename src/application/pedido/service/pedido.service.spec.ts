@@ -172,7 +172,7 @@ describe('PedidoService', () => {
    });
 
    describe('edit', () => {
-      it('editar deve falhar porque não foi implementado', async () => {
+      it('editar deve editar um pedido', async () => {
          await service.edit(pedido).then((pedidoEditado) => {
             expect(pedidoEditado.clienteId).toEqual(pedido.clienteId);
             expect(pedidoEditado.dataInicio).toEqual(pedido.dataInicio);
