@@ -1,4 +1,16 @@
-import { Body, Controller, Get, Inject, Logger, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common';
+import {
+   Body,
+   Controller,
+   Get,
+   HttpCode,
+   Inject,
+   Logger,
+   NotFoundException,
+   Param,
+   ParseIntPipe,
+   Post,
+   Put,
+} from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
@@ -6,6 +18,7 @@ import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
+import { EditarPedidoRequest } from 'src/presentation/rest/pedido/request/editar-pedido.request';
 import {
    BuscarPorIdEstadoPedidoResponse,
    BuscarPorIdPedidoResponse,
@@ -28,8 +41,8 @@ export class PedidoRestApi extends BaseRestApi {
 
    @Get()
    @ApiOperation({
-      summary: 'Lista todos os pedidos nao finalizados',
-      description: 'Lista de pedidos com status diferente de pagamento pendente e entregue',
+      summary: 'Lista todos os pedidos com status RECEBIDO = 1, EM_PREPARACAO = 2, PRONTO = 3',
+      description: 'Lista de pedidos. ordenado pelos status pronto, em preparação e recebido',
    })
    @ApiOkResponse({
       description: 'Pedidos encontrados com sucesso',
@@ -63,6 +76,26 @@ export class PedidoRestApi extends BaseRestApi {
          .then((pedidoCriado) => {
             this.logger.log(`Pedido gerado com sucesso: ${pedidoCriado.id}}`);
             return new SalvarPedidoResponse(pedidoCriado);
+         });
+   }
+
+   @Put(':id')
+   @ApiOperation({
+      summary: 'Edita um pedido',
+      description: 'Edita um pedido, identificado pelo id',
+   })
+   @ApiOkResponse({ description: 'Pedido editado com sucesso', type: EditarPedidoRequest })
+   async editar(@Param('id', ParseIntPipe) id: number, @Body() request: EditarPedidoRequest): Promise<Pedido> {
+      this.logger.debug(`Editando pedido request: ${JSON.stringify(request)}`);
+
+      return await this.service
+         .edit({
+            ...request,
+            id,
+         })
+         .then((pedido) => {
+            this.logger.log(`Pedido editado com sucesso: ${pedido.id}`);
+            return pedido;
          });
    }
 
@@ -151,6 +184,7 @@ export class PedidoRestApi extends BaseRestApi {
       summary: 'Realiza o checkout do pedido',
       description: 'Realiza o checkout do pedido',
    })
+   @HttpCode(200)
    @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: CheckoutPedidoResponse })
    async checkout(@Param('id', ParseIntPipe) id: number): Promise<CheckoutPedidoResponse> {
       this.logger.debug(`Realizando checkout do pedido id: ${id}`);

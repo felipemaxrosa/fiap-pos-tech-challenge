@@ -42,12 +42,12 @@ exitWithMessage() {
 setNodeEnvToMock
 
 # Executa os testes unitarios
-echo "Executando testes unitários.."
+echo " 🚀 Executando testes unitários.."
 npm run test
 testStatus=$?
 
 # Executa lint
-echo "Executando Lint.."
+echo " 🚀 Executando Lint.."
 npm run lint
 
 # Verifica se os testes unitário falharam
@@ -56,7 +56,7 @@ if [ $testStatus -ne 0 ]; then
 fi
 
 # Verifica cobertura de testes
-echo "Verificando cobertura de testes unitários.."
+echo " 🚀 Verificando cobertura de testes unitários.."
 npm run test:cov
 coverageStatus=$?
 

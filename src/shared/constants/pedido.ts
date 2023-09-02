@@ -2,6 +2,7 @@ export const IREPOSITORY = 'IRepository<Pedido>';
 export const ISERVICE = 'IService<Pedido>';
 export const REPOSITORY_PEDIDO_ENTITY = 'Repository<PedidoEntity>';
 export const SALVAR_PEDIDO_VALIDATOR = 'SalvarPedidoValidator';
+export const EDITAR_PEDIDO_VALIDATOR = 'EditarPedidoValidator';
 export const SALVAR_PEDIDO_USECASE = 'SalvarPedidoUseCase';
 export const EDITAR_PEDIDO_USECASE = 'EditarPedidoUseCase';
 export const DELETAR_PEDIDO_USECASE = 'DeletarPedidoUseCase';
