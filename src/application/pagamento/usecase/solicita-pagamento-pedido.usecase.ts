@@ -16,6 +16,12 @@ export class SolicitaPagamentoPedidoUseCase {
    async solicitaPagamento(pedido: Pedido): Promise<Pagamento> {
       const transacaoId = randomUUID();
 
+      this.logger.log('\n\n RODRIGO \n\n');
+
+      this.logger.log(`\n\n Pedido: ${JSON.stringify(pedido)} \n\n`);
+
+      this.logger.log('\n\n -------- \n\n');
+
       const pagamento: Pagamento = {
          pedidoId: pedido.id,
          transacaoId: transacaoId,
