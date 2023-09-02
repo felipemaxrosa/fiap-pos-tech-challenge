@@ -2,9 +2,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
-import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { PedidoConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
+import { EditarPedidoValidator } from 'src/application/pedido/validation/editar-pedido.validator';
 
 @Injectable()
 export class EditarPedidoUseCase {
@@ -12,8 +12,8 @@ export class EditarPedidoUseCase {
 
    constructor(
       @Inject(PedidoConstants.IREPOSITORY) private repository: IPedidoRepository,
-      @Inject(PedidoConstants.SALVAR_PEDIDO_VALIDATOR)
-      private validators: SalvarPedidoValidator[],
+      @Inject(PedidoConstants.EDITAR_PEDIDO_VALIDATOR)
+      private validators: EditarPedidoValidator[],
    ) {}
 
    async editarPedido(pedido: Pedido): Promise<Pedido> {

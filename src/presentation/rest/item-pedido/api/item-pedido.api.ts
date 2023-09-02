@@ -4,6 +4,7 @@ import { IItemPedidoService } from 'src/application/item-pedido/service/item-ped
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
 import { SalvarItemPedidoResponse, SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request';
+import { EditarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request/editar-item-pedido.request';
 import { ItemPedidoConstants } from 'src/shared/constants';
 
 @Controller('v1/item')
@@ -35,8 +36,8 @@ export class ItemPedidoRestApi extends BaseRestApi {
       summary: 'Edita um item do pedido',
       description: 'Edita um item do pedido, identificado pelo id do item vinculado ao id do pedido e id do produto',
    })
-   @ApiCreatedResponse({ description: 'Item do pedido editado com sucesso' })
-   async editar(@Param('id', ParseIntPipe) id: number, @Body() request: ItemPedido): Promise<ItemPedido> {
+   @ApiCreatedResponse({ description: 'Item do pedido editado com sucesso', type: EditarItemPedidoRequest })
+   async editar(@Param('id', ParseIntPipe) id: number, @Body() request: EditarItemPedidoRequest): Promise<ItemPedido> {
       this.logger.debug(`Editando item do pedido request: ${JSON.stringify(request)}`);
 
       return await this.service
