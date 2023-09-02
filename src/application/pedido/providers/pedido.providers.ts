@@ -14,7 +14,9 @@ import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedid
 import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
 import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
 import { ClienteExistentePedidoValidator } from 'src/application/pedido/validation/cliente-existente-pedido.validator';
+import { EditarPedidoValidator } from 'src/application/pedido/validation/editar-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
+import { PedidoExistenteValidator } from 'src/application/pedido/validation/pedido-existente.validator';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
@@ -45,6 +47,25 @@ export const PedidoProviders: Provider[] = [
          // new CheckoutPedidoValidator(pedidoRepository),
       ],
    },
+
+   {
+      provide: PedidoConstants.CHECKOUT_PEDIDO_VALIDATOR,
+      inject: [ClienteConstants.IREPOSITORY],
+      useFactory: (clienteRepository: IRepository<Cliente>): CheckoutPedidoValidator[] => [
+         new ClienteExistentePedidoValidator(clienteRepository),
+      ],
+   },
+   {
+      provide: PedidoConstants.EDITAR_PEDIDO_VALIDATOR,
+      inject: [ClienteConstants.IREPOSITORY, PedidoConstants.IREPOSITORY],
+      useFactory: (
+         clienteRepository: IRepository<Cliente>,
+         pedidoRepository: IRepository<Pedido>,
+      ): EditarPedidoValidator[] => [
+         new ClienteExistentePedidoValidator(clienteRepository),
+         new PedidoExistenteValidator(pedidoRepository),
+      ],
+   },
    {
       provide: PedidoConstants.SALVAR_PEDIDO_USECASE,
       inject: [PedidoConstants.IREPOSITORY, PedidoConstants.SALVAR_PEDIDO_VALIDATOR],
@@ -53,8 +74,8 @@ export const PedidoProviders: Provider[] = [
    },
    {
       provide: PedidoConstants.EDITAR_PEDIDO_USECASE,
-      inject: [PedidoConstants.IREPOSITORY, PedidoConstants.SALVAR_PEDIDO_VALIDATOR],
-      useFactory: (repository: IPedidoRepository, validators: SalvarPedidoValidator[]): EditarPedidoUseCase =>
+      inject: [PedidoConstants.IREPOSITORY, PedidoConstants.EDITAR_PEDIDO_VALIDATOR],
+      useFactory: (repository: IPedidoRepository, validators: EditarPedidoValidator[]): EditarPedidoUseCase =>
          new EditarPedidoUseCase(repository, validators),
    },
    {
@@ -105,7 +126,7 @@ export const PedidoProviders: Provider[] = [
          PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
          PedidoConstants.EDITAR_PEDIDO_USECASE,
          PagamentoConstants.SOLICITA_PAGAMENTO_PEDIDO_USECASE,
-         PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
+         PedidoConstants.CHECKOUT_PEDIDO_VALIDATOR,
       ],
       useFactory: (
          repository: IRepository<Produto>,

@@ -48,7 +48,7 @@ export class PagamentoTypeormRepository implements IRepository<Pagamento> {
       this.logger.debug(`Salvando pagamento: ${pagamento}`);
       return this.repository
          .save({
-            pedidoId: pagamento.id,
+            pedidoId: pagamento.pedidoId,
             transacaoId: pagamento.transacaoId,
             estadoPagamento: pagamento.estadoPagamento,
             total: pagamento.total,

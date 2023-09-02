@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
 import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
-import { SolicitaPagamentoPedidoUseCase } from 'src/application/pagamento/usecase';
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/buscar-itens-por-pedido-id.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
@@ -14,7 +13,7 @@ import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
-import { ClienteConstants, PagamentoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
+import { ClienteConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 import { CheckoutPedidoUseCase } from './checkout-pedido.usecase';
 
 describe('CheckoutPedidoUseCase', () => {
@@ -22,7 +21,6 @@ describe('CheckoutPedidoUseCase', () => {
    let buscarItensPorPedidoIdUseCase: BuscarItensPorPedidoIdUseCase;
    let buscarProdutoPorIdUseCase: BuscarProdutoPorIdUseCase;
    let editarPedidoUseCase: EditarPedidoUseCase;
-   let solicitaPagamentoPedidoUseCase: SolicitaPagamentoPedidoUseCase;
    let clienteRepository: IRepository<Cliente>;
 
    const pedido: Pedido = {
@@ -100,9 +98,6 @@ describe('CheckoutPedidoUseCase', () => {
       );
       buscarProdutoPorIdUseCase = module.get<BuscarProdutoPorIdUseCase>(ProdutoConstants.BUSCAR_PRODUTO_POR_ID_USECASE);
       editarPedidoUseCase = module.get<EditarPedidoUseCase>(PedidoConstants.EDITAR_PEDIDO_USECASE);
-      solicitaPagamentoPedidoUseCase = module.get<SolicitaPagamentoPedidoUseCase>(
-         PagamentoConstants.SOLICITA_PAGAMENTO_PEDIDO_USECASE,
-      );
       clienteRepository = module.get<IRepository<Cliente>>(ClienteConstants.IREPOSITORY);
    });
 
@@ -125,12 +120,6 @@ describe('CheckoutPedidoUseCase', () => {
          const result = await useCase.checkout(pedido);
 
          expect(result.total).toEqual(itemPedidoMock.quantidade * produtoMock.preco);
-      });
-
-      it('deve lançar uma ValidationException se o estado do novo pedido não for PAGAMENTO_PENDENTE', async () => {
-         const pedidoInvalido = { ...pedido, estadoPedido: EstadoPedido.RECEBIDO };
-
-         await expect(useCase.checkout(pedidoInvalido)).rejects.toThrowError(ValidationException);
       });
 
       it('deve lançar uma ValidationException se o cliente do pedido não existir', async () => {
