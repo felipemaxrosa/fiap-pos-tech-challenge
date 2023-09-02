@@ -126,7 +126,7 @@ export const PedidoProviders: Provider[] = [
          PedidoConstants.BUSCAR_ITENS_PEDIDO_POR_PEDIDO_ID_USECASE,
          PedidoConstants.EDITAR_PEDIDO_USECASE,
          PagamentoConstants.SOLICITA_PAGAMENTO_PEDIDO_USECASE,
-         PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
+         PedidoConstants.CHECKOUT_PEDIDO_VALIDATOR,
       ],
       useFactory: (
          repository: IRepository<Produto>,

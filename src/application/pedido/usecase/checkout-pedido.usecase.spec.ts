@@ -122,12 +122,6 @@ describe('CheckoutPedidoUseCase', () => {
          expect(result.total).toEqual(itemPedidoMock.quantidade * produtoMock.preco);
       });
 
-      it('deve lançar uma ValidationException se o estado do novo pedido não for PAGAMENTO_PENDENTE', async () => {
-         const pedidoInvalido = { ...pedido, estadoPedido: EstadoPedido.RECEBIDO };
-
-         await expect(useCase.checkout(pedidoInvalido)).rejects.toThrowError(ValidationException);
-      });
-
       it('deve lançar uma ValidationException se o cliente do pedido não existir', async () => {
          jest.spyOn(clienteRepository, 'findBy').mockResolvedValue([]);
          jest.spyOn(buscarItensPorPedidoIdUseCase, 'buscarItensPedidoPorPedidoId').mockResolvedValue([itemPedidoMock]);
