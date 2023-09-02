@@ -21,15 +21,13 @@ export class WebhookPagamentoPedidoUseCase {
    ) {}
 
    async webhook(transacaoId: string): Promise<boolean> {
-      this.logger.log(`\n\n\nRODRIGO: webhook activated, transaçãoId = ${transacaoId}\n`);
+      this.logger.log(`Webhook: ativado para transaçãoId = ${transacaoId}\n`);
 
       // buscar pagamento associado a transaçãoID
       const pagamento = await this.buscarPagamento(transacaoId);
-      this.logger.log(`\n\npagamento = ${JSON.stringify(pagamento)}\n\n\n`);
 
       // buscar pedido associado a transaçãoID
       const pedido = await this.buscarPedido(pagamento, transacaoId);
-      this.logger.log(`\n\npedido = ${JSON.stringify(pedido)}\n\n\n`);
 
       // mudar status pedido para RECEBIDO
       pedido.estadoPedido = EstadoPedido.RECEBIDO;
@@ -39,13 +37,12 @@ export class WebhookPagamentoPedidoUseCase {
       pagamento.estadoPagamento = EstadoPagamento.CONFIRMADO;
       await this.repository.edit(pagamento);
 
+      this.logger.log(`Webhook: finalizado para transaçãoId = ${transacaoId}\n`);
       return true;
    }
 
    private async buscarPedido(pagamento: Pagamento, transacaoId: string): Promise<Pedido> {
-      this.logger.log(`\n\nFoi?\n\n\n`);
       const pedido = await this.buscarPedidoPorIdUseCase.buscarPedidoPorId(pagamento.pedidoId);
-      this.logger.log(`\n\nFoi!\n\n\n`);
       if (pedido === undefined) {
          this.logger.error(`Nenhum pedido associado a transação ${transacaoId} foi localizado no banco de dados`);
          throw new ServiceException(

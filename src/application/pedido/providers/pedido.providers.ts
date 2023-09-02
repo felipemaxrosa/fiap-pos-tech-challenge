@@ -54,8 +54,7 @@ export const PedidoProviders: Provider[] = [
    {
       provide: PedidoConstants.EDITAR_PEDIDO_USECASE,
       inject: [PedidoConstants.IREPOSITORY, PedidoConstants.SALVAR_PEDIDO_VALIDATOR],
-      useFactory: (repository: IPedidoRepository, validators: SalvarPedidoValidator[]): EditarPedidoUseCase =>
-         new EditarPedidoUseCase(repository, validators),
+      useFactory: (repository: IPedidoRepository): EditarPedidoUseCase => new EditarPedidoUseCase(repository),
    },
    {
       provide: PedidoConstants.DELETAR_PEDIDO_USECASE,

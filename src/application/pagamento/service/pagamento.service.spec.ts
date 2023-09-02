@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { IPagamentoService } from 'src/application/pagamento/service/pagamento.service.interface';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
@@ -59,6 +60,7 @@ describe('PagamentoService', () => {
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             ...PagamentoProviders,
+            ...PedidoProviders,
             ...PersistenceInMemoryProviders,
             // Mock do serviço IRepository<Pagamento>
             {
