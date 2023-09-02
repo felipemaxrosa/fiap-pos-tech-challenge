@@ -7,6 +7,7 @@
 # 🍔 Fast & Foodious [![CircleCI](https://dl.circleci.com/status-badge/img/gh/rodrigo-ottero/fast-n-foodious/tree/main.svg?style=shield&circle-token=12e7b6fd014f65fe4658af215a97de00d7bc0858)](https://dl.circleci.com/status-badge/redirect/gh/rodrigo-ottero/fast-n-foodious/tree/main) ![Static Badge](https://img.shields.io/badge/v2.0.0-version?logo=&color=%232496ED&labelColor=white&label=fast-n-foodious)
 
 Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da pós gradução em Software Architecture.
+[TLDR; **Avaliação FIAP**](#%EF%B8%8F-execução-em-modo-produção-avaliação-fiap)
 
 * [Arquitetura](#arquitetura)
 * [Instalação de Dependências Node](#-instalação-de-dependências-node)
@@ -20,7 +21,8 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
         * [Docker (Modo Desbravador!)](#-docker-modo-desbravador)
         * [Kubernetes (Modo Fácil!)](#-kubernetes-modo-fácil)
         * [Kubernetes (Modo Desbravador!)](#-kubernetes-modo-desbravador)
-    * [Documentação da API](#-documentação-da-api)
+* [Documentação da API (Swagger)](#-documentação-da-api-swagger)
+* [Desinstalação & Cleanup](#-desinstalação--cleanup)
 * [Testes](#-testes)
 * [Estrutura Base do Projeto](#%EF%B8%8F-estrutura-base-do-projeto)
 * [DDD](#ddd)
@@ -57,6 +59,8 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
             
             [![CircleCI](https://dl.circleci.com/insights-snapshot/gh/rodrigo-ottero/fast-n-foodious/main/fast-n-foodious/badge.svg?window=7d&circle-token=b9e60e9eea697022b96bf40bfec96876943129c1)](https://app.circleci.com/insights/github/rodrigo-ottero/fast-n-foodious/workflows/fast-n-foodious/overview?branch=main&reporting-window=last-7-days&insights-snapshot=true)
 
+***Nota:** Nas instruções abaixo, se assume que o diretório onde os comandos serão executados será a posta raiz do projeto ~/fast-n-foodious.*
+
 ## 🚀 Instalação de Dependências Node
 ```bash
 $ npm install
@@ -69,10 +73,10 @@ $ npm run build
 
 ## ⚡️ Executando a Aplicação
 O sistema pode ser executado com ou sem dependências externas.
+
 ### 📦 Variáveis de Ambiente
 `NODE_ENV` como variável de ambiente, com os seguintes valores:
-
-```bash
+```
 # env_name:
 - local-mock-repository   # Variáveis usadas para rodar a aplicação em ambiente local, SEM dependência de container mysql
                           # Exemplo de caso de uso: debugar local rodando com o banco em memória
@@ -85,7 +89,9 @@ O sistema pode ser executado com ou sem dependências externas.
 
 - prod                    # Variáveis usadas para rodar a aplicação em ambiente de produção, COM dependøencia de container mysql
                           # $ NODE_ENV=prod npm run start:debug
+```
 
+```bash
 # Desenvolvimento
 $ NODE_ENV={env_name} npm run start
 
@@ -102,13 +108,13 @@ $ npm run start:prod
 
 ### ⚡️ Execução em modo local (in-memory repository)
 Utilizado **`apenas para desenvolvimento local, modo watch, debug, testes unitários e e2e`**. Executa a aplicação em modo local, com repositório em memória:
-```
+```bash
 $ NODE_ENV=local-mock-repository npm run start
 ```
 
 ### ⚡️ Execução em modo local (mysql repository)
 Utilizado **`apenas para desenvolvimento local, modo watch, debug, testes e2e `**. Inicia o contianer mysql com as variáveis locais e inicia a aplicação `(fora do container)`com as variáveis locais:
-```
+```bash
 $ docker-compose --env-file ./envs/local.env up mysql
 $ docker ps
 CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                               NAMES
@@ -120,10 +126,12 @@ $ NODE_ENV=local npm run start
 
 ### 🚨⚡️ Execução em modo produção (Avaliação FIAP)
 Utilizado **`apenas para produção e para avaliação dos instrutores FIAP`**.
+***Nota:** O container da aplicação depende do mysql estar up & running. Então seja paciente, o tempo para o container do mysql estar disponível pode veriar, dependendo da disponibilidade de recursos e suas configurações de hardware locais.* 
 
 #### 🫧 Docker Compose (Modo Fácil!)
 Inicia o container da aplicação e do mysql com as variáveis de produção, utilizando o docker compose:
-```
+```bash
+$ docker-compose --env-file ./envs/prod.env build
 $ docker-compose --env-file ./envs/prod.env up -d
 $ docker ps
 CONTAINER ID   IMAGE                 COMMAND                  CREATED         STATUS         PORTS                               NAMES
@@ -133,7 +141,7 @@ CONTAINER ID   IMAGE                 COMMAND                  CREATED         ST
 
 #### 💀 Docker (Modo Desbravador!)
 Inicia o container da aplicação e do mysql com as variáveis de produção, utilizando *`imagens docker`* do mysql e da aplicação:
-```
+```bash
 $ docker network create fast-n-foodious-network
 
 $ docker run -d --rm --name mysql -p 3306:3306 \
@@ -144,17 +152,18 @@ $ docker run -d --rm --name mysql -p 3306:3306 \
 
 $ docker run -d --rm --name fast-n-foodious -p 3000:3000 \
     --env-file ./envs/prod.env --network fast-n-foodious-network \
-    ottero/fast-n-foodious
+    ottero/fast-n-foodious:latest
 
 $ docker ps
 CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS         PORTS                               NAMES
-88bf7eae7e46   ottero/fast-n-foodious               "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious
+88bf7eae7e46   ottero/fast-n-foodious:latest        "docker-entrypoint.s…"   2 seconds ago   Up 1 second    0.0.0.0:3000->3000/tcp              fast-n-foodious
 8b0268d435a6   mysql:8.0                            "docker-entrypoint.s…"   6 seconds ago   Up 5 seconds   0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 ```
+
 #### 🫧 Kubernetes (Modo Fácil!)
 Inicia o pod da aplicação e do mysql com as variáveis de produção, assim como suas dependências (services, deployments, replicasets, hpas, configmaps, secrets, pv, pvc) utilizando o helm:
 *Nota: Assume k8s pod/metrics-server up & running para habilitação de escalabilidade via HPA*
-```
+```bash
 $ helm install fast-n-foodious helm/
 
 NAME: fast-n-foodious
@@ -186,10 +195,12 @@ replicaset.apps/mysql-595c5c9d4f             1         1         1       3m28s
 NAME                                                      REFERENCE                    TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
 horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa   Deployment/fast-n-foodious   46%/70%, 0%/70%   1         3         1          3m28s
 ```
+
 #### 💀 Kubernetes (Modo Desbravador!)
 Inicia o pod da aplicação e do mysql com as variáveis de produção, assim como suas dependências (services, deployments, replicasets, hpas, configmaps, secrets, pv, pvc) utilizando o CLI kubectl:
 *Nota: Assume k8s pod/metrics-server up & running para habilitação de escalabilidade via HPA*
-```
+
+```bash
 $ kubectl apply -f k8s/fast-n-foodious-secret.yml 
 secret/fast-n-foodious-secret created
 
@@ -235,12 +246,110 @@ replicaset.apps/mysql-595c5c9d4f             1         1         1       2m58s
 NAME                                                      REFERENCE                    TARGETS           MINPODS   MAXPODS   REPLICAS   AGE
 horizontalpodautoscaler.autoscaling/fast-n-foodious-hpa   Deployment/fast-n-foodious   69%/80%, 0%/80%   1         3         1          2m48s 
 ```
-### 🧾 Documentação da API (Swagger)
+
+## 🧾 Documentação da API (Swagger)
 `docker`    http://localhost:3000/api
 
 `k8s`       http://localhost:80/api
 
-### 🎮 Extras Docker Compose
+## 🧼 Desinstalação & Cleanup
+Para realizar a desistalação da aplicação e o cleanup da infraestrutura, basta realizar os comandos abaixos de acordo com o modo de instalação.
+1. Se você utilizou o `docker` para subir a aplicação:
+
+```bash
+$ docker stop mysql fast-n-foodious
+mysql
+fast-n-foodious
+
+$ docker volume rm mysql-data
+mysql-data
+
+$ docker network rm fast-n-foodious-network
+fast-n-foodious-network
+
+docker image rm ottero/fast-n-foodious
+Untagged: ottero/fast-n-foodious:latest
+Untagged: ottero/fast-n-foodious@sha256:58d0731f992f2755ee311a25603fde8c8c9ecd57e3f5aad34c32b41783284625
+Deleted: sha256:e206061037e125c6b6b93bcc3b3ef61a59d8919753759d34527e38abe17c712e
+Deleted: sha256:8cc3b430e851d9d31ff5049bb95e8032398a32203b7fbc49d1ac0ef65b4d1387
+Deleted: sha256:a7fa60af5472f99af1f84d0f245d8e64f3897dcbd02f0c63f1817a09479a31cd
+Deleted: sha256:3b012aad6f4a48c30a61d8834cebd0a48d3ef2e0680cd86545243618f782d778
+Deleted: sha256:f93cb6531dabccc23848e273402d3fbef0515206efab1a29ccc1be81bf273dea
+```
+
+2. Se você utilizou o `docker compose` para subir a aplicação:
+```bash
+$ docker-compose --env-file ./envs/prod.env down -v
+[+] Running 4/4
+ ✔ Container fast-n-foodious                        Removed                                                                                           0.8s 
+ ✔ Container mysql                                  Removed                                                                                           1.1s 
+ ✔ Volume fast-n-foodious_mysql-data                Removed                                                                                           0.0s 
+ ✔ Network fast-n-foodious_fast-n-foodious-network  Removed                                                                                           0.1s
+
+$ docker image rm fast-n-foodious-fast-n-foodious
+Untagged: fast-n-foodious-fast-n-foodious:latest
+Deleted: sha256:357edf598a86260a5d755b8739b8be3ecd761ed51f8c9a84a5d32b93971e3e5e
+```
+
+3. Se você utilizou o `helm` para subir a aplicação:
+```bash
+$ helm uninstall fast-n-foodious
+release "fast-n-foodious" uninstalled
+```
+
+4. Se você utilizou o `kubeclt` para subir a aplicação:
+```bash
+$ kubectl delete -f k8s/fast-n-foodious-hpa.yml 
+horizontalpodautoscaler.autoscaling "fast-n-foodious-hpa" deleted
+
+$ kubectl delete -f k8s/fast-n-foodious-service.yml 
+service "fast-n-foodious-svc" deleted
+service "mysql" deleted
+
+$ kubectl delete -f k8s/fast-n-foodious-deployment.yml 
+deployment.apps "fast-n-foodious" deleted
+deployment.apps "mysql" deleted
+
+$ kubectl delete -f k8s/fast-n-foodious-pvc.yml 
+persistentvolumeclaim "fast-n-foodious-pvc" deleted
+
+$ kubectl delete -f k8s/fast-n-foodious-pv.yml 
+persistentvolume "fast-n-foodious-pv" deleted
+
+$ kubectl delete -f k8s/fast-n-foodious-configmap.yml 
+configmap "fast-n-foodious-env" deleted
+configmap "mysql-env" deleted
+
+$ kubectl delete -f k8s/fast-n-foodious-secret.yml 
+secret "fast-n-foodious-secret" deleted
+
+$ docker image rm ottero/fast-n-foodious
+Untagged: ottero/fast-n-foodious:latest
+Untagged: ottero/fast-n-foodious@sha256:58d0731f992f2755ee311a25603fde8c8c9ecd57e3f5aad34c32b41783284625
+Deleted: sha256:e206061037e125c6b6b93bcc3b3ef61a59d8919753759d34527e38abe17c712e
+Deleted: sha256:8cc3b430e851d9d31ff5049bb95e8032398a32203b7fbc49d1ac0ef65b4d1387
+Deleted: sha256:a7fa60af5472f99af1f84d0f245d8e64f3897dcbd02f0c63f1817a09479a31cd
+Deleted: sha256:3b012aad6f4a48c30a61d8834cebd0a48d3ef2e0680cd86545243618f782d778
+Deleted: sha256:f93cb6531dabccc23848e273402d3fbef0515206efab1a29ccc1be81bf273dea
+```
+
+5. Extra: se os testes de stress foram realizados no cluster kubernetes, via job k6:
+
+```bash
+$ kubectl delete -f k8s/fast-n-foodious-job.yml 
+job.batch "k6-stress-job" deleted
+configmap "k6-stress-env" deleted
+
+$ docker image rm 24hoursmedia/k6-xarch
+Untagged: 24hoursmedia/k6-xarch:latest
+Untagged: 24hoursmedia/k6-xarch@sha256:62f55c01e327d15bef89275168cab9a7bb11c8450203bf15d052cfe2654d8a29
+Deleted: sha256:0ea08d7adac52324b25f57d126491c6b7c2bf48ea0c714c893cdcebc1f2b8929
+Deleted: sha256:4f90d3b645cdd7184811448c570951ee7c3c032770c1956f25e8fcdfd4d79e9b
+Deleted: sha256:6f16c4dda6e7ae2562218ba06bae1285ff33934b991620db4f591ac60d35ee5c
+Deleted: sha256:0f7b3ff8b310adb0c38fa8108967e51e3431bc4b7ce350de93839eeffcefd34c
+```
+
+## 🎮 Extras Docker Compose
 
 ```bash
 # Build com docker-compose utilizando env específica
@@ -263,6 +372,7 @@ $ docker-compose --env-file ./envs/{env-name}.env down {service}
 - fast-n-foodious
 - mysql
 ```
+
 ## 🧪 Testes
 O projeto cobre testes unitários, testes e2e e testes isolados de api (para desenvolvedor), além de verifiar a cobertura dos testes:
 ```bash
@@ -280,10 +390,12 @@ $ NODE_ENV=local-mock-repository npm run test:e2e
 # 2. Considere remover o volume criado no mysql caso execute o teste mais de uma vez!
 $ NODE_ENV=local npm run test:e2e
 ```
+
 ### 🧪 Testes Stress 
 Excução de testes de stress cluster k8s, utilizando job k6.
 *Nota: A execução tem duração de 60s, estressando o path /v1/categoria. Assume a aplicação e mysql up & running no cluster kubernetes*
-```
+
+```bash
 $ kubectl apply -f k8s/fast-n-foodious-job.yml 
 job.batch/k6-stress-job created
 configmap/k6-stress-env created
@@ -305,6 +417,7 @@ $ kubectl logs -f k6-stress-job-fkjv9
 
   execution: local
 ```
+
 # 🏛️ Estrutura Base do Projeto
 ```
 .circleci/                              # Configurações de pipelines CI/CD
