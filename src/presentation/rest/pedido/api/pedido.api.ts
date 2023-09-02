@@ -2,6 +2,7 @@ import {
    Body,
    Controller,
    Get,
+   HttpCode,
    Inject,
    Logger,
    NotFoundException,
@@ -83,7 +84,7 @@ export class PedidoRestApi extends BaseRestApi {
       summary: 'Edita um pedido',
       description: 'Edita um pedido, identificado pelo id',
    })
-   @ApiCreatedResponse({ description: 'Pedido editado com sucesso', type: EditarPedidoRequest })
+   @ApiOkResponse({ description: 'Pedido editado com sucesso', type: EditarPedidoRequest })
    async editar(@Param('id', ParseIntPipe) id: number, @Body() request: EditarPedidoRequest): Promise<Pedido> {
       this.logger.debug(`Editando pedido request: ${JSON.stringify(request)}`);
 
@@ -183,6 +184,7 @@ export class PedidoRestApi extends BaseRestApi {
       summary: 'Realiza o checkout do pedido',
       description: 'Realiza o checkout do pedido',
    })
+   @HttpCode(200)
    @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: CheckoutPedidoResponse })
    async checkout(@Param('id', ParseIntPipe) id: number): Promise<CheckoutPedidoResponse> {
       this.logger.debug(`Realizando checkout do pedido id: ${id}`);

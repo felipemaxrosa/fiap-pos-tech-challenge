@@ -36,7 +36,7 @@ export class ItemPedidoRestApi extends BaseRestApi {
       summary: 'Edita um item do pedido',
       description: 'Edita um item do pedido, identificado pelo id do item vinculado ao id do pedido e id do produto',
    })
-   @ApiCreatedResponse({ description: 'Item do pedido editado com sucesso', type: EditarItemPedidoRequest })
+   @ApiOkResponse({ description: 'Item do pedido editado com sucesso', type: EditarItemPedidoRequest })
    async editar(@Param('id', ParseIntPipe) id: number, @Body() request: EditarItemPedidoRequest): Promise<ItemPedido> {
       this.logger.debug(`Editando item do pedido request: ${JSON.stringify(request)}`);
 

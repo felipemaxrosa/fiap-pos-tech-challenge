@@ -47,6 +47,16 @@ export const PedidoProviders: Provider[] = [
          // new CheckoutPedidoValidator(pedidoRepository),
       ],
    },
+   
+   {
+      provide: PedidoConstants.CHECKOUT_PEDIDO_VALIDATOR,
+      inject: [ ClienteConstants.IREPOSITORY],
+      useFactory: (
+         clienteRepository: IRepository<Cliente>,
+      ): CheckoutPedidoValidator[] => [
+         new ClienteExistentePedidoValidator(clienteRepository),
+      ],
+   },
    {
       provide: PedidoConstants.EDITAR_PEDIDO_VALIDATOR,
       inject: [ClienteConstants.IREPOSITORY, PedidoConstants.IREPOSITORY],
