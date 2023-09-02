@@ -16,6 +16,23 @@ export class PedidoTypeormRepository implements IPedidoRepository {
       private repository: Repository<PedidoEntity>,
    ) {}
 
+   async find(options: any): Promise<Pedido[]> {
+      this.logger.debug(`Realizando consulta de pedidos: com as condições ${JSON.stringify(options)}`);
+      return this.repository
+         .find(options)
+         .then((pedidoEntities) => {
+            this.logger.debug(
+               `Consulta de pedidos realizada com sucesso com as condições: '${JSON.stringify(options)}'`,
+            );
+            return pedidoEntities.map((pedido) => pedido);
+         })
+         .catch((error) => {
+            throw new RepositoryException(
+               `Houve um erro ao buscar os pedidos com as condições: '${JSON.stringify(options)}': ${error.message}`,
+            );
+         });
+   }
+
    async findBy(attributes: any): Promise<Pedido[]> {
       this.logger.debug(`Realizando consulta de pedidos: com os parâmetros ${JSON.stringify(attributes)}`);
       return this.repository

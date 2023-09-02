@@ -102,7 +102,10 @@ describe('PedidoService', () => {
                      // retorna vazio, simulando que não encontrou registros pelo atributos passados por parâmetro
                      return Promise.resolve({});
                   }),
-                  findAll: jest.fn(() => Promise.resolve(todosOsPedidos)),
+                  find: jest.fn(() => {
+                     return Promise.resolve(todosOsPedidos);
+                  }),
+                  // findAll: jest.fn(() => Promise.resolve(todosOsPedidos)),
                   // mock para a chamada repository.edit(produto)
                   edit: jest.fn(() => Promise.resolve(pedido)),
                   // mock para a chamada repository.delete(id)
@@ -322,44 +325,14 @@ describe('PedidoService', () => {
 
    describe('listarPedidosNaoFinalizados', () => {
       it('deve listar pedidos pendentes', async () => {
-         const pedidosOrdenadosEsperados = [
-            {
-               id: 4,
-               clienteId: 4,
-               dataInicio: '2023-06-20',
-               estadoPedido: 3,
-               ativo: true,
-            },
-            {
-               id: 13,
-               clienteId: 13,
-               dataInicio: '2023-06-20',
-               estadoPedido: 3,
-               ativo: true,
-            },
-            {
-               id: 3,
-               clienteId: 3,
-               dataInicio: '2023-06-20',
-               estadoPedido: 1,
-               ativo: true,
-            },
-            {
-               id: 10,
-               clienteId: 10,
-               dataInicio: '2023-06-20',
-               estadoPedido: 1,
-               ativo: true,
-            },
-         ];
          await service.listarPedidosNaoFinalizados().then((pedidos) => {
-            expect(pedidos).toEqual(pedidosOrdenadosEsperados);
+            expect(pedidos).toEqual(todosOsPedidos);
          });
       });
 
       it('não deve encontrar pedido pendente quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(pedidoRepository, 'findAll').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'find').mockRejectedValue(error);
 
          await expect(service.listarPedidosNaoFinalizados()).rejects.toThrowError(ServiceException);
       });

@@ -5,38 +5,30 @@ import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { PedidoConstants } from 'src/shared/constants';
 
-const estadosDePedidoParaListagem = [EstadoPedido.RECEBIDO, EstadoPedido.EM_PREPARACAO, EstadoPedido.PRONTO];
-
 @Injectable()
 export class BuscarTodosPedidosNaoFinalizadosUseCase {
    private logger = new Logger(BuscarTodosPedidosNaoFinalizadosUseCase.name);
 
    constructor(@Inject(PedidoConstants.IREPOSITORY) private repository: IPedidoRepository) {}
 
-   private ordenarPorEstadoDoPedido(pedidoA: Pedido, pedidoB: Pedido): number {
-      if (pedidoA.estadoPedido > pedidoB.estadoPedido) {
-         return -1;
-      }
-
-      if (pedidoA.estadoPedido < pedidoB.estadoPedido) {
-         return 1;
-      }
-
-      return 0;
-   }
-
    async buscarTodosPedidos(): Promise<Pedido[]> {
-      const pedidos = await this.repository.findAll().catch((error) => {
-         this.logger.error(`Erro ao buscar todos os pedidos no banco de dados: ${error}`);
-         throw new ServiceException(`Erro ao buscar todos os pedidos no banco de dados: ${error}`);
-      });
-
-      const pedidosNaoFinalizados = pedidos.filter((pedido) =>
-         estadosDePedidoParaListagem.includes(pedido.estadoPedido),
-      );
-
-      const pedidosNaoFinalizadosOrdenados = pedidosNaoFinalizados.sort(this.ordenarPorEstadoDoPedido);
-
-      return pedidosNaoFinalizadosOrdenados;
+      return await this.repository
+         .find({
+            where: [
+               { estadoPedido: EstadoPedido.RECEBIDO },
+               { estadoPedido: EstadoPedido.EM_PREPARACAO },
+               { estadoPedido: EstadoPedido.PRONTO },
+            ],
+            order: {
+               estadoPedido: 'DESC',
+            },
+         })
+         .then((pedidos) => {
+            return pedidos;
+         })
+         .catch((error) => {
+            this.logger.error(`Erro ao buscar todos pedidos no banco de dados: ${error} `);
+            throw new ServiceException(`Houve um erro ao buscar os pedidos: ${error}`);
+         });
    }
 }

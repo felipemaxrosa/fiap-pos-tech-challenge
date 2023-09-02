@@ -46,7 +46,7 @@ describe('BuscarTodosPedidosNaoFinalizadosUseCase', () => {
             {
                provide: PedidoConstants.IREPOSITORY,
                useValue: {
-                  findAll: jest.fn(() => Promise.resolve([pedido1, pedido2, pedido3])),
+                  find: jest.fn(() => Promise.resolve([pedido3, pedido2, pedido1])),
                },
             },
          ],

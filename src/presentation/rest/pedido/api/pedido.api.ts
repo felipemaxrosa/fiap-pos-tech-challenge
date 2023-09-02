@@ -41,8 +41,8 @@ export class PedidoRestApi extends BaseRestApi {
 
    @Get()
    @ApiOperation({
-      summary: 'Lista todos os pedidos com status RECEBIDO = 1, EM_PREPARACAO = 2, PRONTO = 3',
-      description: 'Lista de pedidos. ordenado pelos status pronto, em preparação e recebido',
+      summary: 'Lista todos os pedidos (recebidos, em preparação e pronto)',
+      description: 'Lista pedidos, ordenado pelos status PRONTO (3), EM_PREPARACAO (2) e RECEBIDO (1)',
    })
    @ApiOkResponse({
       description: 'Pedidos encontrados com sucesso',
