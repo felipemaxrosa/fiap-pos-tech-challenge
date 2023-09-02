@@ -101,8 +101,8 @@ export class PedidoRestApi extends BaseRestApi {
 
    @Get('/pendentes')
    @ApiOperation({
-      summary: 'Lista pedidos pendentes',
-      description: 'Lista pedidos com status recebido ou em preparo',
+      summary: 'Lista pedidos pendentes de pagamento',
+      description: 'Lista pedidos pendentes (PAGAMENTO_PENDENTE=0)',
    })
    @ApiOkResponse({
       description: 'Pedidos encontrados com sucesso',
@@ -110,7 +110,7 @@ export class PedidoRestApi extends BaseRestApi {
       isArray: true,
    })
    async listarPendentes(): Promise<ListarPedidoPendenteResponse[]> {
-      this.logger.debug(`Listando pedidos pendentes`);
+      this.logger.debug(`Listando pedidos pendentes de pagamento`);
 
       return await this.service.listarPedidosPendentes().then((pedidos) => {
          return pedidos.map((pedido) => new ListarPedidoPendenteResponse(pedido));

@@ -84,7 +84,7 @@ export class PedidoMemoryRepository implements IPedidoRepository {
    }
 
    async listarPedidosPendentes(): Promise<Pedido[]> {
-      this.logger.debug('Listando pedidos pendentes');
+      this.logger.debug('Listando pedidos pendentes de pagamento');
 
       return new Promise<Pedido[]>((resolve) => {
          const pedidos = this.pedidosRepository.filter(
