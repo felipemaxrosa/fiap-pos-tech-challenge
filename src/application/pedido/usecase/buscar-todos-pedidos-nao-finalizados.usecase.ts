@@ -22,6 +22,7 @@ export class BuscarTodosPedidosNaoFinalizadosUseCase {
             order: {
                estadoPedido: 'DESC',
             },
+            relations: ['itensPedido', 'itensPedido.produto'],
          })
          .then((pedidos) => {
             return pedidos;

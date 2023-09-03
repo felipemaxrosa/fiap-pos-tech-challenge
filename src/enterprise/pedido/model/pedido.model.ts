@@ -1,3 +1,4 @@
+import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 
 export class Pedido {
@@ -8,5 +9,6 @@ export class Pedido {
       public ativo: boolean,
       public id?: number,
       public total?: number,
+      public itensPedido?: ItemPedido[],
    ) {}
 }
