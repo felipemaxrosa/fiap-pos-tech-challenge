@@ -30,6 +30,36 @@ describe('PagamentoTypeormRepository', () => {
       id: 1,
    };
 
+   const mockedPagamentoEditado: Pagamento = {
+      dataHoraPagamento: new Date('2023-08-31'),
+      estadoPagamento: EstadoPagamento.REJEITADO,
+      pedidoId: 2,
+      total: 101,
+      transacaoId: '2',
+      id: 1,
+   };
+
+   const mockedPagamentoEditadoEntity: PagamentoEntity = {
+      dataHoraPagamento: new Date('2023-08-31'),
+      estadoPagamento: EstadoPagamento.REJEITADO,
+      pedidoId: 2,
+      total: 101,
+      transacaoId: '2',
+      id: 1,
+   };
+
+   const pagamentos: Pagamento[] = [
+      mockedPagamento,
+      {
+         dataHoraPagamento: new Date(),
+         estadoPagamento: EstadoPagamento.PENDENTE,
+         pedidoId: 2,
+         total: 20,
+         transacaoId: '2',
+         id: 2,
+      },
+   ];
+
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
@@ -114,12 +144,31 @@ describe('PagamentoTypeormRepository', () => {
    });
 
    describe('edit', () => {
-      it('editar deve falhar porque não foi implementado', async () => {
-         await expect(repository.edit(mockedPagamento)).rejects.toThrow(
-            new RepositoryException('Método não implementado.'),
-         );
-      });
-   });
+      it('deve editar pagamento corretamente', async () => {
+         const repositorySpy = jest.spyOn(repositoryTypeOrm, 'save').mockResolvedValue(mockedPagamentoEditadoEntity);
+
+         await repository.edit(mockedPagamentoEditado).then((pagamentoEditado) => {
+            // verifica se o pagamento editado contém os mesmos dados passados como input
+            expect(pagamentoEditado.id).toEqual(mockedPagamentoEditado.id);
+            expect(pagamentoEditado.pedidoId).toEqual(mockedPagamentoEditado.pedidoId);
+            expect(pagamentoEditado.estadoPagamento).toEqual(mockedPagamentoEditado.estadoPagamento);
+            expect(pagamentoEditado.total).toEqual(mockedPagamentoEditado.total);
+            expect(pagamentoEditado.transacaoId).toEqual(mockedPagamentoEditado.transacaoId);
+            expect(pagamentoEditado.dataHoraPagamento.getTime()).toEqual(
+               mockedPagamentoEditado.dataHoraPagamento.getTime(),
+            );
+         });
+         expect(repositorySpy).toBeCalled();
+      }); // end it deve editar pagamento corretamente
+
+      it('não deve editar pagamento quando houver um erro de banco ', async () => {
+         const error = new TypeORMError('Erro genérico do TypeORM');
+         jest.spyOn(repositoryTypeOrm, 'save').mockRejectedValue(error);
+
+         // verifica se foi lançada uma exception na camada infra
+         await expect(repository.edit(mockedPagamentoEditado)).rejects.toThrowError(RepositoryException);
+      }); // end it não deve editar pagamento quando houver um erro de banco
+   }); // end describe edit
 
    describe('delete', () => {
       it('deletar deve falhar porque não foi implementado', async () => {

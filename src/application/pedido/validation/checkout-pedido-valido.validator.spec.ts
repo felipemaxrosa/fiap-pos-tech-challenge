@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CheckoutPedidoIdValidoValidator } from 'src/application/pedido/validation/checkout-pedido-id-valido.validator';
+import { CheckoutPedidoValidoValidator } from 'src/application/pedido/validation/checkout-pedido-valido-validator.service';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PedidoConstants } from 'src/shared/constants';
 
 describe('CheckoutPedidoValidator', () => {
-   let validator: CheckoutPedidoIdValidoValidator;
+   let validator: CheckoutPedidoValidoValidator;
    let repository: IRepository<Pedido>;
 
    const pedido: Pedido = {
@@ -28,7 +28,7 @@ describe('CheckoutPedidoValidator', () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({
          providers: [
-            CheckoutPedidoIdValidoValidator,
+            CheckoutPedidoValidoValidator,
             // Mock do serviço IRepository<Pedido>
             {
                provide: PedidoConstants.IREPOSITORY,
@@ -46,7 +46,7 @@ describe('CheckoutPedidoValidator', () => {
 
       // Obtém a instância do serviço e repositório a partir do módulo de teste
       repository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
-      validator = module.get<CheckoutPedidoIdValidoValidator>(CheckoutPedidoIdValidoValidator);
+      validator = module.get<CheckoutPedidoValidoValidator>(CheckoutPedidoValidoValidator);
    });
 
    describe('injeção de dependências', () => {
@@ -64,7 +64,7 @@ describe('CheckoutPedidoValidator', () => {
 
       it('não deve validar pedido quando id estiver vazio', async () => {
          await expect(validator.validate(pedidoSemId)).rejects.toThrowError(
-            CheckoutPedidoIdValidoValidator.PEDIDO_INEXISTENTE_ERROR_MESSAGE,
+            CheckoutPedidoValidoValidator.PEDIDO_INEXISTENTE_ERROR_MESSAGE,
          );
       });
 
@@ -75,7 +75,7 @@ describe('CheckoutPedidoValidator', () => {
             return Promise.resolve([]);
          });
          await expect(validator.validate(pedido)).rejects.toThrowError(
-            CheckoutPedidoIdValidoValidator.PEDIDO_INEXISTENTE_ERROR_MESSAGE,
+            CheckoutPedidoValidoValidator.PEDIDO_INEXISTENTE_ERROR_MESSAGE,
          );
       });
    });

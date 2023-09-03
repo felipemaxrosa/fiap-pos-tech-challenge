@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { SolicitaPagamentoPedidoUseCase } from 'src/application/pagamento/usecase/solicita-pagamento-pedido.usecase';
+import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
@@ -35,7 +36,7 @@ describe('SolicitaPagamentoPedidoUseCase', () => {
 
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
-         providers: [...PagamentoProviders, ...PersistenceInMemoryProviders],
+         providers: [...PedidoProviders, ...PagamentoProviders, ...PersistenceInMemoryProviders],
       }).compile();
 
       // Desabilita a saída de log
@@ -54,14 +55,6 @@ describe('SolicitaPagamentoPedidoUseCase', () => {
          expect(pagamentoResponse.pedidoId).toEqual(pedido.id);
       });
 
-      // it('deve retornar undefined quando o pagamento não for encontrado', async () => {
-      //    jest.spyOn(repository, 'findBy').mockResolvedValue([]);
-      //
-      //    const result = await useCase.buscaEstadoPagamento(2);
-      //
-      //    expect(result).toBeUndefined();
-      // });
-      //
       it('deve lançar uma ServiceException em caso de erro no repositório', async () => {
          const error = new Error('Erro no repositório');
          jest.spyOn(repository, 'save').mockRejectedValue(error);

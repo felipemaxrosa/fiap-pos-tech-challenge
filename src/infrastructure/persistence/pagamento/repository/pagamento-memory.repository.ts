@@ -6,7 +6,7 @@ import { IRepository } from 'src/enterprise/repository/repository';
 export class PagamentoMemoryRepository implements IRepository<Pagamento> {
    private logger: Logger = new Logger(PagamentoMemoryRepository.name);
 
-   private pagamentosRepository: Array<Pagamento> = [];
+   pagamentosRepository: Array<Pagamento> = [];
    private static ID_COUNT = 0;
 
    async findBy(attributes: Partial<Pagamento>): Promise<Pagamento[]> {
@@ -25,12 +25,12 @@ export class PagamentoMemoryRepository implements IRepository<Pagamento> {
 
    async save(pagamento: Pagamento): Promise<Pagamento> {
       this.logger.debug(`Efetuando novo pagamento: ${pagamento}`);
-
-      return new Promise<Pagamento>((resolve) => {
+      const promise = new Promise<Pagamento>((resolve) => {
          pagamento.id = ++PagamentoMemoryRepository.ID_COUNT;
          this.pagamentosRepository.push(pagamento);
          resolve(pagamento);
       });
+      return promise;
    }
 
    async edit(pagamento: Pagamento): Promise<Pagamento> {
@@ -47,7 +47,7 @@ export class PagamentoMemoryRepository implements IRepository<Pagamento> {
       });
    }
 
-   findAll(): Promise<Pagamento[]> {
+   async findAll(): Promise<Pagamento[]> {
       this.logger.debug('Listando todos os pagamentos');
 
       return new Promise<Pagamento[]>((resolve) => {

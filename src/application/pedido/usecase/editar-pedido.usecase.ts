@@ -1,10 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { EditarPedidoValidator } from 'src/application/pedido/validation/editar-pedido.validator';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { PedidoConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
-import { EditarPedidoValidator } from 'src/application/pedido/validation/editar-pedido.validator';
 
 @Injectable()
 export class EditarPedidoUseCase {
@@ -18,7 +18,6 @@ export class EditarPedidoUseCase {
 
    async editarPedido(pedido: Pedido): Promise<Pedido> {
       await ValidatorUtils.executeValidators(this.validators, pedido);
-
       return await this.repository
          .edit(pedido)
          .then((pedidoEditado) => pedidoEditado)
