@@ -30,7 +30,7 @@ describe('ClienteExistentePedidoValidator', () => {
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             ClienteExistentePedidoValidator,
-            // Mock do serviço IRepository<Pedido>
+            // Mock do serviço IRepository<Cliente>
             {
                provide: ClienteConstants.IREPOSITORY,
                useValue: {
