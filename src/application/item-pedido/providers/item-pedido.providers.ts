@@ -62,8 +62,10 @@ export const ItemPedidoProviders: Provider[] = [
    },
    {
       provide: ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE,
-      inject: [ItemPedidoConstants.IREPOSITORY],
-      useFactory: (repository: IRepository<ItemPedido>): DeletarItemPedidoUseCase =>
-         new DeletarItemPedidoUseCase(repository),
+      inject: [ItemPedidoConstants.IREPOSITORY, ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR],
+      useFactory: (
+         repository: IRepository<ItemPedido>,
+         editarValidators: EditarItemPedidoValidator[],
+      ): DeletarItemPedidoUseCase => new DeletarItemPedidoUseCase(repository, editarValidators),
    },
 ];
