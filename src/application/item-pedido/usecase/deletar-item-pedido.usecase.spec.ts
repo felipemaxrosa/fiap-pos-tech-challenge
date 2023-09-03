@@ -15,7 +15,7 @@ describe('DeletarItemPedidoUseCase', () => {
       pedidoId: 1,
       produtoId: 2,
       quantidade: 3,
-      id: 123,
+      id: 1,
    };
 
    beforeEach(async () => {
@@ -28,6 +28,8 @@ describe('DeletarItemPedidoUseCase', () => {
 
       useCase = module.get<DeletarItemPedidoUseCase>(ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE);
       repository = module.get<IRepository<ItemPedido>>(ItemPedidoConstants.IREPOSITORY);
+
+      jest.spyOn(repository, 'findBy').mockResolvedValue([itemPedidoMock]);
    });
 
    describe('deletarItemPedido', () => {

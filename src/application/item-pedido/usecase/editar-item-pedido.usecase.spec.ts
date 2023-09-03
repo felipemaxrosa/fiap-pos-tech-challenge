@@ -28,6 +28,8 @@ describe('DeletarItemPedidoUseCase', () => {
 
       useCase = module.get<DeletarItemPedidoUseCase>(ItemPedidoConstants.DELETAR_ITEM_PEDIDO_USECASE);
       repository = module.get<IRepository<ItemPedido>>(ItemPedidoConstants.IREPOSITORY);
+
+      jest.spyOn(repository, 'findBy').mockResolvedValue([itemPedidoMock]);
    });
 
    describe('deletarItemPedido', () => {

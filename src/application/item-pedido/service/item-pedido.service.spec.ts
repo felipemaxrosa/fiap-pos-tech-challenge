@@ -63,6 +63,7 @@ describe('ItemPedidoService', () => {
 
       jest.spyOn(pedidoRepository, 'findBy').mockResolvedValue([pedido]);
       jest.spyOn(produtoRepository, 'findBy').mockResolvedValue([produto]);
+      jest.spyOn(repository, 'findBy').mockResolvedValue([itemPedido]);
    });
 
    describe('injeção de dependências', () => {

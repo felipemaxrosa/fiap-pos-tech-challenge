@@ -72,19 +72,18 @@ export class ItemPedidoTypeormRepository implements IRepository<ItemPedido> {
    }
 
    async delete(id: number): Promise<boolean> {
-      this.logger.debug(`Deletando logicamente pedido id: ${id}`);
-      const pedido = (await this.findBy({ id }))[0];
-      // pedido.ativo = false;
+      this.logger.debug(`Deletando item de pedido id: ${id}`);
+      const itemPedido = (await this.findBy({ id }))[0];
 
       return this.repository
-         .delete({ pedidoId: id })
+         .delete({ id })
          .then(() => {
-            this.logger.debug(`Pedido deletado logicamente com sucesso no banco de dados: ${pedido.id}`);
+            this.logger.debug(`Item do pedido deletado com sucesso no banco de dados: ${id}`);
             return true;
          })
          .catch((error) => {
             throw new RepositoryException(
-               `Houve um erro ao deletar logicamente o pedido no banco de dados: '${pedido}': ${error.message}`,
+               `Houve um erro ao deletar o item de pedido no banco de dados: '${itemPedido}': ${error.message}`,
             );
          });
    }
