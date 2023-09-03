@@ -42,7 +42,6 @@ describe('DeletarItemPedidoUseCase', () => {
       });
 
       it('deve lançar uma ServiceException em caso de erro no repositório', async () => {
-         jest.spyOn(repository, 'findBy').mockResolvedValue([itemPedidoMock]);
          const error = new Error('Erro no repositório');
          jest.spyOn(repository, 'delete').mockRejectedValue(error);
 
