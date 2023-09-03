@@ -1,10 +1,10 @@
 import { Body, Controller, Inject, Logger, Post, Put, Delete, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
-import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
-import { SalvarItemPedidoResponse, SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request';
+import { SalvarItemPedidoResponse, SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido';
 import { EditarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request/editar-item-pedido.request';
+import { EditarItemPedidoResponse } from 'src/presentation/rest/item-pedido/response/editar-item-pedido.response';
 import { ItemPedidoConstants } from 'src/shared/constants';
 
 @Controller('v1/item')
@@ -36,8 +36,11 @@ export class ItemPedidoRestApi extends BaseRestApi {
       summary: 'Edita um item do pedido',
       description: 'Edita um item do pedido, identificado pelo id do item vinculado ao id do pedido e id do produto',
    })
-   @ApiOkResponse({ description: 'Item do pedido editado com sucesso', type: EditarItemPedidoRequest })
-   async editar(@Param('id', ParseIntPipe) id: number, @Body() request: EditarItemPedidoRequest): Promise<ItemPedido> {
+   @ApiOkResponse({ description: 'Item do pedido editado com sucesso', type: EditarItemPedidoResponse })
+   async editar(
+      @Param('id', ParseIntPipe) id: number,
+      @Body() request: EditarItemPedidoRequest,
+   ): Promise<EditarItemPedidoResponse> {
       this.logger.debug(`Editando item do pedido request: ${JSON.stringify(request)}`);
 
       return await this.service
@@ -47,7 +50,7 @@ export class ItemPedidoRestApi extends BaseRestApi {
          })
          .then((itemPedido) => {
             this.logger.log(`Item do pedido editado com sucesso: ${itemPedido.id}`);
-            return itemPedido;
+            return new EditarItemPedidoResponse(itemPedido);
          });
    }
 

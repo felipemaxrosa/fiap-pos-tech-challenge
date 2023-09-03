@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { ItemPedidoRestApi } from 'src/presentation/rest/item-pedido/api/item-pedido.api';
-import { SalvarItemPedidoRequest, SalvarItemPedidoResponse } from 'src/presentation/rest/item-pedido/request';
+import { SalvarItemPedidoRequest, SalvarItemPedidoResponse } from 'src/presentation/rest/item-pedido';
 import { ItemPedidoConstants } from 'src/shared/constants';
 
 describe('ItemPedidoRestApi', () => {
