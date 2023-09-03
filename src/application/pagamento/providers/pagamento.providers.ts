@@ -4,8 +4,8 @@ import { PagamentoService } from 'src/application/pagamento/service/pagamento.se
 import {
    ConsultaEstadoPagamentoPedidoUseCase,
    SolicitaPagamentoPedidoUseCase,
+   WebhookPagamentoPedidoUseCase,
 } from 'src/application/pagamento/usecase';
-import { WebhookPagamentoPedidoUseCase } from 'src/application/pagamento/usecase/webhook-pagamento-pedido.usecase';
 import { WebhookPagamentoPagamentoValidoValidator } from 'src/application/pagamento/validation/webhook-pagamento-pagamento-valido-validator.service';
 import { WebhookPagamentoPedidoValidoValidator } from 'src/application/pagamento/validation/webhook-pagamento-pedido-valido-validator.service';
 import { WebhookPagamentoTransacaoIdValidoValidator } from 'src/application/pagamento/validation/webhook-pagamento-transacao-id-valido.validator';
@@ -51,13 +51,18 @@ export const PagamentoProviders: Provider[] = [
    },
    {
       provide: PagamentoConstants.WEBHOOK_PAGAMENTO_VALIDATOR,
-      inject: [PagamentoConstants.IREPOSITORY, PedidoConstants.IREPOSITORY],
+      inject: [
+         PagamentoConstants.IREPOSITORY,
+         PedidoConstants.IREPOSITORY,
+         PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE,
+      ],
       useFactory: (
          repositoryPagamento: IRepository<Pagamento>,
          repositoryPedido: IRepository<Pedido>,
+         buscarPedidoPorIdUseCase: BuscarPedidoPorIdUseCase,
       ): WebhookPagamentoValidator[] => [
          new WebhookPagamentoTransacaoIdValidoValidator(repositoryPagamento),
-         new WebhookPagamentoPedidoValidoValidator(repositoryPedido),
+         new WebhookPagamentoPedidoValidoValidator(repositoryPedido, repositoryPagamento, buscarPedidoPorIdUseCase),
          new WebhookPagamentoPagamentoValidoValidator(repositoryPagamento),
       ],
    },

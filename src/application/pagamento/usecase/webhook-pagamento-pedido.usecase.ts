@@ -2,7 +2,8 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WebhookPagamentoValidator } from 'src/application/pagamento/validation/webhook-pagamento.validator';
 import { BuscarPedidoPorIdUseCase, EditarPedidoUseCase } from 'src/application/pedido/usecase';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { ValidationException } from 'src/enterprise/exception/validation.exception';
+import { EstadoPagamento, getEstadoPagamentoFromValue } from 'src/enterprise/pagamento/enums/pagamento.enums';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
@@ -25,24 +26,41 @@ export class WebhookPagamentoPedidoUseCase {
 
    async webhook(transacaoId: string, estadoPagamento: number): Promise<boolean> {
       this.logger.log(`Webhook: ativado para transaçãoId = ${transacaoId} para estado = ${estadoPagamento}\n`);
-
+      const estadoPagamentoEnum: EstadoPagamento = this.constroiEstadoPagamentoEnum(estadoPagamento);
       const pagamentoParaValidar = new Pagamento(undefined, transacaoId, undefined, undefined, undefined, undefined);
-
       await ValidatorUtils.executeValidators(this.validators, pagamentoParaValidar);
 
       // buscar pagamento associado a transaçãoID
       const pagamento = await this.buscarPagamento(transacaoId);
 
-      // mudar status pagamento para o estado recebido
-      this.logger.debug(`Estado pagamento: ${estadoPagamento}`);
-
       //TODO - validar o estadoPagamento parâmetro
-      const estadoPagamentoEnum: EstadoPagamento = estadoPagamento as unknown as EstadoPagamento;
-      this.logger.debug(`Estado pagamento enum: ${estadoPagamentoEnum}`);
-      this.logger.debug(`typeof Estado pagamento enum: ${typeof estadoPagamentoEnum}`);
+      // mudar status pagamento para o estado CONFIRMADO
+
       pagamento.estadoPagamento = estadoPagamentoEnum;
       await this.repository.edit(pagamento);
 
+      // mudar status pedido para RECEBIDO se o pagamento foi CONFIRMADO
+      await this.mudarEstadoPedidoParaRecebidoSePagamentoConfirmado(estadoPagamentoEnum, pagamento, transacaoId);
+
+      this.logger.log(`Webhook: finalizado para transaçãoId = ${transacaoId}\n`);
+      return true;
+   }
+
+   private constroiEstadoPagamentoEnum(estadoPagamento: number): EstadoPagamento {
+      const estadoPagamentoFromValue = getEstadoPagamentoFromValue(estadoPagamento);
+      if (estadoPagamentoFromValue === undefined) {
+         throw new ValidationException(
+            `Estado de pagamento válidos são 1 (Confirmado) e 2 (Rejeitado). O estado de pagamento informado é inválido: ${estadoPagamento}`,
+         );
+      }
+      return estadoPagamentoFromValue;
+   }
+
+   private async mudarEstadoPedidoParaRecebidoSePagamentoConfirmado(
+      estadoPagamentoEnum: EstadoPagamento,
+      pagamento: Pagamento,
+      transacaoId: string,
+   ): Promise<void> {
       if (estadoPagamentoEnum === EstadoPagamento.CONFIRMADO) {
          // buscar pedido associado a transaçãoID
          const pedido = await this.buscarPedido(pagamento, transacaoId);
@@ -51,9 +69,6 @@ export class WebhookPagamentoPedidoUseCase {
          pedido.estadoPedido = EstadoPedido.RECEBIDO;
          await this.editarPedidoUseCase.editarPedido(pedido);
       }
-
-      this.logger.log(`Webhook: finalizado para transaçãoId = ${transacaoId}\n`);
-      return true;
    }
 
    private async buscarPedido(pagamento: Pagamento, transacaoId: string): Promise<Pedido> {
