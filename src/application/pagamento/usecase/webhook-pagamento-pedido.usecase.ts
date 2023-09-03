@@ -35,8 +35,11 @@ export class WebhookPagamentoPedidoUseCase {
 
       // mudar status pagamento para o estado recebido
       this.logger.debug(`Estado pagamento: ${estadoPagamento}`);
-      const estadoPagamentoEnum: EstadoPagamento = EstadoPagamento[estadoPagamento] as unknown as EstadoPagamento;
+
+      //TODO - validar o estadoPagamento parâmetro
+      const estadoPagamentoEnum: EstadoPagamento = estadoPagamento as unknown as EstadoPagamento;
       this.logger.debug(`Estado pagamento enum: ${estadoPagamentoEnum}`);
+      this.logger.debug(`typeof Estado pagamento enum: ${typeof estadoPagamentoEnum}`);
       pagamento.estadoPagamento = estadoPagamentoEnum;
       await this.repository.edit(pagamento);
 

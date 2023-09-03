@@ -15,7 +15,7 @@ export class PagamentoRestApi extends BaseRestApi {
       super();
    }
 
-   @Post(':transacaoId')
+   @Post(':transacaoId/:estadoPagamento')
    @ApiOperation({
       summary: 'Webhook para atualização do estado do pagamento de um pedido com APROVADO = 1, REJEITADO =2',
       description: 'Confirma o pagamento de um pedido através da integração com o gateway de pagamento.',
