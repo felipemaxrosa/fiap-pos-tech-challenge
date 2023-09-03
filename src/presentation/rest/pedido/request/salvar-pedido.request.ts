@@ -13,7 +13,15 @@ export class SalvarPedidoRequest {
    @IsDateString({}, { message: 'Data deve ser válido' })
    public dataInicio: string;
 
-   @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido', enum: EstadoPedido })
+   @ApiProperty({
+      required: true,
+      nullable: false,
+      enum: EstadoPedido,
+      description: `${Object.values(EstadoPedido)
+         .filter((value) => typeof value === 'number')
+         .map((value) => `${value}:${EstadoPedido[value]}`)
+         .join(', ')}`,
+   })
    @IsNotEmpty({ message: 'Estado do pedido não pode ser vazio' })
    @IsEnum(EstadoPedido, {
       message: () =>

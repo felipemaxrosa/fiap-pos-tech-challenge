@@ -10,7 +10,15 @@ export class ListarPedidoNaoFinalizadoResponse {
    @ApiProperty({ required: true, nullable: false, description: 'Data do Inicio do Pedido', pattern: 'yyyy-MM-dd' })
    public dataInicio: string;
 
-   @ApiProperty({ required: true, nullable: false, description: 'Estado do pedido', enum: EstadoPedido })
+   @ApiProperty({
+      required: true,
+      nullable: false,
+      enum: EstadoPedido,
+      description: `${Object.values(EstadoPedido)
+         .filter((value) => typeof value === 'number')
+         .map((value) => `${value}:${EstadoPedido[value]}`)
+         .join(', ')}`,
+   })
    public estadoPedido: EstadoPedido;
 
    @ApiProperty({
@@ -24,7 +32,7 @@ export class ListarPedidoNaoFinalizadoResponse {
    @ApiProperty({ required: true, nullable: false, description: 'ID do pedido' })
    public id: number;
 
-   @ApiProperty({ required: false, nullable: true, description: 'Itens de pedido' })
+   @ApiProperty({ required: false, nullable: true, description: 'Itens de pedido', type: ItemPedido, isArray: true })
    public itensPedido: ItemPedido[];
 
    constructor(pedido: Pedido) {
