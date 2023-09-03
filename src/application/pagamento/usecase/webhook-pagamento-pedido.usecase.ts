@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { WebhookPagamentoValidator } from 'src/application/pagamento/validation/webhook-pagamento.validator';
 import { BuscarPedidoPorIdUseCase, EditarPedidoUseCase } from 'src/application/pedido/usecase';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
@@ -7,6 +8,7 @@ import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PagamentoConstants, PedidoConstants } from 'src/shared/constants';
+import { ValidatorUtils } from 'src/shared/validator.utils';
 
 @Injectable()
 export class WebhookPagamentoPedidoUseCase {
@@ -18,10 +20,14 @@ export class WebhookPagamentoPedidoUseCase {
       private editarPedidoUseCase: EditarPedidoUseCase,
       @Inject(PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE)
       private buscarPedidoPorIdUseCase: BuscarPedidoPorIdUseCase,
+      @Inject(PagamentoConstants.WEBHOOK_PAGAMENTO_VALIDATOR) private validators: WebhookPagamentoValidator[],
    ) {}
 
    async webhook(transacaoId: string): Promise<boolean> {
       this.logger.log(`Webhook: ativado para transaçãoId = ${transacaoId}\n`);
+
+      const pagamentoParaValidar = new Pagamento(undefined, transacaoId, undefined, undefined, undefined, undefined);
+      await ValidatorUtils.executeValidators(this.validators, pagamentoParaValidar);
 
       // buscar pagamento associado a transaçãoID
       const pagamento = await this.buscarPagamento(transacaoId);

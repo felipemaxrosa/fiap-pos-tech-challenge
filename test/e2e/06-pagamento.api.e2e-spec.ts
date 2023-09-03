@@ -1,7 +1,8 @@
-import * as request from 'supertest';
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { MainModule } from 'src/main.module';
+import { RandomIdGeneratorUtils } from 'src/shared/random.id.generator.utils';
+import * as request from 'supertest';
 
 describe('PagamentoRestApi (e2e)', () => {
    let app: INestApplication;
@@ -13,7 +14,7 @@ describe('PagamentoRestApi (e2e)', () => {
       }).compile();
 
       // Desabilita a saída de log
-      module.useLogger(false);
+      //module.useLogger(false);
 
       app = module.createNestApplication();
 
@@ -26,10 +27,13 @@ describe('PagamentoRestApi (e2e)', () => {
       await app.close();
    });
 
-   it('POST /v1/pagamento/1 - deve efetuar o pagamento', async () => {
+   it('POST /v1/pagamento/<transaçãoId> - deve acionar o webhook de pagamento', async () => {
       // realiza requisição e compara a resposta
+      const pedidoId = 1;
+      const transacaoId = RandomIdGeneratorUtils.generate('transacaoId', pedidoId);
+
       return await request(app.getHttpServer())
-         .post('/v1/pagamento/1')
+         .post(`/v1/pagamento/${transacaoId}`)
          .set('Content-type', 'application/json')
          .then((response) => {
             expect(response.status).toEqual(201);

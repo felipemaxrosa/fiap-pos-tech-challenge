@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PagamentoConstants } from 'src/shared/constants';
+import { RandomIdGeneratorUtils } from 'src/shared/random.id.generator.utils';
 
 @Injectable()
 export class SolicitaPagamentoPedidoUseCase {
@@ -14,13 +14,7 @@ export class SolicitaPagamentoPedidoUseCase {
    constructor(@Inject(PagamentoConstants.IREPOSITORY) private repository: IRepository<Pagamento>) {}
 
    async solicitaPagamento(pedido: Pedido): Promise<Pagamento> {
-      const transacaoId = randomUUID();
-
-      this.logger.log('\n\n RODRIGO \n\n');
-
-      this.logger.log(`\n\n Pedido: ${JSON.stringify(pedido)} \n\n`);
-
-      this.logger.log('\n\n -------- \n\n');
+      const transacaoId = RandomIdGeneratorUtils.generate('transacaoId', pedido.id);
 
       const pagamento: Pagamento = {
          pedidoId: pedido.id,

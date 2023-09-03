@@ -6,6 +6,8 @@ import {
    SolicitaPagamentoPedidoUseCase,
 } from 'src/application/pagamento/usecase';
 import { WebhookPagamentoPedidoUseCase } from 'src/application/pagamento/usecase/webhook-pagamento-pedido.usecase';
+import { WebhookPagamentoTransacaoIdValidoValidator } from 'src/application/pagamento/validation/webhook-pagamento-transacao-id-valido.validator';
+import { WebhookPagamentoValidator } from 'src/application/pagamento/validation/webhook-pagamento.validator';
 import { BuscarPedidoPorIdUseCase, EditarPedidoUseCase } from 'src/application/pedido/usecase';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { IRepository } from 'src/enterprise/repository/repository';
@@ -34,12 +36,21 @@ export const PagamentoProviders: Provider[] = [
          PagamentoConstants.IREPOSITORY,
          PedidoConstants.EDITAR_PEDIDO_USECASE,
          PedidoConstants.BUSCAR_PEDIDO_POR_ID_USECASE,
+         PagamentoConstants.WEBHOOK_PAGAMENTO_VALIDATOR,
       ],
       useFactory: (
          repository: IRepository<Pagamento>,
          editarPedidoUseCase: EditarPedidoUseCase,
          buscarPedidoPorIdUseCase: BuscarPedidoPorIdUseCase,
+         validators: WebhookPagamentoValidator[],
       ): WebhookPagamentoPedidoUseCase =>
-         new WebhookPagamentoPedidoUseCase(repository, editarPedidoUseCase, buscarPedidoPorIdUseCase),
+         new WebhookPagamentoPedidoUseCase(repository, editarPedidoUseCase, buscarPedidoPorIdUseCase, validators),
+   },
+   {
+      provide: PagamentoConstants.WEBHOOK_PAGAMENTO_VALIDATOR,
+      inject: [PagamentoConstants.IREPOSITORY],
+      useFactory: (repository: IRepository<Pagamento>): WebhookPagamentoValidator[] => [
+         new WebhookPagamentoTransacaoIdValidoValidator(repository),
+      ],
    },
 ];
