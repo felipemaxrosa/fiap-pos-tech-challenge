@@ -24,6 +24,7 @@ export class CheckoutPedidoUseCase {
    ) {}
 
    async checkout(pedido: Pedido): Promise<Pedido> {
+      this.logger.log(`Checkout ativado para pedido = ${JSON.stringify(pedido)}`);
       await ValidatorUtils.executeValidators(this.validators, pedido);
       // listar items pedido
       const itemPedidos = await this.buscarItensPorPedidoIdUseCase.buscarItensPedidoPorPedidoId(pedido.id);

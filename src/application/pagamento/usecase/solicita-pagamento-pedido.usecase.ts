@@ -15,7 +15,6 @@ export class SolicitaPagamentoPedidoUseCase {
 
    async solicitaPagamento(pedido: Pedido): Promise<Pagamento> {
       const transacaoId = RandomIdGeneratorUtils.generate('transacaoId', pedido.id);
-
       const pagamento: Pagamento = {
          pedidoId: pedido.id,
          transacaoId: transacaoId,
@@ -23,7 +22,6 @@ export class SolicitaPagamentoPedidoUseCase {
          total: pedido.total,
          dataHoraPagamento: new Date(),
       };
-
       return await this.repository
          .save(pagamento)
          .then((pagamento) => {

@@ -26,7 +26,6 @@ export class WebhookPagamentoTransacaoIdValidoValidator implements WebhookPagame
             );
          }
       });
-
       return true;
    }
 }

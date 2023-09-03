@@ -27,6 +27,7 @@ export class WebhookPagamentoPedidoUseCase {
       this.logger.log(`Webhook: ativado para transaçãoId = ${transacaoId}\n`);
 
       const pagamentoParaValidar = new Pagamento(undefined, transacaoId, undefined, undefined, undefined, undefined);
+
       await ValidatorUtils.executeValidators(this.validators, pagamentoParaValidar);
 
       // buscar pagamento associado a transaçãoID

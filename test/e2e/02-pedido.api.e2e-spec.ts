@@ -54,7 +54,7 @@ describe('PedidoRestApi (e2e)', () => {
       }).compile();
 
       // Desabilita a saída de log
-      //odule.useLogger(false);
+      module.useLogger(false);
 
       app = module.createNestApplication();
 
