@@ -1,16 +1,17 @@
 import { Provider } from '@nestjs/common';
+import { ProdutoService } from 'src/application/produto/service/produto.service';
+import { BuscarProdutoPorIdCategoriaUseCase } from 'src/application/produto/usecase/buscar-produto-por-id-categoria.usecase';
+import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
+import { DeletarProdutoUseCase } from 'src/application/produto/usecase/deletar-produto.usecase';
+import { EditarProdutoUseCase } from 'src/application/produto/usecase/editar-produto.usecase';
+import { SalvarProdutoUseCase } from 'src/application/produto/usecase/salvar-produto.usecase';
+import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
+import { NomeUnicoProdutoValidator } from 'src/application/produto/validation/nome-unico-produto.validator';
+import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { ProdutoService } from 'src/application/produto/service/produto.service';
-import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
-import { ProdutoConstants } from 'src/shared/constants';
-import { SalvarProdutoUseCase } from 'src/application/produto/usecase/salvar-produto.usecase';
-import { EditarProdutoUseCase } from 'src/application/produto/usecase/editar-produto.usecase';
-import { DeletarProdutoUseCase } from 'src/application/produto/usecase/deletar-produto.usecase';
-import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
-import { BuscarProdutoPorIdCategoriaUseCase } from 'src/application/produto/usecase/buscar-produto-por-id-categoria.usecase';
 import { IRepository } from 'src/enterprise/repository/repository';
+import { ProdutoConstants } from 'src/shared/constants';
 
 export const ProdutoProviders: Provider[] = [
    { provide: ProdutoConstants.ISERVICE, useClass: ProdutoService },
@@ -48,6 +49,7 @@ export const ProdutoProviders: Provider[] = [
       inject: [ProdutoConstants.IREPOSITORY],
       useFactory: (repository: IRepository<Produto>): SalvarProdutoValidator[] => [
          new CamposObrigatoriosProdutoValidator(repository),
+         new NomeUnicoProdutoValidator(repository),
       ],
    },
 ];
