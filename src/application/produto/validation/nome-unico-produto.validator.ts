@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
+import { PersistirProdutoValidator } from 'src/application/produto/validation/persistir-produto.validator';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
 
 @Injectable()
-export class NomeUnicoProdutoValidator implements SalvarProdutoValidator {
+export class NomeUnicoProdutoValidator implements PersistirProdutoValidator {
    public static CAMPOS_INVALIDOS_ERROR_MESSAGE = 'Já existe um produto ativo com o nome informado';
 
    private logger: Logger = new Logger(NomeUnicoProdutoValidator.name);

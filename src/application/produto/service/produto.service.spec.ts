@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
 import { IProdutoService } from 'src/application/produto/service/produto.service.interface';
+import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
+import { PersistirProdutoValidator } from 'src/application/produto/validation/persistir-produto.validator';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { CamposObrigatoriosProdutoValidator } from 'src/application/produto/validation/campos-obrigatorios-produto.validator';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { ProdutoConstants } from 'src/shared/constants';
-import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
+import { ProdutoConstants } from 'src/shared/constants';
 
 const IMAGEM_BASE64_SAMPLE =
    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII=';
@@ -67,7 +67,7 @@ const produtoEditar: Produto = {
 describe('ProdutoService', () => {
    let service: IProdutoService;
    let repository: IRepository<Produto>;
-   let validators: SalvarProdutoValidator[];
+   let validators: PersistirProdutoValidator[];
 
    beforeEach(async () => {
       // Configuração do módulo de teste
@@ -109,7 +109,7 @@ describe('ProdutoService', () => {
 
       // Obtém a instância do repositório, validators e serviço a partir do módulo de teste
       repository = module.get<IRepository<Produto>>(ProdutoConstants.IREPOSITORY);
-      validators = module.get<SalvarProdutoValidator[]>(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR);
+      validators = module.get<PersistirProdutoValidator[]>(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR);
       service = module.get<IProdutoService>(ProdutoConstants.ISERVICE);
    });
 
@@ -216,6 +216,7 @@ describe('ProdutoService', () => {
             ativo: true,
          };
 
+         repository.findBy = jest.fn().mockResolvedValue([produtoEditar]);
          await service.edit(produto).then((produtoEditado) => {
             // verifica se o produto salvo contém os mesmos dados passados como input
             expect(produtoEditado.id).toEqual(1);
@@ -281,6 +282,7 @@ describe('ProdutoService', () => {
 
       it('não deve editar produto quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
+         repository.findBy = jest.fn().mockResolvedValue([produtoEditar]);
          jest.spyOn(repository, 'edit').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
@@ -290,6 +292,7 @@ describe('ProdutoService', () => {
 
    describe('deletar', () => {
       it('deleta produto', async () => {
+         repository.findBy = jest.fn().mockResolvedValue([produtoEditar]);
          await service.delete(1).then((result) => {
             expect(result).toBeTruthy();
          });
@@ -297,6 +300,7 @@ describe('ProdutoService', () => {
 
       it('não deve deletar produto quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
+         repository.findBy = jest.fn().mockResolvedValue([produtoEditar]);
          jest.spyOn(repository, 'delete').mockRejectedValue(error);
 
          // verifica se foi lançada uma exception na camada de serviço
