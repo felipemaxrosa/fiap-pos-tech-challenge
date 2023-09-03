@@ -5,7 +5,7 @@ import { ItemPedido } from 'src/enterprise/item-pedido/model';
 import { AddItemPedidoValidator, QuantidadeMinimaItemValidator } from 'src/application/item-pedido/validation';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
-import { SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido/request';
+import { SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido';
 import { ItemPedidoConstants } from 'src/shared/constants';
 import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
