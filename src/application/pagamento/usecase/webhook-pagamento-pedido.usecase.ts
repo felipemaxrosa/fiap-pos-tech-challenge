@@ -33,9 +33,7 @@ export class WebhookPagamentoPedidoUseCase {
       // buscar pagamento associado a transaçãoID
       const pagamento = await this.buscarPagamento(transacaoId);
 
-      //TODO - validar o estadoPagamento parâmetro
       // mudar status pagamento para o estado CONFIRMADO
-
       pagamento.estadoPagamento = estadoPagamentoEnum;
       await this.repository.edit(pagamento);
 
