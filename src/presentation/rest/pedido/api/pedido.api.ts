@@ -138,7 +138,8 @@ export class PedidoRestApi extends BaseRestApi {
    @Get(':id/estado')
    @ApiOperation({
       summary: 'Consulta o estado do pedido por ID',
-      description: 'Realiza a consulta do estado do pedido por ID',
+      description:
+         'Realiza a consulta do estado do pedido por ID onde PAGAMENTO_PENDENTE = 0, RECEBIDO = 1, EM_PREPARACAO = 2, PRONTO = 3, FINALIZADO = 4',
    })
    @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: BuscarPorIdEstadoPedidoResponse })
    async findByIdEstadoDoPedido(@Param('id', ParseIntPipe) id: number): Promise<BuscarPorIdEstadoPedidoResponse> {
@@ -157,8 +158,9 @@ export class PedidoRestApi extends BaseRestApi {
 
    @Get('estado/:id')
    @ApiOperation({
-      summary: 'Consulta de pedidos por estado',
-      description: 'Realiza a consulta de todos os pedidos por estado',
+      summary: 'Consulta de pedidos por estado do pedido',
+      description:
+         'Realiza a consulta de todos os pedidos por estado onde PAGAMENTO_PENDENTE = 0, RECEBIDO = 1, EM_PREPARACAO = 2, PRONTO = 3, FINALIZADO = 4',
    })
    @ApiOkResponse({
       description: 'Pedidos encontrados com sucesso',
