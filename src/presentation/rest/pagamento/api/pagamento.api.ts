@@ -34,7 +34,7 @@ export class PagamentoRestApi extends BaseRestApi {
 
    @Get('estado')
    @ApiOperation({
-      summary: 'Consulta estado do pagamento por ID do Pedido',
+      summary: 'Consulta estado do pagamento por ID do Pedido com PENDENTE = 0, CONFIRMADO = 1 e REJEITADO = 2',
       description: 'Realiza consulta do estado do pagamento por ID do Pedido',
    })
    @ApiOkResponse({
