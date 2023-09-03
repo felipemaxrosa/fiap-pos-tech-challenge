@@ -29,8 +29,8 @@ export class PagamentoService implements IPagamentoService {
       return await this.solicitarPagamentoPedidoUsecase.solicitaPagamento(pedido);
    }
 
-   async webhookPagamentoPedido(transacaoId: string): Promise<boolean> {
-      await this.webhookPagamentoPedidoUseCase.webhook(transacaoId);
+   async webhookPagamentoPedido(transacaoId: string, estadoPagamento: number): Promise<boolean> {
+      await this.webhookPagamentoPedidoUseCase.webhook(transacaoId, estadoPagamento);
       return true;
    }
 }

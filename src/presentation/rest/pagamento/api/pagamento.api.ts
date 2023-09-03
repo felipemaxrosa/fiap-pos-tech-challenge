@@ -17,15 +17,18 @@ export class PagamentoRestApi extends BaseRestApi {
 
    @Post(':transacaoId')
    @ApiOperation({
-      summary: 'Webhook para confirmação do pagamento de um pedido',
+      summary: 'Webhook para atualização do estado do pagamento de um pedido com APROVADO = 1, REJEITADO =2',
       description: 'Confirma o pagamento de um pedido através da integração com o gateway de pagamento.',
    })
    @ApiOkResponse({
       description: 'Pagamento confirmado com sucesso',
    })
-   async webhook(@Param('transacaoId') transacaoId: string): Promise<boolean> {
-      const response = await this.service.webhookPagamentoPedido(transacaoId);
-      this.logger.debug('Pagamento confirmado com sucesso para a transactionId ' + transacaoId + '.');
+   async webhook(
+      @Param('transacaoId') transacaoId: string,
+      @Param('estadoPagamento') estadoPagamento: number,
+   ): Promise<boolean> {
+      const response = await this.service.webhookPagamentoPedido(transacaoId, estadoPagamento);
+      this.logger.debug(`Estado do pagamento modificado para ${estadoPagamento} para a transactionId  ${transacaoId}.`);
       return response;
    }
 

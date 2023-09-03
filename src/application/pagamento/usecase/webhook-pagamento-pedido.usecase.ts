@@ -23,8 +23,8 @@ export class WebhookPagamentoPedidoUseCase {
       @Inject(PagamentoConstants.WEBHOOK_PAGAMENTO_VALIDATOR) private validators: WebhookPagamentoValidator[],
    ) {}
 
-   async webhook(transacaoId: string): Promise<boolean> {
-      this.logger.log(`Webhook: ativado para transaçãoId = ${transacaoId}\n`);
+   async webhook(transacaoId: string, estadoPagamento: number): Promise<boolean> {
+      this.logger.log(`Webhook: ativado para transaçãoId = ${transacaoId} para estado = ${estadoPagamento}\n`);
 
       const pagamentoParaValidar = new Pagamento(undefined, transacaoId, undefined, undefined, undefined, undefined);
 
@@ -33,16 +33,21 @@ export class WebhookPagamentoPedidoUseCase {
       // buscar pagamento associado a transaçãoID
       const pagamento = await this.buscarPagamento(transacaoId);
 
-      // buscar pedido associado a transaçãoID
-      const pedido = await this.buscarPedido(pagamento, transacaoId);
-
-      // mudar status pedido para RECEBIDO
-      pedido.estadoPedido = EstadoPedido.RECEBIDO;
-      await this.editarPedidoUseCase.editarPedido(pedido);
-
-      // mudar status pagamento para CONFIRMADO
-      pagamento.estadoPagamento = EstadoPagamento.CONFIRMADO;
+      // mudar status pagamento para o estado recebido
+      this.logger.debug(`Estado pagamento: ${estadoPagamento}`);
+      const estadoPagamentoEnum: EstadoPagamento = EstadoPagamento[estadoPagamento] as unknown as EstadoPagamento;
+      this.logger.debug(`Estado pagamento enum: ${estadoPagamentoEnum}`);
+      pagamento.estadoPagamento = estadoPagamentoEnum;
       await this.repository.edit(pagamento);
+
+      if (estadoPagamentoEnum === EstadoPagamento.CONFIRMADO) {
+         // buscar pedido associado a transaçãoID
+         const pedido = await this.buscarPedido(pagamento, transacaoId);
+
+         // mudar status pedido para RECEBIDO
+         pedido.estadoPedido = EstadoPedido.RECEBIDO;
+         await this.editarPedidoUseCase.editarPedido(pedido);
+      }
 
       this.logger.log(`Webhook: finalizado para transaçãoId = ${transacaoId}\n`);
       return true;
