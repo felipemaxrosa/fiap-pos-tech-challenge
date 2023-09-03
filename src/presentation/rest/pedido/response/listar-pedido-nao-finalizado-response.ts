@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ItemPedido } from 'src/enterprise/item-pedido/model/item-pedido.model';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 
@@ -23,11 +24,15 @@ export class ListarPedidoNaoFinalizadoResponse {
    @ApiProperty({ required: true, nullable: false, description: 'ID do pedido' })
    public id: number;
 
+   @ApiProperty({ required: false, nullable: true, description: 'Itens de pedido' })
+   public itensPedido: ItemPedido[];
+
    constructor(pedido: Pedido) {
       this.clienteId = pedido.clienteId;
       this.dataInicio = pedido.dataInicio;
       this.estadoPedido = pedido.estadoPedido;
       this.ativo = pedido.ativo;
       this.id = pedido.id;
+      this.itensPedido = pedido.itensPedido;
    }
 }
