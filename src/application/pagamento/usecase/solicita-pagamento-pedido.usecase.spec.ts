@@ -55,14 +55,6 @@ describe('SolicitaPagamentoPedidoUseCase', () => {
          expect(pagamentoResponse.pedidoId).toEqual(pedido.id);
       });
 
-      // it('deve retornar undefined quando o pagamento não for encontrado', async () => {
-      //    jest.spyOn(repository, 'findBy').mockResolvedValue([]);
-      //
-      //    const result = await useCase.buscaEstadoPagamento(2);
-      //
-      //    expect(result).toBeUndefined();
-      // });
-      //
       it('deve lançar uma ServiceException em caso de erro no repositório', async () => {
          const error = new Error('Erro no repositório');
          jest.spyOn(repository, 'save').mockRejectedValue(error);

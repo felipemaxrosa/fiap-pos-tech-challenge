@@ -66,4 +66,11 @@ export const PagamentoProviders: Provider[] = [
          new WebhookPagamentoPagamentoValidoValidator(repositoryPagamento),
       ],
    },
+   // {
+   //    provide: PagamentoConstants.WEBHOOK_PAGAMENTO_TRANSACAO_ID_VALIDO_VALIDATOR,
+   //    inject: [PagamentoConstants.IREPOSITORY],
+   //    useFactory: (repositoryPagamento: IRepository<Pagamento>): WebhookPagamentoValidator[] => [
+   //       new WebhookPagamentoTransacaoIdValidoValidator(repositoryPagamento),
+   //    ],
+   // },
 ];
