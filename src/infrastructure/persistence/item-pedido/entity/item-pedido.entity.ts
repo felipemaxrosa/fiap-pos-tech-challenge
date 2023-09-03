@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ProdutoEntity } from 'src/infrastructure/persistence/produto/entity/produto.entity';
+import { Entity, Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'ITEM_PEDIDO' })
 export class ItemPedidoEntity {
@@ -13,4 +14,8 @@ export class ItemPedidoEntity {
 
    @Column({ name: 'QUANTIDADE' })
    quantidade: number;
+
+   @ManyToOne(() => ProdutoEntity, (produto) => produto.itensPedido)
+   @JoinColumn({ name: 'PRODUTO_ID' })
+   produto?: ProdutoEntity;
 }

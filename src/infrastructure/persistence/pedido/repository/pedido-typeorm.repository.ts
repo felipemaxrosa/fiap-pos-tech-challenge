@@ -133,7 +133,7 @@ export class PedidoTypeormRepository implements IPedidoRepository {
             return pedidoEntities.map((pedido) => pedido);
          })
          .catch((error) => {
-            throw new RepositoryException(`Houve um erro ao listar pedidos pendentes de pagamento: ${error.message}`);
+            throw new RepositoryException(`Houve um erro ao listar pedidos pendentes: ${error.message}`);
          });
    }
 }
