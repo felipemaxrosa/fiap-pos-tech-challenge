@@ -1,6 +1,4 @@
 export class Produto {
-   //TODO RODRIGO - considerar criar um padrão builder para campos opcionais
-
    constructor(
       public nome: string,
       public idCategoriaProduto: number,

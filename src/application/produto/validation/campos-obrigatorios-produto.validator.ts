@@ -1,13 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
 
 @Injectable()
 export class CamposObrigatoriosProdutoValidator implements SalvarProdutoValidator {
-   // TODO RODRIGO - load from database
    private static readonly VALID_ID_CATEGORIA_PRODUTO = [1, 2, 3, 4];
 
    public static CAMPOS_INVALIDOS_ERROR_MESSAGE =
@@ -33,7 +32,7 @@ export class CamposObrigatoriosProdutoValidator implements SalvarProdutoValidato
       }
 
       this.logger.debug(
-         `${CamposObrigatoriosProdutoValidator.name} finalizado com sucesso para cliente: ${produto.nome}`,
+         `${CamposObrigatoriosProdutoValidator.name} finalizado com sucesso para produto: ${produto.nome}`,
       );
       return true;
    }
