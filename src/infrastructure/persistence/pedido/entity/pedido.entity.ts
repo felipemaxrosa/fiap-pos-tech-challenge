@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ItemPedidoEntity } from 'src/infrastructure/persistence/item-pedido/entity/item-pedido.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'PEDIDO' })
 export class PedidoEntity {
@@ -19,4 +20,7 @@ export class PedidoEntity {
 
    @Column({ name: 'TOTAL' })
    total: number;
+
+   @OneToMany(() => ItemPedidoEntity, (itemPedido) => itemPedido.produto)
+   itensPedido?: ItemPedidoEntity[];
 }

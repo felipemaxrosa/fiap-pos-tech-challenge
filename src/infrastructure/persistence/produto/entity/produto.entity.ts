@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ItemPedidoEntity } from 'src/infrastructure/persistence/item-pedido/entity/item-pedido.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'PRODUTO' })
 export class ProdutoEntity {
@@ -22,4 +23,7 @@ export class ProdutoEntity {
 
    @Column({ name: 'ATIVO' })
    ativo: boolean;
+
+   @OneToMany(() => ItemPedidoEntity, (itemPedido) => itemPedido.produto)
+   itensPedido?: ItemPedidoEntity[];
 }
