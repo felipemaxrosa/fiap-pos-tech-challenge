@@ -17,8 +17,8 @@ export class PedidoExistenteValidator implements AddItemPedidoValidator {
    async validate({ pedidoId }: ItemPedido): Promise<boolean> {
       this.logger.log(`Inicializando validação ${PedidoExistenteValidator.name} de pedido existente: ${pedidoId}`);
 
-      return this.repository.findBy({ id: pedidoId }).then((items) => {
-         if (items.length > 0) {
+      return this.repository.findBy({ id: pedidoId }).then((pedidos) => {
+         if (pedidos.length > 0) {
             this.logger.debug(`${PedidoExistenteValidator.name} finalizado com sucesso para pedido: ${pedidoId}`);
             return true;
          }
