@@ -158,8 +158,9 @@ export class PedidoRestApi extends BaseRestApi {
 
    @Get('estado/:id')
    @ApiOperation({
-      summary: 'Consulta de pedidos por estado',
-      description: 'Realiza a consulta de todos os pedidos por estado',
+      summary: 'Consulta de pedidos por estado do pedido',
+      description:
+         'Realiza a consulta de todos os pedidos por estado onde PAGAMENTO_PENDENTE = 0, RECEBIDO = 1, EM_PREPARACAO = 2, PRONTO = 3, FINALIZADO = 4',
    })
    @ApiOkResponse({
       description: 'Pedidos encontrados com sucesso',
