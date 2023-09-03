@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SalvarProdutoUseCase } from './salvar-produto.usecase';
-import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { IRepository } from 'src/enterprise/repository/repository';
-import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { ProdutoConstants } from 'src/shared/constants';
 import { ProdutoProviders } from 'src/application/produto/providers/produto.providers';
+import { PersistirProdutoValidator } from 'src/application/produto/validation/persistir-produto.validator';
+import { ServiceException } from 'src/enterprise/exception/service.exception';
+import { Produto } from 'src/enterprise/produto/model/produto.model';
+import { IRepository } from 'src/enterprise/repository/repository';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
+import { ProdutoConstants } from 'src/shared/constants';
+import { SalvarProdutoUseCase } from './salvar-produto.usecase';
 
 describe('SalvarProdutoUseCase', () => {
    let useCase: SalvarProdutoUseCase;
    let repository: IRepository<Produto>;
-   let validators: SalvarProdutoValidator[];
+   let validators: PersistirProdutoValidator[];
 
    const produtoMock: Produto = {
       nome: 'Produto Teste',
@@ -32,7 +32,7 @@ describe('SalvarProdutoUseCase', () => {
 
       useCase = module.get<SalvarProdutoUseCase>(ProdutoConstants.SALVAR_PRODUTO_USECASE);
       repository = module.get<IRepository<Produto>>(ProdutoConstants.IREPOSITORY);
-      validators = module.get<SalvarProdutoValidator[]>(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR);
+      validators = module.get<PersistirProdutoValidator[]>(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR);
    });
 
    describe('salvarProduto', () => {

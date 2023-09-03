@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
+import { PersistirProdutoValidator } from 'src/application/produto/validation/persistir-produto.validator';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
 
 @Injectable()
-export class CamposObrigatoriosProdutoValidator implements SalvarProdutoValidator {
+export class CamposObrigatoriosProdutoValidator implements PersistirProdutoValidator {
    private static readonly VALID_ID_CATEGORIA_PRODUTO = [1, 2, 3, 4];
 
    public static CAMPOS_INVALIDOS_ERROR_MESSAGE =

@@ -1,3 +1,5 @@
+export const DELETAR_PRODUTO_VALIDATOR = 'DeletarProdutoValidator';
+export const EDITAR_PRODUTO_VALIDATOR = 'EditarProdutoValidator';
 export const ISERVICE = 'IService<Produto>';
 export const IREPOSITORY = 'IRepository<Produto>';
 export const SALVAR_PRODUTO_VALIDATOR = 'SalvarProdutoValidator';

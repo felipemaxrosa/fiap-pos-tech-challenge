@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { PersistirProdutoValidator } from 'src/application/produto/validation/persistir-produto.validator';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
-import { SalvarProdutoValidator } from 'src/application/produto/validation/salvar-produto.validator';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { ProdutoConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
@@ -12,7 +12,7 @@ export class SalvarProdutoUseCase {
 
    constructor(
       @Inject(ProdutoConstants.IREPOSITORY) private repository: IRepository<Produto>,
-      @Inject(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR) private validators: SalvarProdutoValidator[],
+      @Inject(ProdutoConstants.SALVAR_PRODUTO_VALIDATOR) private validators: PersistirProdutoValidator[],
    ) {}
 
    async salvarProduto(produto: Produto): Promise<Produto> {
