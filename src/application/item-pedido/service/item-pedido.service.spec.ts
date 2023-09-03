@@ -6,18 +6,30 @@ import { AddItemPedidoValidator, QuantidadeMinimaItemValidator } from 'src/appli
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';
 import { SalvarItemPedidoRequest } from 'src/presentation/rest/item-pedido';
-import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
+import { ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 import { IItemPedidoService } from 'src/application/item-pedido/service/item-pedido.service.interface';
 import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { Produto } from 'src/enterprise/produto/model/produto.model';
 
 describe('ItemPedidoService', () => {
    let service: IItemPedidoService;
    let repository: IRepository<ItemPedido>;
    let pedidoRepository: IRepository<Pedido>;
+   let produtoRepository: IRepository<Produto>;
    let validators: AddItemPedidoValidator[];
+
+   const produto: Produto = {
+      id: 1,
+      nome: 'nome correto',
+      idCategoriaProduto: 1,
+      descricao: 'Teste',
+      preco: 10,
+      imagemBase64: '',
+      ativo: true,
+   };
 
    const pedido: Pedido = {
       id: 1,
@@ -45,10 +57,12 @@ describe('ItemPedidoService', () => {
 
       repository = module.get<IRepository<ItemPedido>>(ItemPedidoConstants.IREPOSITORY);
       pedidoRepository = module.get<IRepository<Pedido>>(PedidoConstants.IREPOSITORY);
+      produtoRepository = module.get<IRepository<Produto>>(ProdutoConstants.IREPOSITORY);
       validators = module.get<AddItemPedidoValidator[]>(ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR);
       service = module.get<IItemPedidoService>(ItemPedidoConstants.ISERVICE);
 
       jest.spyOn(pedidoRepository, 'findBy').mockResolvedValue([pedido]);
+      jest.spyOn(produtoRepository, 'findBy').mockResolvedValue([produto]);
    });
 
    describe('injeção de dependências', () => {

@@ -16,6 +16,15 @@ describe('ItemPedidoRestApi (e2e)', () => {
       cpf: '25634428777',
    };
 
+   const salvarProdutoRequest = {
+      nome: 'nome correto',
+      idCategoriaProduto: 1,
+      descricao: 'Teste',
+      preco: 10,
+      imagemBase64: '',
+      ativo: true,
+   };
+
    const salvarPedidoRequest = {
       clienteId: 1,
       dataInicio: '2023-06-24',
@@ -60,6 +69,11 @@ describe('ItemPedidoRestApi (e2e)', () => {
             .post('/v1/cliente')
             .set('Content-type', 'application/json')
             .send(salvarClienteRequest);
+
+         await request(app.getHttpServer())
+            .post('/v1/produto')
+            .set('Content-type', 'application/json')
+            .send(salvarProdutoRequest);
 
          await request(app.getHttpServer())
             .post('/v1/pedido')

@@ -9,21 +9,27 @@ import {
    AddItemPedidoValidator,
    EditarItemPedidoValidator,
    PedidoExistenteValidator,
+   ProdutoExistentePedidoValidator,
 } from 'src/application/item-pedido/validation';
 import { IRepository } from 'src/enterprise/repository/repository';
-import { ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
+import { ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/salvar-item-pedido.usecase';
 import { EditarItemPedidoUseCase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
 import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/deletar-item-pedido.usecase';
+import { Produto } from 'src/enterprise/produto/model/produto.model';
 
 export const ItemPedidoProviders: Provider[] = [
    { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
    {
       provide: ItemPedidoConstants.ADD_ITEM_PEDIDO_VALIDATOR,
-      inject: [PedidoConstants.IREPOSITORY],
-      useFactory: (pedidoRepository: IRepository<Pedido>): AddItemPedidoValidator[] => [
+      inject: [PedidoConstants.IREPOSITORY, ProdutoConstants.IREPOSITORY],
+      useFactory: (
+         pedidoRepository: IRepository<Pedido>,
+         produtoRepository: IRepository<Produto>,
+      ): AddItemPedidoValidator[] => [
          new QuantidadeMinimaItemValidator(),
          new PedidoExistenteValidator(pedidoRepository),
+         new ProdutoExistentePedidoValidator(produtoRepository),
       ],
    },
    {
