@@ -24,6 +24,31 @@ export class PedidoMemoryRepository implements IPedidoRepository {
       });
    }
 
+   async find(options: any): Promise<Pedido[]> {
+      const pedidos = this.pedidosRepository.filter((pedido) => {
+         return Object.entries(options).every(([key, values]: [string, any]) => {
+            if (key === 'where') {
+               return values.some((value) => {
+                  return Object.entries(value).every(([k, v]) => {
+                     return pedido[k] === v;
+                  });
+               });
+            }
+            return true;
+         });
+      });
+
+      Object.entries(options).forEach(([key, value]: [string, any]) => {
+         if (key === 'order') {
+            Object.entries(value).forEach(([k, v]) => {
+               pedidos.sort((one, other) => (v === 'ASC' ? one[k] - other[k] : other[k] - one[k]));
+            });
+         }
+      });
+
+      return Promise.resolve(pedidos);
+   }
+
    async save(pedido: Pedido): Promise<Pedido> {
       this.logger.debug(`Criando novo pedido: ${pedido}`);
 
@@ -59,7 +84,7 @@ export class PedidoMemoryRepository implements IPedidoRepository {
    }
 
    async listarPedidosPendentes(): Promise<Pedido[]> {
-      this.logger.debug('Listando pedidos pendentes');
+      this.logger.debug('Listando pedidos pendentes de pagamento');
 
       return new Promise<Pedido[]>((resolve) => {
          const pedidos = this.pedidosRepository.filter(
