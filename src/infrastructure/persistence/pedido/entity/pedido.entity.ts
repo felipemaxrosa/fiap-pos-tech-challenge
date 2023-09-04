@@ -30,5 +30,5 @@ export class PedidoEntity {
    total: number;
 
    @OneToMany(() => ItemPedidoEntity, (itemPedido) => itemPedido.pedido)
-   itensPedido: ItemPedidoEntity[];
+   itensPedido?: ItemPedidoEntity[];
 }

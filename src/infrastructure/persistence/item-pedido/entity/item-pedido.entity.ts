@@ -22,5 +22,5 @@ export class ItemPedidoEntity {
 
    @ManyToOne(() => PedidoEntity, (pedido) => pedido.itensPedido)
    @JoinColumn({ name: 'PEDIDO_ID' })
-   pedido: PedidoEntity;
+   pedido?: PedidoEntity;
 }
