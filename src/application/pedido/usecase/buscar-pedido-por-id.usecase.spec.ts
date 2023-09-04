@@ -37,7 +37,7 @@ describe('BuscarPedidoPorIdUseCase', () => {
 
    describe('buscarPedidoPorId', () => {
       it('deve buscar um pedido por ID com sucesso', async () => {
-         jest.spyOn(repository, 'findBy').mockResolvedValue([pedidoMock]);
+         jest.spyOn(repository, 'find').mockResolvedValue([pedidoMock]);
 
          const result = await useCase.buscarPedidoPorId(pedidoId);
 
@@ -46,7 +46,7 @@ describe('BuscarPedidoPorIdUseCase', () => {
 
       it('deve lançar uma ServiceException em caso de erro no repositório', async () => {
          const error = new Error('Erro no repositório');
-         jest.spyOn(repository, 'findBy').mockRejectedValue(error);
+         jest.spyOn(repository, 'find').mockRejectedValue(error);
 
          await expect(useCase.buscarPedidoPorId(pedidoId)).rejects.toThrowError(ServiceException);
       });
