@@ -66,17 +66,10 @@ export class PedidoRestApi extends BaseRestApi {
    @ApiCreatedResponse({ description: 'Pedido gerado com sucesso', type: SalvarPedidoResponse })
    async salvar(@Body() novoPedido: SalvarPedidoRequest): Promise<Pedido> {
       this.logger.debug(`Criando Novo Pedido Request: ${JSON.stringify(novoPedido)}`);
-      return await this.service
-         .save({
-            clienteId: novoPedido.clienteId,
-            dataInicio: novoPedido.dataInicio,
-            estadoPedido: novoPedido.estadoPedido,
-            ativo: novoPedido.ativo,
-         })
-         .then((pedidoCriado) => {
-            this.logger.log(`Pedido gerado com sucesso: ${pedidoCriado.id}}`);
-            return new SalvarPedidoResponse(pedidoCriado);
-         });
+      return await this.service.save(novoPedido).then((pedidoCriado) => {
+         this.logger.log(`Pedido gerado com sucesso: ${pedidoCriado.id}}`);
+         return new SalvarPedidoResponse(pedidoCriado);
+      });
    }
 
    @Put(':id')
