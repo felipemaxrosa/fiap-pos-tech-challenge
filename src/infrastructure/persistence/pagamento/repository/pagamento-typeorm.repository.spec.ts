@@ -48,18 +48,6 @@ describe('PagamentoTypeormRepository', () => {
       id: 1,
    };
 
-   const pagamentos: Pagamento[] = [
-      mockedPagamento,
-      {
-         dataHoraPagamento: new Date(),
-         estadoPagamento: EstadoPagamento.PENDENTE,
-         pedidoId: 2,
-         total: 20,
-         transacaoId: '2',
-         id: 2,
-      },
-   ];
-
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({

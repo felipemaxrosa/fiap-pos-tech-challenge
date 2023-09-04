@@ -17,6 +17,7 @@ import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/sal
 import { EditarItemPedidoUseCase } from 'src/application/item-pedido/usecase/editar-item-pedido.usecase';
 import { DeletarItemPedidoUseCase } from 'src/application/item-pedido/usecase/deletar-item-pedido.usecase';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
+import { ProdutoInativoPedidoValidator } from 'src/application/item-pedido/validation/produto-inativo.validator';
 
 export const ItemPedidoProviders: Provider[] = [
    { provide: ItemPedidoConstants.ISERVICE, useClass: ItemPedidoService },
@@ -30,11 +31,12 @@ export const ItemPedidoProviders: Provider[] = [
          new QuantidadeMinimaItemValidator(),
          new PedidoExistenteValidator(pedidoRepository),
          new ProdutoExistentePedidoValidator(produtoRepository),
+         new ProdutoInativoPedidoValidator(produtoRepository),
       ],
    },
    {
       provide: ItemPedidoConstants.EDITAR_ITEM_PEDIDO_VALIDATOR,
-      inject: [ItemPedidoConstants.IREPOSITORY],
+      inject: [ItemPedidoConstants.IREPOSITORY, ProdutoConstants.IREPOSITORY],
       useFactory: (repository: IRepository<ItemPedido>): EditarItemPedidoValidator[] => [
          new ItemPedidoExistenteValidator(repository),
       ],

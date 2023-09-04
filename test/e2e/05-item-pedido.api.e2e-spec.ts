@@ -4,6 +4,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { MainModule } from 'src/main.module';
 import { SalvarItemPedidoRequest, SalvarItemPedidoResponse } from 'src/presentation/rest/item-pedido';
 import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { DateUtils } from 'src/shared/date.utils';
 
 describe('ItemPedidoRestApi (e2e)', () => {
    let app: INestApplication;
@@ -27,7 +28,7 @@ describe('ItemPedidoRestApi (e2e)', () => {
 
    const salvarPedidoRequest = {
       clienteId: 1,
-      dataInicio: '2023-06-24',
+      dataInicio: DateUtils.toString(new Date()),
       estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
       ativo: true,
    };

@@ -35,6 +35,7 @@ export class WebhookPagamentoPedidoUseCase {
 
       // mudar status pagamento para o estado CONFIRMADO
       pagamento.estadoPagamento = estadoPagamentoEnum;
+      pagamento.dataHoraPagamento = pagamento.estadoPagamento === EstadoPagamento.CONFIRMADO ? new Date() : null;
       await this.repository.edit(pagamento);
 
       // mudar status pedido para RECEBIDO se o pagamento foi CONFIRMADO

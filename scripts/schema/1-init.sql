@@ -71,5 +71,5 @@ CREATE TABLE IF NOT EXISTS PAGAMENTO (
                                        TRANSACAO_ID VARCHAR(255) NOT NULL,
                                        ESTADO_PAGAMENTO INT NOT NULL,
                                        TOTAL DECIMAL(8,2) NOT NULL,
-                                       DATA_HORA_PAGAMENTO DATETIME NOT NULL
+                                       DATA_HORA_PAGAMENTO DATETIME NULL
 );
