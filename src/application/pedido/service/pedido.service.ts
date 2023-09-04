@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
+import { IPedidoService, PedidoComDadosDePagamento } from 'src/application/pedido/service/pedido.service.interface';
 import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoConstants } from 'src/shared/constants';
@@ -70,7 +70,7 @@ export class PedidoService implements IPedidoService {
       return await this.buscarTodosNaoFinalizadosUsecase.buscarTodosPedidos();
    }
 
-   async checkout(pedido: Pedido): Promise<Pedido> {
+   async checkout(pedido: Pedido): Promise<PedidoComDadosDePagamento> {
       return await this.checkoutPedidoUsecase.checkout(pedido);
    }
 

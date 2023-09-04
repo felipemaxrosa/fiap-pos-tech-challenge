@@ -4,9 +4,15 @@ import { BuscarItensPorPedidoIdUseCase } from 'src/application/pedido/usecase/bu
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
 import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
+import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PagamentoConstants, PedidoConstants, ProdutoConstants } from 'src/shared/constants';
 import { ValidatorUtils } from 'src/shared/validator.utils';
+
+export interface PedidoComDadosDePagamento {
+   pedido: Pedido;
+   pagamento: Pagamento;
+}
 
 @Injectable()
 export class CheckoutPedidoUseCase {
@@ -23,7 +29,7 @@ export class CheckoutPedidoUseCase {
       private validators: CheckoutPedidoValidator[],
    ) {}
 
-   async checkout(pedido: Pedido): Promise<Pedido> {
+   async checkout(pedido: Pedido): Promise<PedidoComDadosDePagamento> {
       this.logger.log(`Checkout ativado para pedido = ${JSON.stringify(pedido)}`);
       await ValidatorUtils.executeValidators(this.validators, pedido);
       // listar items pedido
@@ -37,11 +43,14 @@ export class CheckoutPedidoUseCase {
       pedido.total = totalPedido;
 
       // registra a necessidade de pagamento do pedido
-      await this.solicitaPagamentoPedidoUseCase.solicitaPagamento(pedido);
+      const pagamento = await this.solicitaPagamentoPedidoUseCase.solicitaPagamento(pedido);
 
       const pedidoRetornado = await this.editarPedidoUseCase.editarPedido(pedido);
       this.logger.log(`pedidoRetornado: ${pedidoRetornado}`);
 
-      return pedidoRetornado;
+      return {
+         pedido: pedidoRetornado,
+         pagamento,
+      };
    }
 }

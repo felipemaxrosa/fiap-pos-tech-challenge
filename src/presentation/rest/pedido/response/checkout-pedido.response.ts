@@ -31,7 +31,7 @@ export class CheckoutPedidoResponse {
    @ApiProperty({ required: true, nullable: false, description: 'ID do pedido' })
    public id: number;
 
-   @ApiProperty({ required: true, nullable: false, description: 'ID do pedido' })
+   @ApiProperty({ required: true, nullable: false, description: 'Total do pedido' })
    public total: number;
 
    constructor(pedido: Pedido) {

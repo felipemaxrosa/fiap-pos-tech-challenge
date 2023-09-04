@@ -27,7 +27,7 @@ import {
    ListarPedidoPendenteResponse,
    SalvarPedidoResponse,
 } from 'src/presentation/rest/pedido/response';
-import { CheckoutPedidoResponse } from 'src/presentation/rest/pedido/response/checkout-pedido.response';
+import { CheckoutResponse } from 'src/presentation/rest/pedido/response';
 import { PedidoConstants } from 'src/shared/constants';
 
 @Controller('v1/pedido')
@@ -187,8 +187,8 @@ export class PedidoRestApi extends BaseRestApi {
       description: 'Realiza o checkout do pedido',
    })
    @HttpCode(200)
-   @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: CheckoutPedidoResponse })
-   async checkout(@Param('id', ParseIntPipe) id: number): Promise<CheckoutPedidoResponse> {
+   @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: CheckoutResponse })
+   async checkout(@Param('id', ParseIntPipe) id: number): Promise<CheckoutResponse> {
       this.logger.debug(`Realizando checkout do pedido id: ${id}`);
 
       const pedido = await this.service.findById(id).then((pedidoBuscado) => {
@@ -202,8 +202,8 @@ export class PedidoRestApi extends BaseRestApi {
 
       return await this.service.checkout(pedido).then((pedidoCheckout) => {
          if (pedidoCheckout) {
-            this.logger.log(`Checkout realizado com sucesso para pedido: ${pedidoCheckout.id}}`);
-            return new CheckoutPedidoResponse(pedidoCheckout);
+            this.logger.log(`Checkout realizado com sucesso para pedido: ${pedidoCheckout.pedido.id}}`);
+            return new CheckoutResponse(pedidoCheckout);
          }
          this.logger.debug(`Erro durante realização de checkout do pedido: ${id}`);
          throw new ServiceException(`Erro durante realização de checkout do pedido: ${id}`);
