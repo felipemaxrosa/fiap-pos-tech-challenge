@@ -125,7 +125,7 @@ describe('PedidoRestApi (e2e)', () => {
          .set('Content-type', 'application/json')
          .then((response) => {
             expect(response.status).toEqual(200);
-            expect(response.body.estadoPedido).toEqual(EstadoPedido.FINALIZADO);
+            expect(response.body.pedido.estadoPedido).toEqual(EstadoPedido.FINALIZADO);
          });
    });
 });

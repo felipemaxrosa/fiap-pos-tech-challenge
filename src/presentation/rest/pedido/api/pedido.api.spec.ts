@@ -36,12 +36,17 @@ describe('PedidoRestApi', () => {
    };
 
    const checkoutPedidoResponse = {
-      id: 100,
-      clienteId: 1,
-      dataInicio: '2023-06-18',
-      estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
-      ativo: true,
-      total: 27,
+      pedido: {
+         id: 100,
+         clienteId: 1,
+         dataInicio: '2023-06-18',
+         estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
+         ativo: true,
+         total: 27,
+      },
+      pagamento: {
+         transacaoId: 'algum ID',
+      },
    };
 
    const pedidoAntesCheckout: Pedido = {
@@ -89,7 +94,7 @@ describe('PedidoRestApi', () => {
                   listarPedidosPendentes: jest.fn(() => Promise.resolve([pedido])),
                   listarPedidosNaoFinalizados: jest.fn(() => Promise.resolve([pedido])),
                   checkout: jest.fn((pedido) =>
-                     pedido.id === checkoutPedidoResponse.id
+                     pedido.id === checkoutPedidoResponse.pedido.id
                         ? Promise.resolve(checkoutPedidoResponse)
                         : Promise.reject(new Error('error')),
                   ),
@@ -276,12 +281,12 @@ describe('PedidoRestApi', () => {
          const response = await restApi.checkout(100);
 
          // Verifica se o resultado obtido tem as propriedades esperadas
-         expect(response.clienteId).toEqual(pedidoDepoisCheckout.clienteId);
-         expect(response.dataInicio).toEqual(pedidoDepoisCheckout.dataInicio);
-         expect(response.estadoPedido).toEqual(pedidoDepoisCheckout.estadoPedido);
-         expect(response.ativo).toEqual(pedidoDepoisCheckout.ativo);
-         expect(response.id).toEqual(pedidoDepoisCheckout.id);
-         expect(response.total).toEqual(pedidoDepoisCheckout.total);
+         expect(response.pedido.clienteId).toEqual(pedidoDepoisCheckout.clienteId);
+         expect(response.pedido.dataInicio).toEqual(pedidoDepoisCheckout.dataInicio);
+         expect(response.pedido.estadoPedido).toEqual(pedidoDepoisCheckout.estadoPedido);
+         expect(response.pedido.ativo).toEqual(pedidoDepoisCheckout.ativo);
+         expect(response.pedido.id).toEqual(pedidoDepoisCheckout.id);
+         expect(response.pedido.total).toEqual(pedidoDepoisCheckout.total);
       });
 
       it('deve falhar se pedido não existir', async () => {

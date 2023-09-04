@@ -12,7 +12,10 @@ export class BuscarPedidoPorIdUseCase {
 
    async buscarPedidoPorId(id: number): Promise<Pedido> {
       return await this.repository
-         .findBy({ id })
+         .find({
+            where: [{ id }],
+            relations: ['itensPedido', 'itensPedido.produto'],
+         })
          .then((pedidos) => {
             return pedidos[0];
          })

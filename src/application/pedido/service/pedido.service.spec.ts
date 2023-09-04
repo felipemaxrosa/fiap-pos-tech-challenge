@@ -210,23 +210,26 @@ describe('PedidoService', () => {
 
    describe('buscar por ID', () => {
       it('encontra pedido por id', async () => {
-         pedidoRepository.findBy = jest.fn().mockImplementation((attributes) => {
-            return Promise.resolve(attributes['id'] === pedido.id ? [pedido] : undefined);
+         pedidoRepository.find = jest.fn().mockImplementation(() => {
+            return Promise.resolve([pedido]);
          });
-         await service.findById(1).then((produtoEncontrado) => {
-            expect(produtoEncontrado).toEqual(pedido);
+         await service.findById(1).then((pedidoEncontrado) => {
+            expect(pedidoEncontrado).toEqual(pedido);
          });
       });
 
       it('não encontra pedido por id', async () => {
-         await service.findById(2).then((produtoEncontrado) => {
-            expect(produtoEncontrado).toEqual(undefined);
+         pedidoRepository.find = jest.fn().mockImplementation(() => {
+            return Promise.resolve([]);
+         });
+         await service.findById(2).then((pedidoEncontrado) => {
+            expect(pedidoEncontrado).toEqual(undefined);
          });
       });
 
       it('não deve encontrar pedido por id quando houver um erro de banco ', async () => {
          const error = new RepositoryException('Erro genérico de banco de dados');
-         jest.spyOn(pedidoRepository, 'findBy').mockRejectedValue(error);
+         jest.spyOn(pedidoRepository, 'find').mockRejectedValue(error);
 
          await expect(service.findById(1)).rejects.toThrowError(ServiceException);
       });
@@ -341,8 +344,19 @@ describe('PedidoService', () => {
 
    describe('checkout', () => {
       it('deve chamar o caso de uso de checkout com o pedido correto', async () => {
+         const expectedResult = {
+            pagamento: {
+               dataHoraPagamento: undefined,
+               estadoPagamento: 0,
+               id: 1,
+               pedidoId: 1,
+               total: 0,
+               transacaoId: '863c99369e3d033aa1f080419d0502b226b3718945ba425481c9f565a85be8c8',
+            },
+            pedido,
+         };
          const resultado = await service.checkout(pedido);
-         expect(resultado).toEqual(pedido);
+         expect(resultado).toEqual(expectedResult);
       });
    });
 
