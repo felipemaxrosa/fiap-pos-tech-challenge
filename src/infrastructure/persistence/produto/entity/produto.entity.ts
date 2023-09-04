@@ -1,5 +1,6 @@
-import { ItemPedidoEntity } from 'src/infrastructure/persistence/item-pedido/entity/item-pedido.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ItemPedidoEntity } from 'src/infrastructure/persistence/item-pedido/entity/item-pedido.entity';
+import { ColumnNumericTransformer } from 'src/shared';
 
 @Entity({ name: 'PRODUTO' })
 export class ProdutoEntity {
@@ -15,7 +16,14 @@ export class ProdutoEntity {
    @Column({ name: 'DESCRICAO' })
    descricao: string;
 
-   @Column({ name: 'PRECO' })
+   @Column({
+      name: 'PRECO',
+      type: 'decimal',
+      precision: 10,
+      scale: 2,
+      default: 0,
+      transformer: new ColumnNumericTransformer(),
+   })
    preco: number;
 
    @Column({ name: 'IMAGEM' })

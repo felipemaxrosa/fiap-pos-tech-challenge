@@ -21,12 +21,8 @@ export class PagamentoPedidoResponse {
    })
    public estadoPagamento: EstadoPagamento;
 
-   @ApiProperty({ required: true, nullable: false, description: 'ID do pedido' })
-   public id: number;
-
    constructor(pagamento: Pagamento) {
       this.transacaoId = pagamento.transacaoId;
       this.estadoPagamento = pagamento.estadoPagamento;
-      this.id = pagamento.id;
    }
 }
