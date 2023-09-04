@@ -40,7 +40,7 @@ export const PedidoProviders: Provider[] = [
    { provide: PedidoConstants.ISERVICE, useClass: PedidoService },
    {
       provide: PedidoConstants.SALVAR_PEDIDO_VALIDATOR,
-      inject: [PedidoConstants.IREPOSITORY, ClienteConstants.IREPOSITORY],
+      inject: [ClienteConstants.IREPOSITORY],
       useFactory: (clienteRepository: IRepository<Cliente>): SalvarPedidoValidator[] => [
          new DataInicioNovoPedidoValidator(),
          new EstadoCorretoNovoPedidoValidator(),
