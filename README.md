@@ -45,7 +45,7 @@ Sistema de auto-atendimento de fast food. Projeto de conclusão da Fase 02 da p�
     - Docker, Kubernetes, Helm, Kubectl, NodeJS, NestJS, TypeORM, NPM, Mysql, Swagger, Typescript, Jest
 - Qualidade / Testes
     - Validações pré-commit/push
-        - Validação de cobertura de testes (threshold 95%)
+        - Validação de cobertura de testes
         - Testes unitários, e2e em memória (all green)
         - Validação de implementação de testes (modo alerta para implementação de testes de rest apis, services, usecases, validators, repositories)
     - CI/CD
