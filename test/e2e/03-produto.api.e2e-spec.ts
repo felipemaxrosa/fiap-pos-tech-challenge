@@ -126,6 +126,16 @@ describe('ProdutoRestApi (e2e)', () => {
          });
    });
 
+   it('DELETE /v1/produto/1 - deve deletar um produto', async () => {
+      // realiza requisição e compara a resposta de erro
+      return await request(app.getHttpServer())
+         .delete('/v1/produto/1')
+         .set('Content-type', 'application/json')
+         .then((response) => {
+            expect(response.status).toEqual(200);
+         });
+   });
+
    it('PUT /v1/produto/1 - deve editar um produto', async () => {
       // realiza requisição e compara a resposta de erro
       return await request(app.getHttpServer())
@@ -198,16 +208,6 @@ describe('ProdutoRestApi (e2e)', () => {
          .set('Content-type', 'application/json')
          .then((response) => {
             expect(response.status).toEqual(404);
-         });
-   });
-
-   it('DELETE /v1/produto/1 - deve deletar um produto', async () => {
-      // realiza requisição e compara a resposta de erro
-      return await request(app.getHttpServer())
-         .delete('/v1/produto/1')
-         .set('Content-type', 'application/json')
-         .then((response) => {
-            expect(response.status).toEqual(200);
          });
    });
 });
