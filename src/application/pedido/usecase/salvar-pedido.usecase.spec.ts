@@ -3,7 +3,7 @@ import { PagamentoProviders } from 'src/application/pagamento/providers/pagament
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { ClienteConstants, PedidoConstants } from 'src/shared/constants';

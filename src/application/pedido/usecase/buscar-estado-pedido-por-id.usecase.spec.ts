@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PagamentoProviders } from 'src/application/pagamento/providers/pagamento.providers';
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { PedidoConstants } from 'src/shared/constants';

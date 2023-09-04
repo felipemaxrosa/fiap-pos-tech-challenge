@@ -5,7 +5,7 @@ import {
    SolicitaPagamentoPedidoUseCase,
 } from 'src/application/pagamento/usecase';
 import { WebhookPagamentoPedidoUseCase } from 'src/application/pagamento/usecase/webhook-pagamento-pedido.usecase';
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { EstadoPagamento } from 'src/enterprise/pagamento/enum/estado-pagamento.enum';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PagamentoConstants } from 'src/shared/constants';

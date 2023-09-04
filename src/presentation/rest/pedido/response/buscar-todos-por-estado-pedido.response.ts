@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 
 export class BuscarTodosPorEstadoPedidoResponse {

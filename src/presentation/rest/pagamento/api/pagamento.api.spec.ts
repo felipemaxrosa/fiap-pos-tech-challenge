@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IPagamentoService } from 'src/application/pagamento/service/pagamento.service.interface';
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { EstadoPagamento } from 'src/enterprise/pagamento/enum/estado-pagamento.enum';
 import { PagamentoRestApi } from 'src/presentation/rest/pagamento/api/pagamento.api';
 import { PagamentoConstants } from 'src/shared/constants';
 import { BuscarEstadoPagamentoPedidoRequest } from '../request';

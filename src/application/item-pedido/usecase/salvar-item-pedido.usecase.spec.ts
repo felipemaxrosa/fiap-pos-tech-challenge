@@ -9,7 +9,7 @@ import { ItemPedidoConstants, PedidoConstants, ProdutoConstants } from 'src/shar
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
 import { SalvarItemPedidoUseCase } from 'src/application/item-pedido/usecase/salvar-item-pedido.usecase';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 
 describe('SalvarItemPedidoUseCase', () => {
    let useCase: SalvarItemPedidoUseCase;

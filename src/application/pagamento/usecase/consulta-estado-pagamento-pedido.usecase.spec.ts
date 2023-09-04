@@ -3,7 +3,7 @@ import { PagamentoProviders } from 'src/application/pagamento/providers/pagament
 import { PedidoProviders } from 'src/application/pedido/providers/pedido.providers';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { EstadoPagamento } from 'src/enterprise/pagamento/enum/estado-pagamento.enum';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';

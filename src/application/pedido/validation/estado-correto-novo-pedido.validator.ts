@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-pedido.validator';
 

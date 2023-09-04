@@ -14,7 +14,7 @@ import {
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { BaseRestApi } from 'src/presentation/rest/base.api';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';

@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WebhookPagamentoValidator } from 'src/application/pagamento/validation/webhook-pagamento.validator';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { EstadoPagamento } from 'src/enterprise/pagamento/enum/estado-pagamento.enum';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PagamentoConstants } from 'src/shared/constants';

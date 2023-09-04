@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoRestApi } from 'src/presentation/rest/pedido/api/pedido.api';
 import { EditarPedidoRequest } from 'src/presentation/rest/pedido/request/editar-pedido.request';

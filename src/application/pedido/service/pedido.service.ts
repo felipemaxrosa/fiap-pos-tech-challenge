@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IPedidoService } from 'src/application/pedido/service/pedido.service.interface';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { PedidoConstants } from 'src/shared/constants';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';

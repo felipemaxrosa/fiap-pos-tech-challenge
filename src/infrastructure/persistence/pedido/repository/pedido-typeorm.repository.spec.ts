@@ -1,6 +1,6 @@
 import { Repository, TypeORMError } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { IRepository } from 'src/enterprise/repository/repository';
