@@ -38,6 +38,18 @@ describe('CheckoutPedidoUseCase', () => {
       id: 1,
    };
 
+   const expectedCheckoutPedido = {
+      pedido,
+      pagamento: {
+         dataHoraPagamento: undefined,
+         estadoPagamento: 0,
+         id: 1,
+         pedidoId: 1,
+         total: 20,
+         transacaoId: '863c99369e3d033aa1f080419d0502b226b3718945ba425481c9f565a85be8c8',
+      },
+   };
+
    const produtoMock = {
       id: 1,
       nome: 'Produto Teste',
@@ -109,7 +121,7 @@ describe('CheckoutPedidoUseCase', () => {
 
          const result = await useCase.checkout(pedido);
 
-         expect(result).toEqual(pedido);
+         expect(result).toEqual(expectedCheckoutPedido);
       });
 
       it('deve calcular corretamente o total do pedido', async () => {
@@ -119,7 +131,7 @@ describe('CheckoutPedidoUseCase', () => {
 
          const result = await useCase.checkout(pedido);
 
-         expect(result.total).toEqual(itemPedidoMock.quantidade * produtoMock.preco);
+         expect(result.pedido.total).toEqual(itemPedidoMock.quantidade * produtoMock.preco);
       });
 
       it('deve lançar uma ValidationException se o cliente do pedido não existir', async () => {
