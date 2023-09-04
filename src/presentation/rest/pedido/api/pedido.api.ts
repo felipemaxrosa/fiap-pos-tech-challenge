@@ -177,7 +177,8 @@ export class PedidoRestApi extends BaseRestApi {
    @Post('checkout/:id')
    @ApiOperation({
       summary: 'Realiza o checkout do pedido',
-      description: 'Realiza o checkout do pedido',
+      description:
+         'Realiza o checkout do pedido, retornando uma propriedade chamada transacaoId dentro de pagamento, que simula um ID gerado por um servico externo para ser feito um pagamento. Este transacaoId deve ser usada na chamada ao webhook',
    })
    @HttpCode(200)
    @ApiOkResponse({ description: 'Pedido encontrado com sucesso', type: CheckoutResponse })
