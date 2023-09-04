@@ -27,7 +27,7 @@ describe('DataInicioNovoPedidoValidator', () => {
             clienteId: 1,
             dataInicio: DateUtils.toString(new Date()),
             estadoPedido: EstadoPedido.RECEBIDO,
-            ativo: true
+            ativo: true,
          };
 
          const isValid = await validator.validate(pedido);
@@ -40,7 +40,7 @@ describe('DataInicioNovoPedidoValidator', () => {
             clienteId: 1,
             dataInicio: '2020-01-01',
             estadoPedido: EstadoPedido.RECEBIDO,
-            ativo: true
+            ativo: true,
          };
 
          // O validator deve lançar uma exceção de validação
