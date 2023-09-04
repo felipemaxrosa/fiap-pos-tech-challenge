@@ -20,7 +20,7 @@ export class SolicitaPagamentoPedidoUseCase {
          transacaoId: transacaoId,
          estadoPagamento: EstadoPagamento.PENDENTE,
          total: pedido.total,
-         dataHoraPagamento: new Date(),
+         dataHoraPagamento: undefined,
       };
       return await this.repository
          .save(pagamento)
