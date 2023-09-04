@@ -48,7 +48,6 @@ describe('PagamentoTypeormRepository', () => {
       id: 1,
    };
 
-
    beforeEach(async () => {
       // Configuração do módulo de teste
       const module: TestingModule = await Test.createTestingModule({

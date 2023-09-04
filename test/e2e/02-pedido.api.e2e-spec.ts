@@ -5,6 +5,7 @@ import { MainModule } from 'src/main.module';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
 import { EditarPedidoRequest } from 'src/presentation/rest/pedido/request/editar-pedido.request';
 import { SalvarPedidoResponse } from 'src/presentation/rest/pedido/response/salvar-pedido.response';
+import { DateUtils } from 'src/shared/date.utils';
 import * as request from 'supertest';
 
 describe('PedidoRestApi (e2e)', () => {
@@ -24,7 +25,7 @@ describe('PedidoRestApi (e2e)', () => {
       // Define um objeto de requisição
       salvarPedidoRequest = {
          clienteId: 1,
-         dataInicio: '2023-06-24',
+         dataInicio: DateUtils.toString(new Date()),
          estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
          ativo: true,
       };
@@ -32,7 +33,7 @@ describe('PedidoRestApi (e2e)', () => {
       // Define um objeto de edição de requisição
       editarPedidoRequest = {
          clienteId: 1,
-         dataInicio: '2023-01-01',
+         dataInicio: DateUtils.toString(new Date()),
          estadoPedido: EstadoPedido.FINALIZADO,
          ativo: false,
       };
@@ -41,7 +42,7 @@ describe('PedidoRestApi (e2e)', () => {
       salvarPedidoResponse = {
          id: 1,
          clienteId: 1,
-         dataInicio: '2023-06-24',
+         dataInicio: DateUtils.toString(new Date()),
          estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
          ativo: true,
       };
