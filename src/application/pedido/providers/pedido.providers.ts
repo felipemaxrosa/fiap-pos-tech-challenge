@@ -12,8 +12,10 @@ import { CheckoutPedidoUseCase } from 'src/application/pedido/usecase/checkout-p
 import { DeletarPedidoUseCase } from 'src/application/pedido/usecase/deletar-pedido.usecase';
 import { EditarPedidoUseCase } from 'src/application/pedido/usecase/editar-pedido.usecase';
 import { SalvarPedidoUseCase } from 'src/application/pedido/usecase/salvar-pedido.usecase';
+import { CheckoutPedidoRealizadoValidator } from 'src/application/pedido/validation/checkout-pedido-realizado-validator';
 import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
 import { ClienteExistentePedidoValidator } from 'src/application/pedido/validation/cliente-existente-pedido.validator';
+import { DataInicioNovoPedidoValidator } from 'src/application/pedido/validation/data-inicio-novo-pedido.validator';
 import { EditarPedidoValidator } from 'src/application/pedido/validation/editar-pedido.validator';
 import { EstadoCorretoNovoPedidoValidator } from 'src/application/pedido/validation/estado-correto-novo-pedido.validator';
 import { PedidoExistenteValidator } from 'src/application/pedido/validation/pedido-existente.validator';
@@ -21,6 +23,7 @@ import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-
 import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/buscar-produto-por-id.usecase';
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
+import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
@@ -42,17 +45,21 @@ export const PedidoProviders: Provider[] = [
          pedidoRepository: IRepository<Pedido>,
          clienteRepository: IRepository<Cliente>,
       ): SalvarPedidoValidator[] => [
+         new DataInicioNovoPedidoValidator(),
          new EstadoCorretoNovoPedidoValidator(),
          new ClienteExistentePedidoValidator(clienteRepository),
-         // new CheckoutPedidoValidator(pedidoRepository),
       ],
    },
 
    {
       provide: PedidoConstants.CHECKOUT_PEDIDO_VALIDATOR,
-      inject: [ClienteConstants.IREPOSITORY],
-      useFactory: (clienteRepository: IRepository<Cliente>): CheckoutPedidoValidator[] => [
+      inject: [ClienteConstants.IREPOSITORY, PagamentoConstants.IREPOSITORY],
+      useFactory: (
+         clienteRepository: IRepository<Cliente>,
+         pagamentoRepository: IRepository<Pagamento>,
+      ): CheckoutPedidoValidator[] => [
          new ClienteExistentePedidoValidator(clienteRepository),
+         new CheckoutPedidoRealizadoValidator(pagamentoRepository),
       ],
    },
    {
@@ -62,6 +69,7 @@ export const PedidoProviders: Provider[] = [
          clienteRepository: IRepository<Cliente>,
          pedidoRepository: IRepository<Pedido>,
       ): EditarPedidoValidator[] => [
+         new DataInicioNovoPedidoValidator(),
          new ClienteExistentePedidoValidator(clienteRepository),
          new PedidoExistenteValidator(pedidoRepository),
       ],
