@@ -1,5 +1,5 @@
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IService } from 'src/enterprise/service/service';
 

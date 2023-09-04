@@ -4,7 +4,7 @@ import { BuscarPedidoPorIdUseCase } from 'src/application/pedido/usecase';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PagamentoConstants, PedidoConstants } from 'src/shared/constants';

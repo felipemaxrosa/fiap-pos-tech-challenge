@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EstadoPagamento } from 'src/enterprise/pagamento/enums/pagamento.enums';
+import { EstadoPagamento } from 'src/enterprise/pagamento/enum/estado-pagamento.enum';
 import { Pagamento } from 'src/enterprise/pagamento/model/pagamento.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { RepositoryException } from 'src/infrastructure/exception/repository.exception';

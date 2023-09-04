@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CheckoutPedidoValidator } from 'src/application/pedido/validation/checkout-pedido.validator';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PedidoConstants } from 'src/shared/constants';

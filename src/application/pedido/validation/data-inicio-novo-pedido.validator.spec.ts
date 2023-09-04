@@ -3,7 +3,7 @@ import { DataInicioNovoPedidoValidator } from './data-inicio-novo-pedido.validat
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { DateUtils } from 'src/shared/date.utils';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 
 describe('DataInicioNovoPedidoValidator', () => {
    let validator: DataInicioNovoPedidoValidator;

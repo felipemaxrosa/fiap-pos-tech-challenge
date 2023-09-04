@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { MainModule } from 'src/main.module';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
 import { EditarPedidoRequest } from 'src/presentation/rest/pedido/request/editar-pedido.request';

@@ -11,7 +11,7 @@ import { IItemPedidoService } from 'src/application/item-pedido/service/item-ped
 import { ItemPedidoProviders } from 'src/application/item-pedido/providers/item-pedido.providers';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Produto } from 'src/enterprise/produto/model/produto.model';
 
 describe('ItemPedidoService', () => {

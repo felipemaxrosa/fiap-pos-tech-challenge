@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsInt, IsDateString, IsBoolean, IsEnum } from 'class-validator';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 
 export class SalvarPedidoRequest {
    @ApiProperty({ required: true, nullable: false, description: 'ID do cliente' })

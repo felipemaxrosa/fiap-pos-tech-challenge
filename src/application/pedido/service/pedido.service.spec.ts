@@ -7,7 +7,7 @@ import { SalvarPedidoValidator } from 'src/application/pedido/validation/salvar-
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ServiceException } from 'src/enterprise/exception/service.exception';
 import { ItemPedido } from 'src/enterprise/item-pedido/model';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repository.interface';
 import { IRepository } from 'src/enterprise/repository/repository';

@@ -9,7 +9,7 @@ import { BuscarProdutoPorIdUseCase } from 'src/application/produto/usecase/busca
 import { Cliente } from 'src/enterprise/cliente/model/cliente.model';
 import { ValidationException } from 'src/enterprise/exception/validation.exception';
 import { ItemPedido } from 'src/enterprise/item-pedido/model/item-pedido.model';
-import { EstadoPedido } from 'src/enterprise/pedido/enums/pedido';
+import { EstadoPedido } from 'src/enterprise/pedido/enum/estado-pedido.enum';
 import { Pedido } from 'src/enterprise/pedido/model/pedido.model';
 import { IRepository } from 'src/enterprise/repository/repository';
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
