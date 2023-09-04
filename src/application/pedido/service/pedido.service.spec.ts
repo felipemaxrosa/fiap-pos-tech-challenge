@@ -15,6 +15,7 @@ import { RepositoryException } from 'src/infrastructure/exception/repository.exc
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { SalvarPedidoRequest } from 'src/presentation/rest/pedido/request';
 import { ClienteConstants, ItemPedidoConstants, PedidoConstants } from 'src/shared/constants';
+import { DateUtils } from 'src/shared/date.utils';
 
 describe('PedidoService', () => {
    let service: IPedidoService;
@@ -25,7 +26,7 @@ describe('PedidoService', () => {
    const pedido: Pedido = {
       id: 1,
       clienteId: 1,
-      dataInicio: '2023-06-18',
+      dataInicio: DateUtils.toString(new Date()),
       estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
       ativo: true,
       total: 10,
@@ -41,7 +42,7 @@ describe('PedidoService', () => {
    const pedidoPendente: Pedido = {
       id: 2,
       clienteId: 2,
-      dataInicio: '2023-06-20',
+      dataInicio: DateUtils.toString(new Date()),
       estadoPedido: EstadoPedido.EM_PREPARACAO,
       ativo: true,
       total: 10,
@@ -51,28 +52,28 @@ describe('PedidoService', () => {
       {
          id: 3,
          clienteId: 3,
-         dataInicio: '2023-06-20',
+         dataInicio: DateUtils.toString(new Date()),
          estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
       },
       {
          id: 4,
          clienteId: 4,
-         dataInicio: '2023-06-20',
+         dataInicio: DateUtils.toString(new Date()),
          estadoPedido: EstadoPedido.PRONTO,
          ativo: true,
       },
       {
          id: 10,
          clienteId: 10,
-         dataInicio: '2023-06-20',
+         dataInicio: DateUtils.toString(new Date()),
          estadoPedido: EstadoPedido.RECEBIDO,
          ativo: true,
       },
       {
          id: 13,
          clienteId: 13,
-         dataInicio: '2023-06-20',
+         dataInicio: DateUtils.toString(new Date()),
          estadoPedido: EstadoPedido.PRONTO,
          ativo: true,
       },
@@ -145,7 +146,7 @@ describe('PedidoService', () => {
       it('deve CRIAR novo pedido', async () => {
          const novoPedido: SalvarPedidoRequest = {
             clienteId: 1,
-            dataInicio: '2023-06-18',
+            dataInicio: DateUtils.toString(new Date()),
             estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
             ativo: true,
          };

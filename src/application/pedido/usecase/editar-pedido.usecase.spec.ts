@@ -8,6 +8,7 @@ import { IPedidoRepository } from 'src/enterprise/pedido/repository/pedido.repos
 import { PersistenceInMemoryProviders } from 'src/infrastructure/persistence/providers/persistence-in-memory.providers';
 import { ClienteConstants, PedidoConstants } from 'src/shared/constants';
 import { EditarPedidoUseCase } from './editar-pedido.usecase';
+import { DateUtils } from 'src/shared/date.utils';
 
 describe('EditarPedidoUseCase', () => {
    let useCase: EditarPedidoUseCase;
@@ -16,7 +17,7 @@ describe('EditarPedidoUseCase', () => {
    const pedidoMock = {
       id: 1,
       clienteId: 101,
-      dataInicio: '2023-08-26',
+      dataInicio: DateUtils.toString(new Date()),
       estadoPedido: EstadoPedido.PAGAMENTO_PENDENTE,
       ativo: true,
    };
