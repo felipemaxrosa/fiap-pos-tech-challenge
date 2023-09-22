@@ -5,6 +5,7 @@ jobs:
   prod-check:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
+    name: Running unit tests
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
