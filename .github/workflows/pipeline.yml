@@ -1,4 +1,4 @@
-name: Fast-N-Foodious CI
+name: Fast N Foodious CI
 run-name: Running Fast N Foodious CI to Production
 on: [push]
 jobs:

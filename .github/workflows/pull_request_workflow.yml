@@ -1,5 +1,5 @@
-name: Fast N Foodious Pull Requests
-run-name: Running Pull Request CI to Develop Branch
+name: Fast N Foodious CI
+run-name: Running Fast N Foodious CI to Develop
 on: [pull_request]
 jobs:
   develop-check:
