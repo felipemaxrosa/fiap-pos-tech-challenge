@@ -1,0 +1,19 @@
+name: Fast-N-Foodious CI
+run-name: Running Fast N Foodious CI
+on: [push]
+jobs:
+  prod-check:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm install
+      - run: npm run test
+      - run: echo "Deployng to production server on branch $GITHUB_REF"
+      
+  release-check:
+    if: ${{ github.ref == 'refs/heads/release' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deployng to release on branch $GITHUB_REF"
