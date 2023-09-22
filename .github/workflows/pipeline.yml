@@ -6,11 +6,12 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Running unit tests
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
       - run: npm install
-      - run: npm run test
+      - name: Running unit tests
+        run: npm run test
       - run: echo "Deployng to production server on branch $GITHUB_REF"
       
   release-check:
