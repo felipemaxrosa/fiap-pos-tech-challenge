@@ -1,5 +1,5 @@
-name: Fast-N-Foodious CI
-run-name: Running Fast N Foodious CI
+name: CI
+run-name: Running Fast N Foodious CI to Production
 on: [push]
 jobs:
   production-check:
@@ -13,10 +13,9 @@ jobs:
         run: npm install
       - name: Running unit tests
         run: npm run test
-      - run: echo "Deployng to production server on branch $GITHUB_REF"
-      
-  release-check:
-    if: ${{ github.ref == 'refs/heads/release' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deployng to release on branch $GITHUB_REF"
+      - name: Running coverage tests
+        run: npm run test:cov
+      - name: Running check components without unit/e2e tests
+        run: npm run test:check
+      - name: Running e2e tests (In-Memory Repositories)
+        run: NODE_ENV=local-mock-repository npm run test:e2e
