@@ -1,21 +1,23 @@
 name: Fast N Foodious CI
-run-name: Running Fast N Foodious CI to Develop
+run-name: Running Tests
 on: [pull_request]
+
 jobs:
-  develop-check:
-    if: ${{ github.ref == 'refs/heads/develop' }}
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js
+      - name: Using Node.js
         uses: actions/setup-node@v3
+        with:
+          node-version: 18.
       - name: Installing dependencies
         run: npm install
       - name: Running unit tests
         run: npm run test
       - name: Running coverage tests
         run: npm run test:cov
-      - name: Running check components without unit/e2e tests
+      - name: Running test check
         run: npm run test:check
       - name: Running e2e tests (In-Memory Repositories)
         run: NODE_ENV=local-mock-repository npm run test:e2e
