@@ -35,6 +35,7 @@ jobs:
       - name: Running e2e in mysql server - Wait for MySQL to Accept Connections
         run: docker-compose exec -T mysql sh -c 'while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done'
       - name: Running e2e in mysql server - Running Tests
+        run: | 
             output=$(docker-compose exec -T tests sh -c 'run test:e2e')
             echo "$output"
 
