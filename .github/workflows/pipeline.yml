@@ -35,7 +35,9 @@ jobs:
       - name: Running e2e in mysql server - Wait for MySQL to Accept Connections
         run: docker-compose exec -T mysql sh -c 'while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done'
       - name: Running e2e in mysql server - Running Tests
-        run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
+        run: |
+          sudo /etc/init.d/mysql start
+          docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
 
       # - name: Running e2e in mysql server - Create schema MySQL Schema & Populate Database
       #   run: |
