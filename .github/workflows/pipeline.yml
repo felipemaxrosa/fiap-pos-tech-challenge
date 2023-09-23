@@ -1,5 +1,5 @@
 name: CI
-run-name: Running Fast N Foodious CI to Production
+run-name: Fast N Foodious CI
 on: [push]
 jobs:
   production-check:
