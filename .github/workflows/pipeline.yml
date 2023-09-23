@@ -34,7 +34,7 @@ jobs:
       - name: Running check components without unit/e2e tests
         run: npm run test:check
       - name: Running e2e tests in memory repositories
-        run: NODE_ENV=local-mock-repository npm run test:
+        run: NODE_ENV=local-mock-repository npm run test:e2e
       
       - name: Running e2e in mysql server - Build Docker Images for Tests
         run: docker-compose --env-file ./envs/prod.env build
