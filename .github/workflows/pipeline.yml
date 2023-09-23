@@ -11,6 +11,8 @@ jobs:
         uses: actions/setup-node@v3
       - name: Installing dependencies
         run: npm install
+      - name: Building application
+        run: npm rum build
       - name: Running unit tests
         run: npm run test
       - name: Running coverage tests
@@ -31,6 +33,8 @@ jobs:
         uses: actions/setup-node@v3
       - name: Installing dependencies
         run: npm install
+      - name: Building application
+        run: npm rum build
       - name: Running unit tests
         run: npm run test
       - name: Running coverage tests
