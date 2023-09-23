@@ -5,6 +5,11 @@ jobs:
   production-check:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
+    env:
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_HOST: '%'
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js
@@ -19,8 +24,14 @@ jobs:
         run: npm run test:cov
       - name: Running check components without unit/e2e tests
         run: npm run test:check
-      - name: Running e2e tests (In-Memory Repositories)
+      - name: Running e2e tests in memory repositories
         run: NODE_ENV=local-mock-repository npm run test:e2e
+      - name: Running e2e in mysql server - Build Docker Images for Tests
+        run: docker-compose --env-file ./envs/prod.env build
+      - name: Running e2e in mysql server - Start Docker Containers
+        run: docker-compose --env-file ./envs/prod.env up -d
+      - name: Running e2e in mysql server - Wait for MySQL to Accept Connections
+        run: docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "until mysqladmin ping -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD ; do sleep 1; done"
       - name: Deploying application
         run: echo "The application has been deployed successfully."
         
