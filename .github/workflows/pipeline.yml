@@ -33,7 +33,7 @@ jobs:
       - name: Running e2e in mysql server - Start Docker Containers
         run: | 
           docker-compose --env-file ./envs/prod.env up -d
-          docker-compose exec mysql sh -c 'while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done'
+          docker-compose exec -T mysql sh -c 'while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done'
 
       # - name: Running e2e in mysql server - Create schema MySQL Schema & Populate Database
       #   run: |
