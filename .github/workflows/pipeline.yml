@@ -20,8 +20,8 @@ jobs:
         
       - name: Create test database
         run: |
-          "mysql -uroot -p$MYSQL_ROOT_PASSWORD < /scripts/schema/1-init.sql"
-          "mysql -uroot -p$MYSQL_ROOT_PASSWORD < /scripts/schema/2-populate.sql
+          "mysql -uroot -p$MYSQL_ROOT_PASSWORD < ./scripts/schema/1-init.sql"
+          "mysql -uroot -p$MYSQL_ROOT_PASSWORD < ./scripts/schema/2-populate.sql
 
       # - name: Installing dependencies
       #   run: npm install
