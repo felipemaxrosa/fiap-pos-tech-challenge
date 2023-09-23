@@ -32,7 +32,7 @@ jobs:
         run: docker-compose --env-file ./envs/prod.env up -d
       - name: Running e2e in mysql server - Wait for MySQL to Accept Connections
         # run: docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "until mysqladmin ping -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD ; do sleep 1; done"
-        run: docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "telnet 127.0.0.1 3306 ; do sleep 1; done"
+        run: docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "telnet 127.0.0.1 3306"
       - name: Deploying application
         run: echo "The application has been deployed successfully."
         
