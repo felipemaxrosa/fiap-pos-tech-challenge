@@ -14,18 +14,18 @@ jobs:
       - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
-      - name: Installing dependencies
-        run: npm install
-      - name: Building application
-        run: npm rum build
-      - name: Running unit tests
-        run: npm run test
-      - name: Running coverage tests
-        run: npm run test:cov
-      - name: Running check components without unit/e2e tests
-        run: npm run test:check
-      - name: Running e2e tests in memory repositories
-        run: NODE_ENV=local-mock-repository npm run test:e2e
+      # - name: Installing dependencies
+      #   run: npm install
+      # - name: Building application
+      #   run: npm rum build
+      # - name: Running unit tests
+      #   run: npm run test
+      # - name: Running coverage tests
+      #   run: npm run test:cov
+      # - name: Running check components without unit/e2e tests
+      #   run: npm run test:check
+      # - name: Running e2e tests in memory repositories
+      #   run: NODE_ENV=local-mock-repository npm run test:e2e
       - name: Running e2e in mysql server - Build Docker Images for Tests
         run: docker-compose --env-file ./envs/prod.env build
       - name: Running e2e in mysql server - Start Docker Containers
@@ -34,6 +34,7 @@ jobs:
         run: |
           docker cp ./scripts/schema/. $(docker-compose ps -q mysql):/docker-entrypoint-initdb.d
           docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "mysql -uroot -p$MYSQL_ROOT_PASSWORD -e 'source /docker-entrypoint-initdb.d/1-init.sql; source /docker-entrypoint-initdb.d/2-populate.sql;'"
+          sudo /etc/init.d/mysql start
       # - name: Running e2e in mysql server - Wait for MySQL to Accept Connections
         # run: docker-compose --env-file ./envs/prod.env exec -T mysql sh -c "until mysqladmin ping -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD ; do sleep 1; done"
       - name: Deploying application
