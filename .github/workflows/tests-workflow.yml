@@ -1,5 +1,5 @@
 name: CI
-run-name: Running Tests
+run-name: Pull Request CI
 on: [pull_request]
 
 jobs:
