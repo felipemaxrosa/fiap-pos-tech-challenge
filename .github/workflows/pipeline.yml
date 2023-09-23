@@ -19,7 +19,7 @@ jobs:
         run: npm run test:check
       - name: Running e2e tests (In-Memory Repositories)
         run: NODE_ENV=local-mock-repository npm run test:e2e
-      - name: Deploying
+      - name: Deploying application
         run: echo "The application has been deployed successfully."
         
   release-check:
@@ -39,5 +39,5 @@ jobs:
         run: npm run test:check
       - name: Running e2e tests (In-Memory Repositories)
         run: NODE_ENV=local-mock-repository npm run test:e2e
-      - name: Deploying
+      - name: Releasing application
         run: echo "The application has been released successfully."
