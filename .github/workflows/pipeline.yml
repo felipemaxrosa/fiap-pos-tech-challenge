@@ -21,3 +21,23 @@ jobs:
         run: NODE_ENV=local-mock-repository npm run test:e2e
       - name: Deploying
         run: echo "The application has been deployed successfully."
+        
+  release-check:
+    if: ${{ github.ref == 'refs/heads/release' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+      - name: Installing dependencies
+        run: npm install
+      - name: Running unit tests
+        run: npm run test
+      - name: Running coverage tests
+        run: npm run test:cov
+      - name: Running check components without unit/e2e tests
+        run: npm run test:check
+      - name: Running e2e tests (In-Memory Repositories)
+        run: NODE_ENV=local-mock-repository npm run test:e2e
+      - name: Deploying
+        run: echo "The application has been released successfully."
