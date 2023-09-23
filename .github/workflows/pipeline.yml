@@ -31,12 +31,12 @@ jobs:
       - name: Running e2e in mysql server - Build Docker Images for Tests
         run: docker-compose --env-file ./envs/prod.env build
       - name: Running e2e in mysql server - Start Docker Containers
-        run: | 
-          docker-compose --env-file ./envs/prod.env up -d
-          docker-compose exec -T mysql sh -c 'while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done'
+        run: docker-compose --env-file ./envs/prod.env up -d
+      - name: Running e2e in mysql server - Wait for MySQL to Accept Connections
+        run: docker-compose exec -T mysql sh -c 'while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done'
       - name: Running e2e in mysql server - Running Tests
-        run: | 
-          docker-compose exec -T tests sh -c 'run test:e2e'
+            output=$(docker-compose exec -T tests sh -c 'run test:e2e')
+            echo "$output"
 
       # - name: Running e2e in mysql server - Create schema MySQL Schema & Populate Database
       #   run: |
