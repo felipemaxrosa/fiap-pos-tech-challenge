@@ -10,7 +10,8 @@ jobs:
       - name: Using Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.
+          node-version: 18
+
       - name: Installing dependencies
         run: npm install
       - name: Running unit tests
