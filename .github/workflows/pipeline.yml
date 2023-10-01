@@ -11,8 +11,6 @@ jobs:
 
       - name: Installing dependencies
         run: npm install
-      - name: Building application
-        run: npm rum build
       - name: Running unit tests
         run: npm run test
       - name: Running coverage tests
@@ -44,6 +42,10 @@ jobs:
       - name: Running e2e in mysql server - Wait for MySQL to Accept Connections
         run: docker-compose exec -T mysql sh -c 'while ! mysqladmin ping -hlocalhost --silent; do sleep 1; done'
 
+      # TO-DO - need to check how to implement it properly
+      # - name: Running e2e in mysql server - Running Tests
+      #   run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
+
   build:
     runs-on: ubuntu-latest
     needs: e2e-tests
@@ -55,7 +57,7 @@ jobs:
       - name: Installing dependencies
         run: npm install
       - name: Building application
-        run: npm rum build
+        run: npm run build
 
   deploy-STAGING:
     if: ${{ github.ref == 'refs/heads/develop' }}
@@ -73,9 +75,6 @@ jobs:
       - name: Installing dependencies
         run: npm install
 
-      # TO-DO - need to check how to implement it properly
-      # - name: Running e2e in mysql server - Running Tests
-      #   run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
       - name: Deploying application to STAGING
         run: echo "The application has been deployed to STAGING successfully."
 
@@ -90,11 +89,8 @@ jobs:
       - name: Installing dependencies
         run: npm install
 
-      # TO-DO - need to check how to implement it properly
-      # - name: Running e2e in mysql server - Running Tests
-      #   run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
       - name: Deploying application to PRE-RELEASE 
-        run: echo "The application has been released PRE-RELEASE successfully."
+        run: echo "The application has been deployed to PRE-RELEASE successfully."
 
   deploy-PRODUCTION:
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -112,9 +108,6 @@ jobs:
       - name: Installing dependencies
         run: npm install
 
-      # TO-DO - need to check how to implement it properly
-      # - name: Running e2e in mysql server - Running Tests
-      #   run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
       - name: Deploying application to PRODUCTION
-        run: echo "The application has been deployed PRODUCTION successfully."
+        run: echo "The application has been deployed to PRODUCTION successfully."
         
