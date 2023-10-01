@@ -9,22 +9,16 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
 
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Cache Node.js dependencies
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
             
       - name: Installing dependencies
         run: npm install
-
-      - name: Install Jest globally (if not already installed)
-        run: npm install -g jest
-  
-      - name: Add node_modules/.bin to PATH
-        run: export PATH=./node_modules/.bin:$PATH  # This line adds node_modules/.bin to the PATH
         
       - name: Running unit tests
         run: npm run test
@@ -46,16 +40,8 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
 
-      - name: Cache Node.js dependencies (for e2e-tests)
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      # - name: Installing dependencies
-      #   run: npm install
+      - name: Installing dependencies
+        run: npm install
       - name: Running e2e tests in memory repositories
         run: NODE_ENV=local-mock-repository npm run test:e2e
       - name: Running e2e in mysql server - Build Docker Images for Tests
