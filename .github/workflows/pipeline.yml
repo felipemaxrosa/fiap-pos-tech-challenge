@@ -19,6 +19,13 @@ jobs:
             
       - name: Installing dependencies
         run: npm install
+
+      - name: Install Jest globally (if not already installed)
+        run: npm install -g jest
+  
+      - name: Add node_modules/.bin to PATH
+        run: export PATH=./node_modules/.bin:$PATH  # This line adds node_modules/.bin to the PATH
+        
       - name: Running unit tests
         run: npm run test
       - name: Running coverage tests
