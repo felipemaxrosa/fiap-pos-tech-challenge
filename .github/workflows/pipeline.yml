@@ -51,8 +51,8 @@ jobs:
       - name: Hosts in the Container
         run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "cat /etc/hosts"
       # TO-DO - need to check how to implement it properly
-      # - name: Running e2e in mysql server - Running Tests
-      #   run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
+      - name: Running e2e in mysql server - Running Tests
+        run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
 
   build:
     runs-on: ubuntu-latest
