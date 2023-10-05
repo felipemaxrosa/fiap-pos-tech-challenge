@@ -59,13 +59,20 @@ jobs:
     needs: e2e-tests
     steps:
       - uses: actions/checkout@v3
+
       - name: Use Node.js
         uses: actions/setup-node@v3
-
-      - name: Installing dependencies
-        run: npm install
-      - name: Building application
-        run: npm run build
+      - name: Login Dockerhub
+        env:
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      # - name: Installing dependencies
+      #   run: npm install
+      - name: Build Docker Image
+        run: docker build -t fast-n-foodious .
+      - name: Push to Dockerhub
+        run: docker push felipemaxrosa/fast-n-foodious:latest
 
   deploy-STAGING:
     if: ${{ github.ref == 'refs/heads/develop' }}
