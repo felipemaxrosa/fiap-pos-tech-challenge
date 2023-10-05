@@ -1,4 +1,4 @@
-name: CI
+name: fast-n-foodious-ci
 run-name: Fast N Foodious CI
 on: [push]
 jobs:
@@ -12,12 +12,12 @@ jobs:
       - name: Installing dependencies
         run: npm install
         
-      # - name: Running unit tests
-      #   run: npm run test
-      # - name: Running coverage tests
-      #   run: npm run test:cov
-      # - name: Running check components without unit/e2e tests
-      #   run: npm run test:check
+      - name: Running unit tests
+        run: npm run test
+      - name: Running coverage tests
+        run: npm run test:cov
+      - name: Running check components without unit/e2e tests
+        run: npm run test:check
 
   e2e-tests:
     runs-on: ubuntu-latest
@@ -34,8 +34,8 @@ jobs:
 
       - name: Installing dependencies
         run: npm install
-      # - name: Running e2e tests in memory repositories
-      #   run: NODE_ENV=local-mock-repository npm run test:e2e
+      - name: Running e2e tests in memory repositories
+        run: NODE_ENV=local-mock-repository npm run test:e2e
       - name: Running e2e in mysql server - Build Docker Images for Tests
         run: docker-compose --env-file ./envs/prod.env build
       - name: Running e2e in mysql server - Start Docker Containers
@@ -51,8 +51,8 @@ jobs:
       - name: Hosts in the Container
         run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "cat /etc/hosts"
       # TO-DO - need to check how to implement it properly
-      - name: Running e2e in mysql server - Running Tests
-        run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
+      # - name: Running e2e in mysql server - Running Tests
+      #   run: docker-compose --env-file ./envs/prod.env exec -T fast-n-foodious sh -c "npm run test:e2e"
 
   build:
     runs-on: ubuntu-latest
